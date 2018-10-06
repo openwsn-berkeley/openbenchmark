@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Custom\CommandHandler;
+
+class ExperimentController extends Controller
+{
+    function start() {
+        $cmd_handler = new CommandHandler();
+
+        $cmd_handler->reserve_nodes();
+        $cmd_handler->otbox_start();
+
+        sleep($cmd_handler::OV_GUARD_TIME); //A guard time to wait for the nodes to start sending serial data before running OV
+        $cmd_handler->ov_start();
+
+        sleep($cmd_handler::OV_LOG_GUARD_TIME); //A guard time to wait for OV to start writing the log
+        return $cmd_handler->ov_monitor();
+    }
+
+    function start_watcher() {
+        $cmd_handler = new CommandHandler();
+        return $cmd_handler->ov_monitor();
+    }
+}
