@@ -17,7 +17,7 @@ Vue.component('arrow', require('./components/reusables/Arrow.vue'));
 Vue.component('multiselect', require('vue-multiselect').default);
 Vue.component('progress-bar', require('./components/reusables/ProgressBar.vue'));
 
-Vue.use(VueSocketio, io('http://192.168.10.192:3000'));
+Vue.use(VueSocketio, io('http://89.188.32.132:3000'));
 Vue.use(Vuebar);
 
 Vue.directive('observe-visibility', ObserveVisibility);
