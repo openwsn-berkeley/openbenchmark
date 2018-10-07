@@ -20,6 +20,16 @@ class ExperimentController extends Controller
         return $cmd_handler->ov_monitor();
     }
 
+    function reserve_exp() {
+        $cmd_handler = new CommandHandler();
+        return $cmd_handler->reserve_nodes();
+    }
+
+    function start_otbox() {
+        $cmd_handler = new CommandHandler();
+        return $cmd_handler->otbox_start();
+    }
+
     function start_ov() {
         $cmd_handler = new CommandHandler();
         return $cmd_handler->ov_start();

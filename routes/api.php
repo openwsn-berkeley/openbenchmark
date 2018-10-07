@@ -18,5 +18,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/start-exp', 'ExperimentController@start');
-Route::get('/start-watcher', 'ExperimentController@start_watcher');
+
+//Test routes
+Route::get('/reserve-exp', 'ExperimentController@reserve_exp');
+Route::get('/start-otbox', 'ExperimentController@start_otbox');
 Route::get('/start-ov', 'ExperimentController@start_ov');
+Route::get('/start-watcher', 'ExperimentController@start_watcher');
