@@ -20,6 +20,11 @@ class ExperimentController extends Controller
         return $cmd_handler->ov_monitor();
     }
 
+    function start_ov() {
+        $cmd_handler = new CommandHandler();
+        return $cmd_handler->ov_start();
+    }
+
     function start_watcher() {
         $cmd_handler = new CommandHandler();
         return $cmd_handler->ov_monitor();

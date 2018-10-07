@@ -4,7 +4,8 @@ namespace App\Custom;
 
 class CommandHandler {
 
-    const COMMAND_MAIN = '/home/vagrant/soda/openvisualizer/exp_auto/main.py';
+    //const COMMAND_MAIN = '/home/vagrant/soda/openvisualizer/exp_auto/main.py';
+    const COMMAND_MAIN = '/var/www/html/soda/openvisualizer/iotlab-exp-auto/main.py';
     const OV_GUARD_TIME = 20; //A guard time in seconds for the nodes to start sending serial data before running OV
     const OV_LOG_GUARD_TIME = 5; //A guard time in seconds for the nodes to start sending serial data before running OV
 
