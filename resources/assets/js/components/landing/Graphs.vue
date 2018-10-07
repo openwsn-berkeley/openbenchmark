@@ -6,28 +6,33 @@
                     <d3-network :net-nodes="nodes" :net-links="links" :options="options" @node-click="nodeClick"/>
                 </div>
                 <div class="card col-direction" style="width: 100%; height: 50%;">
-                    <span class="mt-1" v-if="currentlyShowing !== null">
-                        <span class="bold ml-1 mr-1">Name: </span> {{currentlyShowing.id}}
+                    <span class="mt-1" v-if="currentlyShowing !== ''">
+                        <span class="bold ml-1 mr-1">Name: </span> {{currentData.id}}
                     </span>
-                    <span class="data-row" v-if="currentlyShowing !== null">
-                        <span class="bold ml-1 mr-1">EUI-64: </span> {{currentlyShowing.eui64}}
+                    <span class="data-row" v-if="currentlyShowing !== ''">
+                        <span class="bold ml-1 mr-1">EUI-64: </span> {{currentData.eui64}}
                     </span>
-                    <span class="data-row" v-if="currentlyShowing !== null">
-                        <span class="bold ml-1 mr-1">Is DAG?: </span> {{currentlyShowing.isDag}}
+                    <span class="data-row" v-if="currentlyShowing !== ''">
+                        <span class="bold ml-1 mr-1">Is DAG?: </span> {{currentData.isDag}}
                     </span>
                     <!--<span class="data-row"><span class="bold ml-1 mr-1">Radio Duty Cycle: </span> 0.55%</span>-->
                 </div>
             </div>
             <div class="card row ml-1 mr-1 pt-1 col-8 wrap" style="overflow-y: auto; overflow-x: hidden">
 
-                <span v-if="currentlyShowing !== null">
-                    <line-chart class="chart ml-3 mr-3" v-for="item in currentlyShowing.nodeData"
-                        :label="item.label"
-                        :x-axis="item.xAxis"
-                        :y-axis="item.yAxis"
-                        :width="650"
-                        :height="300"></line-chart>
+                <span v-for="node in dataset">
+                    <span v-if="node.id === currentlyShowing">
+                        <span v-for="item in node.nodeData">
+                            <line-chart class="chart ml-3 mr-3"
+                                        :label="item.label"
+                                        :x-axis="item.xAxis"
+                                        :y-axis="item.yAxis"
+                                        :width="650"
+                                        :height="300"></line-chart>
+                        </span>
+                    </span>
                 </span>
+
                 <!--
                 <line-chart class="chart ml-3 mr-3"></line-chart>
                 <line-chart class="chart ml-3 mr-3"></line-chart>
@@ -68,10 +73,10 @@
                     { sid: 2, tid: 3 },
                 ],
 
-                currentlyShowing : null,
+                currentlyShowing : '',
 
                 dataset: [
-                    /*{
+                    /*{//Corresponds to a single node
                         "id":"node-a8-106",
                         "eui64":"05-43-32-ff-03-dc-a3-66",
                         "isDag": 0,
@@ -89,17 +94,6 @@
                         ]
                     }*/
                 ],
-                /*{ //Corresponds to a single node
-                    id: '',
-                    eui64: 'somevalue',
-                    nodeData: [
-                        { //Corresponds to a single chart
-                            label: 'Radio duty cycle',
-                            xAxis: [],
-                            yAxis: []
-                        }
-                    ]
-                }*/
 
                 nodeSize:35,
                 canvas:false
@@ -135,11 +129,13 @@
                     if (node.nodeData[i].label === label) {
                         node.nodeData[i].xAxis.push(xVal);
                         node.nodeData[i].yAxis.push(yVal);
+
                         valueAppended = true;
-                    }
-                    if (node.nodeData[i].xAxis.length > this.dataPerChart) {
-                        node.nodeData[i].xAxis.shift();
-                        node.nodeData[i].yAxis.shift();
+
+                        if (node.nodeData[i].xAxis.length > this.dataPerChart) {
+                            node.nodeData[i].xAxis.shift();
+                            node.nodeData[i].yAxis.shift();
+                        }
                     }
                 }
 
@@ -157,8 +153,8 @@
 
             selectNodeData(id) {
                 //Put dataset element with the given 'id' in 'currentlyShowing' variable (used for filling the UI with the data)
-                this.currentlyShowing = this.getNodeByProperty('id', id);
-                console.log("Currently showing: " + JSON.stringify(this.currentlyShowing))
+                this.currentlyShowing = id;
+                console.log("Currently showing: " + JSON.stringify(this.getNodeByProperty('id', this.currentlyShowing)));
             },
 
             getNodeByProperty(property, val) {
@@ -187,21 +183,6 @@
                 let xVal = this.relativeTimestampParse(obj._timestamp);
                 let yVal = obj[label];
 
-                /*switch (label) {
-                    case 'numRx':
-                        yVal = obj.numRx;
-                        break;
-                    case 'numTx':
-                        yVal = obj.numTx;
-                        break;
-                    case 'dutycycle':
-                        yVal = obj.dutycycle;
-                        break;
-                    case 'numCells':
-                        yVal = obj.numCells;
-                        break;
-                }*/
-
                 this.appendNodeData(id, obj._mote_info, label, xVal, parseFloat(yVal));
             },
 
@@ -219,6 +200,14 @@
                     nodeSize: this.nodeSize,
                     nodeLabels: true,
                     canvas: this.canvas
+                }
+            },
+            currentData() {
+                let currentNode = this.getNodeByProperty('id', this.currentlyShowing);
+                return {
+                    id: currentNode.id,
+                    eui64: currentNode.eui64,
+                    isDag: currentNode.isDag
                 }
             }
         },

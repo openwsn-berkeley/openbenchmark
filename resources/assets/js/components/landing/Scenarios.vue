@@ -42,7 +42,7 @@
                     :data-flow-started="dataFlowStarted"></progress-bar>
         </div>
         <div class="row h-center v-center col-direction mt-1" v-if="dataFlowStarted">
-            <h3 class="mt-0 mb-0" style="margin-bottom: 5px">Experiment started! <span class="pulse clickable" @click.prevent="scrollContent">Watch the progress in real time</span></h3>
+            <h3 class="mt-0 mb-0" style="margin-bottom: 5px">Experiment started! <span class="pulse clickable" @click.prevent="scrollContent">Monitor the progress in real time</span></h3>
             <i class="fas fa-check-circle fa-3x primary-light"></i>
         </div>
     </div>
@@ -145,7 +145,7 @@
                     })
                     .catch(function (error) {
                         // handle error
-                        console.log(error);
+                        console.log("Error: " + error);
                     })
                     .then(function () {
                         // always executed

@@ -142,6 +142,11 @@
                 console.log('LOG_MODIFICATION: ' + data);
             });
 
+            this.$socket.on('EXP_TERMINATE', function(data) {
+                thisComponent.forwardMessage('EXP_TERMINATE', data);
+                console.log('EXP_TERMINATE: ' + data);
+            });
+
             setTimeout(function() {
                 if (!socketConnected) {
                     thisComponent.registerChannel();

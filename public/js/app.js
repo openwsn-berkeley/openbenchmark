@@ -30565,6 +30565,11 @@ var socketConnected = false;
             console.log('LOG_MODIFICATION: ' + data);
         });
 
+        this.$socket.on('EXP_TERMINATE', function (data) {
+            thisComponent.forwardMessage('EXP_TERMINATE', data);
+            console.log('EXP_TERMINATE: ' + data);
+        });
+
         setTimeout(function () {
             if (!socketConnected) {
                 thisComponent.registerChannel();
@@ -31307,7 +31312,7 @@ var thisComponent = void 0;
                 console.log(response);
             }).catch(function (error) {
                 // handle error
-                console.log(error);
+                console.log("Error: " + error);
             }).then(function () {
                 // always executed
             });
@@ -32515,7 +32520,7 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("Watch the progress in real time")]
+                [_vm._v("Monitor the progress in real time")]
               )
             ]
           ),
@@ -32758,6 +32763,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -32783,10 +32793,10 @@ var thisComponent = void 0;
             { id: 3, name: 'node-a8-108', _cssClass: 'node-on' }],
             links: [{ sid: 1, tid: 2 }, { sid: 2, tid: 3 }],
 
-            currentlyShowing: null,
+            currentlyShowing: '',
 
             dataset: [
-                /*{
+                /*{//Corresponds to a single node
                     "id":"node-a8-106",
                     "eui64":"05-43-32-ff-03-dc-a3-66",
                     "isDag": 0,
@@ -32804,17 +32814,6 @@ var thisComponent = void 0;
                     ]
                 }*/
             ],
-            /*{ //Corresponds to a single node
-                id: '',
-                eui64: 'somevalue',
-                nodeData: [
-                    { //Corresponds to a single chart
-                        label: 'Radio duty cycle',
-                        xAxis: [],
-                        yAxis: []
-                    }
-                ]
-            }*/
 
             nodeSize: 35,
             canvas: false
@@ -32851,11 +32850,13 @@ var thisComponent = void 0;
                 if (node.nodeData[i].label === label) {
                     node.nodeData[i].xAxis.push(xVal);
                     node.nodeData[i].yAxis.push(yVal);
+
                     valueAppended = true;
-                }
-                if (node.nodeData[i].xAxis.length > this.dataPerChart) {
-                    node.nodeData[i].xAxis.shift();
-                    node.nodeData[i].yAxis.shift();
+
+                    if (node.nodeData[i].xAxis.length > this.dataPerChart) {
+                        node.nodeData[i].xAxis.shift();
+                        node.nodeData[i].yAxis.shift();
+                    }
                 }
             }
 
@@ -32872,8 +32873,8 @@ var thisComponent = void 0;
         },
         selectNodeData: function selectNodeData(id) {
             //Put dataset element with the given 'id' in 'currentlyShowing' variable (used for filling the UI with the data)
-            this.currentlyShowing = this.getNodeByProperty('id', id);
-            console.log("Currently showing: " + JSON.stringify(this.currentlyShowing));
+            this.currentlyShowing = id;
+            console.log("Currently showing: " + JSON.stringify(this.getNodeByProperty('id', this.currentlyShowing)));
         },
         getNodeByProperty: function getNodeByProperty(property, val) {
             //Searches the dataset for an element with the given property with the given val
@@ -32900,21 +32901,6 @@ var thisComponent = void 0;
             var xVal = this.relativeTimestampParse(obj._timestamp);
             var yVal = obj[label];
 
-            /*switch (label) {
-                case 'numRx':
-                    yVal = obj.numRx;
-                    break;
-                case 'numTx':
-                    yVal = obj.numTx;
-                    break;
-                case 'dutycycle':
-                    yVal = obj.dutycycle;
-                    break;
-                case 'numCells':
-                    yVal = obj.numCells;
-                    break;
-            }*/
-
             this.appendNodeData(id, obj._mote_info, label, xVal, parseFloat(yVal));
         },
         nodeClick: function nodeClick(event, node) {
@@ -32930,6 +32916,14 @@ var thisComponent = void 0;
                 nodeSize: this.nodeSize,
                 nodeLabels: true,
                 canvas: this.canvas
+            };
+        },
+        currentData: function currentData() {
+            var currentNode = this.getNodeByProperty('id', this.currentlyShowing);
+            return {
+                id: currentNode.id,
+                eui64: currentNode.eui64,
+                isDag: currentNode.isDag
             };
         }
     },
@@ -33027,12 +33021,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     watch: {
         xAxis: function xAxis() {
             this.$data._chart.update();
-            //                /this.renderLineChart();
         }
     },
 
     mounted: function mounted() {
-        // Overwriting base render method with actual data.
         this.renderLineChart();
     }
 });
@@ -45936,41 +45928,35 @@ var render = function() {
               staticStyle: { width: "100%", height: "50%" }
             },
             [
-              _vm.currentlyShowing !== null
+              _vm.currentlyShowing !== ""
                 ? _c("span", { staticClass: "mt-1" }, [
                     _c("span", { staticClass: "bold ml-1 mr-1" }, [
                       _vm._v("Name: ")
                     ]),
                     _vm._v(
-                      " " +
-                        _vm._s(_vm.currentlyShowing.id) +
-                        "\n                "
+                      " " + _vm._s(_vm.currentData.id) + "\n                "
                     )
                   ])
                 : _vm._e(),
               _vm._v(" "),
-              _vm.currentlyShowing !== null
+              _vm.currentlyShowing !== ""
                 ? _c("span", { staticClass: "data-row" }, [
                     _c("span", { staticClass: "bold ml-1 mr-1" }, [
                       _vm._v("EUI-64: ")
                     ]),
                     _vm._v(
-                      " " +
-                        _vm._s(_vm.currentlyShowing.eui64) +
-                        "\n                "
+                      " " + _vm._s(_vm.currentData.eui64) + "\n                "
                     )
                   ])
                 : _vm._e(),
               _vm._v(" "),
-              _vm.currentlyShowing !== null
+              _vm.currentlyShowing !== ""
                 ? _c("span", { staticClass: "data-row" }, [
                     _c("span", { staticClass: "bold ml-1 mr-1" }, [
                       _vm._v("Is DAG?: ")
                     ]),
                     _vm._v(
-                      " " +
-                        _vm._s(_vm.currentlyShowing.isDag) +
-                        "\n                "
+                      " " + _vm._s(_vm.currentData.isDag) + "\n                "
                     )
                   ])
                 : _vm._e()
@@ -45985,25 +45971,33 @@ var render = function() {
           staticClass: "card row ml-1 mr-1 pt-1 col-8 wrap",
           staticStyle: { "overflow-y": "auto", "overflow-x": "hidden" }
         },
-        [
-          _vm.currentlyShowing !== null
-            ? _c(
-                "span",
-                _vm._l(_vm.currentlyShowing.nodeData, function(item) {
-                  return _c("line-chart", {
-                    staticClass: "chart ml-3 mr-3",
-                    attrs: {
-                      label: item.label,
-                      "x-axis": item.xAxis,
-                      "y-axis": item.yAxis,
-                      width: 650,
-                      height: 300
-                    }
+        _vm._l(_vm.dataset, function(node) {
+          return _c("span", [
+            node.id === _vm.currentlyShowing
+              ? _c(
+                  "span",
+                  _vm._l(node.nodeData, function(item) {
+                    return _c(
+                      "span",
+                      [
+                        _c("line-chart", {
+                          staticClass: "chart ml-3 mr-3",
+                          attrs: {
+                            label: item.label,
+                            "x-axis": item.xAxis,
+                            "y-axis": item.yAxis,
+                            width: 650,
+                            height: 300
+                          }
+                        })
+                      ],
+                      1
+                    )
                   })
-                })
-              )
-            : _vm._e()
-        ]
+                )
+              : _vm._e()
+          ])
+        })
       )
     ])
   ])

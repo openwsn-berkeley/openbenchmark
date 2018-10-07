@@ -35,12 +35,10 @@
         watch: {
             xAxis: function() {
                 this.$data._chart.update();
-//                /this.renderLineChart();
             }
         },
 
         mounted () {
-            // Overwriting base render method with actual data.
             this.renderLineChart();
         }
 
