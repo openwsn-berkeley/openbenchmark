@@ -25,6 +25,8 @@ Vagrant.configure("2") do |config|
 
   # HTTP server
   config.vm.network "forwarded_port", guest: 80, host: 8081
+  config.vm.network "forwarded_port", guest: 3000, host: 3000
+
 
   # Share an additional folder to the guest VM. The first argument is
   # the path on the host to the actual folder. The second argument is
