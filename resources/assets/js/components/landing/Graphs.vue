@@ -13,7 +13,7 @@
                         <span class="bold ml-1 mr-1">EUI-64: </span> {{currentData.eui64}}
                     </span>
                     <span class="data-row" v-if="currentlyShowing !== ''">
-                        <span class="bold ml-1 mr-1">Is DAG?: </span> {{currentData.isDag}}
+                        <span class="bold ml-1 mr-1">DAG Root?: </span> {{currentData.isDag}}
                     </span>
                     <!--<span class="data-row"><span class="bold ml-1 mr-1">Radio Duty Cycle: </span> 0.55%</span>-->
                 </div>
@@ -57,6 +57,7 @@
 
         data: function () {
             return {
+                expStartTimestamp: -1,
                 dataPerChart: 20,
 
                 name: 'Scenario 1',
@@ -180,14 +181,46 @@
 
                 let id = obj._mote_info.serial.split('_')[1];
 
-                let xVal = this.relativeTimestampParse(obj._timestamp);
+                //let xVal = this.relativeTimestampParse(obj._timestamp);
+                let xVal = obj._timestamp;
                 let yVal = obj[label];
 
-                this.appendNodeData(id, obj._mote_info, label, xVal, parseFloat(yVal));
+                this.appendNodeData(id, obj._mote_info, label, this.timestampDiff(xVal), parseFloat(yVal));
             },
 
             nodeClick(event, node) {
                 this.selectNodeData(node.name);
+            },
+
+            timestampDiff(stmp) {
+                let timestamp = stmp*1000;
+                console.log("Timestamp: " + this.expStartTimestamp + "; Stmp: " + timestamp);
+                return this.getDuration(new Date(this.expStartTimestamp), new Date(timestamp)).toString();
+            },
+
+            getDuration(d1, d2) {
+                let d3 = new Date(d2 - d1);
+                let d0 = new Date(0);
+
+                return {
+                    getHours: function(){
+                        return d3.getHours() - d0.getHours();
+                    },
+                    getMinutes: function(){
+                        return d3.getMinutes() - d0.getMinutes();
+                    },
+                    getSeconds: function(){
+                        return d3.getSeconds() - d0.getSeconds();
+                    },
+                    getMilliseconds: function() {
+                        return d3.getMilliseconds() - d0.getMilliseconds();
+                    },
+                    toString: function(){
+                        return this.getMinutes() + ":" +
+                            this.getSeconds() + ":" +
+                            this.getMilliseconds();
+                    },
+                };
             }
 
         },
@@ -221,6 +254,7 @@
         created() {
             this.createBlankDataset();
             thisComponent = this;
+            this.expStartTimestamp = new Date().valueOf();
         }
     }
 

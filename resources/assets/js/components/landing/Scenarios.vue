@@ -39,7 +39,7 @@
                         <img class="logo-sm ml-2" style="position: absolute; bottom: 0; height: 55px" src="images/openwsn_cropped.png">
                     </div>
                 </div>
-                <button class="main-btn btn-width-full mt-2" v-if="scenarioSelected !== -1 && testbedSelected !== -1 && !dataFlowStarted" @click="processStart()">Start experiment</button>
+                <button class="main-btn btn-width-full mt-2" v-if="scenarioSelected !== -1 && testbedSelected !== -1 && !dataFlowStarted" @click="processStart()" :disabled="processStarted">Start experiment</button>
                 <button class="main-btn btn-width-full btn-danger mt-2" v-if="dataFlowStarted" @click="processTerminate()">Terminate experiment</button>
             </div>
             <div class="col-7">
@@ -308,17 +308,6 @@
                     .then(function () {
                         // always executed
                     });
-
-                this.processStarted = false;
-                this.nodesReserved = false;
-                this.dataFlowStarted = false;
-
-                let nodes = this.value['nodes'];
-                let num = nodes.length;
-
-                for (let i=0; i<num; i++) {
-                    nodes[i]['_cssClass'] = 'node-off';
-                }
             },
 
             markNode(node, field, value) {
@@ -331,6 +320,7 @@
                         switch(field) {
                             case 'booted':
                                 nodes[i]['booted'] = value;
+                                nodes[i]['_cssClass'] = 'node-booted';
                                 break;
 
                             case 'active':
@@ -553,6 +543,12 @@
         stroke-width: 3px;
         transition: fill .5s ease;
         animation: loading 1s infinite;
+    }
+    .node-booted {
+        stroke: rgba(102, 153, 204, 1);
+        fill: rgba(200, 200, 200, .3);
+        stroke-width: 3px;
+        transition: fill .5s ease;
     }
     .node-on {
         stroke: rgba(66, 184, 131, 1);
