@@ -36,16 +36,19 @@ sudo apt-get -y install python-dev
 sudo apt-get -y install python-pip
 sudo apt-get -y install gcc
 sudo apt-get -y install scons
-sudo pip install -r openvisualizer/openvisualizer/requirements.txt
+sudo pip install -r openvisualizer/requirements.txt
 sudo pip install -r iotlab-exp-auto/requirements.txt
 # Node.js
 curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
 sudo apt-get install -y nodejs
 
 # overwrite Laravel project with our code on startup
+cp -r ~/soda-benchmarking/* ~/benchmarking/
 echo "cp -r ~/soda-benchmarking/* ~/benchmarking/" >> ~/.bashrc
 
-# overwrite default Apache config file
+# overwrite default Apache config file now and at every startup
 sudo cp ~/soda-benchmarking/000-default.conf /etc/apache2/sites-enabled/000-default.conf
+echo "sudo cp ~/soda-benchmarking/000-default.conf /etc/apache2/sites-enabled/000-default.conf" >> ~/.bashrc
 sudo cp ~/soda-benchmarking/envvars /etc/apache2/envvars
+echo "sudo cp ~/soda-benchmarking/envvars /etc/apache2/envvars" >> ~/.bashrc
 
