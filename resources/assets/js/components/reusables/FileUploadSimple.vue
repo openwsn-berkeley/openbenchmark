@@ -1,7 +1,7 @@
 
 <template>
     <div class="example-simple">
-        <h4 id="example-title" class="example-title">Upload firmware</h4>
+        <h4 id="example-title" class="example-title">Firmware: </h4>
         <div class="upload ml-3">
             <ul>
                 <li v-for="(file, index) in files" :key="file.id">
@@ -29,7 +29,7 @@
                     <span style="font-size: 100%">Select files</span>
                 </file-upload>
                 <br>
-                <button type="button" class="main-btn btn-small" style="margin-top: 5px;" v-if="!$refs.upload || !$refs.upload.active" @click.prevent="$refs.upload.active = true">
+                <button :disabled="allowUpload" type="button" class="main-btn btn-small" style="margin-top: 5px;" v-if="!$refs.upload || !$refs.upload.active" @click.prevent="$refs.upload.active = true">
                     <i class="fa fa-arrow-up" aria-hidden="true"></i>
                     Start Upload
                 </button>
@@ -54,6 +54,9 @@
         components: {
             FileUpload,
         },
+        props: [
+            'allow-upload'
+        ],
         data() {
             return {
                 files: [],
@@ -90,3 +93,5 @@
         }
     }
 </script>
+
+<style></style>

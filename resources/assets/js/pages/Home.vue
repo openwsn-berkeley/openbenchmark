@@ -16,7 +16,7 @@
                        threshold
                    }
             }"></scenarios>
-            <graphs id="graphs"  v-observe-visibility="{
+            <graphs id="graphs"  v-if="dataFlowStarted" v-observe-visibility="{
                    callback: visibilityChanged,
                    intersection: {
                        root,
@@ -47,6 +47,7 @@
         },
         data: function () {
             return {
+                dataFlowStarted: false,
                 sidebarScroll: false,
                 root: document.getElementById('root'),
                 threshold: 0.05
@@ -85,6 +86,12 @@
             });
             this.$eventHub.$on("SIDEBAR_SCROLL", payload => {
                 thisComponent.sidebarScroll = true;
+            });
+            this.$eventHub.$on("LOG_MODIFICATION", payload => {
+                this.dataFlowStarted = true;
+            });
+            this.$eventHub.$on("EXP_TERMINATE", payload => {
+                this.dataFlowStarted = false;
             });
         },
 

@@ -26,6 +26,15 @@ class ExperimentController extends Controller
         ]);
     }
 
+    function exp_terminate() {
+        $cmd_handler = new CommandHandler();
+        $cmd_handler->exp_terminate();
+
+        return response()->json([
+            'status' => 'terminated'
+        ]);
+    }
+
 
     // Functions for test routes
     function reserve_exp() {

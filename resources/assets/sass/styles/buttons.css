@@ -17,6 +17,9 @@
 .main-btn:hover {
     background-color: #6699CC;
 }
+.main-btn:disabled {
+    background-color: lightgray;
+}
 
 .btn-width-full {
     width: 100%;

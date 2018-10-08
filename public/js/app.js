@@ -29923,7 +29923,9 @@ Vue.component('arrow', __webpack_require__(332));
 Vue.component('multiselect', __webpack_require__(337).default);
 Vue.component('progress-bar', __webpack_require__(338));
 
-Vue.use(__WEBPACK_IMPORTED_MODULE_1_vue_socket_io_extended__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2_socket_io_client___default()('http://89.188.32.132:3000'));
+//Vue.use(VueSocketio, io('http://89.188.32.132:3000'));
+//Vue.use(VueSocketio, io('http://192.168.10.192:3000'));
+Vue.use(__WEBPACK_IMPORTED_MODULE_1_vue_socket_io_extended__["a" /* default */], __WEBPACK_IMPORTED_MODULE_2_socket_io_client___default()('http://127.0.0.1:3000'));
 Vue.use(__WEBPACK_IMPORTED_MODULE_4_vuebar___default.a);
 
 Vue.directive('observe-visibility', __WEBPACK_IMPORTED_MODULE_3_vue_observe_visibility__["a" /* ObserveVisibility */]);
@@ -30243,7 +30245,7 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, "\n.main-btn {\r\n    border: none;\r\n    height: 35px;\r\n    min-width: 350px;\r\n    background-color: #1f6fb2;\r\n    border-radius: 20px;\r\n    text-transform: uppercase;\r\n    color: white;\r\n    font-size: 100%;\r\n    cursor: pointer;\r\n    -webkit-transition: 0.3s ease;\r\n    transition: 0.3s ease;\n}\n.btn-small{\r\n    height: 35px;\r\n    min-width: 150px;\n}\n.main-btn:hover {\r\n    background-color: #6699CC;\n}\n.btn-width-full {\r\n    width: 100%;\n}\n.btn-danger {\r\n    background-color: red;\n}\n.btn-danger:hover {\r\n    background-color: red;\n}", ""]);
+exports.push([module.i, "\n.main-btn {\r\n    border: none;\r\n    height: 35px;\r\n    min-width: 350px;\r\n    background-color: #1f6fb2;\r\n    border-radius: 20px;\r\n    text-transform: uppercase;\r\n    color: white;\r\n    font-size: 100%;\r\n    cursor: pointer;\r\n    -webkit-transition: 0.3s ease;\r\n    transition: 0.3s ease;\n}\n.btn-small{\r\n    height: 35px;\r\n    min-width: 150px;\n}\n.main-btn:hover {\r\n    background-color: #6699CC;\n}\n.main-btn:disabled {\r\n    background-color: lightgray;\n}\n.btn-width-full {\r\n    width: 100%;\n}\n.btn-danger {\r\n    background-color: red;\n}\n.btn-danger:hover {\r\n    background-color: red;\n}", ""]);
 
 // exports
 
@@ -30473,6 +30475,7 @@ var socketConnected = false;
     },
     data: function data() {
         return {
+            dataFlowStarted: false,
             sidebarScroll: false,
             root: document.getElementById('root'),
             threshold: 0.05
@@ -30497,6 +30500,8 @@ var socketConnected = false;
     },
 
     mounted: function mounted() {
+        var _this = this;
+
         this.$eventHub.$on("SCROLL", function (payload) {
             window.scroll({
                 top: document.getElementById(payload).offsetTop,
@@ -30509,6 +30514,12 @@ var socketConnected = false;
         });
         this.$eventHub.$on("SIDEBAR_SCROLL", function (payload) {
             thisComponent.sidebarScroll = true;
+        });
+        this.$eventHub.$on("LOG_MODIFICATION", function (payload) {
+            _this.dataFlowStarted = true;
+        });
+        this.$eventHub.$on("EXP_TERMINATE", function (payload) {
+            _this.dataFlowStarted = false;
         });
     },
     created: function created() {
@@ -30783,7 +30794,7 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, "\n.parent[data-v-953a1466] {\n    padding: 25px;\n    height: 100vh;\n}\n.logo[data-v-953a1466] {\n    width: 250px;\n    height: auto;\n}\n.logo-sm[data-v-953a1466] {\n    width: 150px;\n    height: auto;\n}\n.image-lg[data-v-953a1466] {\n    width: 350px;\n    height: auto;\n}\n.scroll-down[data-v-953a1466] {\n    height: 80px;\n    cursor: pointer;\n}\n\n", ""]);
+exports.push([module.i, "\n.parent[data-v-953a1466] {\n    padding: 25px;\n    height: 100vh;\n}\n.logo[data-v-953a1466] {\n    width: 250px;\n    height: auto;\n}\n.logo-sm[data-v-953a1466] {\n    width: 200px;\n    height: auto;\n}\n.image-lg[data-v-953a1466] {\n    width: 350px;\n    height: auto;\n}\n.scroll-down[data-v-953a1466] {\n    height: 80px;\n    cursor: pointer;\n}\n\n", ""]);
 
 // exports
 
@@ -30794,11 +30805,6 @@ exports.push([module.i, "\n.parent[data-v-953a1466] {\n    padding: 25px;\n    h
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
 //
 //
 //
@@ -30855,7 +30861,7 @@ var render = function() {
     _c(
       "div",
       {
-        staticClass: "scroll-down row h-center mt-1",
+        staticClass: "scroll-down row h-center mt-3",
         on: { click: _vm.scrollContent }
       },
       [_c("arrow")],
@@ -30870,7 +30876,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c(
       "div",
-      { staticClass: "row", staticStyle: { margin: "0 150px" } },
+      { staticClass: "row", staticStyle: { margin: "0 100px" } },
       [
         _c("div", { staticClass: "col-3" }, [
           _c("img", {
@@ -30883,13 +30889,21 @@ var staticRenderFns = [
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "col-9 pl-2" }, [
-          _c("h2", { staticClass: "uppercase" }, [
-            _vm._v("Benchmark your 6TiSCH implementation")
-          ]),
+          _c("h2", [_vm._v("BENCHMARK YOUR 6TiSCH IMPLEMENTATION")]),
+          _vm._v(" "),
+          _c(
+            "h4",
+            { staticStyle: { "font-size": "100%", "font-style": "italic" } },
+            [
+              _vm._v(
+                "How many times have you come across an academic paper with unfair evaluation? "
+              )
+            ]
+          ),
           _vm._v(" "),
           _c("p", { staticClass: "justified" }, [
             _vm._v(
-              "How many times have you come across an academic paper with unfair evaluation methodology? We aim at standardizing how performance evaluation of 6TiSCH low-power networking technology is done. Upload your 6TiSCH firmware and we will test it in industry-relevant test scenarios on experimental testbeds. You can monitor the network key performance indicators in real time and get an exhaustive performance report of your 6TiSCH firmware implementation."
+              "We aim at standardizing how performance evaluation of 6TiSCH low-power networking technology is done. Upload your 6TiSCH firmware and we will test it in industry-relevant test scenarios on experimental testbeds. You can monitor the network key performance indicators in real time and get an exhaustive performance report of your 6TiSCH firmware implementation."
             )
           ])
         ])
@@ -30902,37 +30916,45 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c(
       "div",
-      { staticClass: "row", staticStyle: { margin: "30px 160px 30px 160px" } },
+      {
+        staticStyle: {
+          position: "relative",
+          height: "120px",
+          margin: "50px 100px 30px 110px"
+        }
+      },
       [
-        _c("div", { staticClass: "card col", staticStyle: { flex: "5" } }, [
-          _c("h4", [_vm._v("Brought to you by:")]),
-          _vm._v(" "),
-          _c("img", {
-            staticClass: "logo-sm mr-2",
-            staticStyle: { "margin-bottom": "3px" },
-            attrs: {
-              src:
-                "http://www.ucg.ac.me/skladiste_baneri/org_jedinica_13/baneri_237/soda_logo_transparent.png"
-            }
-          }),
-          _vm._v(" "),
-          _c("img", {
-            staticClass: "logo-sm mr-2",
-            attrs: { src: "images/ucg.png" }
-          })
-        ]),
+        _c("img", {
+          staticClass: "logo-sm",
+          staticStyle: {
+            position: "absolute",
+            left: "0",
+            "margin-bottom": "3px"
+          },
+          attrs: {
+            src:
+              "http://www.ucg.ac.me/skladiste_baneri/org_jedinica_13/baneri_237/soda_logo_transparent.png"
+          }
+        }),
         _vm._v(" "),
-        _c("div", { staticClass: "card pl-5", staticStyle: { flex: "1" } }, [
-          _c("h4", [_vm._v("Funded by:")]),
-          _vm._v(" "),
-          _c("img", {
-            staticClass: "logo",
-            attrs: {
-              src:
-                "https://fed4fire.eu/wp-content/uploads/sites/10/2017/01/fed4fire_logo_extended.png"
-            }
-          })
-        ])
+        _c("img", {
+          staticClass: "logo-sm",
+          staticStyle: {
+            position: "absolute",
+            left: "50%",
+            transform: "translateX(-50%)"
+          },
+          attrs: { src: "images/ucg.png" }
+        }),
+        _vm._v(" "),
+        _c("img", {
+          staticClass: "logo",
+          staticStyle: { position: "absolute", right: "0" },
+          attrs: {
+            src:
+              "https://fed4fire.eu/wp-content/uploads/sites/10/2017/01/fed4fire_logo_extended.png"
+          }
+        })
       ]
     )
   }
@@ -31268,6 +31290,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 
@@ -31291,6 +31319,7 @@ var thisComponent = void 0;
 
             scenarioSelected: -1,
             testbedSelected: -1,
+            useOpenWSNFirmware: true,
 
             value: null,
             multiselectOptions: [{
@@ -31303,17 +31332,16 @@ var thisComponent = void 0;
                 links: [{ sid: 1, tid: 2 }, { sid: 2, tid: 3 }]
             }, {
                 name: 'Smart office',
-                description: ['Number of nodes: 5', 'Traffic pattern: Periodic, 10 s', 'Transmission power: 0 dBm', 'Interference: None'],
-                nodes: [{ id: 1, name: 'node-a8-106', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 2, name: 'node-a8-107', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 3, name: 'node-a8-108', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 4, name: 'node-a8-109', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 5, name: 'node-a8-110', _cssClass: 'node-off', booted: false, failed: false, active: false }],
-                links: [{ sid: 1, tid: 2 }, { sid: 2, tid: 3 }, { sid: 3, tid: 4 }, { sid: 3, tid: 5 }]
+                description: ['Number of nodes: 5', 'Traffic pattern: Periodic, 10 s', 'Transmission power: 0 dBm', 'Interference: 2.4 GHz Wi-Fi'],
+                nodes: [{ id: 1, name: 'node-a8-106', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 2, name: 'node-a8-107', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 3, name: 'node-a8-108', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 4, name: 'node-a8-109', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 5, name: 'node-a8-110', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 6, name: 'node-a8-111', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 7, name: 'node-a8-112', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 8, name: 'node-a8-113', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 9, name: 'node-a8-114', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 10, name: 'node-a8-115', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 11, name: 'node-a8-116', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 12, name: 'node-a8-117', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 13, name: 'node-a8-118', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 14, name: 'node-a8-119', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 15, name: 'node-a8-120', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 16, name: 'node-a8-121', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 17, name: 'node-a8-122', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 18, name: 'node-a8-123', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 19, name: 'node-a8-124', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 20, name: 'node-a8-125', _cssClass: 'node-off', booted: false, failed: false, active: false }],
+                links: [{ sid: 1, tid: 2 }, { sid: 2, tid: 3 }, { sid: 3, tid: 4 }, { sid: 3, tid: 5 }, { sid: 3, tid: 6 }, { sid: 6, tid: 7 }, { sid: 6, tid: 8 }, { sid: 6, tid: 9 }, { sid: 6, tid: 10 }, { sid: 10, tid: 11 }, { sid: 11, tid: 12 }, { sid: 11, tid: 13 }, { sid: 13, tid: 14 }, { sid: 14, tid: 15 }, { sid: 15, tid: 16 }, { sid: 16, tid: 17 }, { sid: 17, tid: 18 }, { sid: 18, tid: 19 }, { sid: 19, tid: 20 }]
             }, {
                 name: 'Smart factory',
-                description: ['Number of nodes: 10', 'Traffic pattern: Periodic, 10 s', 'Transmission power: 0 dBm', 'Interference: None'],
-                nodes: [{ id: 1, name: 'node-a8-106', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 2, name: 'node-a8-107', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 3, name: 'node-a8-108', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 4, name: 'node-a8-109', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 5, name: 'node-a8-110', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 6, name: 'node-a8-111', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 7, name: 'node-a8-112', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 8, name: 'node-a8-113', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 9, name: 'node-a8-114', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 10, name: 'node-a8-115', _cssClass: 'node-off', booted: false, failed: false, active: false }],
-                links: [{ sid: 1, tid: 2 }, { sid: 2, tid: 3 }, { sid: 3, tid: 4 }, { sid: 3, tid: 5 }, { sid: 3, tid: 6 }, { sid: 6, tid: 7 }, { sid: 6, tid: 8 }, { sid: 8, tid: 9 }, { sid: 9, tid: 10 }]
+                description: ['Number of nodes: 10', 'Traffic pattern: Periodic, 10 s', 'Transmission power: 0 dBm', 'Interference: 2.4 GHz Wi-Fi'],
+                nodes: [{ id: 1, name: 'node-a8-106', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 2, name: 'node-a8-107', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 3, name: 'node-a8-108', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 4, name: 'node-a8-109', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 5, name: 'node-a8-110', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 6, name: 'node-a8-111', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 7, name: 'node-a8-112', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 8, name: 'node-a8-113', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 9, name: 'node-a8-114', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 10, name: 'node-a8-115', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 11, name: 'node-a8-116', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 12, name: 'node-a8-117', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 13, name: 'node-a8-118', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 14, name: 'node-a8-119', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 15, name: 'node-a8-120', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 16, name: 'node-a8-121', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 17, name: 'node-a8-122', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 18, name: 'node-a8-123', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 19, name: 'node-a8-124', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 20, name: 'node-a8-125', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 21, name: 'node-a8-106', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 22, name: 'node-a8-107', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 23, name: 'node-a8-108', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 24, name: 'node-a8-109', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 25, name: 'node-a8-110', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 26, name: 'node-a8-111', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 27, name: 'node-a8-112', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 28, name: 'node-a8-113', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 29, name: 'node-a8-114', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 30, name: 'node-a8-115', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 31, name: 'node-a8-116', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 32, name: 'node-a8-117', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 33, name: 'node-a8-118', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 34, name: 'node-a8-119', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 35, name: 'node-a8-120', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 36, name: 'node-a8-121', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 37, name: 'node-a8-122', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 38, name: 'node-a8-123', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 39, name: 'node-a8-124', _cssClass: 'node-off', booted: false, failed: false, active: false }, { id: 40, name: 'node-a8-125', _cssClass: 'node-off', booted: false, failed: false, active: false }],
+                links: [{ sid: 1, tid: 2 }, { sid: 2, tid: 3 }, { sid: 3, tid: 4 }, { sid: 3, tid: 5 }, { sid: 3, tid: 6 }, { sid: 6, tid: 7 }, { sid: 6, tid: 8 }, { sid: 6, tid: 9 }, { sid: 6, tid: 10 }, { sid: 10, tid: 11 }, { sid: 11, tid: 12 }, { sid: 11, tid: 13 }, { sid: 13, tid: 14 }, { sid: 14, tid: 15 }, { sid: 15, tid: 16 }, { sid: 16, tid: 17 }, { sid: 17, tid: 18 }, { sid: 18, tid: 19 }, { sid: 19, tid: 20 }, { sid: 20, tid: 21 }, { sid: 21, tid: 22 }, { sid: 22, tid: 23 }, { sid: 23, tid: 24 }, { sid: 23, tid: 25 }, { sid: 23, tid: 26 }, { sid: 26, tid: 27 }, { sid: 26, tid: 28 }, { sid: 26, tid: 29 }, { sid: 26, tid: 30 }, { sid: 30, tid: 31 }, { sid: 31, tid: 32 }, { sid: 31, tid: 33 }, { sid: 33, tid: 34 }, { sid: 34, tid: 35 }, { sid: 35, tid: 36 }, { sid: 36, tid: 37 }, { sid: 37, tid: 38 }, { sid: 38, tid: 39 }, { sid: 39, tid: 40 }]
             }],
 
-            nodeSize: 35,
             canvas: false
         };
     },
@@ -31349,6 +31377,28 @@ var thisComponent = void 0;
                 nodes[i]['_cssClass'] = 'node-loading';
             }
         },
+        processTerminate: function processTerminate() {
+            axios.get('/api/terminate-exp').then(function (response) {
+                // handle success
+                console.log(response);
+            }).catch(function (error) {
+                // handle error
+                console.log("Error: " + error);
+            }).then(function () {
+                // always executed
+            });
+
+            this.processStarted = false;
+            this.nodesReserved = false;
+            this.dataFlowStarted = false;
+
+            var nodes = this.value['nodes'];
+            var num = nodes.length;
+
+            for (var i = 0; i < num; i++) {
+                nodes[i]['_cssClass'] = 'node-off';
+            }
+        },
         markNode: function markNode(node, field, value) {
             //booted, active, failed
             var nodes = this.value['nodes'];
@@ -31378,10 +31428,24 @@ var thisComponent = void 0;
 
     computed: {
         options: function options() {
+            var nodeSize = void 0;
+            var force = void 0;
+
+            if (this.value.name === "Demo") {
+                nodeSize = 35;
+                force = 3000;
+            } else if (this.value.name === "Smart office") {
+                nodeSize = 25;
+                force = 1000;
+            } else {
+                nodeSize = 25;
+                force = 500;
+            }
+
             return {
-                force: 3000,
+                force: force,
                 size: { w: 600, h: 450 },
-                nodeSize: this.nodeSize,
+                nodeSize: nodeSize,
                 nodeLabels: true,
                 canvas: this.canvas
             };
@@ -31423,6 +31487,8 @@ var thisComponent = void 0;
         thisComponent = this;
     },
     mounted: function mounted() {
+        var _this = this;
+
         this.$eventHub.$on("RESERVATION_SUCCESS", function (payload) {
             thisComponent.nodesReserved = true;
         });
@@ -31443,6 +31509,27 @@ var thisComponent = void 0;
 
         this.$eventHub.$on("LOG_MODIFICATION", function (payload) {
             thisComponent.dataFlowStarted = true;
+
+            thisComponent.selectScenario(0);
+            var nodes = thisComponent.value['nodes'];
+            var num = nodes.length;
+
+            for (var i = 0; i < num; i++) {
+                nodes[i]['_cssClass'] = 'node-on';
+            }
+        });
+
+        this.$eventHub.$on("EXP_TERMINATE", function (payload) {
+            _this.processStarted = false;
+            _this.nodesReserved = false;
+            _this.dataFlowStarted = false;
+
+            var nodes = _this.value['nodes'];
+            var num = nodes.length;
+
+            for (var i = 0; i < num; i++) {
+                nodes[i]['_cssClass'] = 'node-off';
+            }
         });
     }
 });
@@ -32345,155 +32432,206 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "parent" }, [
     _c("div", { staticClass: "row" }, [
-      _c(
-        "div",
-        { staticClass: "col-5 pr-5 pl-5" },
-        [
-          _c("h4", [_vm._v("Choose a scenario: ")]),
+      _c("div", { staticClass: "col-5 pr-5 pl-5" }, [
+        _c("h4", [_vm._v("Scenario: ")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c(
+            "div",
+            {
+              staticClass: "scenario col-direction",
+              class: { "scenario-selected": _vm.scenarioSelected === 0 },
+              on: {
+                click: function($event) {
+                  _vm.selectScenario(0)
+                }
+              }
+            },
+            [
+              _c("i", { staticClass: "fas fa-desktop fa-3x text-center" }),
+              _vm._v(" "),
+              _c("span", { staticClass: "text-center" }, [_vm._v("Demo")])
+            ]
+          ),
           _vm._v(" "),
-          _c("div", { staticClass: "row" }, [
-            _c(
-              "div",
-              {
-                staticClass: "scenario col-direction",
-                class: { "scenario-selected": _vm.scenarioSelected === 0 },
-                on: {
-                  click: function($event) {
-                    _vm.selectScenario(0)
-                  }
+          _c(
+            "div",
+            {
+              staticClass: "scenario col-direction",
+              class: { "scenario-selected": _vm.scenarioSelected === 1 },
+              on: {
+                click: function($event) {
+                  _vm.selectScenario(1)
                 }
-              },
-              [
-                _c("i", { staticClass: "fas fa-desktop fa-3x text-center" }),
-                _vm._v(" "),
-                _c("span", { staticClass: "text-center" }, [_vm._v("Demo")])
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticClass: "scenario col-direction",
-                class: { "scenario-selected": _vm.scenarioSelected === 1 },
-                on: {
-                  click: function($event) {
-                    _vm.selectScenario(1)
-                  }
-                }
-              },
-              [
-                _c("i", { staticClass: "fas fa-building fa-3x text-center" }),
-                _vm._v(" "),
-                _c("span", { staticClass: "text-center" }, [
-                  _vm._v("Smart office")
-                ])
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticClass: "scenario col-direction",
-                class: { "scenario-selected": _vm.scenarioSelected === 2 },
-                on: {
-                  click: function($event) {
-                    _vm.selectScenario(2)
-                  }
-                }
-              },
-              [
-                _c("i", { staticClass: "fas fa-industry fa-3x text-center" }),
-                _vm._v(" "),
-                _c("span", { staticClass: "text-center" }, [
-                  _vm._v("Smart factory")
-                ])
-              ]
-            )
-          ]),
-          _vm._v(" "),
-          _vm.value !== null
-            ? _c("div", { staticClass: "justified bold" }, [
-                _c(
-                  "ul",
-                  _vm._l(_vm.value.description, function(item) {
-                    return _c("li", [
-                      _vm._v(
-                        "\n                        " +
-                          _vm._s(item) +
-                          "\n                    "
-                      )
-                    ])
-                  })
-                )
+              }
+            },
+            [
+              _c("i", { staticClass: "fas fa-building fa-3x text-center" }),
+              _vm._v(" "),
+              _c("span", { staticClass: "text-center" }, [
+                _vm._v("Smart office")
               ])
-            : _vm._e(),
+            ]
+          ),
           _vm._v(" "),
-          _c("h4", [_vm._v("Choose a testbed: ")]),
-          _vm._v(" "),
-          _c("div", { staticClass: "row ml-3" }, [
-            _c(
-              "div",
-              {
-                staticClass: "testbed col-direction",
-                class: { "testbed-selected": _vm.testbedSelected === 0 },
-                on: {
-                  click: function($event) {
-                    _vm.selectTestbed(0)
-                  }
+          _c(
+            "div",
+            {
+              staticClass: "scenario col-direction",
+              class: { "scenario-selected": _vm.scenarioSelected === 2 },
+              on: {
+                click: function($event) {
+                  _vm.selectScenario(2)
                 }
-              },
-              [
-                _c("img", {
-                  staticClass: "logo-sm mr-2",
-                  staticStyle: { height: "55px" },
-                  attrs: {
-                    src:
-                      "https://www.iot-lab.info/wp-content/themes/alienship-1.2.5-child/templates/parts/fit-iotlab3.png"
-                  }
+              }
+            },
+            [
+              _c("i", { staticClass: "fas fa-industry fa-3x text-center" }),
+              _vm._v(" "),
+              _c("span", { staticClass: "text-center" }, [
+                _vm._v("Smart factory")
+              ])
+            ]
+          )
+        ]),
+        _vm._v(" "),
+        _vm.value !== null
+          ? _c("div", { staticClass: "justified bold" }, [
+              _c(
+                "ul",
+                _vm._l(_vm.value.description, function(item) {
+                  return _c("li", [
+                    _vm._v(
+                      "\n                        " +
+                        _vm._s(item) +
+                        "\n                    "
+                    )
+                  ])
                 })
-              ]
-            ),
+              )
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _c("h4", [_vm._v("Testbed: ")]),
+        _vm._v(" "),
+        _c("div", { staticClass: "row ml-3" }, [
+          _c(
+            "div",
+            {
+              staticClass: "testbed col-direction",
+              class: { "testbed-selected": _vm.testbedSelected === 0 },
+              on: {
+                click: function($event) {
+                  _vm.selectTestbed(0)
+                }
+              }
+            },
+            [
+              _c("img", {
+                staticClass: "logo-sm mr-2",
+                staticStyle: { height: "55px" },
+                attrs: {
+                  src:
+                    "https://www.iot-lab.info/wp-content/themes/alienship-1.2.5-child/templates/parts/fit-iotlab3.png"
+                }
+              })
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "testbed col-direction",
+              class: { "testbed-selected": _vm.testbedSelected === 1 },
+              on: {
+                click: function($event) {
+                  _vm.selectTestbed(1)
+                }
+              }
+            },
+            [
+              _c("img", {
+                staticClass: "logo-sm mr-2",
+                staticStyle: { height: "55px" },
+                attrs: { src: "images/w-ilabt.png" }
+              })
+            ]
+          )
+        ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "row" },
+          [
+            _c("file-upload-simple", {
+              attrs: { "allow-upload": _vm.useOpenWSNFirmware },
+              nativeOn: {
+                click: function($event) {
+                  _vm.useOpenWSNFirmware = false
+                }
+              }
+            }),
             _vm._v(" "),
             _c(
               "div",
               {
-                staticClass: "testbed col-direction",
-                class: { "testbed-selected": _vm.testbedSelected === 1 },
+                staticClass: "testbed",
+                class: { "testbed-selected": _vm.useOpenWSNFirmware },
+                staticStyle: { position: "relative" },
                 on: {
                   click: function($event) {
-                    _vm.selectTestbed(1)
+                    _vm.useOpenWSNFirmware = true
                   }
                 }
               },
               [
                 _c("img", {
-                  staticClass: "logo-sm mr-2",
-                  staticStyle: { height: "55px" },
-                  attrs: { src: "images/w-ilabt.png" }
+                  staticClass: "logo-sm ml-2",
+                  staticStyle: {
+                    position: "absolute",
+                    bottom: "0",
+                    height: "55px"
+                  },
+                  attrs: { src: "images/openwsn_cropped.png" }
                 })
               ]
             )
-          ]),
-          _vm._v(" "),
-          _c("file-upload-simple"),
-          _vm._v(" "),
-          _vm.scenarioSelected !== -1 && _vm.testbedSelected !== -1
-            ? _c(
-                "button",
-                {
-                  staticClass: "main-btn btn-width-full mt-2",
-                  on: {
-                    click: function($event) {
-                      _vm.processStart()
-                    }
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _vm.scenarioSelected !== -1 &&
+        _vm.testbedSelected !== -1 &&
+        !_vm.dataFlowStarted
+          ? _c(
+              "button",
+              {
+                staticClass: "main-btn btn-width-full mt-2",
+                on: {
+                  click: function($event) {
+                    _vm.processStart()
                   }
-                },
-                [_vm._v("Start experiment")]
-              )
-            : _vm._e()
-        ],
-        1
-      ),
+                }
+              },
+              [_vm._v("Start experiment")]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.dataFlowStarted
+          ? _c(
+              "button",
+              {
+                staticClass: "main-btn btn-width-full btn-danger mt-2",
+                on: {
+                  click: function($event) {
+                    _vm.processTerminate()
+                  }
+                }
+              },
+              [_vm._v("Terminate experiment")]
+            )
+          : _vm._e()
+      ]),
       _vm._v(" "),
       _c(
         "div",
@@ -46181,6 +46319,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
+            dataFlowStarted: false,
             selectedId: 0
         };
     },
@@ -46210,6 +46349,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     _this.selectedId = 2;
                     break;
             }
+        });
+        this.$eventHub.$on("LOG_MODIFICATION", function (payload) {
+            _this.dataFlowStarted = true;
+        });
+        this.$eventHub.$on("EXP_TERMINATE", function (payload) {
+            _this.dataFlowStarted = false;
         });
     }
 });
@@ -46259,22 +46404,24 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
-        _c(
-          "li",
-          {
-            class: { active: _vm.selectedId === 2 },
-            on: {
-              click: function($event) {
-                _vm.scrollContent("graphs")
-              }
-            }
-          },
-          [
-            _c("i", { staticClass: "fas fa-tachometer-alt" }),
-            _vm._v(" "),
-            _c("span", { staticClass: "tooltip" }, [_vm._v("Monitoring")])
-          ]
-        )
+        _vm.dataFlowStarted
+          ? _c(
+              "li",
+              {
+                class: { active: _vm.selectedId === 2 },
+                on: {
+                  click: function($event) {
+                    _vm.scrollContent("graphs")
+                  }
+                }
+              },
+              [
+                _c("i", { staticClass: "fas fa-tachometer-alt" }),
+                _vm._v(" "),
+                _c("span", { staticClass: "tooltip" }, [_vm._v("Monitoring")])
+              ]
+            )
+          : _vm._e()
       ])
     ])
   ])
@@ -46345,24 +46492,26 @@ var render = function() {
             attrs: { id: "scenarios" }
           }),
           _vm._v(" "),
-          _c("graphs", {
-            directives: [
-              {
-                name: "observe-visibility",
-                rawName: "v-observe-visibility",
-                value: {
-                  callback: _vm.visibilityChanged,
-                  intersection: {
-                    root: _vm.root,
-                    threshold: _vm.threshold
+          _vm.dataFlowStarted
+            ? _c("graphs", {
+                directives: [
+                  {
+                    name: "observe-visibility",
+                    rawName: "v-observe-visibility",
+                    value: {
+                      callback: _vm.visibilityChanged,
+                      intersection: {
+                        root: _vm.root,
+                        threshold: _vm.threshold
+                      }
+                    },
+                    expression:
+                      "{\n               callback: visibilityChanged,\n               intersection: {\n                   root,\n                   threshold\n               }\n        }"
                   }
-                },
-                expression:
-                  "{\n               callback: visibilityChanged,\n               intersection: {\n                   root,\n                   threshold\n               }\n        }"
-              }
-            ],
-            attrs: { id: "graphs" }
-          })
+                ],
+                attrs: { id: "graphs" }
+              })
+            : _vm._e()
         ],
         1
       )
@@ -67076,6 +67225,7 @@ var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(348)
+  __webpack_require__(353)
 }
 var normalizeComponent = __webpack_require__(8)
 /* script */
@@ -67223,6 +67373,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     components: {
         FileUpload: __WEBPACK_IMPORTED_MODULE_0_vue_upload_component___default.a
     },
+    props: ['allow-upload'],
     data: function data() {
         return {
             files: []
@@ -69356,7 +69507,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "example-simple" }, [
     _c("h4", { staticClass: "example-title", attrs: { id: "example-title" } }, [
-      _vm._v("Upload firmware")
+      _vm._v("Firmware: ")
     ]),
     _vm._v(" "),
     _c("div", { staticClass: "upload ml-3" }, [
@@ -69423,7 +69574,7 @@ var render = function() {
                 {
                   staticClass: "main-btn btn-small",
                   staticStyle: { "margin-top": "5px" },
-                  attrs: { type: "button" },
+                  attrs: { disabled: _vm.allowUpload, type: "button" },
                   on: {
                     click: function($event) {
                       $event.preventDefault()
@@ -69475,6 +69626,46 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-79015526", module.exports)
   }
 }
+
+/***/ }),
+/* 353 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(354);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(4)("e36b65e0", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-79015526\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=1!./FileUploadSimple.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-79015526\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=1!./FileUploadSimple.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 354 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(3)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
 
 /***/ })
 /******/ ]);

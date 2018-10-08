@@ -10,7 +10,7 @@
                     <i class="fas fa-cogs"></i>
                     <span class="tooltip">Configuration</span>
                 </li>
-                <li :class="{active: selectedId === 2}" @click="scrollContent('graphs')">
+                <li :class="{active: selectedId === 2}" @click="scrollContent('graphs')" v-if="dataFlowStarted">
                     <i class="fas fa-tachometer-alt"></i>
                     <span class="tooltip">Monitoring</span>
                 </li>
@@ -23,6 +23,7 @@
     export default {
         data: function () {
             return {
+                dataFlowStarted: false,
                 selectedId: 0
             }
         },
@@ -50,6 +51,12 @@
                         this.selectedId = 2;
                         break;
                 }
+            });
+            this.$eventHub.$on("LOG_MODIFICATION", payload => {
+                this.dataFlowStarted = true;
+            });
+            this.$eventHub.$on("EXP_TERMINATE", payload => {
+                this.dataFlowStarted = false;
             });
         }
 
