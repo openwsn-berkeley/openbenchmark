@@ -2,61 +2,71 @@
     <div class="parent">
         <div class="row">
             <div class="col-5 pr-5 pl-5">
-                <h2>Choose a scenario: </h2>
+                <h4>Choose a scenario: </h4>
                 <div class="row">
                     <div class="scenario col-direction" :class="{'scenario-selected': scenarioSelected === 0}" @click="selectScenario(0)">
                         <i class="fas fa-desktop fa-3x text-center"></i>
                         <span class="text-center">Demo</span>
                     </div>
                     <div class="scenario col-direction" :class="{'scenario-selected': scenarioSelected === 1}" @click="selectScenario(1)">
-                        <i class="fas fa-home fa-3x text-center"></i>
-                        <span class="text-center">Home automation</span>
+                        <i class="fas fa-building fa-3x text-center"></i>
+                        <span class="text-center">Smart office</span>
                     </div>
                     <div class="scenario col-direction" :class="{'scenario-selected': scenarioSelected === 2}" @click="selectScenario(2)">
                         <i class="fas fa-industry fa-3x text-center"></i>
                         <span class="text-center">Smart factory</span>
                     </div>
                 </div>
-                <p class="justified bold" v-if="value !== null">{{value.description}}</p>
-                <h2>Choose a testbed: </h2>
-                <div class="row">
+                <div class="justified bold" v-if="value !== null">
+                    <ul>
+                        <li v-for="item in value.description">
+                            {{item}}
+                        </li>
+                    </ul>
+                </div>
+                <h4>Choose a testbed: </h4>
+                <div class="row ml-3">
                     <div class="testbed col-direction" :class="{'testbed-selected': testbedSelected === 0}" @click="selectTestbed(0)">
                         <img class="logo-sm mr-2" style="height: 55px" src="https://www.iot-lab.info/wp-content/themes/alienship-1.2.5-child/templates/parts/fit-iotlab3.png">
                     </div>
                     <div class="testbed col-direction" :class="{'testbed-selected': testbedSelected === 1}" @click="selectTestbed(1)">
-                        <img class="logo-sm mr-2" style="height: 55px" src="https://www.iot-lab.info/wp-content/themes/alienship-1.2.5-child/templates/parts/fit-iotlab3.png">
+                        <img class="logo-sm mr-2" style="height: 55px" src="images/w-ilabt.png">
                     </div>
                 </div>
+                <file-upload-simple></file-upload-simple>
                 <button class="main-btn btn-width-full mt-2" v-if="scenarioSelected !== -1 && testbedSelected !== -1" @click="processStart()">Start experiment</button>
             </div>
             <div class="col-7">
-                <d3-network :net-nodes="value.nodes" :net-links="value.links" :options="options" v-if="value !== null"/>
+                <d3-network style="height: 78%" :net-nodes="value.nodes" :net-links="value.links" :options="options" v-if="value !== null"/>
+                <div class="row pl-3 pr-3 h-center v-center col-direction" v-if="processStarted && !dataFlowStarted">
+                    <h3 class="primary pulse mb-0" v-if="!dataFlowStarted">Starting experiment...</h3>
+                    <progress-bar
+                            :nodes-reserved="nodesReserved"
+                            :all-booted="allBooted"
+                            :all-active="allActive"
+                            :data-flow-started="dataFlowStarted"></progress-bar>
+                </div>
+                <div class="row h-center v-center col-direction mt-1" v-if="dataFlowStarted">
+                    <h3 class="mt-0 mb-0" style="margin-bottom: 5px">Experiment started! <span class="pulse clickable" @click.prevent="scrollContent">Monitor the progress in real time</span></h3>
+                    <i class="fas fa-check-circle fa-3x primary-light"></i>
+                </div>
             </div>
-        </div>
-        <div class="row pl-3 pr-3 h-center v-center col-direction" v-if="processStarted && !dataFlowStarted">
-            <h3 class="primary pulse mb-0" v-if="!dataFlowStarted">Starting experiment...</h3>
-            <progress-bar
-                    :nodes-reserved="nodesReserved"
-                    :all-booted="allBooted"
-                    :all-active="allActive"
-                    :data-flow-started="dataFlowStarted"></progress-bar>
-        </div>
-        <div class="row h-center v-center col-direction mt-1" v-if="dataFlowStarted">
-            <h3 class="mt-0 mb-0" style="margin-bottom: 5px">Experiment started! <span class="pulse clickable" @click.prevent="scrollContent">Monitor the progress in real time</span></h3>
-            <i class="fas fa-check-circle fa-3x primary-light"></i>
         </div>
     </div>
 </template>
 
 <script>
     import D3Network from 'vue-d3-network';
+    import FileUploadSimple from './../reusables/FileUploadSimple.vue';
+
     const axios = require('axios');
 
     let thisComponent;
 
     export default {
         components: {
-            D3Network
+            D3Network,
+            FileUploadSimple
         },
         data: function () {
             return {
@@ -72,8 +82,13 @@
                 value: null,
                 multiselectOptions: [
                     {
-                        name: 'Scenario 1',
-                        description: 'Scenario1: Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.',
+                        name: 'Demo',
+                        description: [
+                            'Number of nodes: 3',
+                            'Traffic pattern: Periodic, 10 s',
+                            'Transmission power: 0 dBm',
+                            'Interference: None'
+                        ],
                         nodes: [
                             { id: 1, name: 'node-a8-106', _cssClass: 'node-off', booted: false, failed: false, active: false},
                             { id: 2, name: 'node-a8-107', _cssClass: 'node-off', booted: false, failed: false, active: false},
@@ -87,34 +102,58 @@
                         ],
                     },
                     {
-                        name: 'Scenario 2',
-                        description: 'Scenario2: Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.',
+                        name: 'Smart office',
+                        description: [
+                            'Number of nodes: 5',
+                            'Traffic pattern: Periodic, 10 s',
+                            'Transmission power: 0 dBm',
+                            'Interference: None'
+                        ],
                         nodes: [
                             { id: 1, name: 'node-a8-106', _cssClass: 'node-off', booted: false, failed: false, active: false},
                             { id: 2, name: 'node-a8-107', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            //{ id: 3, name:'orange node', _color: 'orange' },
-                            //{ id: 4, _color: '#0022ff'},
                             { id: 3, name: 'node-a8-108', _cssClass: 'node-off', booted: false, failed: false, active: false},
+                            { id: 4, name: 'node-a8-109', _cssClass: 'node-off', booted: false, failed: false, active: false},
+                            { id: 5, name: 'node-a8-110', _cssClass: 'node-off', booted: false, failed: false, active: false},
                         ],
                         links: [
                             { sid: 1, tid: 2 },
-                            { sid: 2, tid: 3 }
+                            { sid: 2, tid: 3 },
+                            { sid: 3, tid: 4 },
+                            { sid: 3, tid: 5 },
                         ],
                     },
 
                     {
-                        name: 'Scenario 3',
-                        description: 'Scenario3: Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.',
+                        name: 'Smart factory',
+                        description: [
+                            'Number of nodes: 10',
+                            'Traffic pattern: Periodic, 10 s',
+                            'Transmission power: 0 dBm',
+                            'Interference: None'
+                        ],
                         nodes: [
                             { id: 1, name: 'node-a8-106', _cssClass: 'node-off', booted: false, failed: false, active: false},
                             { id: 2, name: 'node-a8-107', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            //{ id: 3, name:'orange node', _color: 'orange' },
-                            //{ id: 4, _color: '#0022ff'},
                             { id: 3, name: 'node-a8-108', _cssClass: 'node-off', booted: false, failed: false, active: false},
+                            { id: 4, name: 'node-a8-109', _cssClass: 'node-off', booted: false, failed: false, active: false},
+                            { id: 5, name: 'node-a8-110', _cssClass: 'node-off', booted: false, failed: false, active: false},
+                            { id: 6, name: 'node-a8-111', _cssClass: 'node-off', booted: false, failed: false, active: false},
+                            { id: 7, name: 'node-a8-112', _cssClass: 'node-off', booted: false, failed: false, active: false},
+                            { id: 8, name: 'node-a8-113', _cssClass: 'node-off', booted: false, failed: false, active: false},
+                            { id: 9, name: 'node-a8-114', _cssClass: 'node-off', booted: false, failed: false, active: false},
+                            { id: 10, name: 'node-a8-115', _cssClass: 'node-off', booted: false, failed: false, active: false},
                         ],
                         links: [
                             { sid: 1, tid: 2 },
-                            { sid: 2, tid: 3 }
+                            { sid: 2, tid: 3 },
+                            { sid: 3, tid: 4 },
+                            { sid: 3, tid: 5 },
+                            { sid: 3, tid: 6 },
+                            { sid: 6, tid: 7 },
+                            { sid: 6, tid: 8 },
+                            { sid: 8, tid: 9 },
+                            { sid: 9, tid: 10 },
                         ],
                     }
                 ],
@@ -384,4 +423,8 @@
         stroke-width: 3px;
         transition: fill .5s ease;
     }
+
+    /*.net {
+        height: 78%;
+    }*/
 </style>

@@ -18,6 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/start-exp', 'ExperimentController@start');
+Route::post('/firmware-upload', 'ExperimentController@upload');
 
 //Test routes
 Route::get('/reserve-exp', 'ExperimentController@reserve_exp');

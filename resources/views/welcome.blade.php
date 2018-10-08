@@ -8,7 +8,8 @@
 
         <script>window.Laravel = {csrfToken: '{{csrf_token()}}'}</script>
 
-        <title>Laravel</title>
+        <link rel="icon" href="images/6tisch_no_text.png">
+        <title>Benchmark 6TiSCH</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">

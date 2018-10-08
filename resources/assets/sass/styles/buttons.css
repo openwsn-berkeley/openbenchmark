@@ -10,10 +10,20 @@
     cursor: pointer;
     transition: 0.3s ease;
 }
+.btn-small{
+    height: 35px;
+    min-width: 150px;
+}
 .main-btn:hover {
     background-color: #6699CC;
 }
 
 .btn-width-full {
     width: 100%;
+}
+.btn-danger {
+    background-color: red;
+}
+.btn-danger:hover {
+    background-color: red;
 }

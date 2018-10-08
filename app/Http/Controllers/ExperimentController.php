@@ -20,6 +20,14 @@ class ExperimentController extends Controller
         return $cmd_handler->ov_monitor();
     }
 
+    function upload() {
+        return response()->json([
+            'status' => 'success'
+        ]);
+    }
+
+
+    // Functions for test routes
     function reserve_exp() {
         $cmd_handler = new CommandHandler();
         return $cmd_handler->reserve_nodes();

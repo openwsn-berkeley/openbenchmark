@@ -15,7 +15,7 @@
             </li>
             <li :class="{done: dataFlowStarted, todo: !dataFlowStarted}">
                 <em>4</em>
-                <span>Data pending</span>
+                <span>Pending</span>
             </li>
         </ol>
     </div>
@@ -40,7 +40,7 @@
 
 <style scoped>
     .top-container {
-        width: 100%;
+        width: 112%;
     }
 
     body {
