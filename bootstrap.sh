@@ -51,4 +51,9 @@ sudo cp ~/soda-benchmarking/000-default.conf /etc/apache2/sites-enabled/000-defa
 echo "sudo cp ~/soda-benchmarking/000-default.conf /etc/apache2/sites-enabled/000-default.conf" >> ~/.bashrc
 sudo cp ~/soda-benchmarking/envvars /etc/apache2/envvars
 echo "sudo cp ~/soda-benchmarking/envvars /etc/apache2/envvars" >> ~/.bashrc
+rm -f ~/openvisualizer/build/runui/networkEvent.log*
+echo "rm -f ~/openvisualizer/build/runui/networkEvent.log*" >> ~/.bashrc
+
+rm -f ~/openvisualizer/build/runui/*.log*
+echo "rm -f ~/openvisualizer/build/runui/*.log*" >> ~/.bashrc
 
