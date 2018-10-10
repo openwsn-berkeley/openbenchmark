@@ -1,0 +1,13 @@
+[Unit]
+Description=index.js - handling OpenVisualizer log events
+After=network.target
+
+[Service]
+Environment=NODE_PORT=3000
+Type=simple
+User=vagrant
+ExecStart=/usr/bin/node /home/vagrant/iotlab-exp-auto/nodejs_websocket/index.js
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
