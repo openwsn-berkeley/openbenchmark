@@ -55,9 +55,11 @@ echo "sudo cp ~/soda-benchmarking/system-config/envvars /etc/apache2/envvars" >>
 
 # Start node.js as a deamon
 sudo cp ~/soda-benchmarking/system-config/index.service /lib/systemd/system/index.service
-echo "sudo cp ~/soda-benchmarking/system-config/index.service /lib/systemd/system/index.service" >> ~/.bashrc
 sudo systemctl daemon-reload
 sudo systemctl restart index
+echo "sudo cp ~/soda-benchmarking/system-config/index.service /lib/systemd/system/index.service" >> ~/.bashrc
+echo "sudo systemctl daemon-reload" >> ~/.bashrc
+echo "sudo systemctl restart index" >> ~/.bashrc
 
 sudo rm -f ~/openvisualizer/build/runui/networkEvent.log*
 echo "sudo rm -f ~/openvisualizer/build/runui/networkEvent.log*" >> ~/.bashrc
@@ -71,6 +73,7 @@ echo "Please publish the following SSH key on any server where automated SSH is 
 cat ~/.ssh/id_rsa.pub
 echo "==================================="
 
+# Restart Apache
 sudo a2enmod rewrite
 sudo service apache2 restart
 
