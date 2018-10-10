@@ -59,11 +59,11 @@ echo "sudo cp ~/soda-benchmarking/system-config/index.service /lib/systemd/syste
 sudo systemctl daemon-reload
 sudo systemctl restart index
 
-rm -f ~/openvisualizer/build/runui/networkEvent.log*
-echo "rm -f ~/openvisualizer/build/runui/networkEvent.log*" >> ~/.bashrc
+sudo rm -f ~/openvisualizer/build/runui/networkEvent.log*
+echo "sudo rm -f ~/openvisualizer/build/runui/networkEvent.log*" >> ~/.bashrc
 
-rm -f ~/openvisualizer/build/runui/*.log*
-echo "rm -f ~/openvisualizer/build/runui/*.log*" >> ~/.bashrc
+sudo rm -f ~/openvisualizer/build/runui/*.log*
+echo "sudo rm -f ~/openvisualizer/build/runui/*.log*" >> ~/.bashrc
 
 ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
 echo "==================================="
