@@ -47,10 +47,10 @@ cp -r ~/soda-benchmarking/* ~/benchmarking/
 echo "cp -r ~/soda-benchmarking/* ~/benchmarking/" >> ~/.bashrc
 
 # overwrite default Apache config file now and at every startup
-sudo cp ~/soda-benchmarking/000-default.conf /etc/apache2/sites-enabled/000-default.conf
-echo "sudo cp ~/soda-benchmarking/000-default.conf /etc/apache2/sites-enabled/000-default.conf" >> ~/.bashrc
-sudo cp ~/soda-benchmarking/envvars /etc/apache2/envvars
-echo "sudo cp ~/soda-benchmarking/envvars /etc/apache2/envvars" >> ~/.bashrc
+sudo cp ~/soda-benchmarking/apache-config/000-default.conf /etc/apache2/sites-enabled/000-default.conf
+echo "sudo cp ~/soda-benchmarking/apache-config/000-default.conf /etc/apache2/sites-enabled/000-default.conf" >> ~/.bashrc
+sudo cp ~/soda-benchmarking/apache-config/envvars /etc/apache2/envvars
+echo "sudo cp ~/soda-benchmarking/apache-config/envvars /etc/apache2/envvars" >> ~/.bashrc
 rm -f ~/openvisualizer/build/runui/networkEvent.log*
 echo "rm -f ~/openvisualizer/build/runui/networkEvent.log*" >> ~/.bashrc
 
