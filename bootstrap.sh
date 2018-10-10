@@ -57,6 +57,12 @@ echo "rm -f ~/openvisualizer/build/runui/networkEvent.log*" >> ~/.bashrc
 rm -f ~/openvisualizer/build/runui/*.log*
 echo "rm -f ~/openvisualizer/build/runui/*.log*" >> ~/.bashrc
 
+ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
+echo "==================================="
+echo "Please publish the following SSH key on any server where automated SSH is requested"
+cat ~/.ssh/id_rsa.pub
+echo "==================================="
+
 sudo a2enmod rewrite
 sudo service apache2 restart
 
