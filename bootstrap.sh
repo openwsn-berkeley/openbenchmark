@@ -1,7 +1,6 @@
 #!/bin/sh
 
 # Script designed to bootstrap a Vagrant machine
-
 sudo apt-get -y update
 sudo apt-get -y upgrade
 sudo apt-get -y install python-software-properties
@@ -20,14 +19,15 @@ sudo apt-get -y install php7.2-ctype
 sudo apt-get -y install php7.2-json
 sudo apt -y install unzip
 # Laravel
-cd ..
+cd ~
 composer global require "laravel/installer"
 composer create-project --prefer-dist laravel/laravel benchmarking "5.6.*"
 cd benchmarking
 mv .env.example .env
 php artisan key:generate
+
 # OpenWSN
-cd ..
+cd ~
 git clone https://github.com/openwsn-berkeley/coap.git
 git clone -b ov-iot-lab --single-branch https://github.com/bozidars27/openvisualizer.git
 git clone https://github.com/bozidars27/iotlab-exp-auto.git
@@ -42,24 +42,32 @@ sudo pip install -r iotlab-exp-auto/requirements.txt
 curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
 sudo apt-get install -y nodejs
 
-# overwrite Laravel project with our code on startup
-cp -r ~/soda-benchmarking/* ~/benchmarking/
-echo "cp -r ~/soda-benchmarking/* ~/benchmarking/" >> ~/.bashrc
+#overwrite Laravel project with our code on startup
+cp -r -n ~/benchmarking/* ~/soda-benchmarking/
+cp -r -n ~/benchmarking/.[!.]* ~/soda-benchmarking/
+
+# remove original Laravel base project
+sudo rm -rf ~/benchmarking
+
+# install node_modules
+sudo apt-get install npm
+cd ~/soda-benchmarking
+npm install
+npm update
+nodejs node_modules/node-sass/scripts/install.js
+npm rebuild node-sass
 
 # overwrite default Apache config file now and at every startup
 sudo cp ~/soda-benchmarking/system-config/000-default.conf /etc/apache2/sites-enabled/000-default.conf
-echo "sudo cp ~/soda-benchmarking/system-config/000-default.conf /etc/apache2/sites-enabled/000-default.conf" >> ~/.bashrc
+sudo dos2unix ~/soda-benchmarking/system-config/000-default.conf 
 
 sudo cp ~/soda-benchmarking/system-config/envvars /etc/apache2/envvars
-echo "sudo cp ~/soda-benchmarking/system-config/envvars /etc/apache2/envvars" >> ~/.bashrc
+sudo dos2unix /etc/apache2/envvars
 
 # Start node.js as a deamon
 sudo cp ~/soda-benchmarking/system-config/index.service /lib/systemd/system/index.service
 sudo systemctl daemon-reload
 sudo systemctl restart index
-echo "sudo cp ~/soda-benchmarking/system-config/index.service /lib/systemd/system/index.service" >> ~/.bashrc
-echo "sudo systemctl daemon-reload" >> ~/.bashrc
-echo "sudo systemctl restart index" >> ~/.bashrc
 
 sudo rm -f ~/openvisualizer/build/runui/networkEvent.log*
 echo "sudo rm -f ~/openvisualizer/build/runui/networkEvent.log*" >> ~/.bashrc
@@ -76,4 +84,3 @@ echo "==================================="
 # Restart Apache
 sudo a2enmod rewrite
 sudo service apache2 restart
-
