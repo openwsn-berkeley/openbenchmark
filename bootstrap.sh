@@ -3,6 +3,7 @@
 # Script designed to bootstrap a Vagrant machine
 sudo apt-get -y update
 sudo apt-get -y upgrade
+sudo apt-get install apache2
 sudo apt-get -y install python-software-properties
 sudo add-apt-repository ppa:ondrej/php
 sudo apt-get -y update

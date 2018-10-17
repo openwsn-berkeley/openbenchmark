@@ -58,6 +58,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", inline: <<-SHELL
     apt-get update
     apt-get install -y dos2unix
+	dos2unix ./soda-benchmarking/bootstrap.sh
   SHELL
   
   config.vm.provision "shell", run: 'always', inline: <<-SHELL
