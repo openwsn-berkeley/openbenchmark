@@ -21,7 +21,7 @@ vagrant ssh
 
 3. Upon the completion of the process, you will be given a public SSH key which is to be copied and pasted in your IoT-LAB account configuration
 
-4. Write your IoT-LAB username in the experiment ../iotlab-exp-auto/conf.txt file
+4. Write your IoT-LAB username into the experiment config file (../iotlab-exp-auto/conf.txt)
 ```
 [exp-config]
 user = YOUR_USER_NAME
