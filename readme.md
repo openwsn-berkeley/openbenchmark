@@ -1,4 +1,4 @@
-<p align="center"><img src="https://www.ucg.ac.me/skladiste_baneri/org_jedinica_13/baneri_237/soda_logo_transparent.png"></p>
+<p align="center"><img style="width: 250px; height: auto" src="https://www.ucg.ac.me/skladiste_baneri/org_jedinica_13/baneri_237/soda_logo_transparent.png"></p>
 
 ## Prerequisites
 
