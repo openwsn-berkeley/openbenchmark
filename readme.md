@@ -1,9 +1,9 @@
-<p align="center"><img src="https://www.ucg.ac.me/skladiste_baneri/org_jedinica_13/baneri_237/soda_logo_transparent.png"></p>
+<p align="center"><img src="https://www.ucg.ac.me/skladiste_baneri/org_jedinica_13/baneri_244/soda_logo_transparent_small.png"></p>
 
 ## Prerequisites
 
-[Vagrant](https://www.vagrantup.com/)
-An [IoT-LAB](https://www.iot-lab.info/) account
+1. [Vagrant](https://www.vagrantup.com/)
+2. An [IoT-LAB](https://www.iot-lab.info/) account
 
 
 ## Getting started
