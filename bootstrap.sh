@@ -22,8 +22,8 @@ sudo apt -y install unzip
 # Laravel
 cd ~
 composer global require "laravel/installer"
-composer create-project --prefer-dist laravel/laravel benchmarking "5.6.*"
-cd benchmarking
+composer create-project --prefer-dist laravel/laravel temp "5.6.*"
+cd temp
 mv .env.example .env
 php artisan key:generate
 
@@ -44,29 +44,29 @@ curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
 sudo apt-get install -y nodejs
 
 #overwrite Laravel project with our code on startup
-cp -r -n ~/benchmarking/* ~/soda-benchmarking/
-cp -r -n ~/benchmarking/.[!.]* ~/soda-benchmarking/
+cp -r -n ~/temp/* ~/openbenchmark/
+cp -r -n ~/temp/.[!.]* ~/openbenchmark/
 
 # remove original Laravel base project
-sudo rm -rf ~/benchmarking
+sudo rm -rf ~/temp
 
 # install node_modules
 sudo apt-get install npm
-cd ~/soda-benchmarking
+cd ~/openbenchmark
 npm install
 npm update
 nodejs node_modules/node-sass/scripts/install.js
 npm rebuild node-sass
 
 # overwrite default Apache config file now and at every startup
-sudo cp ~/soda-benchmarking/system-config/000-default.conf /etc/apache2/sites-enabled/000-default.conf
+sudo cp ~/openbenchmark/system-config/000-default.conf /etc/apache2/sites-enabled/000-default.conf
 sudo dos2unix ~/etc/apache2/sites-enabled/000-default.conf 
 
-sudo cp ~/soda-benchmarking/system-config/envvars /etc/apache2/envvars
+sudo cp ~/openbenchmark/system-config/envvars /etc/apache2/envvars
 sudo dos2unix /etc/apache2/envvars
 
 # Start node.js as a deamon
-sudo cp ~/soda-benchmarking/system-config/index.service /lib/systemd/system/index.service
+sudo cp ~/openbenchmark/system-config/index.service /lib/systemd/system/index.service
 sudo systemctl daemon-reload
 sudo systemctl restart index
 

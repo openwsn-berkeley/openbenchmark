@@ -34,7 +34,7 @@ Vagrant.configure("2") do |config|
   # argument is a set of non-required options.
 
 
-  config.vm.synced_folder ".", "/home/vagrant/soda-benchmarking", 
+  config.vm.synced_folder ".", "/home/vagrant/openbenchmark",
 	type: 'rsync',
 	rsync__exclude: 'node_modules',
 	rsync__args: ['--verbose', '--archive', '-z', '--copy-links']
@@ -58,7 +58,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", inline: <<-SHELL
     apt-get update
     apt-get install -y dos2unix
-	dos2unix ./soda-benchmarking/bootstrap.sh
+	dos2unix ./openbenchmark/bootstrap.sh
   SHELL
   
   config.vm.provision "shell", run: 'always', inline: <<-SHELL

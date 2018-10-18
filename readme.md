@@ -16,7 +16,7 @@ vagrant up
 2. SSH into the server and run bootstrap.sh script:
 ```
 vagrant ssh
-./soda-benchmarking/bootstrap.sh
+./openbenchmark/bootstrap.sh
 ```
 
 3. Upon the completion of the process, you will be given a public SSH key which is to be copied and pasted in your IoT-LAB account configuration
@@ -40,7 +40,7 @@ vagrant rsync-auto
 2. Run Laravel Mix on the guest machine:
 ```
 vagrant ssh
-cd soda-benchmarking
+cd openbenchmark
 npm run watch
 ```
 
