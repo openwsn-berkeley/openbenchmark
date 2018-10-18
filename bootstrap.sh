@@ -60,7 +60,7 @@ npm rebuild node-sass
 
 # overwrite default Apache config file now and at every startup
 sudo cp ~/soda-benchmarking/system-config/000-default.conf /etc/apache2/sites-enabled/000-default.conf
-sudo dos2unix ~/soda-benchmarking/system-config/000-default.conf 
+sudo dos2unix ~/etc/apache2/sites-enabled/000-default.conf 
 
 sudo cp ~/soda-benchmarking/system-config/envvars /etc/apache2/envvars
 sudo dos2unix /etc/apache2/envvars
