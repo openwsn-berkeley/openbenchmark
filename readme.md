@@ -1,4 +1,15 @@
-<p align="center"><img src="https://www.ucg.ac.me/skladiste_baneri/org_jedinica_13/baneri_244/soda_logo_transparent_small.png"></p>
+[<p align="center"><img src="https://www.ucg.ac.me/skladiste_baneri/org_jedinica_13/baneri_244/soda_logo_transparent_small.png"></p>](https://www.soda.ucg.ac.me)
+
+## About
+This repository contains the code of the 6TiSCH benchmarking platform that automates the experimentation on different testbeds. 
+
+#### Supported testbeds:
+IoTLAB - Saclay
+#### Supported 6TiSCH firmware:
+OpenWSN
+
+## Architecture
+<p align="center"><img src="https://www.ucg.ac.me/skladiste_baneri/org_jedinica_13/baneri_248/soda_presentation_expanded.png"></p>
 
 ## Prerequisites
 
