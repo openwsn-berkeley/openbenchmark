@@ -67,7 +67,7 @@
                     { id: 2, name: 'node-a8-107', _cssClass: 'node-on'},
                     //{ id: 3, name:'orange node', _color: 'orange' },
                     //{ id: 4, _color: '#0022ff'},
-                    { id: 3, name: 'node-a8-108', _cssClass: 'node-on'},
+                    { id: 3, name: 'node-a8-102', _cssClass: 'node-on'},
                 ],
                 links: [
                     { sid: 1, tid: 2 },
