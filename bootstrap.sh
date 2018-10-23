@@ -91,6 +91,9 @@ echo "sudo rm -f ~/openvisualizer/build/runui/networkEvent.log*" >> ~/.bashrc
 sudo rm -f ~/openvisualizer/build/runui/*.log*
 echo "sudo rm -f ~/openvisualizer/build/runui/*.log*" >> ~/.bashrc
 
+# compile app.js and app.css for development
+npm run dev
+
 ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
 echo "==================================="
 echo "Please publish the following SSH key on any server where automated SSH is requested"
@@ -101,6 +104,3 @@ echo "==================================="
 sudo a2enmod rewrite
 sudo service apache2 restart
 sudo service php7.2-fpm restart
-
-# compile app.js and app.css for development
-npm run dev
