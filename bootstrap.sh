@@ -58,6 +58,9 @@ npm update
 nodejs node_modules/node-sass/scripts/install.js
 npm rebuild node-sass
 
+# compile app.js and app.css for development
+npm run dev
+
 # overwrite default Apache config file now and at every startup
 sudo cp ~/openbenchmark/system-config/000-default.conf /etc/apache2/sites-enabled/000-default.conf
 sudo dos2unix ~/etc/apache2/sites-enabled/000-default.conf 
