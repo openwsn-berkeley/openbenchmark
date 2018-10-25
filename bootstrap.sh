@@ -70,7 +70,7 @@ sudo a2enmod actions fastcgi alias proxy_fcgi
 
 # overwrite default Apache config file now and at every startup
 sudo cp ~/openbenchmark/system-config/000-default.conf /etc/apache2/sites-enabled/000-default.conf
-sudo dos2unix ~/etc/apache2/sites-enabled/000-default.conf 
+sudo dos2unix /etc/apache2/sites-enabled/000-default.conf 
 
 sudo cp ~/openbenchmark/system-config/envvars /etc/apache2/envvars
 sudo dos2unix /etc/apache2/envvars
