@@ -13,3 +13,4 @@ yarn-error.log
 .env
 .phpunit.result.cache
 ubuntu-xenial-16.04-cloudimg-console.log
+ssh.EXE.stackdump
