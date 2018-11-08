@@ -47,7 +47,7 @@ sudo apt-get -y install gcc
 sudo apt-get -y install scons
 sudo pip install -r openvisualizer/requirements.txt
 sudo pip install -r iotlab-exp-auto/requirements.txt
-sudo pip install -r docs/requirements.txt
+sudo pip install -r openbenchmark/docs/requirements.txt
 
 # Node.js
 curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
@@ -55,7 +55,7 @@ sudo apt-get install -y nodejs
 
 # Link docs directory to public/docs
 cd ~/openbenchmark/public
-ln -s /home/vagrant/openbenchmark/docs/build/html docs
+ln -s /home/vagrant/openbenchmark/docs/build/html ./docs
 
 #overwrite Laravel project with our code on startup
 cp -r -n ~/temp/* ~/openbenchmark/
