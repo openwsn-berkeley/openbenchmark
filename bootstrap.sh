@@ -39,6 +39,7 @@ cd ~
 git clone https://github.com/openwsn-berkeley/coap.git
 git clone -b ov-iot-lab --single-branch https://github.com/bozidars27/openvisualizer.git
 git clone https://github.com/bozidars27/iotlab-exp-auto.git
+
 # Python-dev
 sudo apt-get -y install python-dev
 sudo apt-get -y install python-pip
@@ -46,9 +47,15 @@ sudo apt-get -y install gcc
 sudo apt-get -y install scons
 sudo pip install -r openvisualizer/requirements.txt
 sudo pip install -r iotlab-exp-auto/requirements.txt
+sudo pip install -r docs/requirements.txt
+
 # Node.js
 curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
 sudo apt-get install -y nodejs
+
+# Link docs directory to public/docs
+cd ~/openbenchmark/public
+ln -s /home/vagrant/openbenchmark/docs/build/html docs
 
 #overwrite Laravel project with our code on startup
 cp -r -n ~/temp/* ~/openbenchmark/
