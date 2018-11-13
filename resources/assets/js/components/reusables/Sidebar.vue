@@ -15,6 +15,12 @@
                     <span class="tooltip">Monitoring</span>
                 </li>
             </ul>
+            <ul class="bottom-list">
+                <li @click="showDocs">
+                    <i class="fas fa-book"></i>
+                    <span class="tooltip">Documentation</span>
+                </li>
+            </ul>
         </nav>
     </div>
 </template>
@@ -35,6 +41,9 @@
             scrollContent(anchor) {
                 this.$eventHub.$emit('SIDEBAR_SCROLL', '');
                 this.$eventHub.$emit('SCROLL', anchor);
+            },
+            showDocs() {
+                window.location.href = "/docs";
             }
         },
 
@@ -82,6 +91,7 @@
 
     .sidebar-navigation {
         display: inline-block;
+        position: relative;
         min-height: 100vh;
         width: 80px;
         background-color: #313443;
@@ -139,5 +149,13 @@
     }
     .sidebar-navigation ul li.active i {
         color: #98D7EC;
+    }
+
+    .bottom-list {
+    	position: absolute;
+    	bottom: 0;
+    	left: 50%;
+    	transform: translateX(-50%);
+    	width: 100%;
     }
 </style>
