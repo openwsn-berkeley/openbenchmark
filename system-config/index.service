@@ -6,7 +6,7 @@ After=network.target
 Environment=NODE_PORT=3000
 Type=simple
 User=vagrant
-ExecStart=/usr/bin/node /home/vagrant/iotlab-exp-auto/nodejs_websocket/index.js
+ExecStart=/usr/bin/node /home/vagrant/openbenchmark/experiment-control/nodejs_websocket/index.js
 Restart=always
 RestartSec=3
 

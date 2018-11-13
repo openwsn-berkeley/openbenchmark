@@ -38,13 +38,13 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder ".", "/home/vagrant/openbenchmark",
 	type: 'rsync',
 	rsync__exclude: [
-		'node_modules', 
-		'public/docs', 
+		'web/node_modules', 
+		'docs', 
 		'docs/build', 
-		'resources/assets/js/app.js', 
-		'resources/assets/js/bootstrap.js', 
-		'resources/assets/sass/_variables.scss',
-		'resources/assets/sass/app.scss'
+		'web/resources/assets/js/app.js', 
+		'web/resources/assets/js/bootstrap.js', 
+		'web/resources/assets/sass/_variables.scss',
+		'web/resources/assets/sass/app.scss'
 	],
 	rsync__args: ['--verbose', '--archive', '-z', '--copy-links']
 
