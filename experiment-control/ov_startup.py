@@ -1,7 +1,7 @@
 import subprocess
 import os
 
-ovDir = os.path.join(os.path.dirname(__file__), "..", "openvisualizer")
+ovDir = os.path.join(os.path.dirname(__file__), "..", "..", "openvisualizer")
 
 class OVStartup:
 
