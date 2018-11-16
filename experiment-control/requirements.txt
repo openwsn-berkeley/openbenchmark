@@ -1,5 +1,6 @@
 paramiko
 socketIO_client_nexus
 watchdog
-paho.mqtt.client
+paho-mqtt
 argparse
+pytest
