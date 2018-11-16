@@ -37,7 +37,7 @@ php artisan key:generate
 # OpenWSN
 cd ~
 git clone https://github.com/openwsn-berkeley/coap.git
-git clone -b ov-iot-lab --single-branch https://github.com/bozidars27/openvisualizer.git
+git clone -b ov-dynamic-topic --single-branch https://github.com/bozidars27/openvisualizer.git
 
 # Python-dev
 sudo apt-get -y install python-dev
