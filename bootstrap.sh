@@ -1,5 +1,7 @@
 #!/bin/sh
 
+pwd="$( cd "$(dirname "$0")" ; pwd -P )"
+
 # Script designed to bootstrap a Vagrant machine
 sudo apt-get -y update
 sudo apt-get -y upgrade
@@ -26,8 +28,8 @@ sudo apt-get -y install php7.2-xml
 sudo apt-get -y install php7.2-ctype
 sudo apt-get -y install php7.2-json
 sudo apt -y install unzip
+
 # Laravel
-cd ~
 composer global require "laravel/installer"
 composer create-project --prefer-dist laravel/laravel temp "5.6.*"
 cd temp
@@ -35,7 +37,7 @@ mv .env.example .env
 php artisan key:generate
 
 # OpenWSN
-cd ~
+cd $pwd
 git clone https://github.com/openwsn-berkeley/coap.git
 git clone -b ov-dynamic-topic --single-branch https://github.com/bozidars27/openvisualizer.git
 
@@ -45,27 +47,27 @@ sudo apt-get -y install python-pip
 sudo apt-get -y install gcc
 sudo apt-get -y install scons
 sudo pip install -r openvisualizer/requirements.txt
-sudo pip install -r openbenchmark/experiment-control/requirements.txt
-sudo pip install -r openbenchmark/docs/requirements.txt
+sudo pip install -r experiment-control/requirements.txt
+sudo pip install -r docs/requirements.txt
 
 # Node.js
 curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
 sudo apt-get install -y nodejs
 
 # Link docs directory to public/docs
-cd ~/openbenchmark/web/public
-ln -s /home/vagrant/openbenchmark/docs/build/html ./docs
+cd $pwd/web/public
+ln -s $pwd/docs/build/html ./docs
 
 #overwrite Laravel project with our code on startup
-cp -r -n ~/temp/* ~/openbenchmark/web/
-cp -r -n ~/temp/.[!.]* ~/openbenchmark/web/
+cp -r -n $pwd/temp/* $pwd/web/
+cp -r -n $pwd/temp/.[!.]* $pwd/web/
 
 # remove original Laravel base project
-sudo rm -rf ~/temp
+sudo rm -rf $pwd/temp
 
 # install node_modules
 sudo apt-get install npm
-cd ~/openbenchmark/web
+cd $pwd/web
 npm install
 npm update
 nodejs node_modules/node-sass/scripts/install.js
@@ -75,26 +77,26 @@ npm rebuild node-sass
 sudo a2enmod actions fastcgi alias proxy_fcgi
 
 # overwrite default Apache config file now and at every startup
-sudo cp ~/openbenchmark/system-config/000-default.conf /etc/apache2/sites-enabled/000-default.conf
+sudo cp $pwd/system-config/000-default.conf /etc/apache2/sites-enabled/000-default.conf
 sudo dos2unix /etc/apache2/sites-enabled/000-default.conf 
 
-sudo cp ~/openbenchmark/system-config/envvars /etc/apache2/envvars
+sudo cp $pwd/system-config/envvars /etc/apache2/envvars
 sudo dos2unix /etc/apache2/envvars
 
-sudo cp ~/openbenchmark/system-config/www.conf /etc/php/7.2/fpm/pool.d/www.conf
+sudo cp $pwd/system-config/www.conf /etc/php/7.2/fpm/pool.d/www.conf
 sudo dos2unix /etc/php/7.2/fpm/pool.d/www.conf
 
 sudo chown -R vagrant:vagrant /var/lib/apache2/fastcgi
 
 # Start node.js as a deamon
-sudo cp ~/openbenchmark/system-config/index.service /lib/systemd/system/index.service
+sudo cp $pwd/system-config/index.service /lib/systemd/system/index.service
 sudo systemctl daemon-reload
 sudo systemctl restart index
 
-sudo rm -f ~/openvisualizer/build/runui/networkEvent.log*
+sudo rm -f $pwd/openvisualizer/build/runui/networkEvent.log*
 echo "sudo rm -f ~/openvisualizer/build/runui/networkEvent.log*" >> ~/.bashrc
 
-sudo rm -f ~/openvisualizer/build/runui/*.log*
+sudo rm -f $pwd/openvisualizer/build/runui/*.log*
 echo "sudo rm -f ~/openvisualizer/build/runui/*.log*" >> ~/.bashrc
 
 # compile app.js and app.css for development
