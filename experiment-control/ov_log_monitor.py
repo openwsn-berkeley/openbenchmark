@@ -11,7 +11,7 @@ from watchdog.events import FileSystemEventHandler
 
 socketIoHandler = SocketIoHandler()
 
-logDir = os.path.join(os.path.dirname(__file__), "..", "..", "openvisualizer", "build", "runui")
+logDir = os.path.join(os.path.dirname(__file__), "..", "openvisualizer", "build", "runui")
 
 class MyHandler(FileSystemEventHandler):
 
