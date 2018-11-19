@@ -13,7 +13,8 @@ configParser = ConfigParser.RawConfigParser()
 configFilePath = os.path.join(os.path.dirname(__file__), 'conf.txt')
 configParser.read(configFilePath)
 
-USERNAME = configParser.get('exp-config', 'user')
+USERNAME = os.environ["user"] if "user" in os.environ else configParser.get('exp-config', 'user')
+PRIVATE_SSH = os.environ["private_ssh"] if "private_ssh" in os.environ else ""
 HOSTNAME = 'saclay.iot-lab.info'
 
 EXP_DURATION = 15 #Duration in minutes
@@ -21,6 +22,14 @@ NODES = "saclay,a8,106+107+102"
 
 FIRMWARE = os.path.join(os.path.dirname(__file__), 'firmware')
 BROKER = configParser.get('exp-config', 'broker')
+
+def add_private_key():
+	if PRIVATE_SSH != "":
+		private_ssh_file = os.path.join(os.path.expanduser("~"), ".ssh", "id_rsa")
+
+		with open(private_ssh_file, "w") as f:
+			f.write(PRIVATE_SSH)
+
 
 def add_parser_args(parser):
 	parser.add_argument('--action', 
@@ -58,6 +67,8 @@ def main():
 	action = args['action']
 	testbed = args['testbed']
 	firmware = '{0}/{1}'.format(FIRMWARE, args['firmware'])
+
+	add_private_key()
 
 	print 'Script started'
 	
