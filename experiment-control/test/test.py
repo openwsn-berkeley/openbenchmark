@@ -31,8 +31,7 @@ def run_action(action):
 	return retcode
 
 def check_ov_log():
-	home_path = os.path.expanduser("~")
-	log_file = os.path.join(home_path, "openvisualizer", "build", "runui", "networkEvent.log")
+	log_file = os.path.join(os.path.dirname(__file__), "..", "..", "openvisualizer", "build", "runui", "networkEvent.log")
 
 	data_recieved = False
 
