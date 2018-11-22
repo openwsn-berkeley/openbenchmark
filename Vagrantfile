@@ -41,10 +41,8 @@ Vagrant.configure("2") do |config|
 		'web/node_modules', 
 		'docs', 
 		'docs/build', 
-		'web/resources/assets/js/app.js', 
-		'web/resources/assets/js/bootstrap.js', 
-		'web/resources/assets/sass/_variables.scss',
-		'web/resources/assets/sass/app.scss'
+		'web/public/js/app.js', 
+		'web/resources/assets/css/app.css'
 	],
 	rsync__args: ['--verbose', '--archive', '-z', '--copy-links']
 
