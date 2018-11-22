@@ -30,6 +30,7 @@ sudo apt-get -y install php7.2-json
 sudo apt -y install unzip
 
 # Laravel
+cd $pwd
 composer global require "laravel/installer"
 composer create-project --prefer-dist laravel/laravel temp "5.6.*"
 cd temp
@@ -59,6 +60,7 @@ cd $pwd/web/public
 ln -s $pwd/docs/build/html ./docs
 
 #overwrite Laravel project with our code on startup
+cd $pwd
 cp -r -n $pwd/temp/* $pwd/web/
 cp -r -n $pwd/temp/.[!.]* $pwd/web/
 
