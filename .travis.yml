@@ -1,8 +1,6 @@
 language: bash
 dist: xenial
 
-before_script: 
-  - bash bootstrap.sh
-
 script:
+  - bash bootstrap.sh
   - pytest ./experiment-control/test/test.py
