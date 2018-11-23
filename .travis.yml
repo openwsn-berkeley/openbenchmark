@@ -1,6 +1,10 @@
 language: bash
 dist: xenial
 
+before_script:
+  - sudo apt-get install -y dos2unix
+
 script:
+  - dos2unix bootstrap.sh
   - bash bootstrap.sh
   - pytest ./experiment-control/test/test.py
