@@ -104,6 +104,10 @@ echo "sudo rm -f ~/openvisualizer/build/runui/*.log*" >> ~/.bashrc
 # compile app.js and app.css for development
 npm run dev
 
+# generate the docs
+cd $pwd/docs
+make html
+
 ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
 echo "==================================="
 echo "Please publish the following SSH key on any server where automated SSH is requested"
