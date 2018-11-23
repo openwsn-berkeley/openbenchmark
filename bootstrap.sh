@@ -79,16 +79,29 @@ npm rebuild node-sass
 sudo a2enmod actions fastcgi alias proxy_fcgi
 
 # overwrite default Apache config file now and at every startup
-sudo cp $pwd/system-config/000-default.conf /etc/apache2/sites-enabled/000-default.conf
-sudo dos2unix /etc/apache2/sites-enabled/000-default.conf 
+if [ "$USER" = "vagrant" ]
+then
+   sudo cp $pwd/system-config/000-default.conf /etc/apache2/sites-enabled/000-default.conf
+   sudo dos2unix /etc/apache2/sites-enabled/000-default.conf 
 
-sudo cp $pwd/system-config/envvars /etc/apache2/envvars
-sudo dos2unix /etc/apache2/envvars
+   sudo cp $pwd/system-config/envvars /etc/apache2/envvars
+   sudo dos2unix /etc/apache2/envvars
 
-sudo cp $pwd/system-config/www.conf /etc/php/7.2/fpm/pool.d/www.conf
-sudo dos2unix /etc/php/7.2/fpm/pool.d/www.conf
+   sudo cp $pwd/system-config/www.conf /etc/php/7.2/fpm/pool.d/www.conf
+   sudo dos2unix /etc/php/7.2/fpm/pool.d/www.conf
+else
+   sudo cp $pwd/system-config-travis/000-default.conf /etc/apache2/sites-enabled/000-default.conf
+   sudo dos2unix /etc/apache2/sites-enabled/000-default.conf 
 
-sudo chown -R vagrant:vagrant /var/lib/apache2/fastcgi
+   sudo cp $pwd/system-config-travis/envvars /etc/apache2/envvars
+   sudo dos2unix /etc/apache2/envvars
+
+   sudo cp $pwd/system-config-travis/www.conf /etc/php/7.2/fpm/pool.d/www.conf
+   sudo dos2unix /etc/php/7.2/fpm/pool.d/www.conf
+fi 
+
+# $USER = vagrant or travis
+sudo chown -R $USER:$USER /var/lib/apache2/fastcgi
 
 # Start node.js as a deamon
 sudo cp $pwd/system-config/index.service /lib/systemd/system/index.service
