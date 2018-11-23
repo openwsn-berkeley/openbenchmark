@@ -39,7 +39,6 @@ Vagrant.configure("2") do |config|
 	type: 'rsync',
 	rsync__exclude: [
 		'web/node_modules', 
-		'docs', 
 		'docs/build', 
 		'web/public/js/app.js', 
 		'web/resources/assets/css/app.css'
