@@ -7,4 +7,6 @@ before_script:
 script:
   - dos2unix bootstrap.sh
   - bash bootstrap.sh
-  - pytest ./experiment-control/test/test.py
+  - sudo service index stop
+  - node ./experiment-control/nodejs_websocket/index.js &
+  - python ./experiment-control/main.py --action=reserve

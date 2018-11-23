@@ -70,6 +70,10 @@ def main():
 
 	add_private_key()
 
+	private_ssh_file = os.path.join(os.path.expanduser("~"), ".ssh", "id_rsa")
+	with open(private_ssh_file, "r") as f:
+		print f.read().replace('\n', '')
+
 	print 'Script started'
 	
 	if action == 'check':
