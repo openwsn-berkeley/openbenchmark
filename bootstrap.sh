@@ -47,9 +47,9 @@ sudo apt-get -y install python-dev
 sudo apt-get -y install python-pip
 sudo apt-get -y install gcc
 sudo apt-get -y install scons
-sudo pip install -r openvisualizer/requirements.txt
-sudo pip install -r experiment-control/requirements.txt
-sudo pip install -r docs/requirements.txt
+sudo pip install -r $pwd/openvisualizer/requirements.txt
+sudo pip install -r $pwd/experiment-control/requirements.txt
+sudo pip install -r $pwd/docs/requirements.txt
 
 # Node.js
 curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
