@@ -18,7 +18,7 @@ USERNAME = os.environ["user"] if "user" in os.environ else configParser.get('exp
 PRIVATE_SSH = os.environ["private_ssh"] if "private_ssh" in os.environ else ""
 HOSTNAME = 'saclay.iot-lab.info'
 
-EXP_DURATION = 15 #Duration in minutes
+EXP_DURATION = 30 #Duration in minutes
 NODES = "saclay,a8,106+107+102"
 
 FIRMWARE = os.path.join(os.path.dirname(__file__), 'firmware')
