@@ -11,6 +11,6 @@ script:
   - node ./experiment-control/nodejs_websocket/index.js > index.log 2>&1 &
   - pytest ./experiment-control/test/test.py -s
   - cat index.log
-  - cat ./openvisualiser/build/runui/networkEvent.log
-  - ls ./openvisualiser -la
+  - cat ./openvisualizer/build/runui/networkEvent.log
+  - ls ./openvisualizer/build/runui -la
   - ls -la
