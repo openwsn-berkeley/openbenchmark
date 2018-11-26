@@ -56,16 +56,22 @@ class OVLogMonitor:
 		self.observer = Observer()
 
 	def start(self):
-		self.observer.schedule(self.event_handler, path=logDir, recursive=False)
-		self.observer.start()
+		if os.path.exists(logDir):
+			self.observer.schedule(self.event_handler, path=logDir, recursive=False)
+			self.observer.start()
 
-		try:
-			while True:
-				time.sleep(1)
-		except KeyboardInterrupt:
-			self.observer.stop()
+			try:
+				while True:
+					time.sleep(1)
+			except KeyboardInterrupt:
+				self.observer.stop()
 
-		self.observer.join()
+			self.observer.join()
+
+		else:
+			print("The path designated for monitoring does not exist.")
+			ExpTerminate().exp_terminate()
+
 
 
 
