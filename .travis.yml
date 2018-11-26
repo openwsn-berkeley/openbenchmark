@@ -14,3 +14,5 @@ script:
   - cat ./openvisualizer/build/runui/networkEvent.log
   - ls ./openvisualizer/build/runui -la
   - ls -la
+  - cd ./openvisualizer
+  - sudo scons runweb --port=8080 --testbed=iotlab --broker=broker.mqttdashboard.com --root=random
