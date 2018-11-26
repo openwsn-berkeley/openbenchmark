@@ -9,4 +9,4 @@ script:
   - bash bootstrap.sh
   - sudo service index stop
   - node ./experiment-control/nodejs_websocket/index.js &
-  - python ./experiment-control/main.py --action=reserve
+  - pytest ./experiment-control/test/test.py
