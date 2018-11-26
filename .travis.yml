@@ -8,5 +8,6 @@ script:
   - dos2unix bootstrap.sh
   - bash bootstrap.sh
   - sudo service index stop
-  - node ./experiment-control/nodejs_websocket/index.js &
+  - node ./experiment-control/nodejs_websocket/index.js > index.log 2>&1 &
   - pytest ./experiment-control/test/test.py
+  - cat index.log
