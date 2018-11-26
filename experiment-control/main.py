@@ -1,6 +1,7 @@
 import argparse
 import ConfigParser
 import os
+import base64
 
 from otbox_startup import OTBoxStartup
 from otbox_flash import OTBoxFlash
@@ -27,8 +28,10 @@ def add_private_key():
 	if PRIVATE_SSH != "":
 		private_ssh_file = os.path.join(os.path.expanduser("~"), ".ssh", "id_rsa")
 
+		private_ssh_decoded = base64.b64decode(PRIVATE_SSH)
+
 		with open(private_ssh_file, "w") as f:
-			f.write(PRIVATE_SSH)
+			f.write(private_ssh_decoded)
 
 
 def add_parser_args(parser):
