@@ -47,6 +47,10 @@ sudo apt-get -y install python-dev
 sudo apt-get -y install python-pip
 sudo apt-get -y install gcc
 sudo apt-get -y install scons
+
+sudo pip uninstall pyopenssl -y
+sudo pip install pyopenssl
+
 sudo pip install -r $pwd/openvisualizer/requirements.txt
 sudo pip install -r $pwd/experiment-control/requirements.txt
 sudo pip install -r $pwd/docs/requirements.txt
