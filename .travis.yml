@@ -15,4 +15,5 @@ script:
   - ls ./openvisualizer/build/runui -la
   - ls -la
   - cd ./openvisualizer
+  - pip install bottle
   - sudo scons runweb --port=8080 --testbed=iotlab --broker=broker.mqttdashboard.com --root=random
