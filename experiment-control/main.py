@@ -19,7 +19,7 @@ PRIVATE_SSH = os.environ["private_ssh"] if "private_ssh" in os.environ else ""
 HOSTNAME = 'saclay.iot-lab.info'
 
 EXP_DURATION = 30 #Duration in minutes
-NODES = "saclay,a8,106+107+102"
+NODES = "saclay,a8,106+107"
 
 FIRMWARE = os.path.join(os.path.dirname(__file__), 'firmware')
 BROKER = configParser.get('exp-config', 'broker')
