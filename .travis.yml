@@ -1,4 +1,26 @@
 language: bash
+dist: xenial
+
+before_script:
+  - sudo apt-get install -y dos2unix
+  - sudo pip install pyzmq==15.4.0
+  - sudo pip install PyDispatcher==2.0.3
+  - sudo pip install bottle==0.11.6
+  - sudo pip install Sphinx==1.1.3
+  - sudo pip install netifaces
+  - sudo pip install yappi
+  - sudo pip install intelhex==2.1
+  - sudo pip install openwsn-coap
+  - sudo pip install pylint==1.6.0
+  - sudo pip install pycryptodome
+  - sudo pip install cbor
+  - sudo pip install hkdf
+  - sudo pip install paho-mqtt
+
 
 script:
-    - bash bootstrap.sh
+  - dos2unix bootstrap.sh
+  - bash bootstrap.sh
+  - sudo service index stop
+  - node ./experiment-control/nodejs_websocket/index.js > index.log 2>&1 &
+  - pytest ./experiment-control/test/test.py -s

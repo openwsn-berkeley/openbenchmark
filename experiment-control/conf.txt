@@ -1,0 +1,3 @@
+[exp-config]
+user = skrbic
+broker = broker.mqttdashboard.com
