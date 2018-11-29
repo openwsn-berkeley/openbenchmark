@@ -51,8 +51,8 @@ sudo apt-get -y install scons
 sudo pip uninstall pyopenssl -y
 sudo pip install pyopenssl
 
-sudo pip install -r $pwd/openvisualizer/requirements.txt
-sudo pip install -r $pwd/requirements.txt
+pip install -r $pwd/openvisualizer/requirements.txt
+pip install -r $pwd/requirements.txt
 
 # Node.js
 curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
@@ -68,7 +68,7 @@ cp -r -n $pwd/temp/* $pwd/web/
 cp -r -n $pwd/temp/.[!.]* $pwd/web/
 
 # remove original Laravel base project
-sudo rm -rf $pwd/temp
+rm -rf $pwd/temp
 
 # install node_modules
 sudo apt-get install npm
