@@ -1,87 +1,114 @@
-# Documentation
+<!-- ====================================================================== -->
 
-One Paragraph of project description goes here.
+# Overview
 
-## Getting Started
+This page documents the OpenBenchmark platform developed in the scope of the [SODA project](http://www.soda.ucg.ac.me/) in collaboration with [Inria-EVA](https://team.inria.fr/eva/).
+OpenBenchmark automates the experimentation and network performance benchmarking on selected testbeds supporting Internet of Things devices compliant with IEEE 802.15.4 standard.
+OpenBenchmark instruments the execution of an experiment in real time following the pre-defined test scenarios and collects the data to calculate the network Key Performance Indicators (KPIs) in a fully automated manner.
+See [Scenarios](#test-scenarios) for the definition of test scenarios.
+See [KPIs](#key-performance-indicators) for the list of Key Performance Indicators.
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+OpenBenchmark focuses on a wireless communication technology called 6TiSCH that enables wire-like reliability and up to a decade of device lifetime on a pair of AA batteries.
+The 6TiSCH stack is defined in the [IETF 6TiSCH working group](https://datatracker.ietf.org/wg/6tisch/about/) and relies on IEEE 802.15.4 hardware.
+By default, OpenBenchmark supports the [OpenWSN](https://openwsn.atlassian.net/) implementation of 6TiSCH.
+If you would like to enable OpenBenchmark to benchmark your 6TiSCH implementation, your implementation needs to log or publish in real-time the experiment data following the [Data Format](#data-format) specification.
 
-### Prerequisites
+See [Testbeds](#testbeds) for the list of testbeds where experimentation with OpenBenchmark is available.
+To enable OpenBenchmark to run on your IEEE 802.15.4-compliant testbed, we require [OpenTestbed](https://github.com/openwsn-berkeley/opentestbed) software to be ported to your testbed infrastructure.
 
-What things you need to install the software and how to install them
+<!-- ====================================================================== -->
 
-```
-Give examples
-```
+# Test Scenarios
 
-### Installing
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
-A step by step series of examples that tell you how to get a development env running
+## Smart Home
 
-Say what the step will be
+<!-- paper "Performance Comparison of the RPL and LOADng Routing Protocols in a Home Automation Scenario" -->
 
-```
-Give the example
-```
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
-And repeat
+## Smart Factory
 
-```
-until finished
-```
+<!-- RFC5673 Section 3.1 -->
 
-End with an example of getting some data out of the system or using it for a little demo
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
-## Running the tests
+## Scenario C
 
-Explain how to run the automated tests for this system
+<!-- ====================================================================== -->
 
-### Break down into end to end tests
+# Key Performance Indicators
 
-Explain what these tests test and why
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
-```
-Give an example
-```
+## Reliability
 
-### And coding style tests
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
-Explain what these tests test and why
+## Latency
 
-```
-Give an example
-```
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
-## Deployment
+## Radio Duty Cycle
 
-Add additional notes about how to deploy this on a live system
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
-## Built With
+## Network Formation Time
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+<!-- . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  -->
 
-## Contributing
+### Synchronization
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+<!-- . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  -->
 
-## Versioning
+### Secure Join
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+<!-- . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  -->
 
-## Authors
+### Bandwidth Assignment
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+## Number of Hops Traversed per Packet
 
-## License
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+## Synchronization Precision
 
-## Acknowledgments
+<!-- ====================================================================== -->
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+# Data Format
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+## File Format
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+## Header
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+## Event Types
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+## Event Definitions
+
+<!-- ====================================================================== -->
+
+# Testbeds
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+## w-iLab.t
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+## IoT-lab Saclay
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+## OpenTestbed
+
