@@ -52,8 +52,7 @@ sudo pip uninstall pyopenssl -y
 sudo pip install pyopenssl
 
 sudo pip install -r $pwd/openvisualizer/requirements.txt
-sudo pip install -r $pwd/experiment-control/requirements.txt
-sudo pip install -r $pwd/docs/requirements.txt
+sudo pip install -r $pwd/requirements.txt
 
 # Node.js
 curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
