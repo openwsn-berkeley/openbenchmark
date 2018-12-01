@@ -173,41 +173,105 @@ Packets per Burst           |   10
 
 # Key Performance Indicators
 
+This section lists the high-level Key Performance Indicators (KPIs) that are calculated by OpenBenchmark.
+Each subsection gives a short description of the KPI and what information is needed to calculate it.
+
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
 ## Reliability
+
+Reliability refers to the ratio between packets received and packets sent by the application.
+Therefore, this KPI refers to the end-to-end reliability.
+A packet may fail a transmission on a given link and be later retransmitted.
+However, failed packet transmission on a given link does not influence the end-to-end reliability if the packet eventually arrives at the destination.
+
+To calculate end-to-end reliability, each sender node needs to log the destination and the number of application packets sent.
+Each receiver node needs to log the number of application packets received and the sender.
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
 ## Latency
 
+Latency refers to the time interval between 
+
+- the instant packet is generated at the sender, and 
+- the instant the packet is received by the application layer of the destination.
+
+To calculate latency per packet, the sender needs to add a timestamp into the packets it sends.
+The receiver calculates the latency by subtracting the current time from the time indicated in the received packet.
+6TiSCH networks use the Absolute Slot Number (ASN) as the timestamp.
+
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
 ## Radio Duty Cycle
+
+Radio Duty Cycle (RDC) refers to the ratio between 
+
+- the time that the radio chip is powered, and 
+- the duration of the measuring interval.
+
+Each node in the network needs to log the RDC specific to it.
+In 6TiSCH network, RDC can be calculated based on the number of assigned cells in the TSCH schedule and the activity within the corresponding slots.
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
 ## Network Formation Time
 
-<!-- . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  -->
+Network Formation Time refers to the initial phase when the network is forming.
+It is an important KPI from the installation point of view.
+We consider 3 different phases described in the following sections.
 
-### Synchronization
-
-<!-- . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  -->
-
-### Secure Join
+Each node in the network needs to log the timestamp of the corresponding events.
 
 <!-- . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  -->
 
-### Bandwidth Assignment
+### Synchronization Phase
+
+Synchronization phase refers to the time interval between
+
+- the instant when a device is booted, and
+- the instant when a device gets synchronized with the network and starts duty cycling.
+
+In 6TiSCH networks, device is synchronized upon reception of a first Enhanced Beacon (EB) frame.
+
+<!-- . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  -->
+
+### Secure Join Phase
+
+Secure Join phase refers to the time interval between
+
+- the instant when a device gets synchronized with the network, and
+- the instant corresponding to the end of the authentication, key and parameter distribution protocol.
+
+Once a device completes the secure join phase, it starts acting as a network node.
+In 6TiSCH networks, a device completes the secure join phase upon reception and successful decryption of a Join Response message.
+
+<!-- . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  -->
+
+### Parent Selection and Bandwidth Assignment
+
+Parent selection and bandwidth assignment phase refers to the time interval between
+
+- the instant corresponding to the end of the authentication, key and parameter distribution protocol, and
+- the instant the node has been successfully assigned the minimum bandwidth needed for it to start sending application traffic.
+
+For a node to complete this phase, it first needs to select a routing parent and then request bandwidth.
+Once the bandwidth with the default (preferred) parent is assigned, the node can start sending application traffic.
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
 ## Number of Hops Traversed per Packet
 
+Number of hops traversed per packet refers to the number of nodes in the network that have forwarded a given packet before it reached its final destination.
+Under the assumption that all nodes in the network use a common value to set the Hop Limit field in the IPv6 header when originating a packet, this metric can be calculated at the final destination node by subtracting this common value with the value of the Hop Limit field in the received packet.
+
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
 ## Synchronization Precision
+
+This metric refers to the average clock drift measured between a pair of nodes.
+In 6TiSCH networks, nodes exchange clock drift within the MAC-layer acknowledgment frames.
+Each node in the network needs to log the measured clock drift and the identifier of the peer.
 
 <!-- ====================================================================== -->
 
