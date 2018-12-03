@@ -19,8 +19,8 @@
 
 # -- Project information -----------------------------------------------------
 
-project = u'SODA'
-copyright = u'2018, SODA'
+project = u'6TiSCH Open Data Action'
+copyright = u'2018, 6TiSCH Open Data Action'
 author = u'Božidar Škrbić'
 
 # The short X.Y version
