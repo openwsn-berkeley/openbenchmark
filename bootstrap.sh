@@ -52,8 +52,7 @@ sudo pip uninstall pyopenssl -y
 sudo pip install pyopenssl
 
 sudo pip install -r $pwd/openvisualizer/requirements.txt
-sudo pip install -r $pwd/experiment-control/requirements.txt
-sudo pip install -r $pwd/docs/requirements.txt
+pip install -r $pwd/requirements.txt
 
 # Node.js
 curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
@@ -69,7 +68,7 @@ cp -r -n $pwd/temp/* $pwd/web/
 cp -r -n $pwd/temp/.[!.]* $pwd/web/
 
 # remove original Laravel base project
-sudo rm -rf $pwd/temp
+rm -rf $pwd/temp
 
 # install node_modules
 sudo apt-get install npm
@@ -113,10 +112,10 @@ sudo systemctl daemon-reload
 sudo systemctl restart index
 
 sudo rm -f $pwd/openvisualizer/build/runui/networkEvent.log*
-echo "sudo rm -f ~/openvisualizer/build/runui/networkEvent.log*" >> ~/.bashrc
+echo "sudo rm -f $pwd/openvisualizer/build/runui/networkEvent.log*" >> ~/.bashrc
 
 sudo rm -f $pwd/openvisualizer/build/runui/*.log*
-echo "sudo rm -f ~/openvisualizer/build/runui/*.log*" >> ~/.bashrc
+echo "sudo rm -f $pwd/openvisualizer/build/runui/*.log*" >> ~/.bashrc
 
 # compile app.js and app.css for development
 npm run dev

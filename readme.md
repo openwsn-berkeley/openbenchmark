@@ -1,3 +1,8 @@
+| Branch         | Build Status  |
+| -------------- | -------------:|
+| master         | [![Build Status](https://travis-ci.org/openwsn-berkeley/openbenchmark.svg?branch=master)](https://travis-ci.org/openwsn-berkeley/openbenchmark)   |
+| develop        | [![Build Status](https://travis-ci.org/openwsn-berkeley/openbenchmark.svg?branch=develop)](https://travis-ci.org/openwsn-berkeley/openbenchmark)  |
+
 [<p align="center"><img src="https://www.ucg.ac.me/skladiste_baneri/org_jedinica_13/baneri_244/soda_logo_transparent_small.png"></p>](https://www.soda.ucg.ac.me)
 
 ## About

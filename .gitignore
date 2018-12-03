@@ -1,4 +1,7 @@
-ubuntu-xenial-16.04-cloudimg-console.log
-ssh.EXE.stackdump
+*.pyd
+*.pyc
+*.swp
+*~
+*.log
 /.vagrant
 /docs/build
