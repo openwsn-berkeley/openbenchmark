@@ -51,7 +51,7 @@ sudo apt-get -y install scons
 sudo pip uninstall pyopenssl -y
 sudo pip install pyopenssl
 
-pip install -r $pwd/openvisualizer/requirements.txt
+sudo pip install -r $pwd/openvisualizer/requirements.txt
 pip install -r $pwd/requirements.txt
 
 # Node.js
