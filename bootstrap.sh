@@ -112,10 +112,10 @@ sudo systemctl daemon-reload
 sudo systemctl restart index
 
 sudo rm -f $pwd/openvisualizer/build/runui/networkEvent.log*
-echo "sudo rm -f ~/openvisualizer/build/runui/networkEvent.log*" >> ~/.bashrc
+echo "sudo rm -f $pwd/openvisualizer/build/runui/networkEvent.log*" >> ~/.bashrc
 
 sudo rm -f $pwd/openvisualizer/build/runui/*.log*
-echo "sudo rm -f ~/openvisualizer/build/runui/*.log*" >> ~/.bashrc
+echo "sudo rm -f $pwd/openvisualizer/build/runui/*.log*" >> ~/.bashrc
 
 # compile app.js and app.css for development
 npm run dev
