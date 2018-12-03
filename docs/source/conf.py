@@ -19,8 +19,8 @@
 
 # -- Project information -----------------------------------------------------
 
-project = u'SODA'
-copyright = u'2018, SODA'
+project = u'6TiSCH Open Data Action'
+copyright = u'2018, 6TiSCH Open Data Action'
 author = u'Božidar Škrbić'
 
 # The short X.Y version
@@ -39,6 +39,7 @@ release = u'0.0.1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'sphinx_markdown_tables',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
