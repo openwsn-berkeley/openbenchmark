@@ -65,7 +65,7 @@ sudo pip uninstall pyopenssl -y
 sudo pip install pyopenssl
 
 # OpenVisualizer needs to be launched with sudo because of the TUN interface
-sudo pip install -r $pwd/openvisualizer/requirements.txt
+sudo pip install -r $pwd/openvisualizer/requirements.txt --ignore-installed
 # OpenBenchmark scripts do not run with sudo
 sudo pip install -r $pwd/requirements.txt
 
