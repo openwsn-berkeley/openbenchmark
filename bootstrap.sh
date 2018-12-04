@@ -1,10 +1,13 @@
-#!/bin/sh
+#!/bin/bash
+
+# Exit on error
+set -e
 
 pwd="$( cd "$(dirname "$0")" ; pwd -P )"
 
-# Script designed to bootstrap a Vagrant machine
 sudo apt-get -y update
 sudo apt-get -y upgrade
+sudo apt-get install -y software-properties-common
 
 # Install Apache and Apache dependencies
 sudo apt-get -y install apache2
@@ -20,7 +23,6 @@ sudo apt-get -y install composer
 
 # PHP extensions
 sudo apt-get -y install php7.2-zip
-sudo apt-get -y install php7.2-openssl
 sudo apt-get -y install php7.2-pdo
 sudo apt-get -y install php7.2-mbstring
 sudo apt-get -y install php7.2-tokenizer
@@ -40,6 +42,8 @@ php artisan key:generate
 # OpenWSN
 cd $pwd
 git clone https://github.com/openwsn-berkeley/coap.git
+
+# FIXME private branch, change to the official repo once code is merged
 git clone -b ov-dynamic-topic --single-branch https://github.com/bozidars27/openvisualizer.git
 
 # Python-dev
@@ -48,15 +52,27 @@ sudo apt-get -y install python-pip
 sudo apt-get -y install gcc
 sudo apt-get -y install scons
 
-sudo pip uninstall pyopenssl -y
-sudo pip install pyopenssl
+if [ -z "$VIRTUAL_ENV" ]
+then
+# Not running inside a virtual environment, need to use sudo for pip
+PIP="sudo pip"
+else
+# We are inside a virtual environment, avoid using sudo
+PIP="pip"
+fi
 
-sudo pip install -r $pwd/openvisualizer/requirements.txt
+$PIP uninstall pyopenssl -y
+$PIP install pyopenssl
+
+# OpenVisualizer needs to be launched with sudo because of the TUN interface
+$PIP install -r $pwd/openvisualizer/requirements.txt
+# OpenBenchmark scripts do not run with sudo
 pip install -r $pwd/requirements.txt
 
-# Node.js
+# Node.js and NPM
 curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-sudo apt-get install -y nodejs
+sudo apt-get install -fy npm
+sudo apt-get install -fy nodejs
 
 # Link docs directory to public/docs
 cd $pwd/web/public
@@ -70,8 +86,7 @@ cp -r -n $pwd/temp/.[!.]* $pwd/web/
 # remove original Laravel base project
 rm -rf $pwd/temp
 
-# install node_modules
-sudo apt-get install npm
+# configure node_modules
 cd $pwd/web
 npm install
 npm update
