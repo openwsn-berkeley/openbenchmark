@@ -52,15 +52,6 @@ sudo apt-get -y install python-pip
 sudo apt-get -y install gcc
 sudo apt-get -y install scons
 
-#if [ -z "$VIRTUAL_ENV" ]
-#then
-# Not running inside a virtual environment, need to use sudo for pip
-#PIP="sudo pip"
-#else
-# We are inside a virtual environment, avoid using sudo
-#PIP="pip"
-#fi
-
 sudo pip uninstall pyopenssl -y
 sudo pip install pyopenssl
 
