@@ -52,22 +52,22 @@ sudo apt-get -y install python-pip
 sudo apt-get -y install gcc
 sudo apt-get -y install scons
 
-if [ -z "$VIRTUAL_ENV" ]
-then
+#if [ -z "$VIRTUAL_ENV" ]
+#then
 # Not running inside a virtual environment, need to use sudo for pip
-PIP="sudo pip"
-else
+#PIP="sudo pip"
+#else
 # We are inside a virtual environment, avoid using sudo
-PIP="pip"
-fi
+#PIP="pip"
+#fi
 
-$PIP uninstall pyopenssl -y
-$PIP install pyopenssl
+sudo pip uninstall pyopenssl -y
+sudo pip install pyopenssl
 
 # OpenVisualizer needs to be launched with sudo because of the TUN interface
-$PIP install -r $pwd/openvisualizer/requirements.txt
+sudo pip install -r $pwd/openvisualizer/requirements.txt
 # OpenBenchmark scripts do not run with sudo
-pip install -r $pwd/requirements.txt
+sudo pip install -r $pwd/requirements.txt
 
 # Node.js and NPM
 curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
