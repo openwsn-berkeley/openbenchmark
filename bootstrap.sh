@@ -61,7 +61,7 @@ sudo pip install -r $pwd/openvisualizer/requirements.txt --ignore-installed
 sudo pip install -r $pwd/requirements.txt
 
 # Node.js and NPM
-curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
 sudo apt-get install -fy npm
 sudo apt-get install -fy nodejs
 
