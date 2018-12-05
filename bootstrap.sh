@@ -58,7 +58,7 @@ sudo pip install pyopenssl
 # OpenVisualizer needs to be launched with sudo because of the TUN interface
 sudo pip install -r $pwd/openvisualizer/requirements.txt --ignore-installed
 # OpenBenchmark scripts do not run with sudo
-sudo pip install -r $pwd/requirements.txt
+pip install -r $pwd/requirements.txt --user
 
 # Node.js and NPM
 curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
