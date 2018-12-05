@@ -3,7 +3,10 @@
 # Exit on error
 set -e
 
-pwd="$( cd "$(dirname "$0")" ; pwd -P )"
+OPENBENCHMARK_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
+LARAVEL_ROOT="$OPENBENCHMARK_DIR/web/public"
+GROUP="$( id -gn )"
+INDEX_JS_PATH="$OPENBENCHMARK_DIR/experiment-control/nodejs_websocket/index.js"
 
 sudo apt-get -y update
 sudo apt-get -y upgrade
@@ -32,7 +35,7 @@ sudo apt-get -y install php7.2-json
 sudo apt -y install unzip
 
 # Laravel
-cd $pwd
+cd $OPENBENCHMARK_DIR
 composer global require "laravel/installer"
 composer create-project --prefer-dist laravel/laravel temp "5.6.*"
 cd temp
@@ -40,7 +43,7 @@ mv .env.example .env
 php artisan key:generate
 
 # OpenWSN
-cd $pwd
+cd $OPENBENCHMARK_DIR
 git clone https://github.com/openwsn-berkeley/coap.git
 
 # FIXME private branch, change to the official repo once code is merged
@@ -52,79 +55,72 @@ sudo apt-get -y install python-pip
 sudo apt-get -y install gcc
 sudo apt-get -y install scons
 
-sudo pip uninstall pyopenssl -y
-sudo pip install pyopenssl
+sudo pip install -U pyopenssl
 
 # OpenVisualizer needs to be launched with sudo because of the TUN interface
-sudo pip install -r $pwd/openvisualizer/requirements.txt --ignore-installed
+sudo pip install -r $OPENBENCHMARK_DIR/openvisualizer/requirements.txt --ignore-installed
 # OpenBenchmark scripts do not run with sudo
-pip install -r $pwd/requirements.txt --user
+pip install -r $OPENBENCHMARK_DIR/requirements.txt --user
 
 # Node.js and NPM
 curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
 sudo apt-get install -fy nodejs
 
 # Link docs directory to public/docs
-cd $pwd/web/public
-ln -s $pwd/docs/build/html ./docs
+cd $OPENBENCHMARK_DIR/web/public
+ln -s $OPENBENCHMARK_DIR/docs/build/html ./docs
 
 #overwrite Laravel project with our code on startup
-cd $pwd
-cp -r -n $pwd/temp/* $pwd/web/
-cp -r -n $pwd/temp/.[!.]* $pwd/web/
+cd $OPENBENCHMARK_DIR
+cp -r -n $OPENBENCHMARK_DIR/temp/* $OPENBENCHMARK_DIR/web/
+cp -r -n $OPENBENCHMARK_DIR/temp/.[!.]* $OPENBENCHMARK_DIR/web/
 
 # remove original Laravel base project
-rm -rf $pwd/temp
+rm -rf $OPENBENCHMARK_DIR/temp
 
 # configure node_modules
-cd $pwd/web
+cd $OPENBENCHMARK_DIR/web
 npm install
 npm update
 
 #Configure Apache to use PHP7.2-FPM
 sudo a2enmod actions fastcgi alias proxy_fcgi
 
-# overwrite default Apache config file now and at every startup
-if [ "$USER" = "vagrant" ]
-then
-   sudo cp $pwd/system-config/000-default.conf /etc/apache2/sites-enabled/000-default.conf
-   sudo dos2unix /etc/apache2/sites-enabled/000-default.conf 
+# overwrite default Apache config files
+sudo cp $OPENBENCHMARK_DIR/system-config/000-default.conf /etc/apache2/sites-enabled/000-default.conf
+sudo dos2unix /etc/apache2/sites-enabled/000-default.conf
+sudo sed -i "s#@LARAVEL_ROOT@#$LARAVEL_ROOT#" /etc/apache2/sites-enabled/000-default.conf
 
-   sudo cp $pwd/system-config/envvars /etc/apache2/envvars
-   sudo dos2unix /etc/apache2/envvars
+sudo cp $OPENBENCHMARK_DIR/system-config/envvars /etc/apache2/envvars
+sudo dos2unix /etc/apache2/envvars
+sudo sed -i "s#@USER@#$USER#" /etc/apache2/envvars
+sudo sed -i "s#@GROUP@#$GROUP#" /etc/apache2/envvars
 
-   sudo cp $pwd/system-config/www.conf /etc/php/7.2/fpm/pool.d/www.conf
-   sudo dos2unix /etc/php/7.2/fpm/pool.d/www.conf
-else
-   sudo cp $pwd/system-config-travis/000-default.conf /etc/apache2/sites-enabled/000-default.conf
-   sudo dos2unix /etc/apache2/sites-enabled/000-default.conf 
+sudo cp $OPENBENCHMARK_DIR/system-config/www.conf /etc/php/7.2/fpm/pool.d/www.conf
+sudo dos2unix /etc/php/7.2/fpm/pool.d/www.conf
+sudo sed -i "s#@USER@#$USER#" /etc/php/7.2/fpm/pool.d/www.conf
+sudo sed -i "s#@GROUP@#$GROUP#" /etc/php/7.2/fpm/pool.d/www.conf
 
-   sudo cp $pwd/system-config-travis/envvars /etc/apache2/envvars
-   sudo dos2unix /etc/apache2/envvars
-
-   sudo cp $pwd/system-config-travis/www.conf /etc/php/7.2/fpm/pool.d/www.conf
-   sudo dos2unix /etc/php/7.2/fpm/pool.d/www.conf
-fi 
-
-# $USER = vagrant or travis
 sudo chown -R $USER:$USER /var/lib/apache2/fastcgi
 
 # Start node.js as a deamon
-sudo cp $pwd/system-config/index.service /lib/systemd/system/index.service
+sudo cp $OPENBENCHMARK_DIR/system-config/index.service /lib/systemd/system/index.service
+sudo sed -i "s#@USER@#$USER#" /lib/systemd/system/index.service
+sudo sed -i "s#@INDEX_JS_PATH@#$INDEX_JS_PATH#" /lib/systemd/system/index.service
 sudo systemctl daemon-reload
 sudo systemctl restart index
 
-sudo rm -f $pwd/openvisualizer/build/runui/networkEvent.log*
-echo "sudo rm -f $pwd/openvisualizer/build/runui/networkEvent.log*" >> ~/.bashrc
+sudo rm -f $OPENBENCHMARK_DIR/openvisualizer/build/runui/networkEvent.log*
+echo "sudo rm -f $OPENBENCHMARK_DIR/openvisualizer/build/runui/networkEvent.log*" >> ~/.bashrc
 
-sudo rm -f $pwd/openvisualizer/build/runui/*.log*
-echo "sudo rm -f $pwd/openvisualizer/build/runui/*.log*" >> ~/.bashrc
+sudo rm -f $OPENBENCHMARK_DIR/openvisualizer/build/runui/*.log*
+echo "sudo rm -f $OPENBENCHMARK_DIR/openvisualizer/build/runui/*.log*" >> ~/.bashrc
 
 # compile app.js and app.css for development
 npm run dev
 
 # generate the docs
-cd $pwd/docs
+cd $OPENBENCHMARK_DIR/docs
 make html
 
 ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa

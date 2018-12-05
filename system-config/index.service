@@ -5,8 +5,8 @@ After=network.target
 [Service]
 Environment=NODE_PORT=3000
 Type=simple
-User=vagrant
-ExecStart=/usr/bin/node /home/vagrant/openbenchmark/experiment-control/nodejs_websocket/index.js
+User=@USER@
+ExecStart=/usr/bin/node @INDEX_JS_PATH@
 Restart=always
 RestartSec=3
 
