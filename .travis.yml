@@ -1,18 +1,16 @@
-language: python
+language: generic
 dist: xenial
 
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install -y dos2unix
-  - dos2unix bootstrap.sh
-
-install:
-  - bash bootstrap.sh
 
 before_script:
-  - sudo service index stop
-  - node ./experiment-control/nodejs_websocket/index.js > index.log 2>&1 &
+  - sudo apt-get install -y dos2unix
+  - dos2unix bootstrap.sh
+  - bash bootstrap.sh
 
 script:
+  - sudo service index stop
+  - node ./experiment-control/nodejs_websocket/index.js > index.log 2>&1 &
   - pytest ./experiment-control/test/test.py -s
   - cd docs; make html
