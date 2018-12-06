@@ -11,7 +11,6 @@ See [KPIs](#key-performance-indicators) for the list of Key Performance Indicato
 OpenBenchmark focuses on a wireless communication technology called 6TiSCH that enables wire-like reliability and up to a decade of device lifetime on a pair of AA batteries.
 The 6TiSCH stack is defined in the [IETF 6TiSCH working group](https://datatracker.ietf.org/wg/6tisch/about/) and relies on IEEE 802.15.4 hardware.
 By default, OpenBenchmark supports the [OpenWSN](https://openwsn.atlassian.net/) implementation of 6TiSCH.
-See [Testbeds](#testbeds) for the list of testbeds where experimentation with OpenBenchmark is available.
 
 <!-- ====================================================================== -->
 
@@ -27,7 +26,7 @@ IUT is executed on low-power devices within the testbed.
 
 # Architecture
 
-<p align="center"><img src="http://benchmark.6tis.ch/openbenchmark_architecture.png"></p>
+<p align="center"><img src="_static/architecture.png"></p>
 
 OpenBenchmark consists of following components:
 
