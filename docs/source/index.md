@@ -27,7 +27,7 @@ IUT is executed on low-power devices within the testbed.
 
 # Architecture
 
-<p align="center"><img src="http://benchmark.6tis.ch/openbenchmark_architecture.png"></p>
+<p align="center"><img src="_static/architecture.png"></p>
 
 OpenBenchmark consists of following components:
 
