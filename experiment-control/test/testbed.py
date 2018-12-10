@@ -1,4 +1,5 @@
 from abc import abstractmethod
+from mqttTest import MQTTTest
 
 import subprocess
 import os
@@ -57,6 +58,8 @@ class Testbed():
 			return self.check_ov_log()
 		elif action == 'check':
 			return self.exp_check(return_code, stdout, stderr)
+		else:
+			True
 
 
 	def get_last_line(self):
@@ -116,15 +119,14 @@ class IoTLAB(Testbed):
 		return return_code == 0 and stderr == '' and self.run_action('check')
 
 	def otbox(self, return_code, stdout, stderr):
-		# TODO: Check broker to see if the testbed really started sending EUI-64
-		return return_code == 0 and stderr == ''
+		mqttTest = MQTTTest('iotlab')
+		return return_code == 0 and stderr == '' and mqttTest.check_data()
 
 	def otbox_flash(self, return_code, stdout, stderr):
-		# TODO: Check broker to see if the testbed is still sending the data
-		return return_code == 0 and stderr == ''
+		mqttTest = MQTTTest('iotlab')
+		return return_code == 0 and stderr == '' and mqttTest.check_data()
 
 	def ov_start(self, return_code, stdout, stderr):
-		# TODO: Check processes to see if OV really started
 		return return_code == 0 and stderr == ''
 
 	def exp_check(self, return_code, stdout, stderr):
@@ -135,5 +137,7 @@ class IoTLAB(Testbed):
 			json_obj = json.loads(line)
 		except Exception, e:
 			json_obj = None
+
+		self.run_action('terminate')
 
 		return return_code == 0 and stderr == '' and json_obj != None
