@@ -80,8 +80,6 @@ rm -rf $pwd/temp
 cd $pwd/web
 npm install
 npm update
-#nodejs node_modules/node-sass/scripts/install.js
-#npm rebuild node-sass
 
 #Configure Apache to use PHP7.2-FPM
 sudo a2enmod actions fastcgi alias proxy_fcgi
