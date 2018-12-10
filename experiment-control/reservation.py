@@ -7,12 +7,13 @@ import time
 
 class Reservation:
 
-	CMD_ERROR = "cmd_error"
+	CMD_ERROR      = "cmd_error"
 	SSH_RETRY_TIME = 120
-	RETRY_PAUSE = 10
+	RETRY_PAUSE    = 10
+	CHECK_PAUSE    = 30
 
 	def __init__(self, user, domain):
-		self.user = user
+		self.user   = user
 		self.domain = domain
 
 		self.socketIoHandler = SocketIoHandler()
@@ -87,6 +88,7 @@ class Reservation:
 		return json_output
 
 	def check_experiment(self):
+		time.sleep(self.CHECK_PAUSE)
 		output = self.ssh_command_exec('iotlab-experiment get -p')
 		print("Experiment check: " + output)
 		return output != self.CMD_ERROR
