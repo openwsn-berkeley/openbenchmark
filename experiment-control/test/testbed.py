@@ -82,6 +82,8 @@ class Testbed():
 				print str(e)
 				time.sleep(self.LOG_CHECK_PAUSE)
 
+		subprocess.Popen(['python', 'main.py', '--action=terminate'], cwd=self.mainDir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+
 		return data_recieved
 
 
@@ -137,7 +139,5 @@ class IoTLAB(Testbed):
 			json_obj = json.loads(line)
 		except Exception, e:
 			json_obj = None
-
-		self.run_action('terminate')
 
 		return return_code == 0 and stderr == '' and json_obj != None
