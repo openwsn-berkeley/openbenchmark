@@ -3,6 +3,9 @@
 # Exit on error
 set -e
 
+# Print each command before executing it
+set -o xtrace
+
 OPENBENCHMARK_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
 LARAVEL_ROOT="$OPENBENCHMARK_DIR/web/public"
 GROUP="$( id -gn )"
