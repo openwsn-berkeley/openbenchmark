@@ -14,3 +14,6 @@ script:
   - node ./experiment-control/nodejs_websocket/index.js > index.log 2>&1 &
   - pytest ./experiment-control/test/test.py -s
   - cd docs; make html
+
+after_script:
+  - cd ../experiment-control; python main.py --action=terminate

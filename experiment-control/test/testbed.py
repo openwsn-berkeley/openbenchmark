@@ -82,8 +82,6 @@ class Testbed():
 				print str(e)
 				time.sleep(self.LOG_CHECK_PAUSE)
 
-		subprocess.Popen(['python', 'main.py', '--action=terminate'], cwd=self.mainDir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
-
 		return data_recieved
 
 
