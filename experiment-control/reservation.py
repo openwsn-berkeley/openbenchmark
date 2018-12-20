@@ -1,3 +1,5 @@
+from abc import abstractmethod
+
 from socket_io_handler import SocketIoHandler
 from exp_terminate import ExpTerminate
 
@@ -5,16 +7,33 @@ import paramiko
 import json
 import time
 
+
 class Reservation:
+	@abstractmethod
+	def reserve_experiment(self):
+		pass
+
+	@abstractmethod
+	def check_experiment(self):
+		pass
+
+	@abstractmethod
+	def terminate_experiment(self):
+		pass
+
+
+
+class IoTLABReservation(Reservation):
 
 	CMD_ERROR      = "cmd_error"
 	SSH_RETRY_TIME = 120
 	RETRY_PAUSE    = 10
-	CHECK_PAUSE    = 30
 
-	def __init__(self, user, domain):
-		self.user   = user
-		self.domain = domain
+	def __init__(self, user, domain, duration, nodes):
+		self.user     = user
+		self.domain   = domain
+		self.duration = duration
+		self.nodes    = nodes
 
 		self.socketIoHandler = SocketIoHandler()
 
@@ -53,17 +72,28 @@ class Reservation:
 			return self.CMD_ERROR
 
 
-	def reserve_experiment(self, duration, nodes):
+	def get_reserved_nodes(self):
+		if self.check_experiment():
+			output = self.ssh_command_exec('iotlab-experiment get -p')
+			json_output = json.loads(output)['nodes']
+			return json_output
+		else:
+			return []
+
+
+	# Abstract method implementations
+
+	def reserve_experiment(self):
 		if self.check_experiment():
 			self.socketIoHandler.publish('NODE_RESERVATION', 'Experiment exists')
 		else:
-			output = self.ssh_command_exec('iotlab-experiment submit -n a8_exp -d ' + str(duration) + ' -l ' + nodes)
+			output = self.ssh_command_exec('iotlab-experiment submit -n a8_exp -d ' + str(self.duration) + ' -l ' + self.nodes)
 			if output != self.CMD_ERROR:
 				self.experiment_id = json.loads(output)['id']
 				self.socketIoHandler.publish('NODE_RESERVATION', 'All nodes reserved')
 
 
-	def get_reserved_nodes(self, logging):
+	def check_experiment(self, loop=False):
 		retries = 0
 		num_of_retries = self.SSH_RETRY_TIME / self.RETRY_PAUSE
 
@@ -74,8 +104,9 @@ class Reservation:
 			output = self.ssh_command_exec('iotlab-experiment get -p')
 
 			if output != self.CMD_ERROR:
+				print("Experiment check: " + output)
 				json_output = json.loads(output)['nodes']
-				break
+				return True
 			elif retries <= num_of_retries:
 				self.socketIoHandler.publish('RESERVATION_STATUS_RETRY', str(retries) + "/" + str(num_of_retries))
 				retries += 1
@@ -84,16 +115,17 @@ class Reservation:
 				self.socketIoHandler.publish('RESERVATION_FAIL', str(retries) + "/" + str(num_of_retries))
 				break
 
-		self.socketIoHandler.publish('RESERVATION_SUCCESS', output)
-		return json_output
+			if not loop:
+				break
 
-	def check_experiment(self):
-		time.sleep(self.CHECK_PAUSE)
-		output = self.ssh_command_exec('iotlab-experiment get -p')
-		print("Experiment check: " + output)
-		return output != self.CMD_ERROR
+		return False
+
 
 	def terminate_experiment(self):
 		self.ssh_command_exec('iotlab-experiment stop')
 		self.socketIoHandler.publish('EXP_TERMINATE', '')
 		ExpTerminate().exp_terminate()
+
+				
+			
+		
