@@ -104,12 +104,9 @@ def main():
 	elif action == 'terminate':
 		print 'Terminating experiment'
 		testbed.reservation.terminate_experiment()
-	elif action == 'otbox':
-		print 'Starting OTBox'
-		OTBoxStartup(USERNAME, HOSTNAME, testbed).start()
 	elif action == 'otbox-flash':
 		print 'Flashing OTBox'
-		OTBoxFlash(firmware, BROKER, testbed).flash()
+		OTBoxFlash(firmware, testbed.BROKER, args['testbed']).flash()
 	elif action == 'ov-start':
 		print 'Starting OV'
 		OVStartup().start()

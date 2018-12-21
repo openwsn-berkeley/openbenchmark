@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0, 'helpers/iotlab')
+
 from abc import abstractmethod
 
 from socket_io_handler import SocketIoHandler
@@ -5,6 +8,8 @@ from socket_io_handler import SocketIoHandler
 import paramiko
 import json
 import time
+
+from otbox_startup import OTBoxStartup
 
 
 class Reservation:
@@ -28,7 +33,7 @@ class IoTLABReservation(Reservation):
 	SSH_RETRY_TIME = 120
 	RETRY_PAUSE    = 10
 
-	def __init__(self, user, domain, duration, nodes):
+	def __init__(self, user, domain, duration=None, nodes=None):
 		self.user     = user
 		self.domain   = domain
 		self.duration = duration
@@ -72,7 +77,7 @@ class IoTLABReservation(Reservation):
 
 
 	def get_reserved_nodes(self):
-		if self.check_experiment():
+		if self.check_experiment(True):
 			output = self.ssh_command_exec('iotlab-experiment get -p')
 			json_output = json.loads(output)['nodes']
 			return json_output
@@ -90,6 +95,14 @@ class IoTLABReservation(Reservation):
 			if output != self.CMD_ERROR:
 				self.experiment_id = json.loads(output)['id']
 				self.socketIoHandler.publish('NODE_RESERVATION', 'All nodes reserved')
+
+				nodes = self.get_reserved_nodes()
+
+				if len(nodes) > 0:
+					OTBoxStartup(self.user, self.domain, 'iotlab', self.get_reserved_nodes()).start()
+				else:
+					print('Experiment startup failed')
+
 
 
 	def check_experiment(self, loop=False):
