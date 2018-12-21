@@ -22,7 +22,7 @@ class Controller(object):
 	def add_parser_args(self, parser):
 		parser.add_argument('--action', 
 	        dest       = 'action',
-	        choices    = ['check', 'reserve', 'terminate', 'otbox', 'otbox-flash', 'ov-start', 'ov-monitor'],
+	        choices    = ['check', 'reserve', 'terminate', 'otbox-flash', 'ov-start', 'ov-monitor'],
 	        required   = True,
 	        action     = 'store'
 		)

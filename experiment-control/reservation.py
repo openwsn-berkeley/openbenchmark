@@ -1,7 +1,6 @@
 from abc import abstractmethod
 
 from socket_io_handler import SocketIoHandler
-from exp_terminate import ExpTerminate
 
 import paramiko
 import json
@@ -124,8 +123,10 @@ class IoTLABReservation(Reservation):
 	def terminate_experiment(self):
 		self.ssh_command_exec('iotlab-experiment stop')
 		self.socketIoHandler.publish('EXP_TERMINATE', '')
-		ExpTerminate().exp_terminate()
-
-				
-			
 		
+		python_proc_kill = "sudo kill $(ps aux | grep '[p]ython' | awk '{print $2}')"
+		delete_logs = "rm ~/soda/openvisualizer/openvisualizer/build/runui/*.log; rm ~/soda/openvisualizer/openvisualizer/build/runui/*.log.*;"
+
+		subprocess.Popen(python_proc_kill, shell=True)
+		time.sleep(3)
+		subprocess.Popen(delete_logs, shell=True)
