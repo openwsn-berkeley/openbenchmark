@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0, '../..')
+
 import paramiko
 import json
 import subprocess
@@ -6,7 +9,6 @@ import threading
 import os
 
 from socket_io_handler import SocketIoHandler
-from reservation import Reservation
 
 class OTBoxStartup:
 
@@ -23,7 +25,7 @@ class OTBoxStartup:
 	timer                    =   0 #used for measuring the amount of time between status messages
 
 
-	def __init__(self, user, domain, testbed):
+	def __init__(self, user, domain, testbed, nodes):
 		self.user            = user
 		self.domain          = domain
 		self.testbed         = testbed
@@ -39,8 +41,7 @@ class OTBoxStartup:
 		self.booted_nodes    = []
 		self.active_nodes    = []
 
-		self.reservation     = Reservation(user, domain)
-		self.nodes           = self.reservation.get_reserved_nodes(True)
+		self.nodes           = nodes
 		
         # Fetch the latest version of opentestbed software in the shared A8 director of the SSH frontend
 		self.ssh_command_exec('cd A8; rm -rf opentestbed; git clone https://github.com/bozidars27/opentestbed.git; cd opentestbed; git checkout origin/opentestbed-extension;')
