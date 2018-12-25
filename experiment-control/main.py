@@ -5,6 +5,7 @@ import base64
 
 from abc import abstractmethod
 from reservation import IoTLABReservation
+from reservation import WilabReservation
 
 from otbox_startup import OTBoxStartup
 from otbox_flash import OTBoxFlash
@@ -78,15 +79,58 @@ class IoTLAB(Controller):
 	def add_files_from_env(self):
 		if self.PRIVATE_SSH != "":
 			private_ssh_file = os.path.join(os.path.expanduser("~"), ".ssh", "id_rsa")
-
 			private_ssh_decoded = base64.b64decode(self.PRIVATE_SSH)
 
 			with open(private_ssh_file, "w") as f:
 				f.write(private_ssh_decoded)
 
 
+class Wilab(Controller):
+
+	def __init__(self):
+		super(Wilab, self).__init__()
+
+		self.CONFIG_SECTION = 'wilab-config'
+
+		# Checks if the following files' content has been set as env variables content
+		# The content is encoded in Base64
+		# Putting files in env variables is necessarry for supplying Travis builds with private data 
+		self.CERTIFICATE_B64 = os.environ["certificate"] if "certificate" in os.environ else ""
+		self.DELETE_B64 = os.environ["delete"] if "delete" in os.environ else ""
+		self.RUN_B64 = os.environ["run"] if "run" in os.environ else ""
+
+		# The nodes will be defined by RSpec file within ESpec directory.
+		# Each scenario should have its own RSpec. RSpecs should be chosen based on scenario config
+		jfed_cli_path = os.path.join(os.path.dirname(__file__), 'helpers', 'wilab', 'jfed_cli')
+		self.DELETE = os.path.join(jfed_cli_path, 'delete_experiment.yml') # Delete action file for terminating the experiment
+		self.RUN = os.path.join(jfed_cli_path, 'run_experiment.yml')  # Run action file for starting the experiment
+
+		self.FIRMWARE = os.path.join(os.path.dirname(__file__), 'firmware')
+		self.BROKER = self.configParser.get(self.CONFIG_SECTION, 'broker')
+
+		self.reservation = WilabReservation(self.RUN, self.DELETE)
+
+	def add_files_from_env(self):
+		if self.CERTIFICATE_B64 != "":
+			file_decoded = base64.b64decode(self.CERTIFICATE_B64)
+			with open(self.CERTIFICATE, "w") as f:
+				f.write(file_decoded)
+
+		if self.DELETE_B64 != "":
+			file_decoded = base64.b64decode(self.DELETE_B64)
+			with open(self.DELETE, "w") as f:
+				f.write(file_decoded)
+
+		if self.RUN_B64 != "":
+			file_decoded = base64.b64decode(self.RUN_B64)
+			with open(self.RUN, "w") as f:
+				f.write(file_decoded)
+
+
+
 TESTBEDS = {
-	"iotlab": IoTLAB
+	"iotlab": IoTLAB,
+	"wilab": Wilab
 }
 
 def main():
