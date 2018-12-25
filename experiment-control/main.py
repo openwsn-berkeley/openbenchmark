@@ -28,7 +28,7 @@ class Controller(object):
 		)
 		parser.add_argument('--testbed', 
 	        dest       = 'testbed',
-	        choices    = ['iotlab', 'opentestbed'],
+	        choices    = ['iotlab', 'wilab'],
 	        default    = 'iotlab',
 	        action     = 'store'
 		)
