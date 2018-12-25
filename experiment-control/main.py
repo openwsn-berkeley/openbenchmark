@@ -3,6 +3,7 @@ import ConfigParser
 import os
 import base64
 
+from abc import abstractmethod
 from reservation import IoTLABReservation
 
 from otbox_startup import OTBoxStartup
@@ -49,6 +50,10 @@ class Controller(object):
 			'firmware': args.firmware
 		}
 
+	@abstractmethod
+	def add_files_from_env(self):
+		pass
+
 
 class IoTLAB(Controller):
 
@@ -68,9 +73,9 @@ class IoTLAB(Controller):
 		self.BROKER = self.configParser.get(self.CONFIG_SECTION, 'broker')
 
 		self.reservation = IoTLABReservation(self.USERNAME, self.HOSTNAME, self.EXP_DURATION, self.NODES)
-		self.add_private_key()
+		self.add_files_from_env()
 
-	def add_private_key(self):
+	def add_files_from_env(self):
 		if self.PRIVATE_SSH != "":
 			private_ssh_file = os.path.join(os.path.expanduser("~"), ".ssh", "id_rsa")
 
