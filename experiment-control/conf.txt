@@ -1,3 +1,6 @@
-[exp-config]
+[iotlab-config]
 user = openbenc
+broker = broker.mqttdashboard.com
+
+[wilab-config]
 broker = broker.mqttdashboard.com

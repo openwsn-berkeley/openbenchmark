@@ -55,7 +55,9 @@ class IoTLAB(Controller):
 	def __init__(self):
 		super(IoTLAB, self).__init__()
 
-		self.USERNAME = os.environ["user"] if "user" in os.environ else self.configParser.get('exp-config', 'user')
+		self.CONFIG_SECTION = 'iotlab-config'
+
+		self.USERNAME = os.environ["user"] if "user" in os.environ else self.configParser.get(self.CONFIG_SECTION, 'user')
 		self.PRIVATE_SSH = os.environ["private_ssh"] if "private_ssh" in os.environ else ""
 		self.HOSTNAME = 'saclay.iot-lab.info'
 
@@ -63,7 +65,7 @@ class IoTLAB(Controller):
 		self.NODES = "saclay,a8,106+107" # To be read from scenario config
 
 		self.FIRMWARE = os.path.join(os.path.dirname(__file__), 'firmware')
-		self.BROKER = self.configParser.get('exp-config', 'broker')
+		self.BROKER = self.configParser.get(self.CONFIG_SECTION, 'broker')
 
 		self.reservation = IoTLABReservation(self.USERNAME, self.HOSTNAME, self.EXP_DURATION, self.NODES)
 		self.add_private_key()
