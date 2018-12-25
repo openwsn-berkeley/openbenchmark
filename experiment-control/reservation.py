@@ -5,9 +5,11 @@ from abc import abstractmethod
 
 from socket_io_handler import SocketIoHandler
 
+import os
 import paramiko
 import json
 import time
+import subprocess
 
 from otbox_startup import OTBoxStartup
 
@@ -85,7 +87,7 @@ class IoTLABReservation(Reservation):
 			return []
 
 
-	# Abstract method implementations
+	####### Abstract method implementations #######
 
 	def reserve_experiment(self):
 		if self.check_experiment():
@@ -102,7 +104,6 @@ class IoTLABReservation(Reservation):
 					OTBoxStartup(self.user, self.domain, 'iotlab', self.get_reserved_nodes()).start()
 				else:
 					print('Experiment startup failed')
-
 
 
 	def check_experiment(self, loop=False):
@@ -143,3 +144,43 @@ class IoTLABReservation(Reservation):
 		subprocess.Popen(python_proc_kill, shell=True)
 		time.sleep(3)
 		subprocess.Popen(delete_logs, shell=True)
+
+
+
+
+class WilabReservation(Reservation):
+
+	def __init__(self, run, delete):
+		self.run = run
+		self.delete = delete
+
+	def run_yml_action(self, action):
+		self.start_display()
+
+		jfed_dir = os.path.join(os.path.dirname(__file__), "helpers", "wilab", "jfed_cli")
+		pipe = subprocess.Popen(['sh', '{0}.sh'.format(action)], cwd=jfed_dir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+
+		for line in iter(pipe.stdout.readline, b''):
+			print(">>> " + line.rstrip())
+
+	def start_display(self):
+		pipe = subprocess.Popen(['xrandr', '-d', ':99'], stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+		pipe.communicate()
+
+		if pipe.returncode != 0:
+			pipe = subprocess.Popen(['export', 'DISPLAY=:99'], stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+
+
+
+	####### Abstract method implementation #######
+
+	def reserve_experiment(self):
+		self.run_yml_action(action="run")
+
+	def check_experiment(self):
+		# TO-DO
+		pass
+
+	def terminate_experiment(self):
+		self.run_yml_action(action="delete")
+
