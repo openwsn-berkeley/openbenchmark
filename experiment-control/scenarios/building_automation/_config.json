@@ -1,0 +1,15 @@
+{
+	"identifier": "home-automation",
+	"duration": 120,
+	
+	"iotlab": {
+		"nodes": [
+			{"node_id": "a8-100", "type": "ms", "area": 1, "sending_time": [1]},
+			{"node_id": "a8-101", "type": "es", "area": 1, "sending_time": [10]}
+		]
+	},
+
+	"wilab": {
+
+	}
+}
