@@ -65,7 +65,7 @@ class MQTTClient:
 
 	def subscribe(self):
 		for key in self.sub_topics:
-			print "Subscribing to: {0}".format(self.sub_topics[key])
+			print "[MQTT CLIENT] Subscribing to: {0}".format(self.sub_topics[key])
 			self.client.subscribe(self.sub_topics[key])
 
 	def publish(self, topic, payload):
@@ -74,18 +74,18 @@ class MQTTClient:
 
 	##### MQTT client listeners #####
 	def _on_connect(self, client, userdata, flags, rc):
-		print("Connected to the broker. Subscribing...")
+		print("[MQTT CLIENT] Connected to the broker. Subscribing...")
 		self.subscribe()
 
 	def _on_disconnect(self, client, userdata, rc):
-		print("Disconnecting from the broker...")
+		print("[MQTT CLIENT] Disconnecting from the broker...")
 		self.client.loop_stop()
 
 	def _on_subscribe(self, client, obj, mid, granted_qos):
 		self.successful_subs += 1
 		if self.successful_subs == len(self.sub_topics):
 			self.successful_subs = 0
-			print("Subscribed to all")
+			print("[MQTT CLIENT] Subscribed to all")
 
 	def _on_message(self, client, userdata, message):
 		topic   = message.topic
@@ -106,14 +106,14 @@ class MQTTClient:
 	# Every command should have its unique token so that requests and responses could match
 	def notify_api_response(self, payload):
 		try:
-			payload_json = json.loads(payload)
+			payload_json = json.loads(payload) 
 			self.condition_object.condition_variables[str(payload_json['token'])]['payload'] = payload
 			cv = self.condition_object.condition_variables[str(payload_json['token'])]['condition_var']
 			cv.acquire()
 			cv.notifyAll()
 			cv.release()
 		except Exception, e:
-			print e
+			print "[MQTT CLIENT] Exception: {0}".format(e)
 
 	def _on_startBenchmark_command(self, payload):
 		# Should start scheduler and send startBenchmark response
