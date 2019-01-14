@@ -43,6 +43,8 @@ class API:
 		payload['token'] = self.token
 		return payload
 
+	def command_exec(self, command, payload):
+		threading.Thread(target=getattr(self, command), args=(payload, )).start()
 
 	def echo(self, payload):
 		# Should publish MQTT command and put thread into waiting state until notified or timeout
