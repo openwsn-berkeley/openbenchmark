@@ -1,6 +1,8 @@
 import time
 import json
 import threading
+import random
+import string
 from mqtt_client import MQTTClient
 from _condition_object import ConditionObject
 
@@ -28,14 +30,13 @@ class API:
 		self.condition_object.remove_variable(token=self.token)
 
 		if payload != '':
-			return payload
-
-		return json.dumps({
-			"token"  : self.token,
-			"success": False,
-			"reason" : "timeout"
-		})
-
+			print "[API] {0}".format(payload)
+		else:
+			print "[API] {0}".format(json.dumps({
+				"token"  : self.token,
+				"success": False,
+				"reason" : "timeout"
+			}))
 
 
 	##### API implementation #####
@@ -50,16 +51,13 @@ class API:
 		# Should publish MQTT command and put thread into waiting state until notified or timeout
 		pass
 
-
 	def send_packet(self, payload):
 		# Publishes MQTT command and puts thread into waiting state until notified or timeout
 		self.mqtt_client.publish(
 			'sendPacket',
 			self._assign_token(payload)
 		)
-		
-		return self._wait()
-
+		self._wait()
 
 	def configure_transmit_power(self, payload):
 		# Should publish MQTT command and put thread into waiting state until notified or timeout
