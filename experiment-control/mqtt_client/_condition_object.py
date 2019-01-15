@@ -1,4 +1,5 @@
 import threading
+import Queue
 
 class ConditionObject:
 
@@ -13,6 +14,10 @@ class ConditionObject:
 
 	def __init__(self):
 		self.condition_variables = {}
+
+		# Needed for Experiment Performance Events monitoring
+		self.exp_event_cv = threading.Condition()
+		self.exp_event_queue = Queue.Queue()
 
 	def append_variable(self, token, payload=''):
 		self.condition_variables[token] = {
