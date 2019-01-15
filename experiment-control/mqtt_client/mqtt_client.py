@@ -44,6 +44,9 @@ class MQTTClient:
 			"sendPacket": "openbenchmark/experimentId/{0}/command/sendPacket".format(self.experiment_id),
 			"configureTransmitPower": "openbenchmark/experimentId/{0}/command/configureTransmitPower".format(self.experiment_id)
 		}
+		self.epe_sub_topics = {  # Experiment Performance Events
+			"expPerfEvents": "OpenBenchmark/experimentId/{0}/nodeId/+/performanceData"
+		}
 
 		self.mqtt_client_setup()
 
@@ -67,6 +70,9 @@ class MQTTClient:
 		for key in self.sub_topics:
 			print "[MQTT CLIENT] Subscribing to: {0}".format(self.sub_topics[key])
 			self.client.subscribe(self.sub_topics[key])
+		for key in self.epe_sub_topics:
+			print "[MQTT CLIENT] Subscribing to: {0}".format(self.sub_topics[key])
+			self.client.subscribe(self.epe_sub_topics[key])
 
 	def publish(self, topic, payload):
 		self.client.publish(self.pub_topics[topic], json.dumps(payload))
@@ -83,7 +89,7 @@ class MQTTClient:
 
 	def _on_subscribe(self, client, obj, mid, granted_qos):
 		self.successful_subs += 1
-		if self.successful_subs == len(self.sub_topics):
+		if self.successful_subs == len(self.sub_topics) + len(self.epe_sub_topics):
 			self.successful_subs = 0
 			print("[MQTT CLIENT] Subscribed to all")
 
@@ -91,15 +97,20 @@ class MQTTClient:
 		topic   = message.topic
 		payload = message.payload
 
-		topic_arr = topic.split("response/")
-		if len(topic_arr) == 1:   # It's a command
-			message_key  = topic.split("command/")[0]
-			message_type = MessageType.command
-		else:   # It's a response
-			message_key  = topic_arr[1]
-			message_type = MessageType.response
+		topic_arr = topic.split("/")
+		topic_arr_len = len(topic_arr)
 
-		getattr(self, "_on_{0}_{1}".format(message_key, message_type))(payload)
+		if topic_arr[topic_arr_len - 1] == "performanceData":   # It's an Experiment Performance Event
+			self._on_performanceData(payload)
+		else:
+			if topic_arr[topic_arr_len - 2] == "command":   # It's a command
+				message_key  = topic_arr[topic_arr_len - 1]
+				message_type = MessageType.command
+			elif topic_arr[topic_arr_len - 2] == "response":   # It's a response
+				message_key  = topic_arr[topic_arr_len - 1]
+				message_type = MessageType.response
+			
+			getattr(self, "_on_{0}_{1}".format(message_key, message_type))(payload)
 
 
 	##### API callbacks #####
