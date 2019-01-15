@@ -142,3 +142,14 @@ class MQTTClient:
 
 	def _on_configureTransmitPower_response(self, payload):
 		self.notify_api_response(payload)
+
+	def _on_performanceData(self, payload):
+		# Here we implement the logic for feeding the performance data into the KPI calculation module
+		cv = self.condition_object.exp_event_cv
+		queue = self.condition_object.exp_event_queue
+
+		if cv != None:
+			queue.put(payload)
+			cv.acquire()
+			cv.notifyAll()
+			cv.release()
