@@ -3,6 +3,7 @@ import json
 import threading
 import random
 import string
+import colorama
 from mqtt_client import MQTTClient
 from _condition_object import ConditionObject
 
@@ -17,6 +18,7 @@ class API:
 		self.condition_object = ConditionObject._create()
 		self.token            = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(15))   # Token generated automatically as a string of 15 random alphanumerical characters
 		self.timeout          = timeout
+		colorama.init() #Needed for coloured log printing
 
 	def _wait(self):
 		self.condition_object.append_variable(token=self.token)
@@ -30,13 +32,13 @@ class API:
 		self.condition_object.remove_variable(token=self.token)
 
 		if payload != '':
-			print "[API] {0}".format(payload)
+			print(colorama.Fore.GREEN + "[API] {0}".format(payload) + colorama.Style.RESET_ALL)
 		else:
-			print "[API] {0}".format(json.dumps({
+			print(colorama.Fore.RED + "[API] {0}".format(json.dumps({
 				"token"  : self.token,
 				"success": False,
 				"reason" : "timeout"
-			}))
+			})) + colorama.Style.RESET_ALL)
 
 
 	##### API implementation #####

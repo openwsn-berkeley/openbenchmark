@@ -67,7 +67,7 @@ class Scheduler:
 				})
 
 			if sleep_interval == -1:
-				print "[SCHEDULER] Currently on: {0}/{1}; Last event".format(i+1, schedule_len)	
+				print "[SCHEDULER] Currently on: {0}/{1}. Last event".format(i+1, schedule_len)	
 			else:
-				print "[SCHEDULER] Currently on: {0}/{1}; Next event in {2} seconds".format(i+1, schedule_len, sleep_interval)
+				print "[SCHEDULER] Currently on: {0}/{1}. Next event in {2} seconds".format(i+1, schedule_len, sleep_interval)
 				time.sleep(sleep_interval)
