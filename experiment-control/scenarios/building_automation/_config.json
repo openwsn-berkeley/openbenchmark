@@ -4,8 +4,11 @@
 	
 	"iotlab": {
 		"nodes": [
-			{"node_id": "a8-100", "type": "ms", "area": 1, "sending_time": [1]},
-			{"node_id": "a8-101", "type": "es", "area": 1, "sending_time": [10]}
+			{"node_id": "a8-100", "type": "ms", "area": 1, "sending_time": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]},
+			{"node_id": "a8-101", "type": "es", "area": 1, "sending_time": [2, 4, 6, 8, 10]},
+			{"node_id": "a8-102", "type": "es", "area": 1, "sending_time": [3, 6, 9]},
+			{"node_id": "a8-103", "type": "es", "area": 1, "sending_time": [4, 8]},
+			{"node_id": "a8-104", "type": "es", "area": 1, "sending_time": [5, 10]}
 		]
 	},
 
