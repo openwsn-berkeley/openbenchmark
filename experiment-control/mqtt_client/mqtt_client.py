@@ -20,7 +20,7 @@ class MQTTClient:
 	_instance = None
 
 	@staticmethod
-	def _create(exp_id):
+	def create(exp_id):
 		if MQTTClient._instance == None:
 			MQTTClient._instance = MQTTClient(experiment_id=exp_id)
 		return MQTTClient._instance
@@ -29,7 +29,7 @@ class MQTTClient:
 	def __init__(self, experiment_id, broker="broker.mqttdashboard.com"):
 		self.experiment_id    = experiment_id
 		self.broker           = broker
-		self.condition_object = ConditionObject._create()
+		self.condition_object = ConditionObject.create()
 
 		self.sub_topics = {
 			"startBenchmark": "openbenchmark/command/startBenchmark",  # Subscribing on the command (receiving)
@@ -127,7 +127,7 @@ class MQTTClient:
 			print "[MQTT CLIENT] Exception: {0}".format(e)
 
 	def _on_startBenchmark_command(self, payload):
-		# Should start scheduler and send startBenchmark response
+		# Should start scheduler and KPI processing unit and send startBenchmark response
 		pass
 
 	def _on_echo_response(self, payload):

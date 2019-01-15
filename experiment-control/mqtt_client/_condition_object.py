@@ -6,7 +6,7 @@ class ConditionObject:
 	_instance = None
 
 	@staticmethod
-	def _create():
+	def create():
 		if ConditionObject._instance == None:
 			ConditionObject._instance = ConditionObject()
 		return ConditionObject._instance

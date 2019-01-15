@@ -14,8 +14,8 @@ class API:
 	# The purpose of the token is to properly match responses with their respective requests
 
 	def __init__(self, timeout):
-		self.mqtt_client      = MQTTClient._create(1)
-		self.condition_object = ConditionObject._create()
+		self.mqtt_client      = MQTTClient.create(1)
+		self.condition_object = ConditionObject.create()
 		self.token            = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(15))   # Token generated automatically as a string of 15 random alphanumerical characters
 		self.timeout          = timeout
 		colorama.init() #Needed for coloured log printing
