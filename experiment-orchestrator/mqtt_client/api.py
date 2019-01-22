@@ -1,3 +1,4 @@
+import sys
 import time
 import json
 import threading
@@ -32,18 +33,23 @@ class API:
 		self.condition_object.remove_variable(token=self.token)
 
 		if payload != '':
-			print(colorama.Fore.GREEN + "[API] {0}".format(payload) + colorama.Style.RESET_ALL)
+			sys.stdout.write("{0}[API] {1}\n{2}".format(
+				colorama.Fore.GREEN if json.loads(payload)['success'] else colorama.Fore.RED, 
+				payload, 
+				colorama.Style.RESET_ALL
+			))
 		else:
-			print(colorama.Fore.RED + "[API] {0}".format(json.dumps({
+			sys.stdout.write("{0}[API] {1}\n{2}".format(colorama.Fore.RED, json.dumps({
 				"token"  : self.token,
 				"success": False,
 				"reason" : "timeout"
-			})) + colorama.Style.RESET_ALL)
+			}), colorama.Style.RESET_ALL))
 
 
 	##### API implementation #####
 	def _assign_token(self, payload):
-		payload['token'] = self.token
+		payload['token']       = self.token
+		payload['packetToken'] = [int(elem.encode("hex"), 16) for elem in self.token]
 		return payload
 
 	def command_exec(self, command, payload):

@@ -1,6 +1,6 @@
 import os
 import json
-from scenarios._scenario import Scenario
+from scenarios.scenario import Scenario
 
 
 class BuildingAutomation(Scenario):
@@ -10,9 +10,5 @@ class BuildingAutomation(Scenario):
 
 	def __init__(self, sut_command):
 		super(BuildingAutomation, self).__init__(sut_command)
-		self._read_config()
+		super(BuildingAutomation, self)._read_config(self.CONFIG_FILE)
 		self._instantiate_nodes()
-
-	def _read_config(self):
-		with open(self.CONFIG_FILE, 'r') as f:
-			self.config_node_data = json.load(f)[self.testbed]['nodes']

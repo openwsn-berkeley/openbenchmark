@@ -2,14 +2,15 @@ import sys
 import time
 import json
 
+from scenarios.scenario import Scenario
 from scenarios.building_automation.building_automation import BuildingAutomation
 from scenarios.home_automation.home_automation import HomeAutomation
 from scenarios.industrial_monitoring.industrial_monitoring import IndustrialMonitoring
 
 class Scheduler:
 
-	nodes    = []   # Array of type `Node`
-	schedule = []   # Array of dictionaries {"time_point": type `float`, "node": type `Node`}
+	nodes        = []   # Array of type `Node`
+	schedule     = []   # Array of dictionaries {"time_sec": type `float`, "node": type `Node`, "destination_eui64: `String`"}
 
 	scenarios = {
 		"building-automation"   : BuildingAutomation,
@@ -27,25 +28,36 @@ class Scheduler:
 		self._start_schedule()
 
 
-	def _generate_schedule(self):
-		for node in self.scenario.nodes:
-			for time_point in node.sending_time:
-				self.schedule.append({
-					"time_point": time_point, 
-					"node"      : node
-				})
-				self._sort_schedule()
-
 	# Used only within `generate_schedule`
 	def _sort_schedule(self):
-		self.schedule = sorted(self.schedule, key=lambda k: k["time_point"])
+		self.schedule = sorted(self.schedule, key=lambda k: k["time_sec"])
+
+	def _generate_schedule(self):
+		for node in self.scenario.nodes:
+			for sending_point in node.sending_points:
+				time_sec    = sending_point["time_sec"]
+				destination = sending_point["destination"]
+
+				self.schedule.append({
+					"time_sec"          : time_sec,
+					"node"              : node,
+					"destination_eui64" : Scenario.id_to_eui64[ self.scenario.config_node_data[destination]['node_id'] ]
+				})
+
+				self._sort_schedule()
+
 
 	def _print_schedule(self):
 		schedule_len = len(self.schedule)
 
 		print "[SCHEDULER] Starting schedule:"
 		for i in range(0, schedule_len):
-			print "'time_point': {0}, 'node_id': {1}".format(self.schedule[i]["time_point"], self.schedule[i]["node"].node_id)
+			print "{0} at {1}: from {2} to {3}".format(
+				self.schedule[i]["node"].node_id, 
+				self.schedule[i]["time_sec"],
+				self.schedule[i]["node"].eui64,
+				self.schedule[i]["destination_eui64"]
+			)
 
 		return schedule_len
 
@@ -58,16 +70,20 @@ class Scheduler:
 			
 			if i < schedule_len - 1:
 				next_on      = self.schedule[i+1]
-				sleep_interval = next_on["time_point"] - currently_on["time_point"]
+				sleep_interval = next_on["time_sec"] - currently_on["time_sec"]
 			else:
 				sleep_interval = -1
 
+			# Assigning `sendPacket` payload as defined by the documentation
 			currently_on["node"].command_exec(payload={
-					'node_id': currently_on["node"].node_id
+					'source': currently_on["node"].eui64,
+					'destination': currently_on["destination_eui64"],
+					'packetPayload': [],
+					'confirmable': True
 				})
 
 			if sleep_interval == -1:
-				print "[SCHEDULER] Currently on: {0}/{1}. Last event".format(i+1, schedule_len)	
+				sys.stdout.write("[SCHEDULER] Currently on: {0}/{1}. Last event\n".format(i+1, schedule_len))
 			else:
-				print "[SCHEDULER] Currently on: {0}/{1}. Next event in {2} seconds".format(i+1, schedule_len, sleep_interval)
+				sys.stdout.write("[SCHEDULER] Currently on: {0}/{1}. Next event in {2} seconds\n".format(i+1, schedule_len, sleep_interval))
 				time.sleep(sleep_interval)

@@ -1,0 +1,67 @@
+{
+	"identifier": "building-automation",
+	"duration_min": 30,
+	"number_of_nodes": 5,
+
+	"nodes": {
+		"openbenchmark00": {
+			"role": "ms", 
+			"area": 1,
+			"sending_points": [
+				{"time_sec": 1, "destination": "openbenchmark01"},
+				{"time_sec": 2, "destination": "openbenchmark02"},
+				{"time_sec": 3, "destination": "openbenchmark03"}
+			]
+		},
+		"openbenchmark01": {
+			"role": "ms", 
+			"area": 1,
+			"sending_points": [
+				{"time_sec": 2, "destination": "openbenchmark00"},
+				{"time_sec": 4, "destination": "openbenchmark02"},
+				{"time_sec": 6, "destination": "openbenchmark03"}
+			]
+		},
+		"openbenchmark02": {
+			"role": "ms", 
+			"area": 1,
+			"sending_points": [
+				{"time_sec": 3, "destination": "openbenchmark00"},
+				{"time_sec": 6, "destination": "openbenchmark01"},
+				{"time_sec": 9, "destination": "openbenchmark03"}
+			]
+		},
+		"openbenchmark03": {
+			"role": "ms", 
+			"area": 1,
+			"sending_points": [
+				{"time_sec": 5, "destination": "openbenchmark00"},
+				{"time_sec": 6, "destination": "openbenchmark01"},
+				{"time_sec": 7, "destination": "openbenchmark02"}
+			]
+		}
+	},
+	
+	"iotlab": {
+		"openbenchmark00": {
+			"node_id": "a8-100",
+			"transmission_power_dbm": 0
+		},
+		"openbenchmark01": {
+			"node_id": "a8-101",
+			"transmission_power_dbm": 0
+		},
+		"openbenchmark02": {
+			"node_id": "a8-102",
+			"transmission_power_dbm": 0
+		},
+		"openbenchmark03": {
+			"node_id": "a8-103",
+			"transmission_power_dbm": 0
+		}
+	},
+
+	"wilab": {
+		
+	}
+}

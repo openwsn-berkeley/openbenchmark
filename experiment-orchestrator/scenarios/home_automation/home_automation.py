@@ -9,9 +9,5 @@ class HomeAutomation(Scenario):
 
 	def __init__(self, sut_command_payload):
 		super(HomeAutomation, self).__init__(sut_command_payload)
-		self._read_config()
+		super(HomeAutomation, self)._read_config(self.CONFIG_FILE)
 		self._instantiate_nodes()
-
-	def _read_config(self):
-		with open(self.CONFIG_FILE, 'r') as f:
-			self.config_node_data = json.load(f)[self.testbed]['nodes']

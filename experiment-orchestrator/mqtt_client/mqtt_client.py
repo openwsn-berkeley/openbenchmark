@@ -45,7 +45,7 @@ class MQTTClient:
 			"configureTransmitPower": "openbenchmark/experimentId/{0}/command/configureTransmitPower".format(self.experiment_id)
 		}
 		self.epe_sub_topics = {  # Experiment Performance Events
-			"expPerfEvents": "OpenBenchmark/experimentId/{0}/nodeId/+/performanceData"
+			"performanceData": "openbenchmark/experimentId/{0}/nodeId/+/performanceData".format(self.experiment_id)
 		}
 
 		self.mqtt_client_setup()
@@ -71,7 +71,7 @@ class MQTTClient:
 			print "[MQTT CLIENT] Subscribing to: {0}".format(self.sub_topics[key])
 			self.client.subscribe(self.sub_topics[key])
 		for key in self.epe_sub_topics:
-			print "[MQTT CLIENT] Subscribing to: {0}".format(self.sub_topics[key])
+			print "[MQTT CLIENT] Subscribing to: {0}".format(self.epe_sub_topics[key])
 			self.client.subscribe(self.epe_sub_topics[key])
 
 	def publish(self, topic, payload):
@@ -101,7 +101,7 @@ class MQTTClient:
 		topic_arr_len = len(topic_arr)
 
 		if topic_arr[topic_arr_len - 1] == "performanceData":   # It's an Experiment Performance Event
-			self._on_performanceData(payload)
+			self._on_performanceData(topic_arr[topic_arr_len - 2], payload)
 		else:
 			if topic_arr[topic_arr_len - 2] == "command":   # It's a command
 				message_key  = topic_arr[topic_arr_len - 1]
@@ -143,13 +143,18 @@ class MQTTClient:
 	def _on_configureTransmitPower_response(self, payload):
 		self.notify_api_response(payload)
 
-	def _on_performanceData(self, payload):
+	def _on_performanceData(self, eui64, payload):
 		# Here we implement the logic for feeding the performance data into the KPI calculation module
 		cv = self.condition_object.exp_event_cv
 		queue = self.condition_object.exp_event_queue
 
+		complete_payload = {
+			"eui64"        : eui64,
+			"event_payload": json.loads(payload)
+		}
+
 		if cv != None:
-			queue.put(payload)
+			queue.put(json.dumps(complete_payload))
 			cv.acquire()
 			cv.notifyAll()
 			cv.release()
