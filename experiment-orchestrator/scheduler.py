@@ -2,6 +2,7 @@ import sys
 import time
 import json
 
+from utils import Utils
 from scenarios.scenario import Scenario
 from scenarios.building_automation.building_automation import BuildingAutomation
 from scenarios.home_automation.home_automation import HomeAutomation
@@ -22,6 +23,9 @@ class Scheduler:
 		# Get scenario instance based on the SUT command payload
 		sut_command   = json.loads(sut_command_payload)
 
+		Utils.id_to_eui64 = sut_command['nodes']
+		Utils.eui64_to_id = {v: k for k, v in sut_command['nodes'].items()}
+
 		self.scenario = self.scenarios[sut_command['scenario']](sut_command) 
 
 		self._generate_schedule()
@@ -41,7 +45,7 @@ class Scheduler:
 				self.schedule.append({
 					"time_sec"          : time_sec,
 					"node"              : node,
-					"destination_eui64" : Scenario.id_to_eui64[ self.scenario.config_node_data[destination]['node_id'] ]
+					"destination_eui64" : Utils.id_to_eui64[ self.scenario.config_node_data[destination]['node_id'] ]
 				})
 
 				self._sort_schedule()

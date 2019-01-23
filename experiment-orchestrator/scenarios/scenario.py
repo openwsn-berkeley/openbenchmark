@@ -1,3 +1,7 @@
+import sys
+sys.path.append('..')
+
+from utils import Utils
 from abc import abstractproperty, abstractmethod
 from _node import Node
 import json
@@ -33,14 +37,14 @@ class Scenario(object):
 
 	
 	def _instantiate_nodes(self):     # Instantiates node objects based on config objects and EUI-64 addresses read from sut payload
-		assert len(self.config_node_data) == len(Scenario.id_to_eui64)
+		assert len(self.config_node_data) == len(Utils.id_to_eui64)
 
 		for generic_id in self.config_node_data:
 			config_params = self.config_node_data[generic_id]
 			params = {
 				'generic_id'    : generic_id,
 				'node_id'       : config_params['node_id'],
-				'eui64'         : Scenario.id_to_eui64[config_params['node_id']],
+				'eui64'         : Utils.id_to_eui64[config_params['node_id']],
 				'role'          : config_params['role'],
 				'area'          : config_params['area'],
 				'sending_points': config_params['sending_points']
@@ -49,8 +53,6 @@ class Scenario(object):
 
 
 	def __init__(self, sut_command):
-		Scenario.id_to_eui64 = sut_command['nodes'] 
-
 		self.testbed         = sut_command['testbed']   # Testbed and nodes data passed from the MQTT payload (see _README.md, step 2)
 		self.nodes           = []                       # List of objects of type Node
 		self.config_object   = None                     # Instantiating nodes based on _config.json data and data received from SUT
