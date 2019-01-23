@@ -1,6 +1,6 @@
 import os
 import json
-from scenarios._scenario import Scenario
+from scenarios.scenario import Scenario
 
 
 class IndustrialMonitoring(Scenario):
