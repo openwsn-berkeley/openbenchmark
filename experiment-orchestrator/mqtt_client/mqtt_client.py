@@ -5,8 +5,9 @@ import paho.mqtt.client as mqtt
 
 
 class MessageType:
-	command  = "command"
-	response = "response"
+	command         = "command"
+	response        = "response"
+	performanceData = "performanceData"
 
 
 class MQTTClient:
@@ -100,13 +101,13 @@ class MQTTClient:
 		topic_arr = topic.split("/")
 		topic_arr_len = len(topic_arr)
 
-		if topic_arr[topic_arr_len - 1] == "performanceData":   # It's an Experiment Performance Event
+		if topic_arr[topic_arr_len - 1] == MessageType.performanceData:   # It's an Experiment Performance Event
 			self._on_performanceData(topic_arr[topic_arr_len - 2], payload)
 		else:
-			if topic_arr[topic_arr_len - 2] == "command":   # It's a command
+			if topic_arr[topic_arr_len - 2] == MessageType.command:   # It's a command
 				message_key  = topic_arr[topic_arr_len - 1]
 				message_type = MessageType.command
-			elif topic_arr[topic_arr_len - 2] == "response":   # It's a response
+			elif topic_arr[topic_arr_len - 2] == MessageType.response:   # It's a response
 				message_key  = topic_arr[topic_arr_len - 1]
 				message_type = MessageType.response
 			
