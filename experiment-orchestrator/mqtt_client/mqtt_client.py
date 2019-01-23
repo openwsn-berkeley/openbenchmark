@@ -155,7 +155,7 @@ class MQTTClient:
 		}
 
 		if cv != None:
-			queue.put(json.dumps(complete_payload))
+			queue.put(complete_payload)
 			cv.acquire()
 			cv.notifyAll()
 			cv.release()
