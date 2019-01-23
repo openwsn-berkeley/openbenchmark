@@ -95,7 +95,7 @@ class MQTTClient:
 
 	def _on_message(self, client, userdata, message):
 		topic   = message.topic
-		payload = message.payload
+		payload = message.payload.decode('string-escape').strip('"')
 
 		topic_arr = topic.split("/")
 		topic_arr_len = len(topic_arr)
