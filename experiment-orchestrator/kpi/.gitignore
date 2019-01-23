@@ -1,3 +1,4 @@
 *.pyc
 _test.py
-sandbox
+kpi.log
+raw.log
