@@ -18,9 +18,7 @@ class KPIProcessing:
 		self.cv               = self.condition_object.exp_event_cv
 		self.queue            = self.condition_object.exp_event_queue
 
-		self.buffer           = []   # Array of dictionaries {"eui64": type `string`, "event_payload": type `dict`}
-		self.start_timestamp  = int(round(time.time() * 1000))
-		self.window_size      = 2*60*1000    # 2 minutes expressed in milliseconds
+		self.buffer           = TimeoutBuffer(timeout=120)   # in seconds
 
 		self.event_to_method  = {
 			"packetSent"               : None,
