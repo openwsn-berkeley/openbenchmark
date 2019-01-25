@@ -102,7 +102,7 @@ class MQTTClient:
 		topic_arr_len = len(topic_arr)
 
 		if topic_arr[topic_arr_len - 1] == MessageType.performanceData:   # It's an Experiment Performance Event
-			self._on_performanceData(topic_arr[topic_arr_len - 2], payload)
+			self._on_performanceData(payload)
 		else:
 			if topic_arr[topic_arr_len - 2] == MessageType.command:   # It's a command
 				message_key  = topic_arr[topic_arr_len - 1]
@@ -144,18 +144,13 @@ class MQTTClient:
 	def _on_configureTransmitPower_response(self, payload):
 		self.notify_api_response(payload)
 
-	def _on_performanceData(self, eui64, payload):
+	def _on_performanceData(self, payload):
 		# Here we implement the logic for feeding the performance data into the KPI calculation module
 		cv = self.condition_object.exp_event_cv
 		queue = self.condition_object.exp_event_queue
 
-		complete_payload = {
-			"eui64"        : eui64,
-			"event_payload": json.loads(payload)
-		}
-
 		if cv != None:
-			queue.put(complete_payload)
+			queue.put(json.loads(payload))
 			cv.acquire()
 			cv.notifyAll()
 			cv.release()
