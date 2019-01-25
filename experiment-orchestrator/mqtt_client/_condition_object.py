@@ -19,6 +19,10 @@ class ConditionObject:
 		self.exp_event_cv = threading.Condition()
 		self.exp_event_queue = Queue.Queue()
 
+		# Needed for packet drop notification
+		self.packet_drop_cv = threading.Condition()
+		self.packet_drop_queue = Queue.Queue()
+
 	def append_variable(self, token, payload=''):
 		self.condition_variables[token] = {
 			'condition_var': threading.Condition(),
