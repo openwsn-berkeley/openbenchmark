@@ -14,7 +14,16 @@ from scenarios.scenario import Scenario
 class KPIProcessing:
 
 	def __init__(self):
-		self.logger           = Logger.create()
+		# Temporarily hardcoded
+		self.logger           = Logger.create({
+				'date'         : '25. 1. 2019',
+				'experiment_id': '1',
+				'testbed'      : 'IoT-LAB',
+				'firmware'     : '03oos_openwsn_prog',
+				'nodes'        : ['a8-100', 'a8-101', 'a8-102', 'a8-103'],
+				'scenario'     : 'Home Automation'
+			})
+
 		self.condition_object = ConditionObject.create()
 		self.cv               = self.condition_object.exp_event_cv
 		self.queue            = self.condition_object.exp_event_queue
