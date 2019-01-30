@@ -35,6 +35,7 @@ class MQTTClient:
 		self.condition_object = ConditionObject.create()
 
 		self.experiment_id    = Utils.experiment_id
+
 		self.sub_topics = {
 			"startBenchmark": "openbenchmark/command/startBenchmark",  # Subscribing on the command (receiving)
 			"echo": "openbenchmark/experimentId/{0}/+/echo".format(self.experiment_id),   # Subscribing on both
@@ -72,10 +73,10 @@ class MQTTClient:
 
 	def subscribe(self):
 		for key in self.sub_topics:
-			print "[MQTT CLIENT] Subscribing to: {0}".format(self.sub_topics[key])
+			sys.stdout.write("[MQTT CLIENT] Subscribing to: {0}\n".format(self.sub_topics[key]))
 			self.client.subscribe(self.sub_topics[key])
 		for key in self.epe_sub_topics:
-			print "[MQTT CLIENT] Subscribing to: {0}".format(self.epe_sub_topics[key])
+			sys.stdout.write("[MQTT CLIENT] Subscribing to: {0}\n".format(self.epe_sub_topics[key]))
 			self.client.subscribe(self.epe_sub_topics[key])
 
 	def publish(self, topic, payload):
@@ -84,19 +85,20 @@ class MQTTClient:
 
 	##### MQTT client listeners #####
 	def _on_connect(self, client, userdata, flags, rc):
-		print("[MQTT CLIENT] Connected to the broker. Subscribing...")
+		sys.stdout.write("[MQTT CLIENT] Connected to the broker. Subscribing...\n")
 		self.subscribe()
 
 	def _on_disconnect(self, client, userdata, rc):
-		print("[MQTT CLIENT] Disconnecting from the broker...")
+		sys.stdout.write("[MQTT CLIENT] Disconnecting from the broker...\n")
 		self.client.loop_stop()
 
 	def _on_subscribe(self, client, obj, mid, granted_qos):
 		self.successful_subs += 1
 		if self.successful_subs == len(self.sub_topics) + len(self.epe_sub_topics):
 			self.successful_subs = 0
-			print("[MQTT CLIENT] Subscribed to all")
+			sys.stdout.write("[MQTT CLIENT] Subscribed to all\n")
 
+			
 	def _on_message(self, client, userdata, message):
 		topic   = message.topic
 		payload = message.payload.decode('string-escape').strip('"')
@@ -113,7 +115,7 @@ class MQTTClient:
 			elif topic_arr[topic_arr_len - 2] == MessageType.response:   # It's a response
 				message_key  = topic_arr[topic_arr_len - 1]
 				message_type = MessageType.response
-			
+
 			getattr(self, "_on_{0}_{1}".format(message_key, message_type))(payload)
 
 
@@ -128,7 +130,8 @@ class MQTTClient:
 			cv.notifyAll()
 			cv.release()
 		except Exception, e:
-			print "[MQTT CLIENT] Exception: {0}".format(e)
+			sys.stdout.write("[MQTT CLIENT] Exception: {0}\n".format(e))
+			
 
 	def _on_startBenchmark_command(self, payload):
 		# Should start scheduler and KPI processing unit and send startBenchmark response
