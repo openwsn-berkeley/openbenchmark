@@ -129,7 +129,20 @@ class MQTTClient:
 
 	def _on_startBenchmark_command(self, payload):
 		# Should start scheduler and KPI processing unit and send startBenchmark response
-		pass
+		payload_obj = json.loads(payload)
+
+		self.publish('startBenchmark', {
+		        "token"        : payload_obj['token'],
+		        "success"      : True,
+		        "experimentId" : self.experiment_id
+			})
+
+		self.condition_object.sut_command_payload = payload_obj
+		
+		self.condition_object.start_benchmark_cv.acquire()
+		self.condition_object.start_benchmark_cv.notifyAll()
+		self.condition_object.start_benchmark_cv.release()
+
 
 	def _on_echo_response(self, payload):
 		self.notify_api_response(payload)
