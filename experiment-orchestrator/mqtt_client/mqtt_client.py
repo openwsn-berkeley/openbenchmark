@@ -31,6 +31,7 @@ class MQTTClient:
 		self.broker           = broker
 		self.condition_object = ConditionObject.create()
 
+		self.experiment_id    = Utils.experiment_id
 		self.sub_topics = {
 			"startBenchmark": "openbenchmark/command/startBenchmark",  # Subscribing on the command (receiving)
 			"echo": "openbenchmark/experimentId/{0}/+/echo".format(self.experiment_id),   # Subscribing on both
