@@ -19,6 +19,8 @@ class Scheduler:
 		"industrial-monitoring" : IndustrialMonitoring
 	}
 
+	scheduler_delay = 5   #[s]
+
 	def __init__(self, sut_command_payload):
 		# Get scenario instance based on the SUT command payload
 		sut_command   = json.loads(sut_command_payload)
@@ -68,6 +70,8 @@ class Scheduler:
 
 	def _start_schedule(self):
 		schedule_len = self._print_schedule()
+		sys.stdout.write("[SCHEDULER] Starting scheduler in {0} seconds...\n".format(self.scheduler_delay))
+		time.sleep(self.scheduler_delay)
 
 		for i in range(0, schedule_len):
 			currently_on = self.schedule[i]
