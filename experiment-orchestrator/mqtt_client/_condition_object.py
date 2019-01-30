@@ -23,6 +23,10 @@ class ConditionObject:
 		self.packet_drop_cv = threading.Condition()
 		self.packet_drop_queue = Queue.Queue()
 
+		# Needed for start benchmark notification
+		self.start_benchmark_cv = threading.Condition()
+		self.sut_command_payload = {}
+
 	def append_variable(self, token, payload=''):
 		self.condition_variables[token] = {
 			'condition_var': threading.Condition(),
