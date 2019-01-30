@@ -21,14 +21,13 @@ class MQTTClient:
 	_instance = None
 
 	@staticmethod
-	def create(exp_id):
+	def create():
 		if MQTTClient._instance == None:
-			MQTTClient._instance = MQTTClient(experiment_id=exp_id)
+			MQTTClient._instance = MQTTClient()
 		return MQTTClient._instance
 
 
-	def __init__(self, experiment_id, broker="broker.mqttdashboard.com"):
-		self.experiment_id    = experiment_id
+	def __init__(self, broker="broker.mqttdashboard.com"):
 		self.broker           = broker
 		self.condition_object = ConditionObject.create()
 
