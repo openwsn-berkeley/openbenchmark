@@ -159,11 +159,11 @@ class WilabReservation(Reservation):
 		}
 
 	def run_yml_action(self, action):
-		self.start_display()
+		if action != 'display':
+			self._start_display()
 
-		jfed_dir = os.path.join(os.path.dirname(__file__), "helpers", "wilab", "jfed_cli")
-		pipe = subprocess.Popen(['sh', '{0}.sh'.format(action)], cwd=jfed_dir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
-
+		pipe = subprocess.Popen(['sh', self.actions[action]], cwd=self.jfed_dir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+		
 		for line in iter(pipe.stdout.readline, b''):
 			print(">>> " + line.rstrip())
 
