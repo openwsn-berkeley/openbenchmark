@@ -101,9 +101,10 @@ class Wilab(Controller):
 
 		# The nodes will be defined by RSpec file within ESpec directory.
 		# Each scenario should have its own RSpec. RSpecs should be chosen based on scenario config
-		jfed_cli_path = os.path.join(os.path.dirname(__file__), 'helpers', 'wilab', 'jfed_cli')
-		self.DELETE = os.path.join(jfed_cli_path, 'delete_experiment.yml') # Delete action file for terminating the experiment
-		self.RUN = os.path.join(jfed_cli_path, 'run_experiment.yml')  # Run action file for starting the experiment
+		self.JFED_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), 'helpers', 'wilab', 'jfed_cli'))
+		self.DELETE   = 'delete_experiment.sh' # Script for terminating the experiment
+		self.RUN      = 'start_experiment.sh'  # Script for starting the experiment
+		self.DISPLAY  = 'start_display.sh'     # Script for starting a fake display
 
 		self.FIRMWARE = os.path.join(os.path.dirname(__file__), 'firmware')
 		self.BROKER = self.configParser.get(self.CONFIG_SECTION, 'broker')
@@ -118,12 +119,12 @@ class Wilab(Controller):
 
 		if self.DELETE_B64 != "":
 			file_decoded = base64.b64decode(self.DELETE_B64)
-			with open(self.DELETE, "w") as f:
+			with open(os.path.join(self.JFED_DIR, self.DELETE), "w") as f:
 				f.write(file_decoded)
 
 		if self.RUN_B64 != "":
 			file_decoded = base64.b64decode(self.RUN_B64)
-			with open(self.RUN, "w") as f:
+			with open(os.path.join(self.JFED_DIR, self.RUN), "w") as f:
 				f.write(file_decoded)
 
 
