@@ -167,7 +167,7 @@ class WilabReservation(Reservation):
 		for line in iter(pipe.stdout.readline, b''):
 			print(">>> " + line.rstrip())
 
-	def start_display(self):
+	def _start_display(self):
 		pipe = subprocess.Popen(['xrandr', '-d', ':99'], stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
 		pipe.communicate()
 
