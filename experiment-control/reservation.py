@@ -172,7 +172,7 @@ class WilabReservation(Reservation):
 		pipe.communicate()
 
 		if pipe.returncode != 0:
-			pipe = subprocess.Popen(['export', 'DISPLAY=:99'], stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+			self.run_yml_action('display')
 
 
 
