@@ -150,9 +150,13 @@ class IoTLABReservation(Reservation):
 
 class WilabReservation(Reservation):
 
-	def __init__(self, run, delete):
-		self.run = run
-		self.delete = delete
+	def __init__(self, jfed_dir, run, delete, display):
+		self.jfed_dir = jfed_dir
+		self.actions = {
+			"run"    : run,
+			"delete" : delete,
+			"display": display
+		}
 
 	def run_yml_action(self, action):
 		self.start_display()

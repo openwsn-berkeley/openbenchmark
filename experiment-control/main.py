@@ -109,7 +109,7 @@ class Wilab(Controller):
 		self.FIRMWARE = os.path.join(os.path.dirname(__file__), 'firmware')
 		self.BROKER = self.configParser.get(self.CONFIG_SECTION, 'broker')
 
-		self.reservation = WilabReservation(self.RUN, self.DELETE)
+		self.reservation = WilabReservation(self.JFED_DIR, self.RUN, self.DELETE, self.DISPLAY)
 
 	def add_files_from_env(self):
 		if self.CERTIFICATE_B64 != "":
