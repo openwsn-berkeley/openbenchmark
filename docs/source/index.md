@@ -2,11 +2,17 @@
 
 # Overview
 
-This page documents the OpenBenchmark platform developed in the scope of the [SODA project](http://www.soda.ucg.ac.me/) in collaboration with [Inria-EVA](https://team.inria.fr/eva/).
+This page documents the OpenBenchmark platform developed jointly by the [SODA team](http://www.soda.ucg.ac.me/) at the [University of Montenegro](https://www.ucg.ac.me) and [Inria-EVA](https://team.inria.fr/eva/).
 OpenBenchmark automates the experimentation and network performance benchmarking on selected testbeds supporting Internet of Things devices compliant with IEEE 802.15.4 standard.
 OpenBenchmark instruments the execution of an experiment in real time following the pre-defined test scenarios and collects the data to calculate the network Key Performance Indicators (KPIs) in a fully automated manner.
+
+<p align="center"><img src="_static/overview.png"></p>
+
+See [Terminology](#terminology) for the definition of terms used in this documentation.
 See [Scenarios](#test-scenarios) for the definition of test scenarios.
 See [KPIs](#key-performance-indicators) for the list of Key Performance Indicators.
+See [OpenBenchmark Architecture](#openbenchmark-architecture) for the description of the OpenBenchmark software architecture.
+See [OpenBenchmark Compliance Requirements](#openbenchmark-compliance-requirements) for a summary of APIs, data formats and other relevant implementation choices.
 
 OpenBenchmark focuses on a wireless communication technology called 6TiSCH that enables wire-like reliability and up to a decade of device lifetime on a pair of AA batteries.
 The 6TiSCH stack is defined in the [IETF 6TiSCH working group](https://datatracker.ietf.org/wg/6tisch/about/) and relies on IEEE 802.15.4 hardware.
@@ -17,67 +23,10 @@ By default, OpenBenchmark supports the [OpenWSN](https://openwsn.atlassian.net/)
 # Terminology
 
 - 6LoWPAN Border Router (6LBR): A router that interconnects the low-power constrained network with the rest of the Internet.
-- Gateway: An entity executing application-level code that is typically co-located with the 6LBR of the network.
-- System Under Test (SUT): Refers to the low-power constrained network under test as a whole, encompassing the network Gateway and low-power constrained devices.
+- Network Gateway: An entity executing application-level code that is typically co-located with the 6LBR of the network.
+- System Under Test (SUT): Refers to the low-power constrained network under test as a whole, encompassing the Network Gateway and low-power constrained devices.
 - Implementation Under Test (IUT): Refers to the implementation of the 6TiSCH protocol stack under test.
 IUT is executed on low-power devices within the testbed.
-
-<!-- ====================================================================== -->
-
-# Architecture
-
-<p align="center"><img src="_static/architecture.png"></p>
-
-OpenBenchmark consists of following components:
-
-- OpenBenchmark Agent: A component running at the Network Gateway side, translating OpenBenchmark commands to the format that the IUT implements, and also converting performance data from the IUT to the format expected by OpenBenchmark.
-Agent implements [Experiment Control Commands API](#experiment-control-commands) and [Experiment Performance Event API](#experiment-performance-event).
-- Experiment Controller: A component in charge of communicating with the SUT and instrumenting it according to a given scenario (e.g. to send an application packet).
-This component is also in charge of starting the experiment, reserving nodes according to the testbed-specific APIs, etc.
-Experiment Controller MUST implements [Experiment Control Commands API](#experiment-control-commands).
-- Performance Event Handler: A component in charge of handling performance data coming from the SUT.
-Based on this data, OpenBenchmark is able to calculate different Key Performance Indicators (KPIs) of the IUT.
-Performance Event Handler implements [Experiment Performance Event API](#experiment-performance-event).
-- Web server: A PHP-based backend and Vue.js-based frontend allowing the user to access the OpenBenchmark platform through a graphical interface.
-
-Apart from developing new software components that will fully automate the benchmarking process, OpenBenchmark leverages and complements the existing effort in the open-source community to enable benchmarking of the pilot implementation of 6TiSCH: the OpenWSN project.
-These projects include:
-
-- OpenTestbed project: An open-source solution running on the testbed infrastructure that allows the communication with the firmware implementation executing in the testbed to be accessed as if it were running locally on the user’s machine.
-Essentially, OpenTestbed emulates the serial port connectivity over the MQTT protocol and allows the user to remotely flash the firmware on testbed devices.
-As part of the SODA effort, we extended the support of OpenTestbed to IoT-lab Saclay site, and our partners from iMec extended its support for w.iLab.t testbed.
-- OpenVisualizer project: An open-source implementation of a 6TiSCH gateway compatible with the OpenWSN firmware project.
-As part of the SODA effort, together with our external partners from Inria, we extended the OpenVisualizer to support the local execution on user’s premises while the 6TiSCH nodes are in testbed, by using the OpenTestbed functionalities.
-
-<!-- ====================================================================== -->
-
-# Requirements
-
-This section lists the implementation requirements that MUST be met to enable either a new
-
-- System Under Test (SUT), or
-- IEEE 802.15.4 testbed
-
-to be used with the OpenBenchmark platform.
-
-<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-
-## Implementation Under Test
-
-Implementation Under Test (IUT) communicates with the OpenBenchmark platform through the Agent component whose implementation is specific to the IUT.
-
-Specification                                                              | Requirement Level
--------------------------------------------------------------------------- | -----------------
-[Experiment Control Commands](#experiment-control-commands)                |        MUST
-[Experiment Performance Events](#experiment-performance-events)            |        MUST
-
-<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-
-## Testbed
-
-Specification                                                              | Requirement Level
--------------------------------------------------------------------------- | -----------------
-[OpenTestbed Software](https://github.com/openwsn-berkeley/opentestbed)    |        MUST
 
 <!-- ====================================================================== -->
 
@@ -85,12 +34,6 @@ Specification                                                              | Req
 
 The goal of an OpenBenchmark *test scenario* is to capture real-life use cases of a technology in order to benchmark its performance in a setting that is relevant to the end users: companies adopting the technology for their products and their customers.
 A test scenario also allows the experiment to be fully reproducible and the results easily and fairly comparable, desirable properties from the research point of view.
-
-A test scenario is mapped to an executable logic implemented within the *Experiment Controller* component that runs on the OpenBenchmark platform concurrently with the experiment in the testbed.
-Experiment Controller sends commands to the nodes in the testbed in real time to trigger a desired action: configure radio transmit power, trigger application traffic, generate interference, ...
-This requires the SUT, through e.g. the network Gateway, to handle the commands originating from the Experiment Controller.
-These commands can be communicated to the IUT over the serial port thanks to the OpenTestbed software components running on the testbed infrastructure but how this exactly happens is specific to the SUT.
-The format of the commands from the Experiment Controller to the SUT is specified in [Experiment Control Commands](#experiment-control-commands).
 
 Each scenario describes the application traffic pattern and load and the desirable coverage requirements in the number of hops in the network.
 The description of a scenario is generic, with testbed-specific mappings.
@@ -223,8 +166,9 @@ Packets per Burst           |   10
 
 # Key Performance Indicators
 
-This section lists the high-level Key Performance Indicators (KPIs) that are calculated by OpenBenchmark.
+This section lists the high-level Key Performance Indicators (KPIs).
 Each subsection gives a short description of the KPI and what information is needed to calculate it.
+The first four presented KPIs are relevant for the industry stakeholders, while the latter KPIs are also useful from the research point of view.
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
@@ -258,10 +202,9 @@ The receiver calculates the latency by subtracting the current time from the tim
 Radio Duty Cycle (RDC) refers to the ratio between 
 
 - the time that the radio chip is powered, and 
-- the duration of the measuring interval.
+- the duration of the measurement period.
 
 Each node in the network needs to log the RDC specific to it.
-In 6TiSCH network, RDC can be calculated based on the number of assigned cells in the TSCH schedule and the activity within the corresponding slots.
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
@@ -275,9 +218,9 @@ Each node in the network needs to log the timestamp of the corresponding events.
 
 <!-- . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  -->
 
-### Synchronization Phase
+## Synchronization Phase Time
 
-Synchronization phase refers to the time interval between
+Synchronization phase time refers to the time interval between
 
 - the instant when a device is booted, and
 - the instant when a device gets synchronized with the network and starts duty cycling.
@@ -286,9 +229,9 @@ In 6TiSCH networks, device is synchronized upon reception of a first Enhanced Be
 
 <!-- . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  -->
 
-### Secure Join Phase
+## Secure Join Phase Time
 
-Secure Join phase refers to the time interval between
+Secure Join phase time refers to the time interval between
 
 - the instant when a device gets synchronized with the network, and
 - the instant corresponding to the end of the authentication, key and parameter distribution protocol.
@@ -298,9 +241,9 @@ In 6TiSCH networks, a device completes the secure join phase upon reception and 
 
 <!-- . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  -->
 
-### Parent Selection and Bandwidth Assignment
+## Parent Selection and Bandwidth Assignment Phase Time
 
-Parent selection and bandwidth assignment phase refers to the time interval between
+Parent selection and bandwidth assignment phase time refers to the time interval between
 
 - the instant corresponding to the end of the authentication, key and parameter distribution protocol, and
 - the instant the node has been successfully assigned the minimum bandwidth needed for it to start sending application traffic.
@@ -323,9 +266,67 @@ This metric refers to the average clock drift measured between a pair of nodes.
 In 6TiSCH networks, nodes exchange clock drift within the MAC-layer acknowledgment frames.
 Each node in the network needs to log the measured clock drift and the identifier of the peer.
 
+
 <!-- ====================================================================== -->
 
-# Experiment Control Commands
+# OpenBenchmark Architecture
+
+<p align="center"><img src="_static/architecture.png"></p>
+
+The OpenBenchmark consists of following components:
+
+- Agent: A component running at the Network Gateway side, translating OpenBenchmark commands to the format that the IUT implements, and also converting performance data from the IUT to the format expected by OpenBenchmark.
+- Experiment Provisioner. A component in charge of testbed node reservation, firmware flashing, and launching the necessary software components that run at testbed infrastructure side. These include the Network Gateway, and the serial port emulation software (OpenTestbed) that make the testbed nodes appear to the Network Gateway as if they were physically connected.
+- Experiment Orchestrator. A component in charge of orchestrating the SUT according to the selected test scenario.
+The Experiment Orchestrator interprets the test scenario files and instruments the experiment based on the interpreted data.
+- Performance Event Handler. A component in charge of handling performance data events coming from the SUT.
+Based on these events, Performance Event Handler generates the experiment data sets and calculates the KPIs.
+- Web server. A Laravel-based (PHP) backend and Vue.js-based frontend allowing the user to access the OpenBenchmark platform through a graphical interface.
+The backend serves as a bridge between the frontend and the rest of the OpenBenchmark components that are implemented in Python.
+The backend provides a RESTful API that enables the use of OpenBenchmark by 3$^{rd}$ party applications.
+
+Apart from developing new software components that will fully automate the benchmarking process, OpenBenchmark leverages and complements the existing effort in the open-source community to enable benchmarking of the pilot implementation of 6TiSCH: the OpenWSN project.
+These projects include:
+
+- OpenTestbed project: An open-source solution running on the testbed infrastructure that allows the communication with the firmware implementation executing in the testbed to be accessed as if it were running locally on the user’s machine.
+Essentially, OpenTestbed emulates the serial port connectivity over the MQTT protocol and allows the user to remotely flash the firmware on testbed devices.
+As part of the SODA effort, we extended the support of OpenTestbed to IoT-lab Saclay site, and our partners from iMec extended its support for w.iLab.t testbed.
+- OpenVisualizer project: An open-source implementation of a 6TiSCH gateway compatible with the OpenWSN firmware project.
+As part of the SODA effort, together with our external partners from Inria, we extended the OpenVisualizer to support the local execution on user’s premises while the 6TiSCH nodes are in testbed, by using the OpenTestbed functionalities.
+
+<!-- ====================================================================== -->
+
+# OpenBenchmark Compliance Requirements
+
+This section lists the implementation requirements that MUST be met to enable either a new
+
+- System Under Test (SUT), or
+- IEEE 802.15.4 testbed
+
+to be used with the OpenBenchmark platform.
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+## Implementation Under Test
+
+Implementation Under Test (IUT) communicates with the OpenBenchmark platform through the Agent component whose implementation is specific to the IUT.
+
+Specification                                                              | Requirement Level
+-------------------------------------------------------------------------- | -----------------
+[Experiment Control Commands API](#experiment-control-commands-api)                |        MUST
+[Experiment Performance Events API](#experiment-performance-events-api)            |        MUST
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+## Testbed
+
+Specification                                                              | Requirement Level
+-------------------------------------------------------------------------- | -----------------
+[OpenTestbed Software](https://github.com/openwsn-berkeley/opentestbed)    |        MUST
+
+<!-- ====================================================================== -->
+
+# Experiment Control Commands API
 
 `API version: 0.0.1`
 
@@ -580,16 +581,16 @@ Example:
 
 <!-- ====================================================================== -->
 
-# Experiment Performance Events
+# Experiment Performance Events API
 
 `API version: 0.0.1`
 
 Performance data needed to calculate the KPIs is calculated by OpenBenchmark based on the events generated by the SUT.
 SUT implements a software component called Agent bridging the constrained network and the OpenBenchmark platform.
-Typically, the Agent can be implemented as part of the network Gateway where hardware constraints are less pronounced compared to the rest of the low-power network such that it can subscribe to different topics, and translate events triggered by the IUT into the format expected by OpenBenchmark.
+Typically, the Agent can be implemented as part of the Network Gateway where hardware constraints are less pronounced compared to the rest of the low-power network such that it can subscribe to different topics, and translate events triggered by the IUT into the format expected by OpenBenchmark.
 
 How the Agent communicates with the IUT is specific to the implementation.
-For example, in the OpenWSN implementation, Gateway (i.e. OpenVisualizer component) communicates with the nodes in the network over the OpenTestbed-emulated serial port by using HDLC framing and custom commands.
+For example, in the OpenWSN implementation, Network Gateway (i.e. OpenVisualizer component) communicates with the nodes in the network over the OpenTestbed-emulated serial port by using HDLC framing and custom commands.
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
@@ -894,3 +895,16 @@ scenario     | Identifier of the scenario requested                             
 The values of these fields are obtained from `startBenchmark` request and response messages, specified in [Start Benchmark](#start-benchmark).
 
 <!-- ====================================================================== -->
+
+# Test Scenario Implementation
+
+A test scenario is defined in a JSON config file.
+The JSON file consists of a generic part describing the scenario "instance", and a testbed-specific part describing how the instance is mapped to a specific testbed through physical nodes to use and their transmission power.
+Application traffic is encoded as an array of objects carrying the time instants relative to the beginning of the experiment when a node is instructed to send an application packet.
+These time instants follow the distributions discussed in [Test Scenarios](#test-scenarios).
+The following listing depicts a JSON snippet describing a building automation test scenario instance and its mapping to the IoT-lab testbed.
+
+<p align="center"><img src="_static/scenario-json.png"></p>
+
+<!-- ====================================================================== -->
+
