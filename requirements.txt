@@ -1,10 +1,13 @@
-# experiment-control
+# experiment-provisioner
 paramiko
 socketIO_client_nexus
 watchdog
 paho-mqtt
 argparse
 pytest
+
+# experiment-orchestrator
+numpy
 
 # docs
 sphinx
