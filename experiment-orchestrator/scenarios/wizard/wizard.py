@@ -73,7 +73,7 @@ class Wizard:
 		
 		
 		self.info['identifier'] = self.identifiers[input(
-				"Pick a scenario (0 - 'building-automation', 1 - 'home-automation', 2 - 'industrial-monitoring'): "
+				"Pick a scenario (0 - {0}, 1 - {1}, 2 - {2}): ".format(Identifiers.ba, Identifiers.ha, Identifiers.im)
 			)]
 		
 		self.info['duration_min'] = input("Duration in minutes (e.g. 30): ")

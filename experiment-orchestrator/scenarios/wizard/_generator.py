@@ -22,11 +22,18 @@ class Generator:
 		while current_instant < self.exp_duration:
 			interval = round(np.random.uniform(bottom_interval, top_interval), 3)
 			current_instant += interval
-			sending_points.append({
-					'time_sec':         current_instant,
-					'destination':      random.choice(node_pool),
-					'packets_in_burst': packets_in_burst
-				})
+
+			if packets_in_burst > 1:
+				sending_points.append({
+						'time_sec':         current_instant,
+						'destination':      random.choice(node_pool),
+						'packets_in_burst': packets_in_burst
+					})
+			else:
+				sending_points.append({
+						'time_sec':         current_instant,
+						'destination':      random.choice(node_pool)
+					})
 
 		return sorted(sending_points, key=lambda k: k['time_sec'])
 
@@ -47,10 +54,16 @@ class Generator:
 			current_instants = [instant for instant in current_instants if instant < self.exp_duration]
 
 			for instant in current_instants:
-				sending_points.append({
-						'time_sec': instant,
-						'destination': random.choice(node_pool),
-						'packets_in_burst': packets_in_burst
-					})
+				if packets_in_burst > 1:
+					sending_points.append({
+							'time_sec': instant,
+							'destination': random.choice(node_pool),
+							'packets_in_burst': packets_in_burst
+						})
+				else:
+					sending_points.append({
+							'time_sec': instant,
+							'destination': random.choice(node_pool),
+						})
 
 		return sorted(sending_points, key=lambda k: k['time_sec'])
