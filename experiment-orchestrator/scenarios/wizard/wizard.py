@@ -51,23 +51,23 @@ class Wizard:
 		}
 
 		self.definitions = {
-			Identifiers.building_automation: {
-				'ms': {'number': 3, 'nodes': [], 'dest_type': 'ac', 'traffic_type': 'periodic', 'interval': [25, 35], 'packets_in_burst': 1},   # seconds
-				'es': {'number': 4, 'nodes': [], 'dest_type': 'ac', 'traffic_type': 'poisson', 'mean': 10, 'packets_in_burst': 1},              # per hour
-				'a':  {'number': 2, 'nodes': [], 'dest_type': 'ac', 'traffic_type': 'periodic', 'interval': [25, 35], 'packets_in_burst': 1}, 
-				'ac': {'number': 1, 'nodes': [], 'dest_type': 'ac', 'traffic_type': 'periodic', 'interval': [0.12, 0.14], 'packets_in_burst': 1},
-				'zc': {'number': 1, 'nodes': [], 'dest_type': None, 'traffic_type': None}
+			Identifiers.ba: {   # Data per area except `zone-controller`
+				Roles.ms: {'number': 3, 'nodes': [], 'dest_type': Roles.ac, 'traffic_type': 'periodic', 'interval': [25, 35],     'packets_in_burst': 1},   # seconds
+				Roles.es: {'number': 4, 'nodes': [], 'dest_type': Roles.ac, 'traffic_type': 'poisson',  'mean': 10,               'packets_in_burst': 1},   # per hour
+				Roles.a : {'number': 2, 'nodes': [], 'dest_type': Roles.ac, 'traffic_type': 'periodic', 'interval': [25, 35],     'packets_in_burst': 1}, 
+				Roles.ac: {'number': 1, 'nodes': [], 'dest_type': Roles.zc, 'traffic_type': 'periodic', 'interval': [0.12, 0.14], 'packets_in_burst': 1},
+				Roles.zc: {'number': 1, 'nodes': [], 'dest_type': None,    'traffic_type': None}
 			},       
-			Identifiers.home_automation: {   # All % except CU
-				'ms': {'number': 49.0, 'nodes': [], 'dest_type': 'cu', 'traffic_type': 'periodic', 'interval': [180, 300], 'packets_in_burst': 1}, 
-				'es': {'number': 21.0, 'nodes': [], 'dest_type': 'cu', 'traffic_type': 'poisson', 'mean': 10, 'packets_in_burst': 1}, 
-				'a' : {'number': 30.0, 'nodes': [], 'dest_type': 'cu', 'traffic_type': 'periodic', 'interval': [180, 300], 'packets_in_burst': 1}, 
-				'cu': {'number': 1, 'nodes': [], 'dest_type': 'a', 'traffic_type': 'poisson', 'mean': 10, 'packets_in_burst': 5}
+			Identifiers.ha: {   # All % except control-unit
+				Roles.ms: {'number': 49.0, 'nodes': [], 'dest_type': Roles.cu, 'traffic_type': 'periodic', 'interval': [180, 300], 'packets_in_burst': 1}, 
+				Roles.es: {'number': 21.0, 'nodes': [], 'dest_type': Roles.cu, 'traffic_type': 'poisson',  'mean': 10,             'packets_in_burst': 1}, 
+				Roles.a : {'number': 30.0, 'nodes': [], 'dest_type': Roles.cu, 'traffic_type': 'periodic', 'interval': [180, 300], 'packets_in_burst': 1}, 
+				Roles.cu: {'number': 1,    'nodes': [], 'dest_type': Roles.a,  'traffic_type': 'poisson',  'mean': 10,             'packets_in_burst': 5}
 			},
-			Identifiers.industrial_monitoring : {   # All % except G
-				's' : {'number': 90.0, 'nodes': [], 'dest_type': 'g', 'traffic_type': 'periodic', 'interval': [1, 60], 'packets_in_burst': 1}, 
-				'bs': {'number': 10.0, 'nodes': [], 'dest_type': 'g', 'traffic_type': 'periodic', 'interval': [60, 3600], 'packets_in_burst': 1}, 
-				'g' : {'number': 1, 'nodes': [], 'dest_type': None, 'traffic_type': None}				
+			Identifiers.im : {   # All % except gateway
+				Roles.s : {'number': 90.0, 'nodes': [], 'dest_type': Roles.g, 'traffic_type': 'periodic', 'interval': [1, 60],    'packets_in_burst': 1}, 
+				Roles.bs: {'number': 10.0, 'nodes': [], 'dest_type': Roles.g, 'traffic_type': 'periodic', 'interval': [60, 3600], 'packets_in_burst': 1}, 
+				Roles.g : {'number': 1,    'nodes': [], 'dest_type': None,    'traffic_type': None}				
 			}
 		}
 
