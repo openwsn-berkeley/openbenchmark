@@ -491,12 +491,13 @@ confirmable   | Whether the packet should be acknowledged at the application lay
 ```
 Example:
     {
-        "token"         : "123",
-        "source"        : "00-12-4b-00-14-b5-b6-44",
-        "destination"   : "00-12-4b-00-14-b5-b6-45",
-        "packetToken"   : [124, 122, 34, 31],
-        "packetPayload" : [],
-        "confirmable"   : true
+        "token"            : "123",
+        "source"           : "00-12-4b-00-14-b5-b6-44",
+        "destination"      : "00-12-4b-00-14-b5-b6-45",
+        "packets_in_burst" : 1
+        "packetToken"      : [124, 122, 34, 31],
+        "packetPayload"    : [],
+        "confirmable"      : true
     }
 ```
 
