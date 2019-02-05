@@ -179,8 +179,8 @@ class Wizard:
 	def _generate_testbed_specific_template(self):
 		for key in self.nodes:
 			for testbed in self.specifics:
-				self.specifics[testbed][key] = {"node_id": "", "transmition_power_dbm": 0}
-				self.specifics[testbed][key] = {"node_id": "", "transmition_power_dbm": 0}
+				self.specifics[testbed][key] = {"node_id": "", "transmission_power_dbm": 0}
+				self.specifics[testbed][key] = {"node_id": "", "transmission_power_dbm": 0}
 
 
 	def _output_json(self):
