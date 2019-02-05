@@ -44,6 +44,7 @@ class Generator:
 			num_of_packets   = np.random.poisson(mean)
 
 			current_instants = [random.expovariate(1.0/mean) * 60 for i in range(0, num_of_packets)]
+			current_instants = [instant for instant in current_instants if instant < self.exp_duration]
 
 			for instant in current_instants:
 				sending_points.append({
