@@ -74,6 +74,7 @@ Sender | Destination | Traffic pattern and load                       | Ack | Ac
 ------ | ----------- | ---------------------------------------------- | --- | -------------
 MS     |  AC         | Periodic, uniformly in [25, 35] seconds        | Yes | None
 ES     |  AC         | Poisson, mean of 10 packets/hour               | Yes | Forward to ZC
+AC     |  A          | Poisson, mean of 10 packets/hour               | Yes | None
 A      |  AC         | Periodic, uniformly in [25, 35] seconds        | Yes | None
 AC     |  ZC         | Periodic, uniformly in [120,140] milliseconds  | No  | None
 
