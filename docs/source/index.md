@@ -675,12 +675,12 @@ hopLimit    | packetSent   | MUST
 ```
 Example:
     {
-        "event"        : "packetSent"
-        "timestamp"    : 2131,
-        "packetToken"   : [124, 122, 34, 31],
-        "source"       : "bbbb::0012:4b00:14b5:b648",
-        "destination"  : "bbbb::1",
-        "hopLimit"     : 255,
+        "event"            : "packetSent"
+        "timestamp"        : 2131,
+        "packetToken"      : [124, 122, 34, 31],
+        "source"           : "00-12-4b-00-14-b5-b6-44",
+        "destination"      : "00-12-4b-00-14-b5-b6-45",
+        "hopLimit"         : 255,
     }
 ```
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
@@ -712,8 +712,8 @@ Example:
         "event"         : "packetReceived"
         "timestamp"     : 2151,
         "packetToken"   : [124, 122, 34, 31],
-        "source"        : "bbbb::0012:4b00:14b5:b648",
-        "destination"   : "bbbb::1",
+        "source"        : "00-12-4b-00-14-b5-b6-45",
+        "destination"   : "00-12-4b-00-14-b5-b6-44",
         "hopLimit"      : 252,
     }
 ```
