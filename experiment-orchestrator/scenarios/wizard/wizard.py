@@ -10,6 +10,17 @@ class Identifiers:
 	ha = 'home-automation'
 	im = 'industrial-monitoring'
 
+class Roles:
+	ms = 'monitoring-sensor'
+	es = 'event-sensor'
+	a  = 'actuator'
+	ac = 'area-controller'
+	zc = 'zone-controller'
+	cu = 'control-unit'
+	s  = 'sensor'
+	bs = 'bursty-sensor'
+	g  = 'gateway'
+
 
 class Wizard:
 
