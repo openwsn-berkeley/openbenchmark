@@ -1,0 +1,46 @@
+{
+    "openbenchmark00": {
+        "node_id": "", 
+        "transmition_power_dbm": 0
+    }, 
+    "openbenchmark01": {
+        "node_id": "", 
+        "transmition_power_dbm": 0
+    }, 
+    "openbenchmark02": {
+        "node_id": "", 
+        "transmition_power_dbm": 0
+    }, 
+    "openbenchmark03": {
+        "node_id": "", 
+        "transmition_power_dbm": 0
+    }, 
+    "openbenchmark04": {
+        "node_id": "", 
+        "transmition_power_dbm": 0
+    }, 
+    "openbenchmark05": {
+        "node_id": "", 
+        "transmition_power_dbm": 0
+    }, 
+    "openbenchmark06": {
+        "node_id": "", 
+        "transmition_power_dbm": 0
+    }, 
+    "openbenchmark07": {
+        "node_id": "", 
+        "transmition_power_dbm": 0
+    }, 
+    "openbenchmark08": {
+        "node_id": "", 
+        "transmition_power_dbm": 0
+    }, 
+    "openbenchmark09": {
+        "node_id": "", 
+        "transmition_power_dbm": 0
+    }, 
+    "openbenchmark10": {
+        "node_id": "", 
+        "transmition_power_dbm": 0
+    }
+}
