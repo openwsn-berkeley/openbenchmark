@@ -72,9 +72,9 @@ class Wizard:
 		}
 
 		self.locations = {
-			Identifiers.building_automation: os.path.abspath("../building_automation/_config.json"),
-			Identifiers.home_automation: os.path.abspath("../home_automation/_config.json"),
-			Identifiers.industrial_monitoring: os.path.abspath("../industrial_monitoring/_config.json"),
+			Identifiers.ba: "../building_automation/",
+			Identifiers.ha: "../home_automation/",
+			Identifiers.im: "../industrial_monitoring/"
 		}
 
 
@@ -174,18 +174,19 @@ class Wizard:
 
 	def _output_json(self):
 		identifier = self.info['identifier']
-		with open(self.locations[identifier], 'w') as f:
-			content = {
-					'identifier'     : self.info['identifier'],
-					'duration_min'   : self.info['duration_min'],
-					'number_of_nodes': self.info['number_of_nodes'],
-					'nodes'          : self.nodes
-				}
-			
-			for testbed in self.specifics:
-				content[testbed] = self.specifics[testbed]
+		path       = self.locations[identifier]
 
-			f.write(json.dumps(content, indent=4, sort_keys=True))
+		with open(os.path.abspath(os.path.join(path, '_config.json')), 'w') as f:
+			content = OrderedDict()
+			content['identifier']      = self.info['identifier']
+			content['duration_min']    = self.info['duration_min']
+			content['number_of_nodes'] = self.info['number_of_nodes'] 
+			content['nodes']           = self.nodes
+			f.write(json.dumps(content, indent=4))
+
+		for testbed in self.specifics:
+			with open(os.path.abspath(os.path.join(path, '_{0}_config.json'.format(testbed))), 'w') as f:
+				f.write(json.dumps(self.specifics[testbed], indent=4, sort_keys=True))
 
 
 
