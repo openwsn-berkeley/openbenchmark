@@ -1,536 +1,476 @@
 {
-    "duration_min": 30, 
     "identifier": "home-automation", 
-    "iotlab": {
-        "openbenchmark00": {
-            "node_id": "", 
-            "transmition_power_dbm": 0
-        }, 
-        "openbenchmark01": {
-            "node_id": "", 
-            "transmition_power_dbm": 0
-        }, 
-        "openbenchmark02": {
-            "node_id": "", 
-            "transmition_power_dbm": 0
-        }, 
-        "openbenchmark03": {
-            "node_id": "", 
-            "transmition_power_dbm": 0
-        }, 
-        "openbenchmark04": {
-            "node_id": "", 
-            "transmition_power_dbm": 0
-        }, 
-        "openbenchmark05": {
-            "node_id": "", 
-            "transmition_power_dbm": 0
-        }, 
-        "openbenchmark06": {
-            "node_id": "", 
-            "transmition_power_dbm": 0
-        }, 
-        "openbenchmark07": {
-            "node_id": "", 
-            "transmition_power_dbm": 0
-        }, 
-        "openbenchmark08": {
-            "node_id": "", 
-            "transmition_power_dbm": 0
-        }, 
-        "openbenchmark09": {
-            "node_id": "", 
-            "transmition_power_dbm": 0
-        }
-    }, 
+    "duration_min": 30, 
+    "number_of_nodes": 10, 
     "nodes": {
         "openbenchmark00": {
-            "area": 1, 
-            "role": "a", 
-            "sending_points": [
+            "role": "control-unit", 
+            "area": 0, 
+            "traffic_sending_points": [
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 220.204
+                    "time_sec": 32.952706317668415, 
+                    "destination": "openbenchmark05", 
+                    "packets_in_burst": 5
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 494.109
+                    "time_sec": 49.41432624050842, 
+                    "destination": "openbenchmark07", 
+                    "packets_in_burst": 5
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 732.537
+                    "time_sec": 162.78023377911705, 
+                    "destination": "openbenchmark06", 
+                    "packets_in_burst": 5
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 986.6510000000001
+                    "time_sec": 287.37369618071824, 
+                    "destination": "openbenchmark07", 
+                    "packets_in_burst": 5
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 1205.982
+                    "time_sec": 304.8972717059167, 
+                    "destination": "openbenchmark06", 
+                    "packets_in_burst": 5
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 1464.223
+                    "time_sec": 360.59241934569184, 
+                    "destination": "openbenchmark05", 
+                    "packets_in_burst": 5
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 1678.165
+                    "time_sec": 475.60287393745864, 
+                    "destination": "openbenchmark06", 
+                    "packets_in_burst": 5
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 1961.063
+                    "time_sec": 655.230648291632, 
+                    "destination": "openbenchmark05", 
+                    "packets_in_burst": 5
+                }, 
+                {
+                    "time_sec": 783.1579318968352, 
+                    "destination": "openbenchmark07", 
+                    "packets_in_burst": 5
+                }, 
+                {
+                    "time_sec": 1421.0125013097827, 
+                    "destination": "openbenchmark05", 
+                    "packets_in_burst": 5
+                }, 
+                {
+                    "time_sec": 1468.1925400785035, 
+                    "destination": "openbenchmark05", 
+                    "packets_in_burst": 5
                 }
             ]
         }, 
         "openbenchmark01": {
-            "area": 1, 
-            "role": "a", 
-            "sending_points": [
+            "role": "monitoring-sensor", 
+            "area": 0, 
+            "traffic_sending_points": [
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 297.306
+                    "time_sec": 268.163, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 577.769
+                    "time_sec": 456.64700000000005, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 788.414
+                    "time_sec": 755.614, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 1080.716
+                    "time_sec": 953.7750000000001, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 1303.146
+                    "time_sec": 1171.587, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 1490.568
+                    "time_sec": 1450.2269999999999, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 1757.9969999999998
+                    "time_sec": 1696.328, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 2043.1019999999999
+                    "time_sec": 1936.706, 
+                    "destination": "openbenchmark08"
                 }
             ]
         }, 
         "openbenchmark02": {
-            "area": 1, 
-            "role": "a", 
-            "sending_points": [
+            "role": "monitoring-sensor", 
+            "area": 0, 
+            "traffic_sending_points": [
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 231.007
+                    "time_sec": 279.344, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 480.78999999999996
+                    "time_sec": 512.231, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 690.6519999999999
+                    "time_sec": 801.639, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 940.7769999999999
+                    "time_sec": 1083.27, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 1221.3249999999998
+                    "time_sec": 1302.939, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 1426.456
+                    "time_sec": 1574.7740000000001, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 1640.7189999999998
-                }, 
-                {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 1928.2299999999998
+                    "time_sec": 1852.337, 
+                    "destination": "openbenchmark08"
                 }
             ]
         }, 
         "openbenchmark03": {
-            "area": 1, 
-            "role": "cu", 
-            "sending_points": [
+            "role": "monitoring-sensor", 
+            "area": 0, 
+            "traffic_sending_points": [
                 {
-                    "destination": "openbenchmark00", 
-                    "packets_in_burst": 5, 
-                    "time_sec": 112.61580842538925
+                    "time_sec": 229.547, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark00", 
-                    "packets_in_burst": 5, 
-                    "time_sec": 125.29352688302276
+                    "time_sec": 485.895, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "time_sec": 258.9938279346006
+                    "time_sec": 728.039, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark00", 
-                    "packets_in_burst": 5, 
-                    "time_sec": 330.19720220266055
+                    "time_sec": 984.502, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark00", 
-                    "packets_in_burst": 5, 
-                    "time_sec": 414.45750219234094
+                    "time_sec": 1199.126, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark01", 
-                    "packets_in_burst": 5, 
-                    "time_sec": 881.5943909361866
+                    "time_sec": 1471.403, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark00", 
-                    "packets_in_burst": 5, 
-                    "time_sec": 1671.1725618135997
+                    "time_sec": 1668.988, 
+                    "destination": "openbenchmark08"
+                }, 
+                {
+                    "time_sec": 1857.6750000000002, 
+                    "destination": "openbenchmark08"
                 }
             ]
         }, 
         "openbenchmark04": {
-            "area": 1, 
-            "role": "es", 
-            "sending_points": [
+            "role": "monitoring-sensor", 
+            "area": 0, 
+            "traffic_sending_points": [
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 38.313081016472566
+                    "time_sec": 288.556, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 92.726730549543
+                    "time_sec": 500.73299999999995, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 100.94583453784588
+                    "time_sec": 775.9789999999999, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 185.89072752251758
+                    "time_sec": 957.502, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 223.10908581916158
+                    "time_sec": 1214.478, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 253.1715581562911
+                    "time_sec": 1487.355, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 395.5490934600869
+                    "time_sec": 1700.387, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 397.31478085950613
-                }, 
-                {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 482.5654228987283
-                }, 
-                {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 902.1731719082381
+                    "time_sec": 1950.345, 
+                    "destination": "openbenchmark08"
                 }
             ]
         }, 
         "openbenchmark05": {
-            "area": 1, 
-            "role": "es", 
-            "sending_points": [
+            "role": "actuator", 
+            "area": 0, 
+            "traffic_sending_points": [
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 182.87710101661924
+                    "time_sec": 209.136, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 438.8956507800713
+                    "time_sec": 409.068, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 622.2760832283453
+                    "time_sec": 621.325, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 735.8168800301723
+                    "time_sec": 908.337, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 1061.0723396482626
+                    "time_sec": 1199.897, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 1498.560552628562
+                    "time_sec": 1404.4569999999999, 
+                    "destination": "openbenchmark08"
+                }, 
+                {
+                    "time_sec": 1683.696, 
+                    "destination": "openbenchmark08"
+                }, 
+                {
+                    "time_sec": 1904.993, 
+                    "destination": "openbenchmark08"
                 }
             ]
         }, 
         "openbenchmark06": {
-            "area": 1, 
-            "role": "ms", 
-            "sending_points": [
+            "role": "actuator", 
+            "area": 0, 
+            "traffic_sending_points": [
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 245.985
+                    "time_sec": 236.381, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 441.63
+                    "time_sec": 480.63300000000004, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 687.983
+                    "time_sec": 661.327, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 974.0269999999999
+                    "time_sec": 947.783, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 1222.8239999999998
+                    "time_sec": 1143.597, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 1463.6229999999998
+                    "time_sec": 1359.539, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 1651.7079999999999
+                    "time_sec": 1549.226, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 1925.3759999999997
+                    "time_sec": 1769.6200000000001, 
+                    "destination": "openbenchmark08"
+                }, 
+                {
+                    "time_sec": 1954.622, 
+                    "destination": "openbenchmark08"
                 }
             ]
         }, 
         "openbenchmark07": {
-            "area": 1, 
-            "role": "ms", 
-            "sending_points": [
+            "role": "actuator", 
+            "area": 0, 
+            "traffic_sending_points": [
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 282.942
+                    "time_sec": 251.949, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 523.927
+                    "time_sec": 520.281, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 767.6890000000001
+                    "time_sec": 755.569, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 1062.7640000000001
+                    "time_sec": 1002.083, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 1353.8570000000002
+                    "time_sec": 1275.53, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 1610.5730000000003
+                    "time_sec": 1569.304, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 1897.6850000000004
+                    "time_sec": 1838.578, 
+                    "destination": "openbenchmark08"
                 }
             ]
         }, 
         "openbenchmark08": {
-            "area": 1, 
-            "role": "ms", 
-            "sending_points": [
+            "role": "control-unit", 
+            "area": 0, 
+            "traffic_sending_points": [
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 209.066
+                    "time_sec": 50.370093417649976, 
+                    "destination": "openbenchmark06", 
+                    "packets_in_burst": 5
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 505.558
+                    "time_sec": 105.3842900223238, 
+                    "destination": "openbenchmark07", 
+                    "packets_in_burst": 5
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 765.097
+                    "time_sec": 112.18318525059561, 
+                    "destination": "openbenchmark05", 
+                    "packets_in_burst": 5
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 972.312
+                    "time_sec": 233.77861116653298, 
+                    "destination": "openbenchmark07", 
+                    "packets_in_burst": 5
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 1185.92
+                    "time_sec": 420.24743395290363, 
+                    "destination": "openbenchmark05", 
+                    "packets_in_burst": 5
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 1422.41
+                    "time_sec": 424.9574826353051, 
+                    "destination": "openbenchmark05", 
+                    "packets_in_burst": 5
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 1686.718
+                    "time_sec": 589.2648558932702, 
+                    "destination": "openbenchmark06", 
+                    "packets_in_burst": 5
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 1888.303
+                    "time_sec": 724.3549051591556, 
+                    "destination": "openbenchmark05", 
+                    "packets_in_burst": 5
                 }
             ]
         }, 
         "openbenchmark09": {
-            "area": 1, 
-            "role": "ms", 
-            "sending_points": [
+            "role": "event-sensor", 
+            "area": 0, 
+            "traffic_sending_points": [
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 298.003
+                    "time_sec": 42.57858294929232, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 489.806
+                    "time_sec": 77.2302072753525, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 768.797
+                    "time_sec": 311.78417756577505, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 1045.167
+                    "time_sec": 322.8922683712692, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 1315.2379999999998
+                    "time_sec": 344.32754771209056, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 1601.898
+                    "time_sec": 371.47238552171314, 
+                    "destination": "openbenchmark08"
                 }, 
                 {
-                    "destination": "openbenchmark03", 
-                    "packets_in_burst": 1, 
-                    "time_sec": 1899.9229999999998
+                    "time_sec": 414.2090854582112, 
+                    "destination": "openbenchmark08"
+                }, 
+                {
+                    "time_sec": 558.0418411497762, 
+                    "destination": "openbenchmark08"
+                }, 
+                {
+                    "time_sec": 655.0202950575416, 
+                    "destination": "openbenchmark08"
+                }, 
+                {
+                    "time_sec": 670.2224667438057, 
+                    "destination": "openbenchmark08"
+                }, 
+                {
+                    "time_sec": 675.0186848340721, 
+                    "destination": "openbenchmark08"
+                }, 
+                {
+                    "time_sec": 698.4015028601796, 
+                    "destination": "openbenchmark08"
+                }, 
+                {
+                    "time_sec": 796.2284520557355, 
+                    "destination": "openbenchmark08"
+                }, 
+                {
+                    "time_sec": 1102.9332325749147, 
+                    "destination": "openbenchmark08"
+                }, 
+                {
+                    "time_sec": 1111.5150497152465, 
+                    "destination": "openbenchmark08"
+                }, 
+                {
+                    "time_sec": 1182.8287359756391, 
+                    "destination": "openbenchmark08"
                 }
             ]
-        }
-    }, 
-    "number_of_nodes": 10, 
-    "wilab": {
-        "openbenchmark00": {
-            "node_id": "", 
-            "transmition_power_dbm": 0
         }, 
-        "openbenchmark01": {
-            "node_id": "", 
-            "transmition_power_dbm": 0
-        }, 
-        "openbenchmark02": {
-            "node_id": "", 
-            "transmition_power_dbm": 0
-        }, 
-        "openbenchmark03": {
-            "node_id": "", 
-            "transmition_power_dbm": 0
-        }, 
-        "openbenchmark04": {
-            "node_id": "", 
-            "transmition_power_dbm": 0
-        }, 
-        "openbenchmark05": {
-            "node_id": "", 
-            "transmition_power_dbm": 0
-        }, 
-        "openbenchmark06": {
-            "node_id": "", 
-            "transmition_power_dbm": 0
-        }, 
-        "openbenchmark07": {
-            "node_id": "", 
-            "transmition_power_dbm": 0
-        }, 
-        "openbenchmark08": {
-            "node_id": "", 
-            "transmition_power_dbm": 0
-        }, 
-        "openbenchmark09": {
-            "node_id": "", 
-            "transmition_power_dbm": 0
+        "openbenchmark10": {
+            "role": "event-sensor", 
+            "area": 0, 
+            "traffic_sending_points": [
+                {
+                    "time_sec": 119.21373355534702, 
+                    "destination": "openbenchmark08"
+                }, 
+                {
+                    "time_sec": 190.5659842776904, 
+                    "destination": "openbenchmark08"
+                }, 
+                {
+                    "time_sec": 320.90134058887276, 
+                    "destination": "openbenchmark08"
+                }, 
+                {
+                    "time_sec": 405.5184908113399, 
+                    "destination": "openbenchmark08"
+                }, 
+                {
+                    "time_sec": 457.86630697084354, 
+                    "destination": "openbenchmark08"
+                }, 
+                {
+                    "time_sec": 1642.9332119619762, 
+                    "destination": "openbenchmark08"
+                }
+            ]
         }
     }
 }
