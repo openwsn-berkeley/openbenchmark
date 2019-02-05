@@ -173,7 +173,7 @@ class Wizard:
 					roles[role]
 				)
 
-				self.nodes[key]['sending_points'] = sending_points
+				self.nodes[key]['traffic_sending_points'] = sending_points
 
 
 	def _generate_testbed_specific_template(self):
