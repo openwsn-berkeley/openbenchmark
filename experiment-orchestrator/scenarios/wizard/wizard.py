@@ -6,9 +6,9 @@ from _generator import Generator
 
 
 class Identifiers:
-	building_automation   = 'building-automation'
-	home_automation       = 'home-automation'
-	industrial_monitoring = 'industrial-monitoring'
+	ba = 'building-automation'
+	ha = 'home-automation'
+	im = 'industrial-monitoring'
 
 
 class Wizard:
@@ -27,9 +27,9 @@ class Wizard:
 		self.id_prefix = "openbenchmark"
 
 		self.identifiers = [
-			Identifiers.building_automation,
-			Identifiers.home_automation,
-			Identifiers.industrial_monitoring
+			Identifiers.ba,
+			Identifiers.ha,
+			Identifiers.im
 		]
 
 		self.info       = {}   # fields: identifier, duration_min, number_of_nodes, 
