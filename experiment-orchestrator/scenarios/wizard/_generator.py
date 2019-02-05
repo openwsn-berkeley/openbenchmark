@@ -32,7 +32,7 @@ class Generator:
 
 
 	def _generate_poisson(self, node_pool, params):
-		mean               = params['mean']               
+		mean               = params['mean']   # per hour
 		packets_in_burst   = params['packets_in_burst']
 		period             = 3600   # 1h in seconds
 		top_interval       = 0
@@ -43,8 +43,7 @@ class Generator:
 			top_interval     = bottom_interval + period
 			num_of_packets   = np.random.poisson(mean)
 
-			# Should be replaced with exponential backoff generator
-			current_instants = [round(np.random.uniform(bottom_interval, top_interval), 3) for i in range(0, num_of_packets)]
+			current_instants = [random.expovariate(1.0/mean) * 60 for i in range(0, num_of_packets)]
 
 			for instant in current_instants:
 				sending_points.append({
