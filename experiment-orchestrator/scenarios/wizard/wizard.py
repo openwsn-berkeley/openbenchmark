@@ -19,7 +19,7 @@ class Wizard:
 		self._calculate_number_of_nodes()
 		self._define_nodes()
 		self._generate_time_instants()
-		# self._generate_testbed_specific_template()
+		self._generate_testbed_specific_template()
 		self._output_json()
 
 
