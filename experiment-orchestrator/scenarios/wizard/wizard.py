@@ -2,6 +2,7 @@ import os
 import json
 import numpy as np
 import random
+from collections import OrderedDict
 from _generator import Generator
 
 
@@ -44,7 +45,7 @@ class Wizard:
 		]
 
 		self.info       = {}   # fields: identifier, duration_min, number_of_nodes, 
-		self.nodes      = {}
+		self.nodes      = OrderedDict()
 		self.specifics  = {
 			"iotlab": {},
 			"wilab":  {}
@@ -96,7 +97,7 @@ class Wizard:
 	def _calculate_number_of_nodes(self):
 		identifier = self.info['identifier']
 
-		if identifier == Identifiers.building_automation:
+		if identifier == Identifiers.ba:
 			print "All extra nodes that cannot form an entire area will be disregarded"
 			self.info['number_of_areas'] = self.info['number_of_nodes'] / 10    # 10 = number of nodes per zone
 			self.info['number_of_nodes'] = self.info['number_of_areas'] * 10
@@ -107,7 +108,7 @@ class Wizard:
 			node_sum = 0
 
 			for key in roles:
-				if key != 'cu':
+				if key != Roles.cu and key != Roles.g:
 					percent         = roles[key]['number']
 					roles[key]['number'] = int( ((percent/100) * self.info['number_of_nodes'])//1 )
 
@@ -122,30 +123,40 @@ class Wizard:
 		identifier = self.info['identifier']
 		roles      = self.definitions[identifier]
 
-		if identifier == Identifiers.building_automation:
-			id_suffix = 0
+		self.nodes["openbenchmark00"]         = OrderedDict()
+		self.nodes["openbenchmark00"]['role'] = Roles.zc if identifier == Identifiers.ba else Roles.cu if identifier == Identifiers.ha else Roles.g
+		self.nodes["openbenchmark00"]['area'] = 0
+		self.nodes["openbenchmark00"]['traffic_sending_points'] = {}
+
+		if identifier == Identifiers.ba:
+			id_suffix = 1
+
 			for area_ind in range(0, self.info['number_of_areas']):
 				for role in roles:
-					for i in range(0, roles[role]['number']):
-						generic_id = "{0}{1}".format(self.id_prefix, "%02d"%id_suffix)
-						self.nodes[generic_id] = {
-							'role': role,
-							'area': area_ind,
-							'sending_points': {}
-						}
-						roles[role]['nodes'].append(generic_id)
-						id_suffix += 1
+					if role != Roles.zc:
+						for i in range(0, roles[role]['number']):
+							generic_id = "{0}{1}".format(self.id_prefix, "%02d"%id_suffix)
+
+							self.nodes[generic_id]         = OrderedDict()
+							self.nodes[generic_id]['role'] = role
+							self.nodes[generic_id]['area'] = area_ind
+							self.nodes[generic_id]['traffic_sending_points'] = {}
+
+							roles[role]['nodes'].append(generic_id)
+							id_suffix += 1
 
 		else:
-			id_suffix = 0
+			id_suffix = 1
+
 			for role in roles:
 				for i in range(0, roles[role]['number']):
 					generic_id = "{0}{1}".format(self.id_prefix, "%02d"%id_suffix)
-					self.nodes[generic_id] = {
-						'role': role,
-						'area': 1,
-						'sending_points': {}
-					}
+
+					self.nodes[generic_id]         = OrderedDict()
+					self.nodes[generic_id]['role'] = role
+					self.nodes[generic_id]['area'] = 0
+					self.nodes[generic_id]['traffic_sending_points'] = {}
+
 					roles[role]['nodes'].append(generic_id)
 					id_suffix += 1
 
