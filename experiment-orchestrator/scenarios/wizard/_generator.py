@@ -28,7 +28,7 @@ class Generator:
 					'packets_in_burst': packets_in_burst
 				})
 
-		return sending_points
+		return sorted(sending_points, key=lambda k: k['time_sec'])
 
 
 	def _generate_poisson(self, node_pool, params):
@@ -52,4 +52,4 @@ class Generator:
 						'packets_in_burst': packets_in_burst
 					})
 
-		return sending_points
+		return sorted(sending_points, key=lambda k: k['time_sec'])
