@@ -124,7 +124,7 @@ class Wizard:
 		identifier = self.info['identifier']
 		roles      = self.definitions[identifier]
 
-		self.nodes["openbenchmark00"]         = OrderedDict()
+		self.nodes["openbenchmark00"] = OrderedDict()
 		self.nodes["openbenchmark00"]['role'] = Roles.zc if identifier == Identifiers.ba else Roles.cu if identifier == Identifiers.ha else Roles.g
 		self.nodes["openbenchmark00"]['area'] = 0
 		self.nodes["openbenchmark00"]['traffic_sending_points'] = {}
@@ -138,7 +138,7 @@ class Wizard:
 						for i in range(0, roles[role]['number']):
 							generic_id = "{0}{1}".format(self.id_prefix, "%02d"%id_suffix)
 
-							self.nodes[generic_id]         = OrderedDict()
+							self.nodes[generic_id] = OrderedDict()
 							self.nodes[generic_id]['role'] = role
 							self.nodes[generic_id]['area'] = area_ind
 							self.nodes[generic_id]['traffic_sending_points'] = {}
@@ -153,7 +153,7 @@ class Wizard:
 				for i in range(0, roles[role]['number']):
 					generic_id = "{0}{1}".format(self.id_prefix, "%02d"%id_suffix)
 
-					self.nodes[generic_id]         = OrderedDict()
+					self.nodes[generic_id] = OrderedDict()
 					self.nodes[generic_id]['role'] = role
 					self.nodes[generic_id]['area'] = 0
 					self.nodes[generic_id]['traffic_sending_points'] = {}
