@@ -1,9 +1,12 @@
 from socket_io_handler import SocketIoHandler
 from exp_terminate import ExpTerminate
+from cryptography.utils import CryptographyDeprecationWarning
 
+import warnings
 import paramiko
 import json
 import time
+import os
 
 class Reservation:
 
@@ -13,6 +16,11 @@ class Reservation:
 	CHECK_PAUSE    = 30
 
 	def __init__(self, user, domain):
+		warnings.simplefilter(
+			action='ignore',
+			category=CryptographyDeprecationWarning
+		)
+
 		self.user   = user
 		self.domain = domain
 
@@ -21,6 +29,11 @@ class Reservation:
 		self.client = paramiko.SSHClient()
 		self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 		self.client.load_system_host_keys()
+		
+		paramiko_log_path = os.path.join(os.path.dirname(__file__), "logs")
+		if not os.path.exists(paramiko_log_path):
+			os.mkdir(paramiko_log_path)
+		paramiko.util.log_to_file(os.path.join(paramiko_log_path, 'reservation_paramiko.log'))
 
 		self.ssh_connect()
 

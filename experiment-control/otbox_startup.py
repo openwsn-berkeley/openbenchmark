@@ -1,3 +1,4 @@
+import warnings
 import paramiko
 import json
 import subprocess
@@ -5,6 +6,7 @@ import time
 import threading
 import os
 
+from cryptography.utils import CryptographyDeprecationWarning
 from socket_io_handler import SocketIoHandler
 from reservation import Reservation
 
@@ -24,6 +26,11 @@ class OTBoxStartup:
 
 
 	def __init__(self, user, domain, testbed):
+		warnings.simplefilter(
+			action='ignore',
+			category=CryptographyDeprecationWarning
+		)
+
 		self.user            = user
 		self.domain          = domain
 		self.testbed         = testbed
@@ -33,6 +40,11 @@ class OTBoxStartup:
 		self.client          = paramiko.SSHClient()
 		self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 		self.client.load_system_host_keys()
+
+		paramiko_log_path = os.path.join(os.path.dirname(__file__), "logs")
+		if not os.path.exists(paramiko_log_path):
+			os.mkdir(paramiko_log_path)
+		paramiko.util.log_to_file(os.path.join(paramiko_log_path, 'otbox_paramiko.log'))
 
 		self.ssh_connect()
 
