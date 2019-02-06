@@ -79,6 +79,13 @@ Specification                                                              | Req
 -------------------------------------------------------------------------- | -----------------
 [OpenTestbed Software](https://github.com/openwsn-berkeley/opentestbed)    |        MUST
 
+### Supported testbeds 
+
+Name                                                                       | OpenBenchmark Indentifier
+-------------------------------------------------------------------------- | -------------------------
+[IoT-LAB](https://www.iot-lab.info/)                                       |        "iotlab"
+[w-iLab.t](https://doc.ilabt.imec.be/ilabt/wilab/)                         |        "wilab"
+
 <!-- ====================================================================== -->
 
 # Test Scenarios
