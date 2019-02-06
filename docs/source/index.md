@@ -357,7 +357,7 @@ Field name   | Description                                   | JSON Type
 ------------ | --------------------------------------------- | -------
 api_version  | Set to `0.0.1` string                         | string
 token        | Random token used to match the response       | string
-date         | UTC time when experiment is launched          | string
+date         | RFC2822 time when experiment is launched      | string
 firmware     | Identifier of the IUT used                    | string
 testbed      | Name of the testbed used                      | string
 nodes        | List of EUI64 of nodes used in the experiment | array of strings
@@ -368,7 +368,7 @@ Example:
     {
         "api_version"  : "0.0.1",
         "token"        : "123",
-        "date"         : "Sun Dec 2 14:41:13 UTC 2018",
+        "date"         : "Wed, 06 Feb 2019 17:46:55 +0100",
         "firmware"     : "OpenWSN-42a4007db7",
         "testbed"      : "w-iLab.t"
         "nodes"        : [  "00-12-4b-00-14-b5-b6-44",
