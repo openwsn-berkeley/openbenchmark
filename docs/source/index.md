@@ -371,7 +371,7 @@ Example:
         "token"        : "123",
         "date"         : "Wed, 06 Feb 2019 17:46:55 +0100",
         "firmware"     : "OpenWSN-42a4007db7",
-        "testbed"      : "w-iLab.t"
+        "testbed"      : "wilab"
         "nodes"        : {  
                             "nuc0-35": "00-12-4b-00-14-b5-b6-44",
                             "nuc0-36": "00-12-4b-00-14-b5-b6-45",
