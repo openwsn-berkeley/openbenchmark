@@ -11,6 +11,8 @@ LARAVEL_ROOT="$OPENBENCHMARK_DIR/web/public"
 GROUP="$( id -gn )"
 INDEX_JS_PATH="$OPENBENCHMARK_DIR/experiment-control/nodejs_websocket/index.js"
 
+sudo apt-mark hold mysql-server-5.7
+
 sudo apt-get -y update
 sudo apt-get -y upgrade
 sudo apt-get install -y software-properties-common
