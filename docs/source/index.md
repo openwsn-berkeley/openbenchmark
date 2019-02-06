@@ -314,8 +314,8 @@ Implementation Under Test (IUT) communicates with the OpenBenchmark platform thr
 
 Specification                                                              | Requirement Level
 -------------------------------------------------------------------------- | -----------------
-[Experiment Control Commands API](#experiment-control-commands-api)                |        MUST
-[Experiment Performance Events API](#experiment-performance-events-api)            |        MUST
+[Experiment Control Commands API](#experiment-control-commands-api)        |        MUST
+[Experiment Performance Events API](#experiment-performance-events-api)    |        MUST
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
@@ -329,7 +329,7 @@ Specification                                                              | Req
 
 # Experiment Control Commands API
 
-`API version: 0.0.1`
+`API version: "0.0.1"`
 
 This section lists the commands that MUST be handled by the SUT, as well as the behavior of the SUT when the Agent is first initialized.
 Commands are carried over MQTT in a request-response fashion.
@@ -356,12 +356,12 @@ Payload of the request MUST be a JSON object with following fields:
 
 Field name   | Description                                   | JSON Type
 ------------ | --------------------------------------------- | -------
-api_version  | Set to `0.0.1` string                         | string
+api_version  | Set to implemented API version                | string
 token        | Random token used to match the response       | string
 date         | RFC2822 time when experiment is launched      | string
-firmware     | Identifier of the IUT used                    | string
-testbed      | Name of the testbed used                      | string
-nodes        | List of EUI64 of nodes used in the experiment | JSON object
+firmware     | [IUT identifier](#supported-iuts), with a custom suffix | string
+testbed      | [Testbed identifier](#supported-testbeds)     | string
+nodes        | Map of testbed hosts and nodes' EUI64 address | object
 scenario     | Identifier of the scenario requested          | string
 
 ```
@@ -372,7 +372,7 @@ Example:
         "date"         : "Wed, 06 Feb 2019 17:46:55 +0100",
         "firmware"     : "OpenWSN-42a4007db7",
         "testbed"      : "wilab"
-        "nodes"        : {  
+        "nodes"        : {
                             "nuc0-35": "00-12-4b-00-14-b5-b6-44",
                             "nuc0-36": "00-12-4b-00-14-b5-b6-45",
                             "nuc0-37": "00-12-4b-00-14-b5-b6-46"
@@ -884,18 +884,18 @@ All other lines are JSON strings corresponding to different events occurring in 
 
 ### Header
 
-First line of the log file MUST be a string representation of the JSON object with following fields, all fields being mandatory:
+First line of the log file MUST be a string representation of the JSON object with following fields:
 
-Field name   | Description                                                        | JSON Type
------------- | ------------------------------------------------------------------ | -------
-date         | UTC time when experiment is launched                               | string
-experimentId | Opaque identifier of the experiment                                | string
-testbed      | Name of the testbed used                                           | string
-firmware     | Identifier of the IUT used                                         | string
-nodes        | List of EUI64 of nodes used in the experiment                      | array of strings
-scenario     | Identifier of the scenario requested                               | string
+Field name   | Presence Requirement
+------------ | ---------------------
+date         | MUST
+experimentId | MUST
+testbed      | MUST
+firmware     | MUST
+nodes        | MUST
+scenario     | MUST
 
-The values of these fields are obtained from `startBenchmark` request and response messages, specified in [Start Benchmark](#start-benchmark).
+The values of these fields follow the format specified in [Start Benchmark](#start-benchmark).
 
 <!-- ====================================================================== -->
 
