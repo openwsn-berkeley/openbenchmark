@@ -112,6 +112,7 @@ class Wizard:
 					percent = roles[key]['number']
 					roles[key]['number'] = int( round((percent/100) * (self.info['number_of_nodes']-1)) )
 
+				print "{0}s: {1}".format(key, roles[key]['number'])
 				node_sum += roles[key]['number']
 
 			if node_sum != self.info['number_of_nodes']:
