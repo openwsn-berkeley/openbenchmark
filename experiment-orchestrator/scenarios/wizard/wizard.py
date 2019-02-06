@@ -109,8 +109,8 @@ class Wizard:
 
 			for key in roles:
 				if key != Roles.cu and key != Roles.g:
-					percent         = roles[key]['number']
-					roles[key]['number'] = int( ((percent/100) * self.info['number_of_nodes'])//1 )
+					percent = roles[key]['number']
+					roles[key]['number'] = int( round((percent/100) * (self.info['number_of_nodes']-1)) )
 
 				node_sum += roles[key]['number']
 
