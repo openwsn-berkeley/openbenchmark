@@ -911,3 +911,20 @@ The following listing depicts a JSON snippet describing a building automation te
 
 <!-- ====================================================================== -->
 
+# Supported IUTs
+
+Name                                                |  Identifier
+--------------------------------------------------- | ------------
+[OpenWSN](http://www.openwsn.org/)                  | "openwsn"
+
+<!-- ====================================================================== -->
+
+# Supported Testbeds
+
+Name                                                |  Identifier
+--------------------------------------------------- | ------------
+[IoT-LAB](https://www.iot-lab.info/)                | "iotlab"
+[w-iLab.t](https://doc.ilabt.imec.be/ilabt/wilab/)  | "wilab"
+
+<!-- ====================================================================== -->
+
