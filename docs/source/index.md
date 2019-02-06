@@ -30,6 +30,70 @@ IUT is executed on low-power devices within the testbed.
 
 <!-- ====================================================================== -->
 
+# Architecture
+
+<p align="center"><img src="_static/architecture.png"></p>
+
+OpenBenchmark consists of following components:
+
+- OpenBenchmark Agent: A component running at the Network Gateway side, translating OpenBenchmark commands to the format that the IUT implements, and also converting performance data from the IUT to the format expected by OpenBenchmark.
+Agent implements [Experiment Control Commands API](#experiment-control-commands) and [Experiment Performance Event API](#experiment-performance-event).
+- Experiment Controller: A component in charge of communicating with the SUT and instrumenting it according to a given scenario (e.g. to send an application packet).
+This component is also in charge of starting the experiment, reserving nodes according to the testbed-specific APIs, etc.
+Experiment Controller MUST implements [Experiment Control Commands API](#experiment-control-commands).
+- Performance Event Handler: A component in charge of handling performance data coming from the SUT.
+Based on this data, OpenBenchmark is able to calculate different Key Performance Indicators (KPIs) of the IUT.
+Performance Event Handler implements [Experiment Performance Event API](#experiment-performance-event).
+- Web server: A PHP-based backend and Vue.js-based frontend allowing the user to access the OpenBenchmark platform through a graphical interface.
+
+Apart from developing new software components that will fully automate the benchmarking process, OpenBenchmark leverages and complements the existing effort in the open-source community to enable benchmarking of the pilot implementation of 6TiSCH: the OpenWSN project.
+These projects include:
+
+- OpenTestbed project: An open-source solution running on the testbed infrastructure that allows the communication with the firmware implementation executing in the testbed to be accessed as if it were running locally on the user’s machine.
+Essentially, OpenTestbed emulates the serial port connectivity over the MQTT protocol and allows the user to remotely flash the firmware on testbed devices.
+As part of the SODA effort, we extended the support of OpenTestbed to IoT-lab Saclay site, and our partners from iMec extended its support for w.iLab.t testbed.
+- OpenVisualizer project: An open-source implementation of a 6TiSCH gateway compatible with the OpenWSN firmware project.
+As part of the SODA effort, together with our external partners from Inria, we extended the OpenVisualizer to support the local execution on user’s premises while the 6TiSCH nodes are in testbed, by using the OpenTestbed functionalities.
+
+<!-- ====================================================================== -->
+
+# Requirements
+
+This section lists the implementation requirements that MUST be met to enable either a new
+
+- System Under Test (SUT), or
+- IEEE 802.15.4 testbed
+
+to be used with the OpenBenchmark platform.
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+## Implementation Under Test
+
+Implementation Under Test (IUT) communicates with the OpenBenchmark platform through the Agent component whose implementation is specific to the IUT.
+
+Specification                                                              | Requirement Level
+-------------------------------------------------------------------------- | -----------------
+[Experiment Control Commands](#experiment-control-commands)                |        MUST
+[Experiment Performance Events](#experiment-performance-events)            |        MUST
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+## Testbed
+
+Specification                                                              | Requirement Level
+-------------------------------------------------------------------------- | -----------------
+[OpenTestbed Software](https://github.com/openwsn-berkeley/opentestbed)    |        MUST
+
+### Supported testbeds 
+
+Name                                                                       | OpenBenchmark Indentifier
+-------------------------------------------------------------------------- | -------------------------
+[IoT-LAB](https://www.iot-lab.info/)                                       |        "iotlab"
+[w-iLab.t](https://doc.ilabt.imec.be/ilabt/wilab/)                         |        "wilab"
+
+<!-- ====================================================================== -->
+
 # Test Scenarios
 
 The goal of an OpenBenchmark *test scenario* is to capture real-life use cases of a technology in order to benchmark its performance in a setting that is relevant to the end users: companies adopting the technology for their products and their customers.
@@ -361,7 +425,7 @@ token        | Random token used to match the response       | string
 date         | UTC time when experiment is launched          | string
 firmware     | Identifier of the IUT used                    | string
 testbed      | Name of the testbed used                      | string
-nodes        | List of EUI64 of nodes used in the experiment | array of strings
+nodes        | List of EUI64 of nodes used in the experiment | JSON object
 scenario     | Identifier of the scenario requested          | string
 
 ```
@@ -371,7 +435,7 @@ Example:
         "token"        : "123",
         "date"         : "Sun Dec 2 14:41:13 UTC 2018",
         "firmware"     : "OpenWSN-42a4007db7",
-        "testbed"      : "w-iLab.t"
+        "testbed"      : "wilab"
         "nodes"        : {  
                             "nuc0-35": "00-12-4b-00-14-b5-b6-44",
                             "nuc0-36": "00-12-4b-00-14-b5-b6-45",
