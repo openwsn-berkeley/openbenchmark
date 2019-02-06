@@ -361,7 +361,7 @@ token        | Random token used to match the response       | string
 date         | RFC2822 time when experiment is launched      | string
 firmware     | Identifier of the IUT used                    | string
 testbed      | Name of the testbed used                      | string
-nodes        | List of EUI64 of nodes used in the experiment | array of strings
+nodes        | List of EUI64 of nodes used in the experiment | JSON object
 scenario     | Identifier of the scenario requested          | string
 
 ```
