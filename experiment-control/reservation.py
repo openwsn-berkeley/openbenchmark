@@ -2,16 +2,16 @@ import sys
 sys.path.insert(0, 'helpers/iotlab')
 
 from abc import abstractmethod
-
 from socket_io_handler import SocketIoHandler
+from cryptography.utils import CryptographyDeprecationWarning
+from otbox_startup import OTBoxStartup
 
 import os
 import paramiko
 import json
 import time
 import subprocess
-
-from otbox_startup import OTBoxStartup
+import warnings
 
 
 class Reservation:
@@ -28,14 +28,19 @@ class Reservation:
 		pass
 
 
-
 class IoTLABReservation(Reservation):
 
 	CMD_ERROR      = "cmd_error"
 	SSH_RETRY_TIME = 120
 	RETRY_PAUSE    = 10
 
+
 	def __init__(self, user, domain, duration=None, nodes=None):
+		warnings.simplefilter(
+			action='ignore',
+			category=CryptographyDeprecationWarning
+		)
+
 		self.user     = user
 		self.domain   = domain
 		self.duration = duration
@@ -46,6 +51,11 @@ class IoTLABReservation(Reservation):
 		self.client = paramiko.SSHClient()
 		self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 		self.client.load_system_host_keys()
+		
+		paramiko_log_path = os.path.join(os.path.dirname(__file__), "logs")
+		if not os.path.exists(paramiko_log_path):
+			os.mkdir(paramiko_log_path)
+		paramiko.util.log_to_file(os.path.join(paramiko_log_path, 'reservation_paramiko.log'))
 
 		self.ssh_connect()
 
@@ -187,4 +197,3 @@ class WilabReservation(Reservation):
 
 	def terminate_experiment(self):
 		self.run_yml_action(action="delete")
-
