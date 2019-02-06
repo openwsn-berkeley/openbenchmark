@@ -53,21 +53,21 @@ class Wizard:
 
 		self.definitions = {
 			Identifiers.ba: {   # Data per area except `zone-controller`
-				Roles.ms: {'number': 3, 'nodes': [], 'dest_type': Roles.ac, 'traffic_type': 'periodic', 'interval': [25, 35],     'packets_in_burst': 1},   # seconds
-				Roles.es: {'number': 4, 'nodes': [], 'dest_type': Roles.ac, 'traffic_type': 'poisson',  'mean': 10,               'packets_in_burst': 1},   # per hour
-				Roles.a : {'number': 2, 'nodes': [], 'dest_type': Roles.ac, 'traffic_type': 'periodic', 'interval': [25, 35],     'packets_in_burst': 1}, 
-				Roles.ac: {'number': 1, 'nodes': [], 'dest_type': Roles.zc, 'traffic_type': 'periodic', 'interval': [0.12, 0.14], 'packets_in_burst': 1},
-				Roles.zc: {'number': 1, 'nodes': [], 'dest_type': None,    'traffic_type': None}
+				Roles.ms: {'number': 3, 'nodes': [], 'dest_type': [Roles.ac],          'traffic_type': 'periodic', 'interval': [25, 35],     'packets_in_burst': 1},   # seconds
+				Roles.es: {'number': 4, 'nodes': [], 'dest_type': [Roles.ac],          'traffic_type': 'poisson',  'mean': 10,               'packets_in_burst': 1},   # per hour
+				Roles.a : {'number': 2, 'nodes': [], 'dest_type': [Roles.ac],          'traffic_type': 'periodic', 'interval': [25, 35],     'packets_in_burst': 1}, 
+				Roles.ac: {'number': 1, 'nodes': [], 'dest_type': [Roles.a, Roles.zc], 'traffic_type': 'periodic', 'interval': [0.12, 0.14], 'packets_in_burst': 1},
+				Roles.zc: {'number': 1, 'nodes': [], 'dest_type': None,                'traffic_type': None}
 			},       
 			Identifiers.ha: {   # All % except control-unit
-				Roles.ms: {'number': 49.0, 'nodes': [], 'dest_type': Roles.cu, 'traffic_type': 'periodic', 'interval': [180, 300], 'packets_in_burst': 1}, 
-				Roles.es: {'number': 21.0, 'nodes': [], 'dest_type': Roles.cu, 'traffic_type': 'poisson',  'mean': 10,             'packets_in_burst': 1}, 
-				Roles.a : {'number': 30.0, 'nodes': [], 'dest_type': Roles.cu, 'traffic_type': 'periodic', 'interval': [180, 300], 'packets_in_burst': 1}, 
-				Roles.cu: {'number': 1,    'nodes': [], 'dest_type': Roles.a,  'traffic_type': 'poisson',  'mean': 10,             'packets_in_burst': 5}
+				Roles.ms: {'number': 49.0, 'nodes': [], 'dest_type': [Roles.cu], 'traffic_type': 'periodic', 'interval': [180, 300], 'packets_in_burst': 1}, 
+				Roles.es: {'number': 21.0, 'nodes': [], 'dest_type': [Roles.cu], 'traffic_type': 'poisson',  'mean': 10,             'packets_in_burst': 1}, 
+				Roles.a : {'number': 30.0, 'nodes': [], 'dest_type': [Roles.cu], 'traffic_type': 'periodic', 'interval': [180, 300], 'packets_in_burst': 1}, 
+				Roles.cu: {'number': 1,    'nodes': [], 'dest_type': [Roles.a],  'traffic_type': 'poisson',  'mean': 10,             'packets_in_burst': 5}
 			},
 			Identifiers.im : {   # All % except gateway
-				Roles.s : {'number': 90.0, 'nodes': [], 'dest_type': Roles.g, 'traffic_type': 'periodic', 'interval': [1, 60],    'packets_in_burst': 1}, 
-				Roles.bs: {'number': 10.0, 'nodes': [], 'dest_type': Roles.g, 'traffic_type': 'periodic', 'interval': [60, 3600], 'packets_in_burst': 1}, 
+				Roles.s : {'number': 90.0, 'nodes': [], 'dest_type': [Roles.g], 'traffic_type': 'periodic', 'interval': [1, 60],    'packets_in_burst': 1}, 
+				Roles.bs: {'number': 10.0, 'nodes': [], 'dest_type': [Roles.g], 'traffic_type': 'periodic', 'interval': [60, 3600], 'packets_in_burst': 1}, 
 				Roles.g : {'number': 1,    'nodes': [], 'dest_type': None,    'traffic_type': None}				
 			}
 		}
@@ -165,11 +165,15 @@ class Wizard:
 		for key in self.nodes:
 			roles = self.definitions[self.info['identifier']]
 			role = self.nodes[key]['role']
-			dest_type = roles[role]['dest_type']
+			dest_types = roles[role]['dest_type']
 
-			if dest_type != None:
+			node_pool = []
+			if dest_types != None:
+				for destination in dest_types:
+					node_pool += roles[destination]['nodes']
+
 				sending_points = self.generator.generate(
-					roles[dest_type]['nodes'], 
+					node_pool, 
 					roles[role]
 				)
 
