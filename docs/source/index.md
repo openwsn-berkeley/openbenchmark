@@ -74,6 +74,7 @@ Sender | Destination | Traffic pattern and load                       | Ack | Ac
 ------ | ----------- | ---------------------------------------------- | --- | -------------
 MS     |  AC         | Periodic, uniformly in [25, 35] seconds        | Yes | None
 ES     |  AC         | Poisson, mean of 10 packets/hour               | Yes | Forward to ZC
+AC     |  A          | Poisson, mean of 10 packets/hour               | Yes | None
 A      |  AC         | Periodic, uniformly in [25, 35] seconds        | Yes | None
 AC     |  ZC         | Periodic, uniformly in [120,140] milliseconds  | No  | None
 
@@ -313,8 +314,8 @@ Implementation Under Test (IUT) communicates with the OpenBenchmark platform thr
 
 Specification                                                              | Requirement Level
 -------------------------------------------------------------------------- | -----------------
-[Experiment Control Commands API](#experiment-control-commands-api)                |        MUST
-[Experiment Performance Events API](#experiment-performance-events-api)            |        MUST
+[Experiment Control Commands API](#experiment-control-commands-api)        |        MUST
+[Experiment Performance Events API](#experiment-performance-events-api)    |        MUST
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
@@ -328,7 +329,7 @@ Specification                                                              | Req
 
 # Experiment Control Commands API
 
-`API version: 0.0.1`
+`API version: "0.0.1"`
 
 This section lists the commands that MUST be handled by the SUT, as well as the behavior of the SUT when the Agent is first initialized.
 Commands are carried over MQTT in a request-response fashion.
@@ -355,12 +356,12 @@ Payload of the request MUST be a JSON object with following fields:
 
 Field name   | Description                                   | JSON Type
 ------------ | --------------------------------------------- | -------
-api_version  | Set to `0.0.1` string                         | string
+api_version  | Set to implemented API version                | string
 token        | Random token used to match the response       | string
-date         | UTC time when experiment is launched          | string
-firmware     | Identifier of the IUT used                    | string
-testbed      | Name of the testbed used                      | string
-nodes        | List of EUI64 of nodes used in the experiment | array of strings
+date         | RFC2822 time when experiment is launched      | string
+firmware     | [IUT identifier](#supported-iuts), with a custom suffix | string
+testbed      | [Testbed identifier](#supported-testbeds)     | string
+nodes        | Map of testbed hosts and nodes' EUI64 address | object
 scenario     | Identifier of the scenario requested          | string
 
 ```
@@ -368,13 +369,14 @@ Example:
     {
         "api_version"  : "0.0.1",
         "token"        : "123",
-        "date"         : "Sun Dec 2 14:41:13 UTC 2018",
+        "date"         : "Wed, 06 Feb 2019 17:46:55 +0100",
         "firmware"     : "OpenWSN-42a4007db7",
-        "testbed"      : "w-iLab.t"
-        "nodes"        : [  "00-12-4b-00-14-b5-b6-44",
-                            "00-12-4b-00-14-b5-b6-45",
-                            "00-12-4b-00-14-b5-b6-46"
-                         ]
+        "testbed"      : "wilab"
+        "nodes"        : {
+                            "nuc0-35": "00-12-4b-00-14-b5-b6-44",
+                            "nuc0-36": "00-12-4b-00-14-b5-b6-45",
+                            "nuc0-37": "00-12-4b-00-14-b5-b6-46"
+                         }
         "scenario"     : "building-automation"
     }
 ```
@@ -489,12 +491,13 @@ confirmable   | Whether the packet should be acknowledged at the application lay
 ```
 Example:
     {
-        "token"         : "123",
-        "source"        : "00-12-4b-00-14-b5-b6-44",
-        "destination"   : "00-12-4b-00-14-b5-b6-45",
-        "packetToken"   : [124, 122, 34, 31],
-        "packetPayload" : [],
-        "confirmable"   : true
+        "token"            : "123",
+        "source"           : "00-12-4b-00-14-b5-b6-44",
+        "destination"      : "00-12-4b-00-14-b5-b6-45",
+        "packets_in_burst" : 1
+        "packetToken"      : [124, 122, 34, 31],
+        "packetPayload"    : [],
+        "confirmable"      : true
     }
 ```
 
@@ -673,12 +676,12 @@ hopLimit    | packetSent   | MUST
 ```
 Example:
     {
-        "event"        : "packetSent"
-        "timestamp"    : 2131,
-        "packetToken"   : [124, 122, 34, 31],
-        "source"       : "bbbb::0012:4b00:14b5:b648",
-        "destination"  : "bbbb::1",
-        "hopLimit"     : 255,
+        "event"            : "packetSent"
+        "timestamp"        : 2131,
+        "packetToken"      : [124, 122, 34, 31],
+        "source"           : "00-12-4b-00-14-b5-b6-44",
+        "destination"      : "00-12-4b-00-14-b5-b6-45",
+        "hopLimit"         : 255,
     }
 ```
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
@@ -710,8 +713,8 @@ Example:
         "event"         : "packetReceived"
         "timestamp"     : 2151,
         "packetToken"   : [124, 122, 34, 31],
-        "source"        : "bbbb::0012:4b00:14b5:b648",
-        "destination"   : "bbbb::1",
+        "source"        : "00-12-4b-00-14-b5-b6-45",
+        "destination"   : "00-12-4b-00-14-b5-b6-44",
         "hopLimit"      : 252,
     }
 ```
@@ -881,18 +884,18 @@ All other lines are JSON strings corresponding to different events occurring in 
 
 ### Header
 
-First line of the log file MUST be a string representation of the JSON object with following fields, all fields being mandatory:
+First line of the log file MUST be a string representation of the JSON object with following fields:
 
-Field name   | Description                                                        | JSON Type
------------- | ------------------------------------------------------------------ | -------
-date         | UTC time when experiment is launched                               | string
-experimentId | Opaque identifier of the experiment                                | string
-testbed      | Name of the testbed used                                           | string
-firmware     | Identifier of the IUT used                                         | string
-nodes        | List of EUI64 of nodes used in the experiment                      | array of strings
-scenario     | Identifier of the scenario requested                               | string
+Field name   | Presence Requirement
+------------ | ---------------------
+date         | MUST
+experimentId | MUST
+testbed      | MUST
+firmware     | MUST
+nodes        | MUST
+scenario     | MUST
 
-The values of these fields are obtained from `startBenchmark` request and response messages, specified in [Start Benchmark](#start-benchmark).
+The values of these fields follow the format specified in [Start Benchmark](#start-benchmark).
 
 <!-- ====================================================================== -->
 
@@ -905,6 +908,23 @@ These time instants follow the distributions discussed in [Test Scenarios](#test
 The following listing depicts a JSON snippet describing a building automation test scenario instance and its mapping to the IoT-lab testbed.
 
 <p align="center"><img src="_static/scenario-json.png"></p>
+
+<!-- ====================================================================== -->
+
+# Supported IUTs
+
+Name                                                |  Identifier
+--------------------------------------------------- | ------------
+[OpenWSN](http://www.openwsn.org/)                  | "openwsn"
+
+<!-- ====================================================================== -->
+
+# Supported Testbeds
+
+Name                                                |  Identifier
+--------------------------------------------------- | ------------
+[IoT-LAB](https://www.iot-lab.info/)                | "iotlab"
+[w-iLab.t](https://doc.ilabt.imec.be/ilabt/wilab/)  | "wilab"
 
 <!-- ====================================================================== -->
 
