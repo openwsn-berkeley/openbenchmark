@@ -90,6 +90,7 @@ class Wizard:
 		
 		self.info['duration_min'] = input("Duration in minutes (e.g. 30): ")
 		self.info['number_of_nodes'] = input("Number of nodes (e.g. 10): ")
+		self.info['payload_size'] = input("Choose payload size (a value in bytes, max. 80): ")
 
 		self.generator = Generator(self.info['duration_min'] * 60)
 
@@ -202,6 +203,7 @@ class Wizard:
 			content['identifier']      = self.info['identifier']
 			content['duration_min']    = self.info['duration_min']
 			content['number_of_nodes'] = self.info['number_of_nodes'] 
+			content['payload_size']    = self.info['payload_size']
 			content['nodes']           = self.nodes
 			f.write(json.dumps(content, indent=4))
 
