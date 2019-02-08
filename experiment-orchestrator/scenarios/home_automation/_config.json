@@ -8,57 +8,67 @@
             "area": 0, 
             "traffic_sending_points": [
                 {
-                    "time_sec": 32.952706317668415, 
-                    "destination": "openbenchmark05", 
-                    "packets_in_burst": 5
-                }, 
-                {
-                    "time_sec": 49.41432624050842, 
+                    "time_sec": 41.773703190563346, 
                     "destination": "openbenchmark07", 
                     "packets_in_burst": 5
                 }, 
                 {
-                    "time_sec": 162.78023377911705, 
-                    "destination": "openbenchmark06", 
-                    "packets_in_burst": 5
-                }, 
-                {
-                    "time_sec": 287.37369618071824, 
+                    "time_sec": 62.59196659864559, 
                     "destination": "openbenchmark07", 
                     "packets_in_burst": 5
                 }, 
                 {
-                    "time_sec": 304.8972717059167, 
+                    "time_sec": 132.7791738838304, 
                     "destination": "openbenchmark06", 
                     "packets_in_burst": 5
                 }, 
                 {
-                    "time_sec": 360.59241934569184, 
-                    "destination": "openbenchmark05", 
-                    "packets_in_burst": 5
-                }, 
-                {
-                    "time_sec": 475.60287393745864, 
+                    "time_sec": 135.75251995096633, 
                     "destination": "openbenchmark06", 
                     "packets_in_burst": 5
                 }, 
                 {
-                    "time_sec": 655.230648291632, 
-                    "destination": "openbenchmark05", 
+                    "time_sec": 323.35955092782046, 
+                    "destination": "openbenchmark06", 
                     "packets_in_burst": 5
                 }, 
                 {
-                    "time_sec": 783.1579318968352, 
+                    "time_sec": 366.3198574649914, 
+                    "destination": "openbenchmark06", 
+                    "packets_in_burst": 5
+                }, 
+                {
+                    "time_sec": 507.2643202792093, 
+                    "destination": "openbenchmark06", 
+                    "packets_in_burst": 5
+                }, 
+                {
+                    "time_sec": 644.8112038806669, 
                     "destination": "openbenchmark07", 
                     "packets_in_burst": 5
                 }, 
                 {
-                    "time_sec": 1421.0125013097827, 
+                    "time_sec": 680.7338758990819, 
                     "destination": "openbenchmark05", 
                     "packets_in_burst": 5
                 }, 
                 {
-                    "time_sec": 1468.1925400785035, 
+                    "time_sec": 723.0289538249705, 
+                    "destination": "openbenchmark06", 
+                    "packets_in_burst": 5
+                }, 
+                {
+                    "time_sec": 991.5905257053132, 
+                    "destination": "openbenchmark05", 
+                    "packets_in_burst": 5
+                }, 
+                {
+                    "time_sec": 1071.652433575961, 
+                    "destination": "openbenchmark07", 
+                    "packets_in_burst": 5
+                }, 
+                {
+                    "time_sec": 1579.4898291120396, 
                     "destination": "openbenchmark05", 
                     "packets_in_burst": 5
                 }
@@ -69,35 +79,35 @@
             "area": 0, 
             "traffic_sending_points": [
                 {
-                    "time_sec": 268.163, 
+                    "time_sec": 246.865, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 456.64700000000005, 
+                    "time_sec": 486.328, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 755.614, 
+                    "time_sec": 767.162, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 953.7750000000001, 
+                    "time_sec": 1009.972, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 1171.587, 
+                    "time_sec": 1240.504, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 1450.2269999999999, 
+                    "time_sec": 1507.7959999999998, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 1696.328, 
+                    "time_sec": 1708.1639999999998, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 1936.706, 
+                    "time_sec": 2005.7909999999997, 
                     "destination": "openbenchmark08"
                 }
             ]
@@ -107,31 +117,35 @@
             "area": 0, 
             "traffic_sending_points": [
                 {
-                    "time_sec": 279.344, 
+                    "time_sec": 182.841, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 512.231, 
+                    "time_sec": 416.664, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 801.639, 
+                    "time_sec": 639.37, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 1083.27, 
+                    "time_sec": 890.862, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 1302.939, 
+                    "time_sec": 1129.816, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 1574.7740000000001, 
+                    "time_sec": 1351.733, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 1852.337, 
+                    "time_sec": 1628.126, 
+                    "destination": "openbenchmark08"
+                }, 
+                {
+                    "time_sec": 1848.149, 
                     "destination": "openbenchmark08"
                 }
             ]
@@ -141,35 +155,35 @@
             "area": 0, 
             "traffic_sending_points": [
                 {
-                    "time_sec": 229.547, 
+                    "time_sec": 287.973, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 485.895, 
+                    "time_sec": 505.129, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 728.039, 
+                    "time_sec": 711.3240000000001, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 984.502, 
+                    "time_sec": 979.113, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 1199.126, 
+                    "time_sec": 1270.226, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 1471.403, 
+                    "time_sec": 1491.72, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 1668.988, 
+                    "time_sec": 1698.7440000000001, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 1857.6750000000002, 
+                    "time_sec": 1947.1260000000002, 
                     "destination": "openbenchmark08"
                 }
             ]
@@ -179,35 +193,35 @@
             "area": 0, 
             "traffic_sending_points": [
                 {
-                    "time_sec": 288.556, 
+                    "time_sec": 203.644, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 500.73299999999995, 
+                    "time_sec": 415.15700000000004, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 775.9789999999999, 
+                    "time_sec": 663.408, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 957.502, 
+                    "time_sec": 872.204, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 1214.478, 
+                    "time_sec": 1105.5839999999998, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 1487.355, 
+                    "time_sec": 1350.503, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 1700.387, 
+                    "time_sec": 1611.706, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 1950.345, 
+                    "time_sec": 1877.34, 
                     "destination": "openbenchmark08"
                 }
             ]
@@ -217,35 +231,35 @@
             "area": 0, 
             "traffic_sending_points": [
                 {
-                    "time_sec": 209.136, 
+                    "time_sec": 282.208, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 409.068, 
+                    "time_sec": 526.943, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 621.325, 
+                    "time_sec": 815.8340000000001, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 908.337, 
+                    "time_sec": 1073.502, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 1199.897, 
+                    "time_sec": 1304.437, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 1404.4569999999999, 
+                    "time_sec": 1510.4289999999999, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 1683.696, 
+                    "time_sec": 1718.8639999999998, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 1904.993, 
+                    "time_sec": 1917.4729999999997, 
                     "destination": "openbenchmark08"
                 }
             ]
@@ -255,39 +269,31 @@
             "area": 0, 
             "traffic_sending_points": [
                 {
-                    "time_sec": 236.381, 
+                    "time_sec": 270.111, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 480.63300000000004, 
+                    "time_sec": 555.121, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 661.327, 
+                    "time_sec": 844.9369999999999, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 947.783, 
+                    "time_sec": 1135.154, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 1143.597, 
+                    "time_sec": 1384.453, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 1359.539, 
+                    "time_sec": 1621.517, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 1549.226, 
-                    "destination": "openbenchmark08"
-                }, 
-                {
-                    "time_sec": 1769.6200000000001, 
-                    "destination": "openbenchmark08"
-                }, 
-                {
-                    "time_sec": 1954.622, 
+                    "time_sec": 1848.588, 
                     "destination": "openbenchmark08"
                 }
             ]
@@ -297,31 +303,39 @@
             "area": 0, 
             "traffic_sending_points": [
                 {
-                    "time_sec": 251.949, 
+                    "time_sec": 183.643, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 520.281, 
+                    "time_sec": 422.361, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 755.569, 
+                    "time_sec": 656.6379999999999, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 1002.083, 
+                    "time_sec": 864.218, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 1275.53, 
+                    "time_sec": 1086.933, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 1569.304, 
+                    "time_sec": 1367.386, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 1838.578, 
+                    "time_sec": 1566.557, 
+                    "destination": "openbenchmark08"
+                }, 
+                {
+                    "time_sec": 1792.279, 
+                    "destination": "openbenchmark08"
+                }, 
+                {
+                    "time_sec": 1988.112, 
                     "destination": "openbenchmark08"
                 }
             ]
@@ -331,43 +345,68 @@
             "area": 0, 
             "traffic_sending_points": [
                 {
-                    "time_sec": 50.370093417649976, 
+                    "time_sec": 35.60576882471085, 
                     "destination": "openbenchmark06", 
                     "packets_in_burst": 5
                 }, 
                 {
-                    "time_sec": 105.3842900223238, 
-                    "destination": "openbenchmark07", 
-                    "packets_in_burst": 5
-                }, 
-                {
-                    "time_sec": 112.18318525059561, 
+                    "time_sec": 110.19809204122956, 
                     "destination": "openbenchmark05", 
                     "packets_in_burst": 5
                 }, 
                 {
-                    "time_sec": 233.77861116653298, 
-                    "destination": "openbenchmark07", 
-                    "packets_in_burst": 5
-                }, 
-                {
-                    "time_sec": 420.24743395290363, 
+                    "time_sec": 274.53088610733977, 
                     "destination": "openbenchmark05", 
                     "packets_in_burst": 5
                 }, 
                 {
-                    "time_sec": 424.9574826353051, 
-                    "destination": "openbenchmark05", 
-                    "packets_in_burst": 5
-                }, 
-                {
-                    "time_sec": 589.2648558932702, 
+                    "time_sec": 313.3494186227213, 
                     "destination": "openbenchmark06", 
                     "packets_in_burst": 5
                 }, 
                 {
-                    "time_sec": 724.3549051591556, 
+                    "time_sec": 391.789717373326, 
+                    "destination": "openbenchmark07", 
+                    "packets_in_burst": 5
+                }, 
+                {
+                    "time_sec": 411.51014170050405, 
+                    "destination": "openbenchmark07", 
+                    "packets_in_burst": 5
+                }, 
+                {
+                    "time_sec": 491.2721632563001, 
+                    "destination": "openbenchmark06", 
+                    "packets_in_burst": 5
+                }, 
+                {
+                    "time_sec": 523.8389118319607, 
                     "destination": "openbenchmark05", 
+                    "packets_in_burst": 5
+                }, 
+                {
+                    "time_sec": 605.5564865976518, 
+                    "destination": "openbenchmark05", 
+                    "packets_in_burst": 5
+                }, 
+                {
+                    "time_sec": 835.021158687626, 
+                    "destination": "openbenchmark06", 
+                    "packets_in_burst": 5
+                }, 
+                {
+                    "time_sec": 1031.38345543248, 
+                    "destination": "openbenchmark05", 
+                    "packets_in_burst": 5
+                }, 
+                {
+                    "time_sec": 1617.5711349061585, 
+                    "destination": "openbenchmark07", 
+                    "packets_in_burst": 5
+                }, 
+                {
+                    "time_sec": 1783.9180724623668, 
+                    "destination": "openbenchmark06", 
                     "packets_in_burst": 5
                 }
             ]
@@ -377,67 +416,39 @@
             "area": 0, 
             "traffic_sending_points": [
                 {
-                    "time_sec": 42.57858294929232, 
+                    "time_sec": 49.452549655506616, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 77.2302072753525, 
+                    "time_sec": 92.99769237558964, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 311.78417756577505, 
+                    "time_sec": 209.40755103785074, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 322.8922683712692, 
+                    "time_sec": 338.183990560494, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 344.32754771209056, 
+                    "time_sec": 377.4575279080469, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 371.47238552171314, 
+                    "time_sec": 457.7811334458545, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 414.2090854582112, 
+                    "time_sec": 1069.7814341163992, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 558.0418411497762, 
+                    "time_sec": 1305.7356814799261, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 655.0202950575416, 
-                    "destination": "openbenchmark08"
-                }, 
-                {
-                    "time_sec": 670.2224667438057, 
-                    "destination": "openbenchmark08"
-                }, 
-                {
-                    "time_sec": 675.0186848340721, 
-                    "destination": "openbenchmark08"
-                }, 
-                {
-                    "time_sec": 698.4015028601796, 
-                    "destination": "openbenchmark08"
-                }, 
-                {
-                    "time_sec": 796.2284520557355, 
-                    "destination": "openbenchmark08"
-                }, 
-                {
-                    "time_sec": 1102.9332325749147, 
-                    "destination": "openbenchmark08"
-                }, 
-                {
-                    "time_sec": 1111.5150497152465, 
-                    "destination": "openbenchmark08"
-                }, 
-                {
-                    "time_sec": 1182.8287359756391, 
+                    "time_sec": 1694.0793522476129, 
                     "destination": "openbenchmark08"
                 }
             ]
@@ -447,27 +458,47 @@
             "area": 0, 
             "traffic_sending_points": [
                 {
-                    "time_sec": 119.21373355534702, 
+                    "time_sec": 105.08079515532384, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 190.5659842776904, 
+                    "time_sec": 190.1389443700506, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 320.90134058887276, 
+                    "time_sec": 327.1889460454509, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 405.5184908113399, 
+                    "time_sec": 368.16034237008955, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 457.86630697084354, 
+                    "time_sec": 495.42259053015295, 
                     "destination": "openbenchmark08"
                 }, 
                 {
-                    "time_sec": 1642.9332119619762, 
+                    "time_sec": 522.1962696715199, 
+                    "destination": "openbenchmark08"
+                }, 
+                {
+                    "time_sec": 671.6269434826411, 
+                    "destination": "openbenchmark08"
+                }, 
+                {
+                    "time_sec": 738.5066492722004, 
+                    "destination": "openbenchmark08"
+                }, 
+                {
+                    "time_sec": 869.8497020268786, 
+                    "destination": "openbenchmark08"
+                }, 
+                {
+                    "time_sec": 1236.1765955622325, 
+                    "destination": "openbenchmark08"
+                }, 
+                {
+                    "time_sec": 1481.863623578192, 
                     "destination": "openbenchmark08"
                 }
             ]
