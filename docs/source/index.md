@@ -83,7 +83,7 @@ The table below lists other relevant settings:
 Setting                   | Value
 ------------------------- | ----------------
 Coverage Requirement      |  4-6 hops
-Application Payload Size  |  100 bytes
+Application Payload Size  |  80 bytes
 
 The coverage requirement is an approximation based on RFC5867 deployment requirements.
 
@@ -160,7 +160,7 @@ Setting                     | Value
 --------------------------- | ----------------
 Coverage Requirement        |   5-10 hops
 Sensor Payload Size         |   10 bytes
-Bursty Sensor Payload Size  |   100 bytes
+Bursty Sensor Payload Size  |   80 bytes
 Packets per Burst           |   10
 
 <!-- ====================================================================== -->
