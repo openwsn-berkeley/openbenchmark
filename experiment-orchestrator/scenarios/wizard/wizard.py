@@ -44,6 +44,13 @@ class Wizard:
 			Identifiers.im
 		]
 
+		self.default_payload_size = {   # in bytes
+			Identifiers.ba: 80,
+			Identifiers.ha: 10,
+			Identifiers.im: 10
+		}
+
+
 		self.info       = {}   # fields: identifier, duration_min, number_of_nodes, 
 		self.nodes      = OrderedDict()
 		self.specifics  = {
@@ -90,7 +97,7 @@ class Wizard:
 		
 		self.info['duration_min'] = input("Duration in minutes (e.g. 30): ")
 		self.info['number_of_nodes'] = input("Number of nodes (e.g. 10): ")
-		self.info['payload_size'] = input("Choose payload size (a value in bytes, max. 80): ")
+		self.info['payload_size'] = self.default_payload_size[self.info['identifier']]
 
 		self.generator = Generator(self.info['duration_min'] * 60)
 
