@@ -3,6 +3,7 @@ sys.path.append('..')
 
 import collections
 import threading
+import colorama
 from mqtt_client._condition_object import ConditionObject
 
 class TimeoutBuffer():
@@ -22,6 +23,12 @@ class TimeoutBuffer():
 			if self.buffer[token] != None:
 				self.queue_pck_drop.put(self.buffer[token])
 				self.buffer[token] = None
+
+				sys.stdout.write("{0}[TIMEOUT BUFFER] {1}\n{2}".format(
+					colorama.Fore.RED, 
+					"Packet timeout: {0}".format(packet_token), 
+					colorama.Style.RESET_ALL
+				))
 
 				self.cv_packet_drop.acquire()
 				self.cv_packet_drop.notifyAll()
