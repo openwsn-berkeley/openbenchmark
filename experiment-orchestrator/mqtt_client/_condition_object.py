@@ -27,10 +27,10 @@ class ConditionObject:
 		self.start_benchmark_cv = threading.Condition()
 		self.sut_command_payload = {}
 
-	def append_variable(self, token, payload=''):
+	def append_variable(self, token):
 		self.condition_variables[token] = {
 			'condition_var': threading.Condition(),
-			'payload': payload
+			'payload': ''
 		}
 
 	def remove_variable(self, token):
