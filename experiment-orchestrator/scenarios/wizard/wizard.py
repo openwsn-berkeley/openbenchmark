@@ -175,10 +175,10 @@ class Wizard:
 			roles = self.definitions[self.info['identifier']]
 			role = self.nodes[key]['role']
 			dest_types  = roles[role]['dest_type']
-			confirmables = roles[role]['confirmable'] 
 
 			node_pool = []
 			if dest_types != None:
+				confirmables = roles[role]['confirmable']
 				for idx, destination in enumerate(dest_types):
 					for node in roles[destination]['nodes']:
 						node_pool.append({
