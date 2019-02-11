@@ -17,20 +17,19 @@ class API:
 	def __init__(self, timeout):
 		self.mqtt_client      = MQTTClient.create()
 		self.condition_object = ConditionObject.create()
-		self.token            = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(15))   # Token generated automatically as a string of 15 random alphanumerical characters
 		self.timeout          = timeout
-		colorama.init() #Needed for coloured log printing
+		colorama.init()    # Needed for coloured log printing
 
-	def _wait(self):
-		self.condition_object.append_variable(token=self.token)
+	def _wait(self, token):
+		self.condition_object.append_variable(token=token)
 		
-		cv = self.condition_object.condition_variables[self.token]['condition_var']
+		cv = self.condition_object.condition_variables[token]['condition_var']
 		cv.acquire()
 		cv.wait(self.timeout)
 		cv.release()
 
-		payload = self.condition_object.condition_variables[self.token]['payload']
-		self.condition_object.remove_variable(token=self.token)
+		payload = self.condition_object.condition_variables[token]['payload']
+		self.condition_object.remove_variable(token=token)
 
 		if payload != '':
 			sys.stdout.write("{0}[API] {1}\n{2}".format(
@@ -40,7 +39,7 @@ class API:
 			))
 		else:
 			sys.stdout.write("{0}[API] {1}\n{2}".format(colorama.Fore.RED, json.dumps({
-				"token"  : self.token,
+				"token"  : token,
 				"success": False,
 				"reason" : "timeout"
 			}), colorama.Style.RESET_ALL))
@@ -48,8 +47,9 @@ class API:
 
 	##### API implementation #####
 	def _assign_token(self, payload):
-		payload['token']       = self.token
-		payload['packetToken'] = [int(elem.encode("hex"), 16) for elem in self.token]
+		token = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(15))
+		payload['token']       = token
+		payload['packetToken'] = [int(elem.encode("hex"), 16) for elem in token]
 		return payload
 
 	def command_exec(self, command, payload):
@@ -61,11 +61,12 @@ class API:
 
 	def send_packet(self, payload):
 		# Publishes MQTT command and puts thread into waiting state until notified or timeout
+		payload = self._assign_token(payload)
 		self.mqtt_client.publish(
 			'sendPacket',
-			self._assign_token(payload)
+			payload
 		)
-		self._wait()
+		self._wait(payload['token'])
 
 	def configure_transmit_power(self, payload):
 		# Should publish MQTT command and put thread into waiting state until notified or timeout
