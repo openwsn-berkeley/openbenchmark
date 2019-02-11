@@ -1,4 +1,5 @@
 import sys
+import os
 sys.path.append("..")
 
 import json
@@ -23,27 +24,22 @@ class Simulator(object):
             Simulator._instance = Simulator()
         return Simulator._instance
 
-    def __init__(self, broker="broker.mqttdashboard.com"):
+    def __init__(self, testbed="iotlab",  broker="broker.mqttdashboard.com", scenario="building-automation"):
         self.experiment_id      = Utils.experiment_id
+        self.testbed            = testbed
         self.broker             = broker
+        self.scenario           = scenario
         self.co                 = ConditionObject.create()
 
         self.bench_init_timeout = 3    #[s]
 
-        self.sut_command_payload = {
-            "api_version"  : "0.0.1",
-            "token"        : "123",
-            "date"         : "Sun Dec 2 14:41:13 UTC 2018",
-            "firmware"     : "OpenWSN-42a4007db7",
-            "testbed"      : "iotlab",
-            "nodes"        : {  
-                                "a8-100": "00-12-4b-00-14-b5-b6-44",
-                                "a8-101": "00-12-4b-00-14-b5-b6-45",
-                                "a8-102": "00-12-4b-00-14-b5-b6-46",
-                                "a8-103": "00-12-4b-00-14-b5-b6-47"
-                             },
-            "scenario"     : "building-automation"
+        self.scenario_config_dirs = {
+            "building-automation":   os.path.join(os.path.dirname(__file__), "..", "scenarios", "building_automation"),
+            "home-automation":       os.path.join(os.path.dirname(__file__), "..", "scenarios", "home_automation"),
+            "industrial-monitoring": os.path.join(os.path.dirname(__file__), "..", "scenarios", "industrial_monitoring")
         }
+
+        self._form_sut_payload()
 
         self.events = [
             "packetSent",
@@ -68,6 +64,29 @@ class Simulator(object):
         }
 
         self._mqtt_client_setup() 
+
+
+    def _form_sut_payload(self):
+        self.sut_command_payload = {
+            "api_version"  : "0.0.1",
+            "token"        : "123",
+            "date"         : "Sun Dec 2 14:41:13 UTC 2018",
+            "firmware"     : "OpenWSN-42a4007db7",
+            "testbed"      : self.testbed,
+            "scenario"     : self.scenario
+        }
+
+        testbed_config = os.path.join(self.scenario_config_dirs[self.scenario], "_{0}_config.json".format(self.testbed))
+
+        with open(testbed_config, 'r') as f:
+            config_obj  = json.loads(f.read())
+            eui64_start = 44
+            sut_nodes = {}
+            for key in config_obj:
+                sut_nodes[config_obj[key]['node_id']] = "00-12-4b-00-14-b5-b6-{0}".format(eui64_start)
+                eui64_start += 1
+
+            self.sut_command_payload['nodes'] = sut_nodes
 
 
     def _mqtt_client_setup(self):
@@ -109,7 +128,7 @@ class Simulator(object):
                 if  random.randint(1, 10) % 3 != 0:   # Simulate packet drop with probability of 0.3
                     self.sent.append(token)
                 else:
-                    sys.stdout.write("[SUT SIMULATOR] Droping packet...\n")
+                    sys.stdout.write("[SUT SIMULATOR] Dropping packet...")
 
             elif event == 'packetReceived':
                 rand_position = random.randint(0, len(self.sent)-1) if len(self.sent) > 0 else -1
