@@ -18,22 +18,25 @@ class Scenario(object):
 		pass
 
 
-	def _read_config(self, config_file):
+	def _read_config(self, config_files):
 		self.config_node_data = {}
+		main_config    = config_files['main']
+		testbed_config = config_files[self.testbed]
 
-		with open(config_file, 'r') as f:
-			config_obj = json.load(f)
-			generic_node_data = config_obj['nodes']
+		with open(main_config, 'r') as f:
+			with open(testbed_config, 'r') as tf:
+				main_config_obj    = json.load(f)
+				testbed_config_obj = json.load(tf)
+				
+				generic_node_data  = main_config_obj['nodes']
 
-			for generic_id in generic_node_data:
-				testbed_specific_data = config_obj[self.testbed][generic_id]
+				for generic_id in generic_node_data:
+					# Attaching testbed specific data to generic node data
+					node_data = generic_node_data[generic_id]
+					node_data['node_id'] = testbed_config_obj[generic_id]['node_id']
+					node_data['transmission_power_dbm'] = testbed_config_obj[generic_id]['transmission_power_dbm']
 
-				# Attaching testbed specific data to generic node data
-				node_data = generic_node_data[generic_id]
-				node_data['node_id'] = testbed_specific_data['node_id']
-				node_data['transmission_power_dbm'] = testbed_specific_data['transmission_power_dbm']
-
-				self.config_node_data[generic_id] = node_data
+					self.config_node_data[generic_id] = node_data
 
 	
 	def _instantiate_nodes(self):     # Instantiates node objects based on config objects and EUI-64 addresses read from sut payload
@@ -47,7 +50,7 @@ class Scenario(object):
 				'eui64'         : Utils.id_to_eui64[config_params['node_id']],
 				'role'          : config_params['role'],
 				'area'          : config_params['area'],
-				'sending_points': config_params['sending_points']
+				'sending_points': config_params['traffic_sending_points']
 			}
 			self.nodes.append(Node(params))
 
