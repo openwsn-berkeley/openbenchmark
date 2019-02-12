@@ -1,6 +1,8 @@
 import sys
 import time
 import json
+import random
+import string
 
 from utils import Utils
 from scenarios.scenario import Scenario
@@ -43,11 +45,13 @@ class Scheduler:
 			for sending_point in node.sending_points:
 				time_sec    = sending_point["time_sec"]
 				destination = sending_point["destination"]
+				confirmable = sending_point["confirmable"]
 
 				self.schedule.append({
 					"time_sec"          : time_sec,
 					"node"              : node,
-					"destination_eui64" : Utils.id_to_eui64[ self.scenario.config_node_data[destination]['node_id'] ]
+					"destination_eui64" : Utils.id_to_eui64[ self.scenario.config_node_data[destination]['node_id'] ],
+					"confirmable"       : confirmable
 				})
 
 				self._sort_schedule()
@@ -83,11 +87,12 @@ class Scheduler:
 				sleep_interval = -1
 
 			# Assigning `sendPacket` payload as defined by the documentation
+			payload = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(self.scenario.main_config['payload_size']))
 			currently_on["node"].command_exec(payload={
-					'source': currently_on["node"].eui64,
-					'destination': currently_on["destination_eui64"],
-					'packetPayload': [],
-					'confirmable': True
+					'source'       : currently_on["node"].eui64,
+					'destination'  : currently_on["destination_eui64"],
+					'packetPayload': [int(elem.encode("hex"), 16) for elem in payload],
+					'confirmable'  : currently_on["confirmable"]
 				})
 
 			if sleep_interval == -1:
