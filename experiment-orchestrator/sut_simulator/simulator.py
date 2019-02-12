@@ -19,12 +19,12 @@ class Simulator(object):
     _instance = None
 
     @staticmethod
-    def create():
+    def create(testbed, scenario, broker="broker.mqttdashboard.com"):
         if Simulator._instance == None:
-            Simulator._instance = Simulator()
+            Simulator._instance = Simulator(testbed, scenario, broker)
         return Simulator._instance
 
-    def __init__(self, testbed="iotlab",  broker="broker.mqttdashboard.com", scenario="building-automation"):
+    def __init__(self, testbed, scenario, broker):
         self.experiment_id      = Utils.experiment_id
         self.testbed            = testbed
         self.broker             = broker
