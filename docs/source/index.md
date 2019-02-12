@@ -500,6 +500,7 @@ Example:
         "packetPayloadLen" : 5,
         "confirmable"      : true
     }
+
 ```
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
@@ -582,7 +583,61 @@ Example:
         "success"      : true,
     }
 ```
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
+## Trigger Network Formation
+
+*Description:* This command is sent by the Experiment Controller to the SUT to trigger the formation of the network, and so the experiment.
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+### Request
+
+MQTT topic:
+
+```
+    openbenchmark/experimentId/EXPERIMENTID/command/triggerNetworkFormation
+```
+
+EXPERIMENTID MUST be set to the value obtained from the `startBenchmark` response.
+
+Payload of the request MUST be a JSON object with following fields:
+
+Field name   | Description                                                        | JSON Type
+------------ | ------------------------------------------------------------------ | -------
+token        | Random token used to match the response                            | string
+source       | EUI-64 of the node that MUST act as the coordinator of the network | string
+
+```
+Example:
+    {
+        "token"        : "123",
+        "source"       : "00-12-4b-00-14-b5-b6-44",
+    }
+```
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+### Response
+
+```
+topic:
+    openbenchmark/experimentId/EXPERIMENTID/response/triggerNetworkFormation
+```
+Payload of the response MUST be a JSON object with following fields:
+
+Field name   | Description                             | JSON Type | Presence Requirement
+------------ | --------------------------------------- | --------- | ---------------------
+token        | Token echoed from the request           | string    | MUST
+success      | Indicator of success                    | bool      | MUST
+
+```
+Example:
+    {
+        "token"        : "123",
+        "success"      : true,
+    }
+```
 <!-- ====================================================================== -->
 
 # Experiment Performance Events API
