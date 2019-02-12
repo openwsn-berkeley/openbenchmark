@@ -1,0 +1,36 @@
+action: RUN
+actionOutputs : [ { "format" : "TXT", "target" : "STDOUT"  } ]
+debugOutputs : [ { "level" : "DEBUG", "format" : "TXT_FULL", "target" : "STDOUT"} ]
+callOutputs: [ { "format" : "TEXT", "target" : "FILE", "filename" : "calls.txt" } ]
+deleteOn:
+  failBecomeReady: false
+  failConnectivityTest: false
+  failCreate: true
+  failESpec: false
+  failLinkTest: false
+experiment:
+  eSpec:
+    providedContentSource: opentestbed
+  overrideESpecRSpec: false
+  provision: {}
+  requestRSpec: null
+  runLinkTest: false
+  slice:
+    sliceName: exp
+    expireTimeMin: 30
+    failIfNoProject: true
+    project: soda
+    projectSource: PROVIDED
+    failOnExistingSlice: false
+    renewExistingSliceIfNeeded: true
+  waitForReady:
+    enabled: false
+shareWith:
+  projectMembers: false
+  users: []
+user:
+  password: *****
+  passwordMethod: DIRECT
+  pem:
+  - login.pem
+  speaksForCredential: []
