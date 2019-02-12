@@ -42,3 +42,6 @@ sudo apt-get install x11-xserver-utils -y
 # jFed proxy configuration
 mkdir ~/.jFed
 cp $OPENBENCHMARK_DIR/system-config/experimenter-ssh.properties ~/.jFed
+
+# dos2unix on sh files
+dos2unix *.sh
