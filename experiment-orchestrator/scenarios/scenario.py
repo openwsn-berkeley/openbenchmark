@@ -20,21 +20,21 @@ class Scenario(object):
 
 	def _read_config(self, config_files):
 		self.config_node_data = {}
-		main_config    = config_files['main']
-		testbed_config = config_files[self.testbed]
+		main_config_file    = config_files['main']
+		testbed_config_file = config_files[self.testbed]
 
-		with open(main_config, 'r') as f:
-			with open(testbed_config, 'r') as tf:
-				main_config_obj    = json.load(f)
-				testbed_config_obj = json.load(tf)
+		with open(main_config_file, 'r') as f:
+			with open(testbed_config_file, 'r') as tf:
+				self.main_config    = json.load(f)
+				self.testbed_config = json.load(tf)
 				
-				generic_node_data  = main_config_obj['nodes']
+				generic_node_data   = self.main_config['nodes']
 
 				for generic_id in generic_node_data:
 					# Attaching testbed specific data to generic node data
 					node_data = generic_node_data[generic_id]
-					node_data['node_id'] = testbed_config_obj[generic_id]['node_id']
-					node_data['transmission_power_dbm'] = testbed_config_obj[generic_id]['transmission_power_dbm']
+					node_data['node_id'] = self.testbed_config[generic_id]['node_id']
+					node_data['transmission_power_dbm'] = self.testbed_config[generic_id]['transmission_power_dbm']
 
 					self.config_node_data[generic_id] = node_data
 
@@ -58,4 +58,5 @@ class Scenario(object):
 	def __init__(self, sut_command):
 		self.testbed         = sut_command['testbed']   # Testbed and nodes data passed from the MQTT payload (see _README.md, step 2)
 		self.nodes           = []                       # List of objects of type Node
-		self.config_object   = None                     # Instantiating nodes based on _config.json data and data received from SUT
+		self.main_config     = None                     # Scenario configuration parameters (type: dict)
+		self.testbed_config  = None 					# Testbed specific cenario configuration parameters (type: dict)
