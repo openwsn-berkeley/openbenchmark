@@ -19,9 +19,13 @@ class Generator:
 		current_instant  = 0
 		sending_points   = []
 
-		while current_instant < self.exp_duration:
+		while 'current_instant is less than the exp_duration':
 			interval = np.random.uniform(bottom_interval, top_interval)
 			current_instant += interval
+
+			if current_instant >= self.exp_duration:
+				break
+
 			node = random.choice(node_pool)
 
 			if packets_in_burst > 1:
@@ -48,6 +52,7 @@ class Generator:
 		top_interval       = 0
 		sending_points     = []
 
+		# No do-while loop here because of the list comprehension filter on current_instants
 		while top_interval < self.exp_duration:
 			bottom_interval  = top_interval
 			top_interval     = bottom_interval + period
