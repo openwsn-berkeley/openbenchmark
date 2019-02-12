@@ -31,7 +31,9 @@ cd $JFED_DIR
 wget https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz
 wget -O openjfx-11.0.2_linux-x64_bin-sdk.zip http://gluonhq.com/download/javafx-11-0-2-sdk-linux/
 sudo tar xfz openjdk-11.0.2_linux-x64_bin.tar.gz --directory /usr/lib/jvm
-sudo unzip openjfx-11.0.2_linux-x64_bin-sdk.zip -d /usr/lib/jvm 
+sudo unzip openjfx-11.0.2_linux-x64_bin-sdk.zip -d /usr/lib/jvm
+rm openjdk-11.0.2_linux-x64_bin.tar.gz
+rm openjfx-11.0.2_linux-x64_bin-sdk.zip
 
 # Install xvfb
 sudo apt-get install x11-xserver-utils -y
