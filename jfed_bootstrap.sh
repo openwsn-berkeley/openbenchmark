@@ -35,7 +35,8 @@ sudo unzip openjfx-11.0.2_linux-x64_bin-sdk.zip -d /usr/lib/jvm
 rm openjdk-11.0.2_linux-x64_bin.tar.gz
 rm openjfx-11.0.2_linux-x64_bin-sdk.zip
 
-# Install xvfb
+# Install xvfb and xrandr
+sudo apt-get install xvfb -y
 sudo apt-get install x11-xserver-utils -y
 
 # jFed proxy configuration
