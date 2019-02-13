@@ -45,12 +45,13 @@ class Scenario(object):
 		for generic_id in self.config_node_data:
 			config_params = self.config_node_data[generic_id]
 			params = {
-				'generic_id'    : generic_id,
-				'node_id'       : config_params['node_id'],
-				'eui64'         : Utils.id_to_eui64[config_params['node_id']],
-				'role'          : config_params['role'],
-				'area'          : config_params['area'],
-				'sending_points': config_params['traffic_sending_points']
+				'generic_id'        : generic_id,
+				'node_id'           : config_params['node_id'],
+				'eui64'             : Utils.id_to_eui64[config_params['node_id']],
+				'role'              : config_params['role'],
+				'area'              : config_params['area'],
+				'sending_points'    : config_params['traffic_sending_points'],
+				'transmission_power': config_params['transmission_power_dbm']
 			}
 			self.nodes.append(Node(params))
 
