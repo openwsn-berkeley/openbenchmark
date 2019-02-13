@@ -40,14 +40,16 @@ class MQTTClient:
 			"startBenchmark": "openbenchmark/command/startBenchmark",  # Subscribing on the command (receiving)
 			"echo": "openbenchmark/experimentId/{0}/+/echo".format(self.experiment_id),   # Subscribing on both
 			"sendPacket": "openbenchmark/experimentId/{0}/response/sendPacket".format(self.experiment_id),
-			"configureTransmitPower": "openbenchmark/experimentId/{0}/response/configureTransmitPower".format(self.experiment_id)
+			"configureTransmitPower": "openbenchmark/experimentId/{0}/response/configureTransmitPower".format(self.experiment_id),
+			"triggerNetworkFormation": "openbenchmark/experimentId/{0}/response/triggerNetworkFormation".format(self.experiment_id)
 		}
 		self.pub_topics = {
 			"startBenchmark": "openbenchmark/response/startBenchmark",  # Publishing on response (after receving)
 			"echoCommand": "openbenchmark/experimentId/{0}/command/echo".format(self.experiment_id),   # Can publish on both
 			"echoResponse": "openbenchmark/experimentId/{0}/response/echo".format(self.experiment_id), ###
 			"sendPacket": "openbenchmark/experimentId/{0}/command/sendPacket".format(self.experiment_id),
-			"configureTransmitPower": "openbenchmark/experimentId/{0}/command/configureTransmitPower".format(self.experiment_id)
+			"configureTransmitPower": "openbenchmark/experimentId/{0}/command/configureTransmitPower".format(self.experiment_id),
+			"triggerNetworkFormation": "openbenchmark/experimentId/{0}/command/triggerNetworkFormation".format(self.experiment_id)
 		}
 		self.epe_sub_topics = {  # Experiment Performance Events
 			"performanceData": "openbenchmark/experimentId/{0}/nodeId/+/performanceData".format(self.experiment_id)
@@ -134,7 +136,7 @@ class MQTTClient:
 			
 
 	def _on_startBenchmark_command(self, payload):
-		# Should start scheduler and KPI processing unit and send startBenchmark response
+		# Should start network preparation module
 		payload_obj = json.loads(payload)
 
 		self.publish('startBenchmark', {
@@ -161,6 +163,9 @@ class MQTTClient:
 		self.notify_api_response(payload)
 
 	def _on_configureTransmitPower_response(self, payload):
+		self.notify_api_response(payload)
+
+	def _on_triggerNetworkFormation_response(self, payload):
 		self.notify_api_response(payload)
 
 	def _on_performanceData(self, payload):
