@@ -47,9 +47,9 @@ class API:
 
 	##### API implementation #####
 	def _assign_token(self, payload):
-		token = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(15))
+		token = ''.join([random.choice(string.ascii_lowercase + string.digits) for _ in range(4)])
 		payload['token']       = token
-		payload['packetToken'] = [int(elem.encode("hex"), 16) for elem in token]
+		payload['packetToken'] = [0] + [int(elem.encode("hex"), 16) for elem in token]
 		return payload
 
 	def command_exec(self, command, payload):
