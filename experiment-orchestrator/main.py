@@ -71,7 +71,7 @@ class Main():
 
 
 	def _start_scheduler(self):
-		Scheduler(json.dumps(self.sut_command_payload))
+		Scheduler(json.dumps(self.sut_command_payload)).start()
 
 	def _start_kpi_processing(self):
 		KPIProcessing().start()

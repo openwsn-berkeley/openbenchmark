@@ -32,6 +32,7 @@ class Scheduler:
 
 		self.scenario = self.scenarios[sut_command['scenario']](sut_command) 
 
+	def start(self):
 		self._generate_schedule()
 		self._start_schedule()
 
