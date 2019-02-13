@@ -479,14 +479,15 @@ EXPERIMENTID MUST be set to the value obtained from the `startBenchmark` respons
 
 Payload of the request MUST be a JSON object with following fields:
 
-Field name    | Description                                                                              | JSON Type
-------------- | ---------------------------------------------------------------------------------------- | -------
-token         | Random token used to match the response                                                  | string
-source        | EUI-64 of the node that MUST send an application packet                                  | string
-destination   | EUI-64 of the destination node                                                           | string
-packetToken   | Array of 4 bytes that MUST be included in the payload of the packet sent                 | array
-packetPayload | Variable length array that MUST be included in the packet payload after the packetToken  | array
-confirmable   | Whether the packet should be acknowledged at the application layer                       | bool
+Field name       | Description                                                                                                           | JSON Type
+---------------- | --------------------------------------------------------------------------------------------------------------------- | -------
+token            | Random token used to match the response                                                                               | string
+source           | EUI-64 of the node that MUST send an application packet                                                               | string
+destination      | EUI-64 of the destination node                                                                                        | string
+packetsInBurst   | Number of packets in the burst that MUST be generated consequently by the node                                        | integer
+packetToken      | Array of 5 bytes, MUST be included in the payload. First byte of the included token MUST correspond to packet index in the burst | array
+packetPayloadLen | Length of the dummy payload that MUST be included in the packet                                                       | integer
+confirmable      | Whether the packet should be acknowledged at the application layer                                                    | bool
 
 ```
 Example:
@@ -494,11 +495,12 @@ Example:
         "token"            : "123",
         "source"           : "00-12-4b-00-14-b5-b6-44",
         "destination"      : "00-12-4b-00-14-b5-b6-45",
-        "packets_in_burst" : 1
-        "packetToken"      : [124, 122, 34, 31],
-        "packetPayload"    : [],
+        "packetsInBurst"   : 1
+        "packetToken"      : [00, 124, 122, 34, 31],
+        "packetPayloadLen" : 5,
         "confirmable"      : true
     }
+
 ```
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
@@ -581,7 +583,61 @@ Example:
         "success"      : true,
     }
 ```
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
+## Trigger Network Formation
+
+*Description:* This command is sent by the Experiment Controller to the SUT to trigger the formation of the network, and so the experiment.
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+### Request
+
+MQTT topic:
+
+```
+    openbenchmark/experimentId/EXPERIMENTID/command/triggerNetworkFormation
+```
+
+EXPERIMENTID MUST be set to the value obtained from the `startBenchmark` response.
+
+Payload of the request MUST be a JSON object with following fields:
+
+Field name   | Description                                                        | JSON Type
+------------ | ------------------------------------------------------------------ | -------
+token        | Random token used to match the response                            | string
+source       | EUI-64 of the node that MUST act as the coordinator of the network | string
+
+```
+Example:
+    {
+        "token"        : "123",
+        "source"       : "00-12-4b-00-14-b5-b6-44",
+    }
+```
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+### Response
+
+```
+topic:
+    openbenchmark/experimentId/EXPERIMENTID/response/triggerNetworkFormation
+```
+Payload of the response MUST be a JSON object with following fields:
+
+Field name   | Description                             | JSON Type | Presence Requirement
+------------ | --------------------------------------- | --------- | ---------------------
+token        | Token echoed from the request           | string    | MUST
+success      | Indicator of success                    | bool      | MUST
+
+```
+Example:
+    {
+        "token"        : "123",
+        "success"      : true,
+    }
+```
 <!-- ====================================================================== -->
 
 # Experiment Performance Events API
