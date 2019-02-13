@@ -5,7 +5,9 @@ import random
 import string
 import json
 import argparse
+import colorama
 from utils import Utils
+from network_prep import NetworkPrep
 from sut_simulator.simulator import Simulator
 from mqtt_client.mqtt_client import MQTTClient
 from kpi.processing import KPIProcessing
@@ -35,8 +37,16 @@ class Main():
 		print "[MAIN] Lock released on `startBenchmark` command"
 		self.sut_command_payload = self.co.sut_command_payload
 
-		threading.Thread(target=self._start_scheduler).start()
+		self._start_network_prep()
 		threading.Thread(target=self._start_kpi_processing).start()
+
+		time_padding = Utils.scenario.main_config['nf_time_padding_min']
+		print "[MAIN] Scheduler will start in {0} minutes...".format(time_padding)
+
+		threading.Timer(
+			time_padding * 60, 
+			self._start_scheduler
+		).start()
 
 		
 	def _take_arguments(self):
@@ -70,11 +80,14 @@ class Main():
 		)
 
 
-	def _start_scheduler(self):
-		Scheduler(json.dumps(self.sut_command_payload)).start()
+	def _start_network_prep(self):
+		NetworkPrep(json.dumps(self.sut_command_payload)).start()
 
 	def _start_kpi_processing(self):
 		KPIProcessing().start()
+
+	def _start_scheduler(self):
+		Scheduler().start()
 
 	def _start_simulator(self):
 		Simulator.create(testbed=self.testbed, scenario=self.scenario)
