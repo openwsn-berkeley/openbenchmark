@@ -97,4 +97,9 @@ if __name__ == "__main__":
 	try: 
 		Main()
 	except Exception, e:
-		print("Exception: " + str(e))
+		sys.stdout.write("{0}[MAIN] Exception: {1}\n{2}".format(
+				colorama.Fore.RED,
+				str(e), 
+				colorama.Style.RESET_ALL
+			))
+		sys.exit()
