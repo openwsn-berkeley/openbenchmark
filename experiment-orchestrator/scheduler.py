@@ -29,13 +29,13 @@ class Scheduler:
 
 		Utils.id_to_eui64 = sut_command['nodes']
 		Utils.eui64_to_id = {v: k for k, v in sut_command['nodes'].items()}
+		Utils.scenario    = self.scenarios[sut_command['scenario']](sut_command) 
 
-		self.scenario = self.scenarios[sut_command['scenario']](sut_command) 
+		self.scenario = Utils.scenario
 
 	def start(self):
 		self._generate_schedule()
 		self._start_schedule()
-
 
 	# Used only within `generate_schedule`
 	def _sort_schedule(self):
