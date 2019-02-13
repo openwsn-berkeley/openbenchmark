@@ -44,7 +44,7 @@ class Simulator(object):
         self.events = [
             "packetSent",
             "packetReceived"
-            #"networkFormationCompleted",
+            "networkFormationCompleted",
             #"syncronizationCompleted",
             #"secureJoinCompleted",
             #"bandwidthAssigned",
@@ -56,10 +56,14 @@ class Simulator(object):
         self.sub_topics = {
             "startBenchmark": "openbenchmark/response/startBenchmark",
             "sendPacket": "openbenchmark/experimentId/{0}/command/sendPacket".format(self.experiment_id),
+            "configureTransmitPower": "openbenchmark/experimentId/{0}/command/configureTransmitPower".format(self.experiment_id),
+            "triggerNetworkFormation": "openbenchmark/experimentId/{0}/command/triggerNetworkFormation".format(self.experiment_id)
         }
         self.pub_topics = {
             "startBenchmark": "openbenchmark/command/startBenchmark",
             "sendPacket": "openbenchmark/experimentId/{0}/response/sendPacket".format(self.experiment_id),
+            "configureTransmitPower": "openbenchmark/experimentId/{0}/response/configureTransmitPower".format(self.experiment_id),
+            "triggerNetworkFormation": "openbenchmark/experimentId/{0}/response/triggerNetworkFormation".format(self.experiment_id),
             "performanceData": "openbenchmark/experimentId/{0}/nodeId/00-12-4b-00-14-b5-b6-44/performanceData".format(self.experiment_id)
         }
 
@@ -112,8 +116,11 @@ class Simulator(object):
     def publish(self, topic, payload):
         self.client.publish(self.pub_topics[topic], json.dumps(payload))
 
-    def _generate_sut_event_payload(self):
-        event = self.events[random.randint(0, len(self.events)-1)]
+    def _generate_sut_event_payload(self, event=None):
+        # If event is not specified choose at random
+        if event == None:    
+            event = self.events[random.randint(0, len(self.events)-1)]
+
         sut_event_payload = {
             "event"    : event,
             "timestamp": time.time(),
@@ -172,6 +179,10 @@ class Simulator(object):
             self._on_startBenchmark(payload)
         elif topic == self.sub_topics['sendPacket']:
         	self._on_sendPacket(payload)
+        elif topic == self.sub_topics['configureTransmitPower']:
+            self._on_configureTransmitPower(payload)
+        elif topic == self.sub_topics['triggerNetworkFormation']:
+            self._on_triggerNetworkFormation(payload)
             
 
     def _on_startBenchmark(self, payload):
@@ -187,5 +198,28 @@ class Simulator(object):
             
             self.publish('performanceData', json.dumps(self._generate_sut_event_payload()))
             sys.stdout.write("[SUT SIMULATOR] `sendPacket` event generated\n")
+        except Exception, e:
+            print "[SUT SIMULATOR] Exception: " + str(e)
+
+    def _on_configureTransmitPower(self, payload):
+        try:
+            payload_obj = json.loads(payload)
+            self.publish('configureTransmitPower', {
+                    'token': payload_obj['token'],
+                    'success': True    # if random.randint(0, 9) != 0 else False
+                })
+        except Exception, e:
+            print "[SUT SIMULATOR] Exception: " + str(e)
+
+    def _on_triggerNetworkFormation(self, payload):
+        try:
+            payload_obj = json.loads(payload)
+            self.publish('triggerNetworkFormation', {
+                    'token': payload_obj['token'],
+                    'success': True    # if random.randint(0, 9) != 0 else False
+                })
+            
+            self.publish('performanceData', json.dumps(self._generate_sut_event_payload('networkFormationCompleted')))
+            sys.stdout.write("[SUT SIMULATOR] `networkFormationCompleted` event generated\n")
         except Exception, e:
             print "[SUT SIMULATOR] Exception: " + str(e)
