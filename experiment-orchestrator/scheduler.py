@@ -5,32 +5,16 @@ import random
 import string
 
 from utils import Utils
-from scenarios.scenario import Scenario
-from scenarios.building_automation.building_automation import BuildingAutomation
-from scenarios.home_automation.home_automation import HomeAutomation
-from scenarios.industrial_monitoring.industrial_monitoring import IndustrialMonitoring
+
 
 class Scheduler:
 
 	nodes        = []   # Array of type `Node`
 	schedule     = []   # Array of dictionaries {"time_sec": type `float`, "node": type `Node`, "destination_eui64: `String`"}
 
-	scenarios = {
-		"building-automation"   : BuildingAutomation,
-		"home-automation"       : HomeAutomation,
-		"industrial-monitoring" : IndustrialMonitoring
-	}
-
 	scheduler_delay = 5   #[s]
 
-	def __init__(self, sut_command_payload):
-		# Get scenario instance based on the SUT command payload
-		sut_command   = json.loads(sut_command_payload)
-
-		Utils.id_to_eui64 = sut_command['nodes']
-		Utils.eui64_to_id = {v: k for k, v in sut_command['nodes'].items()}
-		Utils.scenario    = self.scenarios[sut_command['scenario']](sut_command) 
-
+	def __init__(self):
 		self.scenario = Utils.scenario
 
 	def start(self):
