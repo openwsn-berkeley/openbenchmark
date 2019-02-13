@@ -50,6 +50,12 @@ class Wizard:
 			Identifiers.im: 10
 		}
 
+		self.nf_time_padding_min = {
+			Identifiers.ba: 5,
+			Identifiers.ha: 5,
+			Identifiers.im: 5,
+		}
+
 
 		self.info       = {}   # fields: identifier, duration_min, number_of_nodes, 
 		self.nodes      = OrderedDict()
@@ -98,6 +104,7 @@ class Wizard:
 		self.info['duration_min'] = input("Duration in minutes (e.g. 30): ")
 		self.info['number_of_nodes'] = input("Number of nodes (e.g. 10): ")
 		self.info['payload_size'] = self.default_payload_size[self.info['identifier']]
+		self.info['nf_time_padding_min'] = self.nf_time_padding_min[self.info['identifier']]
 
 		self.generator = Generator(self.info['duration_min'] * 60)
 
@@ -207,11 +214,12 @@ class Wizard:
 
 		with open(os.path.abspath(os.path.join(path, '_config.json')), 'w') as f:
 			content = OrderedDict()
-			content['identifier']      = self.info['identifier']
-			content['duration_min']    = self.info['duration_min']
-			content['number_of_nodes'] = self.info['number_of_nodes'] 
-			content['payload_size']    = self.info['payload_size']
-			content['nodes']           = self.nodes
+			content['identifier']          = self.info['identifier']
+			content['duration_min']        = self.info['duration_min']
+			content['number_of_nodes']     = self.info['number_of_nodes'] 
+			content['payload_size']        = self.info['payload_size']
+			content['nf_time_padding_min'] = self.info['nf_time_padding_min']
+			content['nodes']               = self.nodes
 			f.write(json.dumps(content, indent=4))
 
 		for testbed in self.specifics:
