@@ -75,8 +75,10 @@ class KPIProcessing:
 
 	def _process_event(self, payload):
 		# Should implement logic for event payload processing and updating log file
-		payload['node_id'] = Utils.eui64_to_id[payload['source']]
-		payload['dest_node_id'] = Utils.eui64_to_id[payload['destination']]
+		if payload['event'] in ["packetSent", "packetReceived"]:
+			payload['node_id'] = Utils.eui64_to_id[payload['source']]
+			payload['dest_node_id'] = Utils.eui64_to_id[payload['destination']]
+
 		self.logger.log('raw', payload)
 		self._kpi_calculate(payload)
 
@@ -138,28 +140,23 @@ class KPIProcessing:
 		self._log_reliability(payload)
 			
 	def _networkFormationTime(self, event_obj):
+		print str(event_obj)
 		self.logger.log('kpi', {
 				'kpi'      : 'networkFormationTime',
-				'eui64'    : event_obj['eui64'],
-				'node_id'  : event_obj['node_id'],
-				'timestamp': event_obj['event_payload']['timestamp'],
+				'timestamp': event_obj['timestamp'],
 				'value'    : 1
 			})
 
 	def _synchronizationPhase(self, event_obj):
 		self.logger.log('kpi', {
 				'kpi'      : 'syncronizationPhase',
-				'eui64'    : event_obj['eui64'],
-				'node_id'  : Utils.eui64_to_id[event_obj['eui64']],
-				'timestamp': event_obj['event_payload']['timestamp'],
+				'timestamp': event_obj['timestamp'],
 				'value'    : 1
 			})
 
 	def _secureJoinPhase(self, event_obj):
 		self.logger.log('kpi', {
 				'kpi'      : 'secureJoinPhase',
-				'eui64'    : event_obj['eui64'],
-				'node_id'  : Utils.eui64_to_id[event_obj['eui64']],
 				'timestamp': event_obj['event_payload']['timestamp'],
 				'value'    : 1
 			})
@@ -169,7 +166,7 @@ class KPIProcessing:
 				'kpi'      : 'bandwidthAssignment',
 				'node_id'  : Utils.eui64_to_id[event_obj['eui64']],
 				'eui64'    : event_obj['eui64'],
-				'timestamp': event_obj['event_payload']['timestamp'],
+				'timestamp': event_obj['timestamp'],
 				'value'    : 1
 			})
 
@@ -178,6 +175,6 @@ class KPIProcessing:
 				'kpi'      : 'radioDutyCycle',
 				'eui64'    : event_obj['eui64'],
 				'node_id'  : Utils.eui64_to_id[event_obj['eui64']],
-				'timestamp': event_obj['event_payload']['timestamp'],
-				'value'    : event_obj['event_payload']['dutyCycle']
+				'timestamp': event_obj['timestamp'],
+				'value'    : event_obj['dutyCycle']
 			}) 
