@@ -15,5 +15,5 @@ class Node:
 		self.transmission_power = params['transmission_power']
 		self.api                = API(timeout=10)
 
-	def command_exec(self, payload, command='sendPacket'):
-		self.api.command_exec(command, payload)
+	def command_exec(self, payload, command='sendPacket', blocking=False):
+		return self.api.command_exec(command, payload, blocking)

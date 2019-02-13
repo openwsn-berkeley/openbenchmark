@@ -38,11 +38,18 @@ class API:
 				colorama.Style.RESET_ALL
 			))
 		else:
-			sys.stdout.write("{0}[API] {1}\n{2}".format(colorama.Fore.RED, json.dumps({
+			payload = json.dumps({
 				"token"  : token,
 				"success": False,
 				"reason" : "timeout"
-			}), colorama.Style.RESET_ALL))
+			})
+			sys.stdout.write("{0}[API] {1}\n{2}".format(
+				colorama.Fore.RED,
+				payload, 
+				colorama.Style.RESET_ALL
+			))
+		
+		return payload
 
 
 	##### API implementation #####
@@ -52,8 +59,12 @@ class API:
 		payload['packetToken'] = [0] + [int(elem.encode("hex"), 16) for elem in token]
 		return payload
 
-	def command_exec(self, command, payload):
+	def command_exec(self, command, payload, blocking):
+		if blocking: 
+			return self._publish_command(payload, command)
+
 		threading.Thread(target=self._publish_command, args=[payload, command]).start()
+		return ''
 
 	def _publish_command(self, payload, command):
 		# Publishes MQTT command and puts thread into waiting state until notified or timeout
@@ -62,4 +73,4 @@ class API:
 			command,
 			payload
 		)
-		self._wait(payload['token'])
+		return self._wait(payload['token'])
