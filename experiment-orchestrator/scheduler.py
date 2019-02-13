@@ -87,11 +87,10 @@ class Scheduler:
 				sleep_interval = -1
 
 			# Assigning `sendPacket` payload as defined by the documentation
-			payload = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(self.scenario.main_config['payload_size']))
 			currently_on["node"].command_exec(payload={
 					'source'       : currently_on["node"].eui64,
 					'destination'  : currently_on["destination_eui64"],
-					'packetPayload': [int(elem.encode("hex"), 16) for elem in payload],
+					'packetPayloadLen': self.scenario.main_config['payload_size'],
 					'confirmable'  : currently_on["confirmable"]
 				})
 
