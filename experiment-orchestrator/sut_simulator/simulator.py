@@ -14,6 +14,16 @@ from mqtt_client._condition_object import ConditionObject
 from utils import Utils
 
 
+class Events:
+    packetSent     = "packetSent"
+    packetReceived = "packetReceived"
+    networkFormationCompleted = "networkFormationCompleted"
+    syncronizationCompleted   = "syncronizationCompleted"
+    secureJoinCompleted       = "secureJoinCompleted"
+    bandwidthAssigned         = "bandwidthAssigned"
+    radioDutyCycleMeasurement = "radioDutyCycleMeasurement"
+
+
 class Simulator(object):
 
     _instance = None
@@ -40,16 +50,6 @@ class Simulator(object):
         }
 
         self._form_sut_payload()
-
-        self.events = [
-            "packetSent",
-            "packetReceived"
-            "networkFormationCompleted",
-            #"syncronizationCompleted",
-            #"secureJoinCompleted",
-            #"bandwidthAssigned",
-            #"radioDutyCycleMeasurement"
-        ]
 
         self.sent = []
 
@@ -126,18 +126,18 @@ class Simulator(object):
             "timestamp": time.time(),
         }
         
-        if event == "radioDutyCycleMeasurement":
+        if event == Events.radioDutyCycleMeasurement:
             sut_event_payload["dutyCycle"] = random.uniform(0, 1)
 
-        elif event in ["packetSent", "packetReceived"]:
-            if event == 'packetSent':
+        elif event in [Events.packetSent, Events.packetReceived]:
+            if event == Events.packetSent:
                 token = [random.randint(0, 255) for i in range(15)]
                 if  random.randint(1, 10) % 3 != 0:   # Simulate packet drop with probability of 0.3
                     self.sent.append(token)
                 else:
                     sys.stdout.write("[SUT SIMULATOR] Dropping packet...")
 
-            elif event == 'packetReceived':
+            elif event == Events.packetReceived:
                 rand_position = random.randint(0, len(self.sent)-1) if len(self.sent) > 0 else -1
                 token = self.sent[rand_position] if rand_position > -1 else []
                 if rand_position > -1:
