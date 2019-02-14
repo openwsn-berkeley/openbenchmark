@@ -119,7 +119,7 @@ class Simulator(object):
     def _generate_sut_event_payload(self, event=None):
         # If event is not specified choose at random
         if event == None:    
-            event = self.events[random.randint(0, len(self.events)-1)]
+            event = [Events.packetSent, Events.packetReceived][random.randint(0, 1)]
 
         sut_event_payload = {
             "event"    : event,
@@ -147,6 +147,8 @@ class Simulator(object):
             sut_event_payload["source"]      = "00-12-4b-00-14-b5-b6-44"
             sut_event_payload["destination"] = "00-12-4b-00-14-b5-b6-45"
             sut_event_payload["hopLimit"]    = 255
+
+        print "[SUT SIMULATOR] {0} event generated".format(event)
 
         return sut_event_payload
 
@@ -197,7 +199,6 @@ class Simulator(object):
                 })
             
             self.publish('performanceData', json.dumps(self._generate_sut_event_payload()))
-            sys.stdout.write("[SUT SIMULATOR] `sendPacket` event generated\n")
         except Exception, e:
             print "[SUT SIMULATOR] Exception: " + str(e)
 
@@ -220,6 +221,5 @@ class Simulator(object):
                 })
             
             self.publish('performanceData', json.dumps(self._generate_sut_event_payload('networkFormationCompleted')))
-            sys.stdout.write("[SUT SIMULATOR] `networkFormationCompleted` event generated\n")
         except Exception, e:
             print "[SUT SIMULATOR] Exception: " + str(e)
