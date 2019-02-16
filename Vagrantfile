@@ -65,7 +65,9 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", inline: <<-SHELL
     apt-get update
     apt-get install -y dos2unix
-	dos2unix ./openbenchmark/bootstrap.sh
+	  dos2unix ./openbenchmark/bootstrap.sh
+    dos2unix ./openbenchmark/jfed_bootstrap.sh
+    dos2unix ./openbenchmark/experiment-control/helpers/wilab/jfed_cli/*.sh
   SHELL
   
   config.vm.provision "shell", run: 'always', inline: <<-SHELL
