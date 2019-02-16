@@ -24,23 +24,29 @@ rm jfed_cli.tar.gz
 rm -rf jfed_cli
 
 # Opentestbed ESPEC clone
-git clone -b espec --single-branch https://github.com/twalcari/opentestbed.git
+if [ ! -d "opentestbed" ]; then
+	git clone -b espec --single-branch https://github.com/twalcari/opentestbed.git
+fi
 
 # Java 11 and JavaFX 11 download
 cd $JFED_DIR
-wget https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz
-wget -O openjfx-11.0.2_linux-x64_bin-sdk.zip http://gluonhq.com/download/javafx-11-0-2-sdk-linux/
-sudo tar xfz openjdk-11.0.2_linux-x64_bin.tar.gz --directory /usr/lib/jvm
-sudo unzip openjfx-11.0.2_linux-x64_bin-sdk.zip -d /usr/lib/jvm
-rm openjdk-11.0.2_linux-x64_bin.tar.gz
-rm openjfx-11.0.2_linux-x64_bin-sdk.zip
+if [ ! -f "/usr/lib/jvm/jdk-11.0.2"]; then
+	wget https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz
+	sudo tar xfz openjdk-11.0.2_linux-x64_bin.tar.gz --directory /usr/lib/jvm
+	rm openjdk-11.0.2_linux-x64_bin.tar.gz
+fi
+if [ ! -f "/usr/lib/jvm/javafx-sdk-11.0.2"]; then
+	wget -O openjfx-11.0.2_linux-x64_bin-sdk.zip http://gluonhq.com/download/javafx-11-0-2-sdk-linux/
+	sudo unzip openjfx-11.0.2_linux-x64_bin-sdk.zip -d /usr/lib/jvm
+	rm openjfx-11.0.2_linux-x64_bin-sdk.zip
+fi
 
 # Install xvfb and xrandr
 sudo apt-get install xvfb -y
 sudo apt-get install x11-xserver-utils -y
 
 # jFed proxy configuration
-mkdir ~/.jFed
+mkdir -p ~/.jFed
 cp $OPENBENCHMARK_DIR/system-config/experimenter-ssh.properties ~/.jFed
 
 # dos2unix on sh files
