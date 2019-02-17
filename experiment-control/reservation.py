@@ -164,17 +164,18 @@ class WilabReservation(Reservation):
 		self.jfed_dir = jfed_dir
 		self.actions = {
 			"run"    : run,
-			"delete" : delete,
-			"display": display
+			"delete" : delete
 		}
 
 	def run_yml_action(self, action):
-		if action != 'display':
-			self._start_display()
+		self._start_display()
 
 		pipe = subprocess.Popen(['sh', self.actions[action]], cwd=self.jfed_dir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
 		
 		for line in iter(pipe.stdout.readline, b''):
+			print(">>> " + line.rstrip())
+
+		for line in iter(pipe.stderr.readline, b''):
 			print(">>> " + line.rstrip())
 
 	def _start_display(self):
@@ -182,8 +183,7 @@ class WilabReservation(Reservation):
 		pipe.communicate()
 
 		if pipe.returncode != 0:
-			self.run_yml_action('display')
-
+			os.system('/usr/bin/Xvfb :99 &')
 
 
 	####### Abstract method implementation #######
