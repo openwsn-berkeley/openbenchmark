@@ -16,7 +16,7 @@ experiment:
   requestRSpec: null
   runLinkTest: false
   slice:
-    sliceName: exp
+    sliceName: bench00
     expireTimeMin: 30
     failIfNoProject: true
     project: soda
