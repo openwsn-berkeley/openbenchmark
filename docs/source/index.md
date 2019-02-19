@@ -6,7 +6,11 @@ This page documents the OpenBenchmark platform developed jointly by the [SODA te
 OpenBenchmark automates the experimentation and network performance benchmarking on selected testbeds supporting Internet of Things devices compliant with IEEE 802.15.4 standard.
 OpenBenchmark instruments the execution of an experiment in real time following the pre-defined test scenarios and collects the data to calculate the network Key Performance Indicators (KPIs) in a fully automated manner.
 
-<p align="center"><img src="_static/overview.png"></p>
+
+<figure>
+  <p align="center"><img src="_static/overview.png">
+  <figcaption>Fig. 1. Overview of OpenBenchmark functionality.</figcaption></p>
+</figure>
 
 See [Terminology](#terminology) for the definition of terms used in this documentation.
 See [Scenarios](#test-scenarios) for the definition of test scenarios.
@@ -272,7 +276,10 @@ Each node in the network needs to log the measured clock drift and the identifie
 
 # OpenBenchmark Architecture
 
-<p align="center"><img src="_static/architecture.png"></p>
+<figure>
+  <p align="center"><img src="_static/architecture.png">
+  <figcaption>Fig. 2. OpenBenchmark software architecture. SUT is composed of IUTs and the Network Gateway.</figcaption></p>
+</figure>
 
 The OpenBenchmark consists of following components:
 
@@ -961,9 +968,121 @@ A test scenario is defined in a JSON config file.
 The JSON file consists of a generic part describing the scenario "instance", and a testbed-specific part describing how the instance is mapped to a specific testbed through physical nodes to use and their transmission power.
 Application traffic is encoded as an array of objects carrying the time instants relative to the beginning of the experiment when a node is instructed to send an application packet.
 These time instants follow the distributions discussed in [Test Scenarios](#test-scenarios).
-The following listing depicts a JSON snippet describing a building automation test scenario instance and its mapping to the IoT-lab testbed.
+The following listing depicts a JSON snippet describing the generic building automation test scenario instance.
 
-<p align="center"><img src="_static/scenario-json.png"></p>
+```
+
+{
+    "identifier": "building-automation",
+    "duration_min": 180,
+    "number_of_nodes": 40,
+    "payload_size": 80,
+    "nodes": {
+        "openbenchmark00": {
+            "role": "zone-controller",
+            "area": 0,
+            "traffic_sending_points": {}
+        },
+        "openbenchmark01": {
+            "role": "monitoring-sensor",
+            "area": 0,
+            "traffic_sending_points": [
+                {
+                    "time_sec": 25.708,
+                    "destination": "openbenchmark26",
+                    "confirmable": true
+                },
+                {
+                    "time_sec": 57.885,
+                    "destination": "openbenchmark06",
+                    "confirmable": true
+                },
+                {
+                    "time_sec": 87.179,
+                    "destination": "openbenchmark06",
+                    "confirmable": true
+                },
+                ...
+        },
+        "openbenchmark04": {
+            "role": "actuator",
+            "area": 0,
+            "traffic_sending_points": [
+                {
+                    "time_sec": 34.606,
+                    "destination": "openbenchmark36",
+                    "confirmable": true
+                },
+                {
+                    "time_sec": 60.302,
+                    "destination": "openbenchmark16",
+                    "confirmable": true
+                },
+        },
+        ...
+    }
+}
+```
+
+An example scenario mapping to the wilab.t testbed is presented below with node_id field denoting wilab.t-specific testbed host identifier.
+
+```
+{
+    "openbenchmark00": {
+        "node_id": "nuc10-41-0",
+        "transmission_power_dbm": -5
+    },
+    "openbenchmark01": {
+        "node_id": "nuc10-13-0",
+        "transmission_power_dbm": -5
+    },
+    "openbenchmark02": {
+        "node_id": "nuc10-13-1",
+        "transmission_power_dbm": -5
+    },
+    "openbenchmark03": {
+        "node_id": "nuc10-36-0",
+        "transmission_power_dbm": -5
+    },
+    "openbenchmark04": {
+        "node_id": "nuc10-36-1",
+        "transmission_power_dbm": -5
+    },
+    "openbenchmark05": {
+        "node_id": "nuc10-35-0",
+        "transmission_power_dbm": -5
+    },
+    "openbenchmark06": {
+        "node_id": "nuc10-35-1",
+        "transmission_power_dbm": -5
+    },
+    "openbenchmark07": {
+        "node_id": "nuc10-34-0",
+        "transmission_power_dbm": -5
+    },
+    "openbenchmark08": {
+        "node_id": "nuc10-34-1",
+        "transmission_power_dbm": -5
+    },
+    ...
+}
+```
+
+The following figure depicts the mapping of the building-automation scenario to wilab resources, and the separation of logical areas:
+
+<figure>
+  <p align="center"><img src="_static/scenario-building-wilabt.png">
+  <figcaption>Fig. 3. Mapping of building-automation scenario to wilab testbed.</figcaption></p>
+</figure>
+
+The mapping of the same scenario to iotlab Saclay site is presented below:
+
+<figure>
+  <p align="center"><img src="_static/scenario-building-iotlab.png">
+  <figcaption>Fig. 4. Mapping of building-automation scenario to iotlab testbed, Saclay site.</figcaption></p>
+</figure>
+
+The reader is referred to the [OpenBenchmark github repository](https://github.com/openwsn-berkeley/openbenchmark) for the complete specification of scenarios.
 
 <!-- ====================================================================== -->
 
