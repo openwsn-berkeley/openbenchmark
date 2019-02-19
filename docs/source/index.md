@@ -8,8 +8,8 @@ OpenBenchmark instruments the execution of an experiment in real time following 
 
 
 <figure>
-  <p align="center"><img src="_static/overview.png"></p>
-  <figcaption>Overview of OpenBenchmark functionality.</figcaption>
+  <p align="center"><img src="_static/overview.png">
+  <figcaption>Fig. 1. Overview of OpenBenchmark functionality.</figcaption></p>
 </figure>
 
 See [Terminology](#terminology) for the definition of terms used in this documentation.
@@ -277,8 +277,8 @@ Each node in the network needs to log the measured clock drift and the identifie
 # OpenBenchmark Architecture
 
 <figure>
-  <p align="center"><img src="_static/architecture.png"></p>
-  <figcaption>OpenBenchmark software architecture. SUT is composed of IUTs and the Network Gateway.</figcaption>
+  <p align="center"><img src="_static/architecture.png">
+  <figcaption>Fig. 2. OpenBenchmark software architecture. SUT is composed of IUTs and the Network Gateway.</figcaption></p>
 </figure>
 
 The OpenBenchmark consists of following components:
@@ -1071,15 +1071,15 @@ An example scenario mapping to the wilab.t testbed is presented below with node_
 The following figure depicts the mapping of the building-automation scenario to wilab resources, and the separation of logical areas:
 
 <figure>
-  <p align="center"><img src="_static/scenario-building-wilabt.png"></p>
-  <figcaption>Mapping of building-automation scenario to wilab testbed.</figcaption>
+  <p align="center"><img src="_static/scenario-building-wilabt.png">
+  <figcaption>Fig. 3. Mapping of building-automation scenario to wilab testbed.</figcaption></p>
 </figure>
 
 The mapping of the same scenario to iotlab Saclay site is presented below:
 
 <figure>
-  <p align="center"><img src="_static/scenario-building-iotlab.png"></p>
-  <figcaption>Mapping of building-automation scenario to iotlab testbed, Saclay site.</figcaption>
+  <p align="center"><img src="_static/scenario-building-iotlab.png">
+  <figcaption>Fig. 4. Mapping of building-automation scenario to iotlab testbed, Saclay site.</figcaption></p>
 </figure>
 
 The reader is referred to the [OpenBenchmark github repository](https://github.com/openwsn-berkeley/openbenchmark) for the complete specification of scenarios.
