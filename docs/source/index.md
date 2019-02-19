@@ -1082,6 +1082,8 @@ The mapping of the same scenario to iotlab Saclay site is presented below:
   <figcaption>Mapping of building-automation scenario to iotlab testbed, Saclay site.</figcaption>
 </figure>
 
+The reader is referred to the [OpenBenchmark github repository](https://github.com/openwsn-berkeley/openbenchmark) for the complete specification of scenarios.
+
 <!-- ====================================================================== -->
 
 # Supported IUTs
