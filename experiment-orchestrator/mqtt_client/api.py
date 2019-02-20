@@ -18,7 +18,6 @@ class API:
 		self.mqtt_client      = MQTTClient.create()
 		self.condition_object = ConditionObject.create()
 		self.timeout          = timeout
-		colorama.init()    # Needed for coloured log printing
 
 	def _wait(self, token):
 		self.condition_object.append_variable(token=token)

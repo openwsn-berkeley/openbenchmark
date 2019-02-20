@@ -22,6 +22,8 @@ class Main():
 
 		self._take_arguments()
 
+		colorama.init()
+
 		if self.simulator:
 			print "[MAIN] Starting simulator"
 			threading.Thread(target=self._start_simulator).start()

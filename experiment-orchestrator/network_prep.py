@@ -27,8 +27,6 @@ class NetworkPrep:
 
 		self.scenario = Utils.scenario
 
-		colorama.init()
-
 
 	def start(self):
 		try:
