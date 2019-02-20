@@ -79,9 +79,9 @@ class Wizard:
 				Roles.cu: {'number': 1,    'nodes': [], 'dest_type': [Roles.a],  'confirmable': [True],  'traffic_type': 'poisson',  'mean': 10,             'packets_in_burst': 5}
 			},
 			Identifiers.im : {   # All % except gateway
-				Roles.s : {'number': 90.0, 'nodes': [], 'dest_type': [Roles.g], 'confirmable': [None], 'traffic_type': 'periodic', 'interval': [1, 60],    'packets_in_burst': 1}, 
-				Roles.bs: {'number': 10.0, 'nodes': [], 'dest_type': [Roles.g], 'confirmable': [None], 'traffic_type': 'periodic', 'interval': [60, 3600], 'packets_in_burst': 1}, 
-				Roles.g : {'number': 1,    'nodes': [], 'dest_type': None,                             'traffic_type': None}				
+				Roles.s : {'number': 90.0, 'nodes': [], 'dest_type': [Roles.g], 'confirmable': [False], 'traffic_type': 'periodic', 'interval': [1, 60],    'packets_in_burst': 1}, 
+				Roles.bs: {'number': 10.0, 'nodes': [], 'dest_type': [Roles.g], 'confirmable': [False], 'traffic_type': 'periodic', 'interval': [60, 3600], 'packets_in_burst': 1}, 
+				Roles.g : {'number': 1,    'nodes': [], 'dest_type': None,                              'traffic_type': None}				
 			}
 		}
 
