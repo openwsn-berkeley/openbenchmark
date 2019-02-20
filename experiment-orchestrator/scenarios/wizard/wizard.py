@@ -189,11 +189,12 @@ class Wizard:
 			if dest_types != None:
 				confirmables = roles[role]['confirmable']
 				for idx, destination in enumerate(dest_types):
-					for node in roles[destination]['nodes']:
-						node_pool.append({
-								'id':          node,
-								'confirmable': confirmables[idx]
-							})
+					for generic_id in roles[destination]['nodes']:
+						if self.nodes[generic_id]['area'] == self.nodes[key]['area']:
+							node_pool.append({
+									'id':          generic_id,
+									'confirmable': confirmables[idx]
+								})
 
 				sending_points = self.generator.generate(
 					node_pool, 
