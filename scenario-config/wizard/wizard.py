@@ -50,6 +50,12 @@ class Wizard:
 			Identifiers.im: 10
 		}
 
+		self.nf_time_padding_min = {
+			Identifiers.ba: 5,
+			Identifiers.ha: 5,
+			Identifiers.im: 5,
+		}
+
 		self.info       = {}   # fields: identifier, duration_min, number_of_nodes, 
 		self.nodes      = OrderedDict()
 		self.specifics  = {
@@ -72,9 +78,9 @@ class Wizard:
 				Roles.cu: {'number': 1,    'nodes': [], 'dest_type': [Roles.a],  'confirmable': [True],  'traffic_type': 'poisson',  'mean': 10,             'packets_in_burst': 5}
 			},
 			Identifiers.im : {   # All % except gateway
-				Roles.s : {'number': 90.0, 'nodes': [], 'dest_type': [Roles.g], 'confirmable': [None], 'traffic_type': 'periodic', 'interval': [1, 60],    'packets_in_burst': 1}, 
-				Roles.bs: {'number': 10.0, 'nodes': [], 'dest_type': [Roles.g], 'confirmable': [None], 'traffic_type': 'periodic', 'interval': [60, 3600], 'packets_in_burst': 1}, 
-				Roles.g : {'number': 1,    'nodes': [], 'dest_type': None,                             'traffic_type': None}				
+				Roles.s : {'number': 90.0, 'nodes': [], 'dest_type': [Roles.g], 'confirmable': [False], 'traffic_type': 'periodic', 'interval': [1, 60],    'packets_in_burst': 1}, 
+				Roles.bs: {'number': 10.0, 'nodes': [], 'dest_type': [Roles.g], 'confirmable': [False], 'traffic_type': 'periodic', 'interval': [60, 3600], 'packets_in_burst': 1}, 
+				Roles.g : {'number': 1,    'nodes': [], 'dest_type': None,                              'traffic_type': None}				
 			}
 		}
 
@@ -97,6 +103,7 @@ class Wizard:
 		self.info['duration_min'] = input("Duration in minutes (e.g. 30): ")
 		self.info['number_of_nodes'] = input("Number of nodes (e.g. 10): ")
 		self.info['payload_size'] = self.default_payload_size[self.info['identifier']]
+		self.info['nf_time_padding_min'] = self.nf_time_padding_min[self.info['identifier']]
 
 		self.generator = Generator(self.info['duration_min'] * 60)
 
@@ -106,8 +113,8 @@ class Wizard:
 
 		if identifier == Identifiers.ba:
 			print "All extra nodes that cannot form an entire area will be disregarded"
-			self.info['number_of_areas'] = self.info['number_of_nodes'] / 10    # 10 = number of nodes per zone
-			self.info['number_of_nodes'] = self.info['number_of_areas'] * 10
+			self.info['number_of_areas'] = (self.info['number_of_nodes'] - 1) / 10    # 10 = number of nodes per zone, -1 to account for ZC
+			self.info['number_of_nodes'] = (self.info['number_of_areas'] * 10) + 1
 			print "Number of nodes after calculation: {0}".format(self.info['number_of_nodes'])
 			roles = self.definitions[identifier]   # Roles related to a single area
 		else:
@@ -131,10 +138,12 @@ class Wizard:
 		identifier = self.info['identifier']
 		roles      = self.definitions[identifier]
 
+		role = Roles.zc if identifier == Identifiers.ba else Roles.cu if identifier == Identifiers.ha else Roles.g
 		self.nodes["openbenchmark00"] = OrderedDict()
-		self.nodes["openbenchmark00"]['role'] = Roles.zc if identifier == Identifiers.ba else Roles.cu if identifier == Identifiers.ha else Roles.g
+		self.nodes["openbenchmark00"]['role'] = role
 		self.nodes["openbenchmark00"]['area'] = 0
-		self.nodes["openbenchmark00"]['traffic_sending_points'] = {}
+		self.nodes["openbenchmark00"]['traffic_sending_points'] = []
+		roles[role]['nodes'].append("openbenchmark00")
 
 		if identifier == Identifiers.ba:
 			id_suffix = 1
@@ -148,7 +157,7 @@ class Wizard:
 							self.nodes[generic_id] = OrderedDict()
 							self.nodes[generic_id]['role'] = role
 							self.nodes[generic_id]['area'] = area_ind
-							self.nodes[generic_id]['traffic_sending_points'] = {}
+							self.nodes[generic_id]['traffic_sending_points'] = []
 
 							roles[role]['nodes'].append(generic_id)
 							id_suffix += 1
@@ -156,14 +165,14 @@ class Wizard:
 		else:
 			id_suffix = 1
 
-			for role in roles:
+			for role in [role for role in roles if role != Roles.cu and role != Roles.g]:
 				for i in range(0, roles[role]['number']):
 					generic_id = "{0}{1}".format(self.id_prefix, "%02d"%id_suffix)
 
 					self.nodes[generic_id] = OrderedDict()
 					self.nodes[generic_id]['role'] = role
 					self.nodes[generic_id]['area'] = 0
-					self.nodes[generic_id]['traffic_sending_points'] = {}
+					self.nodes[generic_id]['traffic_sending_points'] = []
 
 					roles[role]['nodes'].append(generic_id)
 					id_suffix += 1
@@ -171,20 +180,21 @@ class Wizard:
 
 	def _generate_time_instants(self):
 		for key in self.nodes:
-			roles = self.definitions[self.info['identifier']]
-			role = self.nodes[key]['role']
-			dest_types  = roles[role]['dest_type']
+			roles      = self.definitions[self.info['identifier']]
+			role       = self.nodes[key]['role']
+			dest_types = roles[role]['dest_type']
 
 			node_pool = []
 			if dest_types != None:
 				confirmables = roles[role]['confirmable'] 
 
 				for idx, destination in enumerate(dest_types):
-					for node in roles[destination]['nodes']:
-						node_pool.append({
-								'id':          node,
-								'confirmable': confirmables[idx]
-							})
+					for generic_id in roles[destination]['nodes']:
+						if self.nodes[generic_id]['area'] == self.nodes[key]['area']:
+							node_pool.append({
+									'id':          generic_id,
+									'confirmable': confirmables[idx]
+								})
 
 				sending_points = self.generator.generate(
 					node_pool, 
@@ -210,11 +220,12 @@ class Wizard:
 
 		with open(os.path.abspath(os.path.join(path, '_config.json')), 'w') as f:
 			content = OrderedDict()
-			content['identifier']      = self.info['identifier']
-			content['duration_min']    = self.info['duration_min']
-			content['number_of_nodes'] = self.info['number_of_nodes'] 
-			content['payload_size']    = self.info['payload_size']
-			content['nodes']           = self.nodes
+			content['identifier']          = self.info['identifier']
+			content['duration_min']        = self.info['duration_min']
+			content['number_of_nodes']     = self.info['number_of_nodes'] 
+			content['payload_size']        = self.info['payload_size']
+			content['nf_time_padding_min'] = self.info['nf_time_padding_min']
+			content['nodes']               = self.nodes
 			f.write(json.dumps(content, indent=4))
 
 		for testbed in self.specifics:
