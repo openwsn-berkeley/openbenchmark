@@ -106,8 +106,8 @@ class Wizard:
 
 		if identifier == Identifiers.ba:
 			print "All extra nodes that cannot form an entire area will be disregarded"
-			self.info['number_of_areas'] = self.info['number_of_nodes'] / 10    # 10 = number of nodes per zone
-			self.info['number_of_nodes'] = self.info['number_of_areas'] * 10
+			self.info['number_of_areas'] = (self.info['number_of_nodes'] - 1) / 10    # 10 = number of nodes per zone, -1 to account for ZC
+			self.info['number_of_nodes'] = (self.info['number_of_areas'] * 10) + 1
 			print "Number of nodes after calculation: {0}".format(self.info['number_of_nodes'])
 			roles = self.definitions[identifier]   # Roles related to a single area
 		else:
@@ -131,10 +131,12 @@ class Wizard:
 		identifier = self.info['identifier']
 		roles      = self.definitions[identifier]
 
+		role = Roles.zc if identifier == Identifiers.ba else Roles.cu if identifier == Identifiers.ha else Roles.g
 		self.nodes["openbenchmark00"] = OrderedDict()
-		self.nodes["openbenchmark00"]['role'] = Roles.zc if identifier == Identifiers.ba else Roles.cu if identifier == Identifiers.ha else Roles.g
+		self.nodes["openbenchmark00"]['role'] = role
 		self.nodes["openbenchmark00"]['area'] = 0
-		self.nodes["openbenchmark00"]['traffic_sending_points'] = {}
+		self.nodes["openbenchmark00"]['traffic_sending_points'] = []
+		roles[role]['nodes'].append("openbenchmark00")
 
 		if identifier == Identifiers.ba:
 			id_suffix = 1
@@ -148,7 +150,7 @@ class Wizard:
 							self.nodes[generic_id] = OrderedDict()
 							self.nodes[generic_id]['role'] = role
 							self.nodes[generic_id]['area'] = area_ind
-							self.nodes[generic_id]['traffic_sending_points'] = {}
+							self.nodes[generic_id]['traffic_sending_points'] = []
 
 							roles[role]['nodes'].append(generic_id)
 							id_suffix += 1
@@ -156,14 +158,14 @@ class Wizard:
 		else:
 			id_suffix = 1
 
-			for role in roles:
+			for role in [role for role in roles if role != Roles.cu and role != Roles.g]:
 				for i in range(0, roles[role]['number']):
 					generic_id = "{0}{1}".format(self.id_prefix, "%02d"%id_suffix)
 
 					self.nodes[generic_id] = OrderedDict()
 					self.nodes[generic_id]['role'] = role
 					self.nodes[generic_id]['area'] = 0
-					self.nodes[generic_id]['traffic_sending_points'] = {}
+					self.nodes[generic_id]['traffic_sending_points'] = []
 
 					roles[role]['nodes'].append(generic_id)
 					id_suffix += 1
@@ -171,9 +173,9 @@ class Wizard:
 
 	def _generate_time_instants(self):
 		for key in self.nodes:
-			roles = self.definitions[self.info['identifier']]
-			role = self.nodes[key]['role']
-			dest_types  = roles[role]['dest_type']
+			roles      = self.definitions[self.info['identifier']]
+			role       = self.nodes[key]['role']
+			dest_types = roles[role]['dest_type']
 
 			node_pool = []
 			if dest_types != None:
