@@ -45,11 +45,9 @@ class Main():
 		time_padding = Utils.scenario.main_config['nf_time_padding_min']
 		print "[MAIN] Scheduler will start in {0} minutes...".format(time_padding)
 
-		threading.Timer(
-			time_padding * 60, 
-			self._start_scheduler
-		).start()
-
+		time.sleep(time_padding*60)
+		self._start_scheduler()
+		
 		
 	def _take_arguments(self):
 		parser = argparse.ArgumentParser()
