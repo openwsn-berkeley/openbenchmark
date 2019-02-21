@@ -6,6 +6,7 @@ import string
 import json
 import argparse
 import colorama
+import time
 from utils import Utils
 from network_prep import NetworkPrep
 from sut_simulator.simulator import Simulator
@@ -26,7 +27,9 @@ class Main():
 
 		if self.simulator:
 			print "[MAIN] Starting simulator"
-			threading.Thread(target=self._start_simulator).start()
+			thread = threading.Thread(target=self._start_simulator)
+			thread.daemon = True
+			thread.start()
 
 		print "[MAIN] Starting MQTT client"
 		MQTTClient.create()
@@ -40,7 +43,9 @@ class Main():
 		self.sut_command_payload = self.co.sut_command_payload
 
 		self._start_network_prep()
-		threading.Thread(target=self._start_kpi_processing).start()
+		thread = threading.Thread(target=self._start_kpi_processing)
+		thread.daemon = True
+		thread.start()
 
 		time_padding = Utils.scenario.main_config['nf_time_padding_min']
 		print "[MAIN] Scheduler will start in {0} minutes...".format(time_padding)
