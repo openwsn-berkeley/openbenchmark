@@ -158,9 +158,5 @@
     "openbenchmark39": {
         "node_id": "nuc10-26-0", 
         "transmission_power_dbm": 0
-    }, 
-    "openbenchmark40": {
-        "node_id": "nuc10-26-0", 
-        "transmission_power_dbm": 0
     }
 }
