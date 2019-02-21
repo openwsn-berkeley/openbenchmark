@@ -46,35 +46,30 @@ class Generator:
 
 
 	def _generate_poisson(self, node_pool, params):
-		mean               = params['mean']   # per hour
+		mean               = params['mean'] * (self.exp_duration/60)  # per hour
+		num_of_packets     = np.random.poisson(mean)
 		packets_in_burst   = params['packets_in_burst']
 		period             = 3600   # 1h in seconds
 		top_interval       = 0
 		sending_points     = []
 
-		# No do-while loop here because of the list comprehension filter on current_instants
-		while top_interval < self.exp_duration:
-			bottom_interval  = top_interval
-			top_interval     = bottom_interval + period
-			num_of_packets   = np.random.poisson(mean)
+		instants = [random.expovariate(1.0/mean) * (self.exp_duration/60) for i in range(0, num_of_packets)]
+		instants = [instant for instant in instants if instant < self.exp_duration]
 
-			current_instants = [random.expovariate(1.0/mean) * 60 for i in range(0, num_of_packets)]
-			current_instants = [instant for instant in current_instants if instant < self.exp_duration]
-
-			for instant in current_instants:
-				node = random.choice(node_pool)
-				if packets_in_burst > 1:
-					sending_points.append({
-							'time_sec':         round(instant, 3),
-							'destination':      node['id'],
-							'confirmable':      node['confirmable'],
-							'packets_in_burst': packets_in_burst
-						})
-				else:
-					sending_points.append({
-							'time_sec':    round(instant, 3),
-							'destination': node['id'],
-							'confirmable': node['confirmable']
-						})
+		for instant in instants:
+			node = random.choice(node_pool)
+			if packets_in_burst > 1:
+				sending_points.append({
+						'time_sec':         round(instant, 3),
+						'destination':      node['id'],
+						'confirmable':      node['confirmable'],
+						'packets_in_burst': packets_in_burst
+					})
+			else:
+				sending_points.append({
+						'time_sec':    round(instant, 3),
+						'destination': node['id'],
+						'confirmable': node['confirmable']
+					})
 
 		return sorted(sending_points, key=lambda k: k['time_sec'])
