@@ -3,14 +3,16 @@ import time
 import json
 import random
 import string
+import threading
+import collections
 
 from utils import Utils
 
 
 class Scheduler:
 
-	nodes        = []   # Array of type `Node`
-	schedule     = []   # Array of dictionaries {"time_sec": type `float`, "node": type `Node`, "destination_eui64: `String`"}
+	nodes        = []                    # Array of type `Node`
+	schedule     = collections.deque()   # Thread-safe array of dictionaries {"time_sec": type `float`, "node": type `Node`, "destination_eui64: `String`"}
 
 	scheduler_delay = 5   #[s]
 
@@ -25,8 +27,8 @@ class Scheduler:
 	def _sort_schedule(self):
 		self.schedule = sorted(self.schedule, key=lambda k: k["time_sec"])
 
-	def _generate_schedule(self):
-		for node in self.scenario.nodes:
+	def _process_node_arr_chunk(self, chunk):
+		for node in chunk:
 			for sending_point in node.sending_points:
 				time_sec         = sending_point["time_sec"]
 				destination      = sending_point["destination"]
@@ -41,7 +43,33 @@ class Scheduler:
 					"packets_in_burst"  : packets_in_burst
 				})
 
-				self._sort_schedule()
+	def _generate_schedule(self):
+		total_size = len(self.scenario.nodes)
+		chunk_size = total_size / 4   # Divides the list into four chunks
+		arr_chunks = []
+
+		iter_val      = 0
+		current_chunk = 1
+		chunk         = []
+		while iter_val < total_size:
+			if iter_val == current_chunk * chunk_size:
+				current_chunk += 1
+				arr_chunks.append(chunk[:])
+				chunk = []
+
+			chunk.append(self.scenario.nodes[iter_val])
+			iter_val += 1
+
+		if len(chunk) > 0:
+			arr_chunks.append(chunk)
+
+		for chunk in arr_chunks:
+			thread = threading.Thread(target=self._process_node_arr_chunk, args=[chunk])
+			thread.daemon = True
+			thread.start()
+			thread.join()
+
+		self._sort_schedule()
 
 
 	def _print_schedule(self):
