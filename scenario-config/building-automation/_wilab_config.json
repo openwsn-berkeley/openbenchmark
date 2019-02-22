@@ -160,7 +160,7 @@
         "transmission_power_dbm": -5
     }, 
     "openbenchmark40": {
-        "node_id": "nuc10-26-0", 
+        "node_id": "nuc10-26-1", 
         "transmission_power_dbm": -5
     }
 }
