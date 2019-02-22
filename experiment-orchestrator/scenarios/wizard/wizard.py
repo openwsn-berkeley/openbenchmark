@@ -3,24 +3,10 @@ import json
 import numpy as np
 import random
 from collections import OrderedDict
+from _wizard_definitions import definitions
+from _wizard_definitions import Identifiers
+from _wizard_definitions import Roles
 from _generator import Generator
-
-
-class Identifiers:
-	ba = 'building-automation'
-	ha = 'home-automation'
-	im = 'industrial-monitoring'
-
-class Roles:
-	ms = 'monitoring-sensor'
-	es = 'event-sensor'
-	a  = 'actuator'
-	ac = 'area-controller'
-	zc = 'zone-controller'
-	cu = 'control-unit'
-	s  = 'sensor'
-	bs = 'bursty-sensor'
-	g  = 'gateway'
 
 
 class Wizard:
@@ -64,27 +50,6 @@ class Wizard:
 			"wilab":  {}
 		}
 
-		self.definitions = {
-			Identifiers.ba: {   # Data per area except `zone-controller`
-				Roles.ms: {'number': 3, 'nodes': [], 'dest_type': [Roles.ac],          'confirmable': [True],        'traffic_type': 'periodic', 'interval': [25, 35],     'packets_in_burst': 1},   # seconds
-				Roles.es: {'number': 4, 'nodes': [], 'dest_type': [Roles.ac],          'confirmable': [True],        'traffic_type': 'poisson',  'mean': 10,               'packets_in_burst': 1},   # per hour
-				Roles.a : {'number': 2, 'nodes': [], 'dest_type': [Roles.ac],          'confirmable': [True],        'traffic_type': 'periodic', 'interval': [25, 35],     'packets_in_burst': 1}, 
-				Roles.ac: {'number': 1, 'nodes': [], 'dest_type': [Roles.a, Roles.zc], 'confirmable': [True, False], 'traffic_type': 'periodic', 'interval': [0.12, 0.14], 'packets_in_burst': 1},
-				Roles.zc: {'number': 1, 'nodes': [], 'dest_type': None,                                              'traffic_type': None}
-			},       
-			Identifiers.ha: {   # All % except control-unit
-				Roles.ms: {'number': 49.0, 'nodes': [], 'dest_type': [Roles.cu], 'confirmable': [False], 'traffic_type': 'periodic', 'interval': [180, 300], 'packets_in_burst': 1}, 
-				Roles.es: {'number': 21.0, 'nodes': [], 'dest_type': [Roles.cu], 'confirmable': [True],  'traffic_type': 'poisson',  'mean': 10,             'packets_in_burst': 1}, 
-				Roles.a : {'number': 30.0, 'nodes': [], 'dest_type': [Roles.cu], 'confirmable': [True],  'traffic_type': 'periodic', 'interval': [180, 300], 'packets_in_burst': 1}, 
-				Roles.cu: {'number': 1,    'nodes': [], 'dest_type': [Roles.a],  'confirmable': [True],  'traffic_type': 'poisson',  'mean': 10,             'packets_in_burst': 5}
-			},
-			Identifiers.im : {   # All % except gateway
-				Roles.s : {'number': 90.0, 'nodes': [], 'dest_type': [Roles.g], 'confirmable': [False], 'traffic_type': 'periodic', 'interval': [1, 60],    'packets_in_burst': 1}, 
-				Roles.bs: {'number': 10.0, 'nodes': [], 'dest_type': [Roles.g], 'confirmable': [False], 'traffic_type': 'periodic', 'interval': [60, 3600], 'packets_in_burst': 1}, 
-				Roles.g : {'number': 1,    'nodes': [], 'dest_type': None,                              'traffic_type': None}				
-			}
-		}
-
 		self.locations = {
 			Identifiers.ba: "../building_automation/",
 			Identifiers.ha: "../home_automation/",
@@ -117,9 +82,9 @@ class Wizard:
 			self.info['number_of_areas'] = (self.info['number_of_nodes'] - 1) / 10    # 10 = number of nodes per zone, -1 to account for ZC
 			self.info['number_of_nodes'] = (self.info['number_of_areas'] * 10) + 1
 			print "Number of nodes after calculation: {0}".format(self.info['number_of_nodes'])
-			roles = self.definitions[identifier]   # Roles related to a single area
+			roles = definitions[identifier]   # Roles related to a single area
 		else:
-			roles = self.definitions[identifier]
+			roles = definitions[identifier]
 			node_sum = 0
 
 			for key in roles:
@@ -137,7 +102,7 @@ class Wizard:
 
 	def _define_nodes(self):
 		identifier = self.info['identifier']
-		roles      = self.definitions[identifier]
+		roles      = definitions[identifier]
 
 		role = Roles.zc if identifier == Identifiers.ba else Roles.cu if identifier == Identifiers.ha else Roles.g
 		self.nodes["openbenchmark00"] = OrderedDict()
@@ -181,7 +146,7 @@ class Wizard:
 
 	def _generate_time_instants(self):
 		for key in self.nodes:
-			roles      = self.definitions[self.info['identifier']]
+			roles      = definitions[self.info['identifier']]
 			role       = self.nodes[key]['role']
 			dest_types = roles[role]['dest_type']
 
