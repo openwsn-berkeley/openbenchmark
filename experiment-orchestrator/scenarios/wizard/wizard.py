@@ -107,7 +107,7 @@ class Wizard:
 		role = Roles.zc if identifier == Identifiers.ba else Roles.cu if identifier == Identifiers.ha else Roles.g
 		self.nodes["openbenchmark00"] = OrderedDict()
 		self.nodes["openbenchmark00"]['role'] = role
-		self.nodes["openbenchmark00"]['area'] = 0
+		self.nodes["openbenchmark00"]['area'] = None
 		self.nodes["openbenchmark00"]['traffic_sending_points'] = []
 		roles[role]['nodes'].append("openbenchmark00")
 
@@ -150,17 +150,21 @@ class Wizard:
 			role       = self.nodes[key]['role']
 			dest_types = roles[role]['dest_type']
 
-			node_pool = []
+			node_pool = {}
 			if dest_types != None:
 				confirmables = roles[role]['confirmable']
-				for idx, destination in enumerate(dest_types):
+				for destination in dest_types:
+					node_group = []
+					
 					for generic_id in roles[destination]['nodes']:
-						if self.nodes[generic_id]['area'] == self.nodes[key]['area']:
-							node_pool.append({
+						if self.nodes[generic_id]['area'] == None or self.nodes[key]['area'] == None or self.nodes[generic_id]['area'] == self.nodes[key]['area']:
+							node_group.append({
 									'id':          generic_id,
-									'confirmable': confirmables[idx]
+									'confirmable': confirmables[destination]
 								})
 
+					node_pool[destination] = node_group[:]
+				
 				sending_points = self.generator.generate(
 					node_pool, 
 					roles[role]
