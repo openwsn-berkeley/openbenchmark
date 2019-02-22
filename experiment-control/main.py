@@ -2,7 +2,11 @@ import argparse
 import ConfigParser
 import os
 import base64
+import json
+import xml.etree
+import xml.etree.ElementTree as ET
 
+from lxml import etree
 from abc import abstractmethod
 from reservation import IoTLABReservation
 from reservation import WilabReservation
@@ -15,6 +19,7 @@ from ov_log_monitor import OVLogMonitor
 class Controller(object):
 
 	CONFIG_FILE = 'conf.txt'
+	SCENARIO_CONFIG = os.path.join(os.path.dirname(__file__), "..", "scenario-config")
 
 	def __init__(self):
 		self.configParser = ConfigParser.RawConfigParser()   
@@ -39,6 +44,12 @@ class Controller(object):
 	        default    = '03oos_openwsn_prog',
 	        action     = 'store'
 		)
+		parser.add_argument('--scenario', 
+	        dest       = 'scenario',
+	        choices    = ['building-automation', 'home-automation', 'industrial-monitoring'],
+	        required   = True,
+	        action     = 'store'
+		)
 
 	def get_args(self):
 		parser = argparse.ArgumentParser()
@@ -48,7 +59,8 @@ class Controller(object):
 		return {
 			'action'  : args.action,
 			'testbed' : args.testbed,
-			'firmware': args.firmware
+			'firmware': args.firmware,
+			'scenario': args.scenario
 		}
 
 	@abstractmethod
@@ -58,17 +70,18 @@ class Controller(object):
 
 class IoTLAB(Controller):
 
-	def __init__(self):
+	def __init__(self, scenario):
 		super(IoTLAB, self).__init__()
 
 		self.CONFIG_SECTION = 'iotlab-config'
+		self.scenario = scenario
 
 		self.USERNAME = os.environ["user"] if "user" in os.environ else self.configParser.get(self.CONFIG_SECTION, 'user')
 		self.PRIVATE_SSH = os.environ["private_ssh"] if "private_ssh" in os.environ else ""
 		self.HOSTNAME = 'saclay.iot-lab.info'
 
 		self.EXP_DURATION = 30 # Duration in minutes
-		self.NODES = "saclay,a8,106+107" # To be read from scenario config
+		self.NODES = self._get_nodes()
 
 		self.FIRMWARE = os.path.join(os.path.dirname(__file__), 'firmware')
 		self.BROKER = self.configParser.get(self.CONFIG_SECTION, 'broker')
@@ -84,13 +97,27 @@ class IoTLAB(Controller):
 			with open(private_ssh_file, "w") as f:
 				f.write(private_ssh_decoded)
 
+	def _get_nodes(self):
+		# e.g. "saclay,a8,106+107"
+		config_file = os.path.join(self.SCENARIO_CONFIG, self.scenario, "_iotlab_config.json")
+		
+		with open(config_file, 'r') as f:
+			config_obj = json.load(f)
+			nodes_str = 'saclay,a8,'
+
+			for generic_id in config_obj:
+				nodes_str += config_obj[generic_id]["node_id"].split("-")[1] + "+"
+
+			return nodes_str.rstrip("+")
+
 
 class Wilab(Controller):
 
-	def __init__(self):
+	def __init__(self, scenario):
 		super(Wilab, self).__init__()
 
 		self.CONFIG_SECTION = 'wilab-config'
+		self.scenario = scenario
 
 		# Checks if the following files' content has been set as env variables content
 		# The content is encoded in Base64
@@ -108,6 +135,8 @@ class Wilab(Controller):
 
 		self.FIRMWARE = os.path.join(os.path.dirname(__file__), 'firmware')
 		self.BROKER = self.configParser.get(self.CONFIG_SECTION, 'broker')
+
+		self._rspec_update()
 
 		self.reservation = WilabReservation(self.JFED_DIR, self.RUN, self.DELETE, self.DISPLAY)
 
@@ -127,6 +156,49 @@ class Wilab(Controller):
 			with open(os.path.join(self.JFED_DIR, self.RUN), "w") as f:
 				f.write(file_decoded)
 
+	def _rspec_update(self):
+		rspec_file = os.path.join(self.JFED_DIR, "opentestbed", "deployment", "otb.rspec")
+
+		tree = etree.parse(rspec_file)
+		xml_root = tree.getroot()
+
+		nucs = self._get_nucs()
+		for nuc_id in nucs:
+			xml_root.append(self._rspec_node(nuc_id))
+
+		tree.write(rspec_file, xml_declaration=True, encoding='UTF-8', pretty_print=True)
+
+	def _rspec_node(self, nuc_id):
+		node = etree.Element(
+			"node", 
+			client_id="sensor{0}".format(nuc_id.split("-")[1]),
+			exclusive="true",
+			component_manager_id="urn:publicid:IDN+wilab1.ilabt.iminds.be+authority+cm",
+			component_id="urn:publicid:IDN+wilab1.ilabt.iminds.be+node+{0}".format(nuc_id)
+		)
+		node.append(etree.Element("silver_type", name="raw-pc"))
+		node.append(etree.Element("ansible_group", xmlns="http://jfed.iminds.be/rspec/ext/jfed/1", name="sensor"))
+		
+		return node
+
+	def _get_nucs(self):
+		config_file = os.path.join(self.SCENARIO_CONFIG, self.scenario, "_wilab_config.json")
+		nucs = []
+
+		with open(config_file, 'r') as f:
+			config_obj = json.load(f)
+
+			for generic_id in config_obj:
+				testbed_id_split = config_obj[generic_id]["node_id"].split("-")
+				nuc_id = testbed_id_split[0] + "-" + testbed_id_split[1]
+
+				if nuc_id not in nucs:
+					nucs.append(nuc_id)
+
+		return nucs
+
+
+
 
 
 TESTBEDS = {
@@ -139,10 +211,11 @@ def main():
 
 	args = controller.get_args()
 
-	action = args['action']
-	testbed = args['testbed']
+	action   = args['action']
+	testbed  = args['testbed']
+	scenario = args['scenario']
 
-	testbed = TESTBEDS[testbed]()
+	testbed  = TESTBEDS[testbed](scenario)
 	firmware = '{0}/{1}'.format(testbed.FIRMWARE, args['firmware'])
 
 	print 'Script started'

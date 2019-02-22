@@ -5,6 +5,7 @@ watchdog
 paho-mqtt
 argparse
 pytest
+lxml
 
 # docs
 sphinx
