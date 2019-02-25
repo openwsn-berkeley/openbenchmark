@@ -3,7 +3,7 @@
     "duration_min": 180, 
     "number_of_nodes": 40, 
     "payload_size": 10, 
-    "nf_time_padding_min": 5, 
+    "nf_time_padding_min": 0.1, 
     "nodes": {
         "openbenchmark00": {
             "role": "control-unit", 

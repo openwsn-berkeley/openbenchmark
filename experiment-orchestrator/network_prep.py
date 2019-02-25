@@ -8,6 +8,9 @@ from scenarios.building_automation.building_automation import BuildingAutomation
 from scenarios.home_automation.home_automation import HomeAutomation
 from scenarios.industrial_monitoring.industrial_monitoring import IndustrialMonitoring
 
+from helpers.reflash.reflash import IotlabReflash
+from helpers.reflash.reflash import WilabReflash
+
 
 class NetworkPrep:
 
@@ -15,6 +18,11 @@ class NetworkPrep:
 		"building-automation"   : BuildingAutomation,
 		"home-automation"       : HomeAutomation,
 		"industrial-monitoring" : IndustrialMonitoring
+	}
+
+	reflash = {
+		"iotlab": IotlabReflash,
+		"wilab": WilabReflash
 	}
 
 	def __init__(self, sut_command_payload):
@@ -26,9 +34,11 @@ class NetworkPrep:
 		Utils.firmware = sut_command['firmware']
 
 		Utils.id_to_eui64 = self._get_node_map(sut_command['nodes'])
-		Utils.eui64_to_id = {v: k for k, v in sut_command['nodes'].items()}
+		Utils.eui64_to_id = {v: k for k, v in Utils.id_to_eui64.items()}
+		
+		self.reflash[Utils.testbed](sut_command['scenario']).remove_unused()
+		
 		Utils.scenario    = self.scenarios[sut_command['scenario']](sut_command) 
-
 		self.scenario = Utils.scenario
 
 

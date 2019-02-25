@@ -81,8 +81,11 @@ class MQTTClient:
 			sys.stdout.write("[MQTT CLIENT] Subscribing to: {0}\n".format(self.epe_sub_topics[key]))
 			self.client.subscribe(self.epe_sub_topics[key])
 
-	def publish(self, topic, payload):
-		self.client.publish(self.pub_topics[topic], json.dumps(payload))
+	def publish(self, topic, payload, custom=False):
+		if not custom:
+			self.client.publish(self.pub_topics[topic], json.dumps(payload))
+		else:
+			self.client.publish(topic, json.dumps(payload))
 
 
 	##### MQTT client listeners #####
