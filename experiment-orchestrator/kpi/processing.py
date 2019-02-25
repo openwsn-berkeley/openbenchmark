@@ -16,12 +16,12 @@ class KPIProcessing:
 	def __init__(self):
 		# Temporarily hardcoded
 		self.logger           = Logger.create({
-				'date'         : '25. 1. 2019',
-				'experiment_id': '1',
-				'testbed'      : 'IoT-LAB',
-				'firmware'     : '03oos_openwsn_prog',
-				'nodes'        : ['a8-100', 'a8-101', 'a8-102', 'a8-103'],
-				'scenario'     : 'Home Automation'
+				'date'         : Utils.date,
+				'experiment_id': Utils.experiment_id,
+				'testbed'      : Utils.testbed,
+				'firmware'     : Utils.firmware,
+				'nodes'        : Utils.id_to_eui64,
+				'scenario'     : Utils.scenario.SCENARIO_IDENTIFIER
 			})
 
 		self.condition_object = ConditionObject.create()

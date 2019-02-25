@@ -21,6 +21,10 @@ class NetworkPrep:
 		# Get scenario instance based on the SUT command payload
 		sut_command   = json.loads(sut_command_payload)
 
+		Utils.date = sut_command['date']
+		Utils.testbed = sut_command['testbed']
+		Utils.firmware = sut_command['firmware']
+
 		Utils.id_to_eui64 = self._get_node_map(sut_command['nodes'])
 		Utils.eui64_to_id = {v: k for k, v in sut_command['nodes'].items()}
 		Utils.scenario    = self.scenarios[sut_command['scenario']](sut_command) 
