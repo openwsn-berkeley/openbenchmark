@@ -21,7 +21,7 @@ class NetworkPrep:
 		# Get scenario instance based on the SUT command payload
 		sut_command   = json.loads(sut_command_payload)
 
-		Utils.id_to_eui64 = sut_command['nodes']
+		Utils.id_to_eui64 = self._get_node_map(sut_command['nodes'])
 		Utils.eui64_to_id = {v: k for k, v in sut_command['nodes'].items()}
 		Utils.scenario    = self.scenarios[sut_command['scenario']](sut_command) 
 
@@ -75,3 +75,18 @@ class NetworkPrep:
 				return node.command_exec(payload={
 						'source': node.eui64,
 				}, command='triggerNetworkFormation', blocking=True)   # Blocks until response is received or timeout
+
+
+	def _get_node_map(self, sut_nodes_field):
+		node_dict = {}
+
+		for key, nodes in sut_nodes_field.items():
+			if len(nodes) > 1:
+				suffix = 0
+				for eui64 in nodes:
+					node_dict["{0}-{1}".format(key, suffix)] = eui64
+					suffix += 1
+			else:
+				node_dict[key] = nodes[0]
+
+		return node_dict

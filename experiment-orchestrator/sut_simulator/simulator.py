@@ -84,12 +84,27 @@ class Simulator(object):
 
         with open(testbed_config, 'r') as f:
             config_obj  = json.loads(f.read())
-            eui64_start = 44
+            eui64_start = 10
             sut_nodes = {}
-            for key in config_obj:
-                sut_nodes[config_obj[key]['node_id']] = "00-12-4b-00-14-b5-b6-{0}".format(eui64_start)
-                eui64_start += 1
 
+            for key in config_obj:
+                testbed_node_id = config_obj[key]['node_id']
+
+                if self.testbed == 'iotlab':
+                    sut_nodes[testbed_node_id] = []
+                    sut_nodes[testbed_node_id].append("00-12-4b-00-14-b5-b6-{0}".format(eui64_start))
+
+                elif self.testbed == 'wilab':
+                    nuc_id = testbed_node_id[:-2]
+                    
+                    if nuc_id not in sut_nodes:
+                        sut_nodes[nuc_id] = []
+                        sut_nodes[nuc_id].append("00-12-4b-00-14-b5-b6-{0}".format(eui64_start))
+                        eui64_start += 1
+                        sut_nodes[nuc_id].append("00-12-4b-00-14-b5-b6-{0}".format(eui64_start))
+
+                eui64_start += 1
+                    
             self.sut_command_payload['nodes'] = sut_nodes
 
 
