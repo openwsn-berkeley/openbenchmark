@@ -9,19 +9,19 @@ class Interface:
 	def __init__(self):
 		self.config_files = {
 			"building-automation": {
-				"main"  : os.path.join("building_automation", "_config.json"),
-				"iotlab": os.path.join("building_automation", "_iotlab_config.json"),
-				"wilab" : os.path.join("building_automation","_wilab_config.json")
+				"main"  : os.path.join(os.path.dirname(__file__), "building_automation", "_config.json"),
+				"iotlab": os.path.join(os.path.dirname(__file__), "building_automation", "_iotlab_config.json"),
+				"wilab" : os.path.join(os.path.dirname(__file__), "building_automation","_wilab_config.json")
 			},
 			"home-automation": {
-				"main"  : os.path.join("home_automation", "_config.json"),
-				"iotlab": os.path.join("home_automation", "_iotlab_config.json"),
-				"wilab" : os.path.join("home_automation","_wilab_config.json")
+				"main"  : os.path.join(os.path.dirname(__file__), "home_automation", "_config.json"),
+				"iotlab": os.path.join(os.path.dirname(__file__), "home_automation", "_iotlab_config.json"),
+				"wilab" : os.path.join(os.path.dirname(__file__), "home_automation","_wilab_config.json")
 			},
 			"industrial-monitoring": {
-				"main"  : os.path.join("industrial_monitoring", "_config.json"),
-				"iotlab": os.path.join("industrial_monitoring", "_iotlab_config.json"),
-				"wilab" : os.path.join("industrial_monitoring","_wilab_config.json")
+				"main"  : os.path.join(os.path.dirname(__file__), "industrial_monitoring", "_config.json"),
+				"iotlab": os.path.join(os.path.dirname(__file__), "industrial_monitoring", "_iotlab_config.json"),
+				"wilab" : os.path.join(os.path.dirname(__file__), "industrial_monitoring","_wilab_config.json")
 			},
 		}
 
@@ -31,7 +31,7 @@ class Interface:
 
 	def _print_data(self, scenario, testbed):
 		self._read_config(scenario, testbed)
-		print self.config_node_data
+		print json.dumps(self.config_node_data)
 
 	def _get_args(self):
 		parser = argparse.ArgumentParser()
