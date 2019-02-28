@@ -27,4 +27,4 @@ Route::get('/start-otbox', 'ExperimentController@start_otbox');
 Route::get('/start-ov', 'ExperimentController@start_ov');
 Route::get('/start-watcher', 'ExperimentController@start_watcher');
 
-Route::get('/scenarios', 'ExperimentController@get_scenarios');
+Route::get('/general', 'ExperimentController@get_config_data');

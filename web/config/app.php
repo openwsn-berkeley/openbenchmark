@@ -208,7 +208,9 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
+        'CommandHandler' => App\Classes\ExperimentController\CommandHandler::class,
+        'ConfigParser' => App\Classes\ExperimentController\ConfigParser::class,
+        'Helpers' => App\Classes\Helpers::class
     ],
 
 ];

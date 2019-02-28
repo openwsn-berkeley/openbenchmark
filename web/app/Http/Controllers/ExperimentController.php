@@ -4,13 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use CommandHandler;
-use ScenarioParser;
+use ConfigParser;
 
 class ExperimentController extends Controller
 {
 
     function __construct() {
-        $this->scenario_parser = new ScenarioParser();
+        $this->config_parser   = new ConfigParser();
         $this->command_handler = new CommandHandler();
     }
 
@@ -56,7 +56,7 @@ class ExperimentController extends Controller
     }
 
     // Scenario data retrieval
-    function get_scenarios() {
-        return $this->scenario_parser->get_scenarios_json();
+    function get_config_data() {
+        return $this->config_parser->get_config_data();
     }
 }
