@@ -54,4 +54,9 @@ class ExperimentController extends Controller
     function start_watcher() {
         return $this->cmd_handler->ov_monitor();
     }
+
+    // Scenario data retrieval
+    function get_scenarios() {
+        return $this->scenario_parser->get_scenarios_json();
+    }
 }
