@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Custom;
+namespace App\Classes\ExperimentController;
 
 class CommandHandler {
 
