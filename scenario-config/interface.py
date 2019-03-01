@@ -56,6 +56,7 @@ class Interface:
 	        required = True,
 	        action   = 'store'
 		)
+<<<<<<< HEAD
 	
 	def _read_config(self, scenario, testbed):
 		self.config_node_data = {}
@@ -77,6 +78,68 @@ class Interface:
 
 					self.config_node_data[generic_id] = node_data
 					del self.config_node_data[generic_id]['traffic_sending_points']
+=======
+
+	def _generate_json_data(self):
+		data = {}
+		data['scenarios'] = [{"identifier": key, "name": value["full_title"]} for key, value in self.scenarios.items()]
+		data['testbeds'] = [{"identifier": key, "name": value} for key, value in self.testbeds.items()]
+
+		for scenario in self.scenarios:
+			data[scenario] = {}
+			main_config_file = self.scenarios[scenario]['config']['main']
+
+			for testbed in self.testbeds:
+				data[scenario][testbed] = {}
+				data[scenario][testbed]['nodes'] = {}
+				testbed_config_file = self.scenarios[scenario]['config'][testbed]
+
+				with open(main_config_file, 'r') as f:
+					with open(testbed_config_file, 'r') as tf:
+						main_config    = json.load(f)
+						testbed_config = json.load(tf)
+						
+						generic_node_data = main_config['nodes']
+
+						for generic_id in generic_node_data:
+							# Attaching testbed specific data to generic node data
+							node_data = generic_node_data[generic_id]
+							node_data['node_id'] = testbed_config[generic_id]['node_id']
+							node_data['transmission_power_dbm'] = testbed_config[generic_id]['transmission_power_dbm']
+
+							data[scenario][testbed]['nodes'][generic_id] = node_data
+							
+							data[scenario][testbed]['nodes'][generic_id]['destinations'] = self._get_destination_nodes(
+									data[scenario][testbed]['nodes'][generic_id]['traffic_sending_points']
+								)
+
+							del data[scenario][testbed]['nodes'][generic_id]['traffic_sending_points']
+
+		general_data_json = os.path.join(os.path.dirname(__file__), "_general_data.json")
+		with open(general_data_json, 'w') as f:
+			f.write(json.dumps(data, indent=4, sort_keys=True))
+
+
+	def _get_destination_nodes(self, traffic_sending_points):
+		destinations = []
+		for sending_point in traffic_sending_points:
+			if sending_point['destination'] not in destinations:
+				destinations.append(sending_point['destination'])
+
+		return destinations
+
+
+	def _read_json_data(self, args):
+		general_data_json = os.path.join(os.path.dirname(__file__), "_general_data.json")
+		with open(general_data_json, 'r') as f:
+			json_obj = json.loads(f.read())
+
+		if args['param'] == 'nodes':
+			print(json.dumps(json_obj[args['scenario']][args['testbed']][args['param']], indent=4, sort_keys=True))
+		else:	
+			print(json.dumps(json_obj[args['param']], indent=4, sort_keys=True))
+
+>>>>>>> 00a9340... Issue #14: Expands `scenarios` and `testbeds` result JSONs with additional data
 
 
 
