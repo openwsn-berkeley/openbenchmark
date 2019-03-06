@@ -92,9 +92,15 @@ class NetworkPrep:
 
 
 	def _get_node_map(self, sut_nodes_field):
-		node_dict = {}
+		grouped_nodes = {}
+		for eui64, node_id in sut_nodes_field.items():
+			if node_id not in grouped_nodes:
+				grouped_nodes[node_id] = []
 
-		for key, nodes in sut_nodes_field.items():
+			grouped_nodes[node_id].append(eui64)
+
+		node_dict = {}
+		for key, nodes in grouped_nodes.items():
 			if len(nodes) > 1:
 				suffix = 0
 				for eui64 in nodes:
