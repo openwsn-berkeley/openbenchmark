@@ -1,6 +1,6 @@
 [iotlab-config]
 user = openbenc
-broker = broker.mqttdashboard.com
+broker = argus.paris.inria.fr
 
 [wilab-config]
-broker = broker.mqttdashboard.com
+broker = argus.paris.inria.fr
