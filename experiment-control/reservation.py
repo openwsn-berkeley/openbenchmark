@@ -35,7 +35,7 @@ class IoTLABReservation(Reservation):
 	RETRY_PAUSE    = 10
 
 
-	def __init__(self, user, domain, duration=None, nodes=None):
+	def __init__(self, user, domain, broker, duration=None, nodes=None):
 		warnings.simplefilter(
 			action='ignore',
 			category=CryptographyDeprecationWarning
@@ -45,6 +45,7 @@ class IoTLABReservation(Reservation):
 		self.domain   = domain
 		self.duration = duration
 		self.nodes    = nodes
+		self.broker   = broker
 
 		self.socketIoHandler = SocketIoHandler()
 
@@ -111,7 +112,7 @@ class IoTLABReservation(Reservation):
 				nodes = self.get_reserved_nodes()
 
 				if len(nodes) > 0:
-					OTBoxStartup(self.user, self.domain, 'iotlab', self.get_reserved_nodes()).start()
+					OTBoxStartup(self.user, self.domain, 'iotlab', self.get_reserved_nodes(), self.broker).start()
 				else:
 					print('Experiment startup failed')
 

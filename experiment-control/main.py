@@ -86,7 +86,7 @@ class IoTLAB(Controller):
 		self.FIRMWARE = os.path.join(os.path.dirname(__file__), 'firmware')
 		self.BROKER = self.configParser.get(self.CONFIG_SECTION, 'broker')
 
-		self.reservation = IoTLABReservation(self.USERNAME, self.HOSTNAME, self.EXP_DURATION, self.NODES)
+		self.reservation = IoTLABReservation(self.USERNAME, self.HOSTNAME, self.BROKER, self.EXP_DURATION, self.NODES)
 		self.add_files_from_env()
 
 	def add_files_from_env(self):
