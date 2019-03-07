@@ -106,7 +106,7 @@ class IoTLAB(Controller):
 			nodes_str = 'saclay,a8,'
 
 			for generic_id in config_obj:
-				nodes_str += config_obj[generic_id]["node_id"].split("-")[1] + "+"
+				nodes_str += config_obj[generic_id]["node_id"].split("-")[2] + "+"
 
 			return nodes_str.rstrip("+")
 
