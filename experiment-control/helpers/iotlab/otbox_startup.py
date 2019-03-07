@@ -123,7 +123,7 @@ class OTBoxStartup:
 		try:
 			for ind, node in enumerate(self.booted_nodes):
 				node_name = 'node-' + node.split('.')[0]
-				print("Starting otbox.py on " + node_name + "...")
+				print("Starting otbox.py on " + node_name + ", with " + self.broker + "...")
                                 self.ssh_command_exec('ssh -o "StrictHostKeyChecking no" root@' + node_name + ' "source /etc/profile; cd A8; cd opentestbed; pip install requests; killall python; python otbox.py --testbed=iotlab --broker=' + self.broker + ' >& otbox-' + node_name + '.log &"')
 				self.active_nodes.append(node)
 				self.socketIoHandler.publish('NODE_ACTIVE', node_name)
