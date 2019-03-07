@@ -1,162 +1,166 @@
 {
     "openbenchmark00": {
-        "node_id": "a8-124", 
+        "node_id": "node-a8-124", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark01": {
-        "node_id": "a8-116", 
+        "node_id": "node-a8-116", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark02": {
-        "node_id": "a8-117", 
+        "node_id": "node-a8-117", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark03": {
-        "node_id": "a8-118", 
+        "node_id": "node-a8-118", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark04": {
-        "node_id": "a8-119", 
+        "node_id": "node-a8-119", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark05": {
-        "node_id": "a8-120", 
+        "node_id": "node-a8-120", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark06": {
-        "node_id": "a8-121", 
+        "node_id": "node-a8-121", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark07": {
-        "node_id": "a8-122", 
+        "node_id": "node-a8-122", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark08": {
-        "node_id": "a8-123", 
+        "node_id": "node-a8-123", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark09": {
-        "node_id": "a8-125", 
+        "node_id": "node-a8-125", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark10": {
-        "node_id": "a8-127", 
+        "node_id": "node-a8-127", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark11": {
-        "node_id": "a8-128", 
+        "node_id": "node-a8-128", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark12": {
-        "node_id": "a8-129", 
+        "node_id": "node-a8-129", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark13": {
-        "node_id": "a8-130", 
+        "node_id": "node-a8-130", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark14": {
-        "node_id": "a8-131", 
+        "node_id": "node-a8-131", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark15": {
-        "node_id": "a8-132", 
+        "node_id": "node-a8-132", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark16": {
-        "node_id": "a8-133", 
+        "node_id": "node-a8-133", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark17": {
-        "node_id": "a8-134", 
+        "node_id": "node-a8-134", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark18": {
-        "node_id": "a8-135", 
+        "node_id": "node-a8-135", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark19": {
-        "node_id": "a8-137", 
+        "node_id": "node-a8-137", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark20": {
-        "node_id": "a8-138", 
+        "node_id": "node-a8-138", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark21": {
-        "node_id": "a8-139", 
+        "node_id": "node-a8-139", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark22": {
-        "node_id": "a8-140", 
+        "node_id": "node-a8-140", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark23": {
-        "node_id": "a8-141", 
+        "node_id": "node-a8-141", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark24": {
-        "node_id": "a8-142", 
+        "node_id": "node-a8-142", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark25": {
-        "node_id": "18-143", 
+        "node_id": "node-a8-143", 
         "transmission_power_dbm": 0
     }, 
     "openbenchmark26": {
-        "node_id": "a8-144", 
+        "node_id": "node-a8-144", 
         "transmission_power_dbm": 0
     }, 
     "openbenchmark27": {
-        "node_id": "a8-145", 
+        "node_id": "node-a8-145", 
         "transmission_power_dbm": 0
     }, 
     "openbenchmark28": {
-        "node_id": "a8-149", 
+        "node_id": "node-a8-149", 
         "transmission_power_dbm": 0
     }, 
     "openbenchmark29": {
-        "node_id": "a8-148", 
+        "node_id": "node-a8-148", 
         "transmission_power_dbm": 0
     }, 
     "openbenchmark30": {
-        "node_id": "a8-150", 
+        "node_id": "node-a8-150", 
         "transmission_power_dbm": 0
     }, 
     "openbenchmark31": {
-        "node_id": "a8-146", 
+        "node_id": "node-a8-146", 
         "transmission_power_dbm": 0
     }, 
     "openbenchmark32": {
-        "node_id": "a8-151", 
+        "node_id": "node-a8-151", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark33": {
-        "node_id": "a8-152", 
+        "node_id": "node-a8-152", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark34": {
-        "node_id": "a8-153", 
+        "node_id": "node-a8-154", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark35": {
-        "node_id": "a8-154", 
+        "node_id": "node-a8-155", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark36": {
-        "node_id": "a8-155", 
+        "node_id": "node-a8-156", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark37": {
-        "node_id": "a8-156", 
+        "node_id": "node-a8-157", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark38": {
-        "node_id": "a8-157", 
+        "node_id": "node-a8-158", 
         "transmission_power_dbm": -12
     }, 
     "openbenchmark39": {
-        "node_id": "a8-159", 
+        "node_id": "node-a8-160", 
+        "transmission_power_dbm": -12
+    }, 
+    "openbenchmark40": {
+        "node_id": "node-a8-163", 
         "transmission_power_dbm": -12
     }
 }
