@@ -21,8 +21,9 @@ class Reflash(object):
 
 	def remove_unused(self):
 		nodes = self._get_unused_nodes()
-		self._reflash_unused(nodes)
-		self._remove_unused(nodes)
+		if len(nodes) > 0:
+			self._reflash_unused(nodes)
+			self._remove_unused(nodes)
 
 	def _reflash_unused(self, nodes):
 		print "[REFLASH] Reverting unused nodes to eui64 retreival firmware..."
