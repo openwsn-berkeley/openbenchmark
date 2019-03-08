@@ -42,6 +42,8 @@ class Main():
 		print "[MAIN] Lock released on `startBenchmark` command"
 		self.sut_command_payload = self.co.sut_command_payload
 
+		print self.sut_command_payload
+
 		self._start_network_prep()
 		thread = threading.Thread(target=self._start_kpi_processing)
 		thread.daemon = True
@@ -99,12 +101,4 @@ class Main():
 
 	
 if __name__ == "__main__":
-	try: 
-		Main()
-	except Exception, e:
-		sys.stdout.write("{0}[MAIN] Exception: {1}\n{2}".format(
-				colorama.Fore.RED,
-				str(e), 
-				colorama.Style.RESET_ALL
-			))
-		sys.exit()
+	Main()
