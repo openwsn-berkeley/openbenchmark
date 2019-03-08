@@ -29,15 +29,15 @@ class Simulator(object):
     _instance = None
 
     @staticmethod
-    def create(testbed, scenario, broker="broker.mqttdashboard.com"):
+    def create(testbed, scenario):
         if Simulator._instance == None:
-            Simulator._instance = Simulator(testbed, scenario, broker)
+            Simulator._instance = Simulator(testbed, scenario)
         return Simulator._instance
 
-    def __init__(self, testbed, scenario, broker):
+    def __init__(self, testbed, scenario):
         self.experiment_id      = Utils.experiment_id
+        self.broker             = Utils.broker
         self.testbed            = testbed
-        self.broker             = broker
         self.scenario           = scenario
         self.co                 = ConditionObject.create()
 

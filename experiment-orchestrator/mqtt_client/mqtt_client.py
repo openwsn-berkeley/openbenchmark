@@ -30,8 +30,8 @@ class MQTTClient:
 		return MQTTClient._instance
 
 
-	def __init__(self, broker="broker.mqttdashboard.com"):
-		self.broker           = broker
+	def __init__(self):
+		self.broker           = Utils.broker
 		self.condition_object = ConditionObject.create()
 
 		self.experiment_id    = Utils.experiment_id
