@@ -130,11 +130,7 @@
 
                     axios.get('/api/general/nodes/' + scenario + '/' + testbed)
                         .then(function (response) {
-                            /*thisComponent.multiselectOptions.push({
-                                'nodes': response.data
-                            });*/
                             thisComponent.value = response.data;
-                            console.log(JSON.stringify(thisComponent.value));
                         })
                         .catch(function (error) {
                             console.log("Error: " + error);
@@ -420,6 +416,57 @@
         50% {fill: rgba(200, 200, 200, .3);}
         100% {fill: rgba(200, 200, 200, .7);}
     }
+
+    /***** Role-related classes *****/
+    .monitoring-sensor {
+        stroke: rgb(75, 113, 147);
+        fill: rgb(219, 226, 233);
+        stroke-width: 3px;
+        transition: fill .5s ease;
+    }
+    .event-sensor {
+        stroke: rgb(75, 113, 147);
+        fill: rgb(129, 155, 179);
+        stroke-width: 3px;
+        transition: fill .5s ease;
+    }
+    .actuator {
+        stroke: rgb(75, 113, 147);
+        fill: rgba(255, 197, 117, .7);
+        stroke-width: 3px;
+        transition: fill .5s ease;
+    }
+    .area-controller, .control-unit {
+        stroke: rgb(75, 113, 147);
+        fill: rgba(0, 198, 209, .7);
+        stroke-width: 3px;
+        transition: fill .5s ease;
+    }
+    .zone-controller {
+        stroke: rgb(75, 113, 147);
+        fill: rgba(0, 198, 209, .7);
+        stroke-width: 3px;
+        transition: fill .5s ease;
+    }
+    .sensor {
+        stroke: rgb(75, 113, 147);
+        fill: rgb(219, 226, 233);
+        stroke-width: 3px;
+        transition: fill .5s ease;
+    }
+    .bursty-sensor {
+        stroke: rgb(75, 113, 147);
+        fill: rgb(129, 155, 179);
+        stroke-width: 3px;
+        transition: fill .5s ease;
+    }
+    .gateway {
+        stroke: rgb(75, 113, 147);
+        fill: rgba(0, 198, 209, .7);
+        stroke-width: 3px;
+        transition: fill .5s ease;
+    }
+    /****/
 
     .node-off {
         stroke: rgba(100, 100, 100, .7);
