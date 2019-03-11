@@ -46,7 +46,7 @@ class ConfigParser {
 				"name"      => $node_data["node_id"],
 				"role"      => $node_data["role"],
 				"area"      => $node_data["area"],
-				"_cssClass" => $node_data["role"],
+				"_cssClass" => "node " . $node_data["role"],
 				"booted"    => false,
 				"failed"    => false,
 				"active"    => false

@@ -105,7 +105,9 @@
                     links: []
                 },
 
-                canvas: false
+                canvas: false,
+
+                gatewayIcon: '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="32" viewBox="0 0 24 32"><path d="M12 30c-6.626 0-12-1.793-12-4 0-1.207 0-2.527 0-4 0-0.348 0.174-0.678 0.424-1 1.338 1.723 5.99 3 11.576 3s10.238-1.277 11.576-3c0.25 0.322 0.424 0.652 0.424 1 0 1.158 0 2.387 0 4 0 2.207-5.375 4-12 4zM12 22c-6.626 0-12-1.793-12-4 0-1.208 0-2.526 0-4 0-0.212 0.080-0.418 0.188-0.622v0c0.061-0.128 0.141-0.254 0.236-0.378 1.338 1.722 5.99 3 11.576 3s10.238-1.278 11.576-3c0.096 0.124 0.176 0.25 0.236 0.378v0c0.107 0.204 0.188 0.41 0.188 0.622 0 1.158 0 2.386 0 4 0 2.207-5.375 4-12 4zM12 14c-6.626 0-12-1.792-12-4 0-0.632 0-1.3 0-2 0-0.636 0-1.296 0-2 0-2.208 5.374-4 12-4s12 1.792 12 4c0 0.624 0 1.286 0 2 0 0.612 0 1.258 0 2 0 2.208-5.375 4-12 4zM12 4c-4.418 0-8 0.894-8 2s3.582 2 8 2 8-0.894 8-2-3.582-2-8-2z"></path></svg>'
             }
         },
 
@@ -114,8 +116,6 @@
                 axios.get('/api/general/' + param)
                     .then(function (response) {
                         thisComponent[param] = response.data;
-                        if (thisComponent.testbeds.length > 0 && thisComponent.scenarios.length > 0)
-                            thisComponent.fetch('nodes');
                     })
                     .catch(function (error) {
                         console.log("Error: " + error);
@@ -130,7 +130,13 @@
 
                     axios.get('/api/general/nodes/' + scenario + '/' + testbed)
                         .then(function (response) {
-                            thisComponent.value = response.data;
+                            let data = response.data;
+                            data['nodes'].forEach(function(element) {
+                                if (['area-controller', 'zone-controller', 'control-unit', 'gateway'].includes(element.role))
+                                    element.svgSym = thisComponent.gatewayIcon;
+                            });
+                            thisComponent.value = data;
+                            console.log(JSON.stringify(thisComponent.value));
                         })
                         .catch(function (error) {
                             console.log("Error: " + error);
@@ -217,43 +223,6 @@
                 }
 
             },
-
-            /*simulateExpStartup() {
-                console.log("Simulation started");
-                this.stepsCompleted++;
-
-                let nodeNum = thisComponent.value.nodes.length;
-                for (let i=0; i<nodeNum; i++) {
-                    thisComponent.value.nodes[i]._cssClass = 'node-loading';
-                }
-
-                let sim = setInterval(function() {
-                    thisComponent.stepsCompleted++;
-                    console.log("Steps completed: " + thisComponent.stepsCompleted);
-
-                    if (thisComponent.stepsCompleted === 4) {
-                        clearInterval(sim);
-
-                        let nodeNum = thisComponent.value.nodes.length;
-
-                        for (let i=0; i<nodeNum; i++) {
-                            thisComponent.sleep(1000*(i+1)).then(() => {
-                                    thisComponent.value.nodes[i]._cssClass = 'node-on';
-
-                                if (i === nodeNum-1)
-                                    thisComponent.sleep(500).then(() => {
-                                        thisComponent.stepsCompleted++;
-                                    });
-                            });
-                        }
-                    }
-
-                }, 2000);
-            },
-
-            sleep(time) {
-                return new Promise(resolve => setTimeout(resolve, time));
-            }*/
         },
 
         computed:{
@@ -264,18 +233,7 @@
                 nodeSize = 35;
                 force    = 1500;
 
-                /*if (this.value.name === "Demo") {
-                    nodeSize = 35;
-                    force = 3000;
-                } else if (this.value.name === "Smart office") {
-                    nodeSize = 25;
-                    force = 1000;
-                } else {
-                    nodeSize = 25;
-                    force = 500;
-                }*/
-
-                return{
+                return {
                     force: force,
                     size: {w:600, h:600},
                     nodeSize: nodeSize,
@@ -418,53 +376,39 @@
     }
 
     /***** Role-related classes *****/
+    .node {
+        stroke-width: 3px;
+    }
+    .node:hover {
+        stroke: rgb(220, 146, 2);
+        fill: rgba(255, 197, 117);
+        width: rgb(255, 180, 4);
+        stroke-width: 4px;
+    }
     .monitoring-sensor {
         stroke: rgb(75, 113, 147);
         fill: rgb(219, 226, 233);
-        stroke-width: 3px;
-        transition: fill .5s ease;
     }
     .event-sensor {
         stroke: rgb(75, 113, 147);
         fill: rgb(129, 155, 179);
-        stroke-width: 3px;
-        transition: fill .5s ease;
     }
     .actuator {
         stroke: rgb(75, 113, 147);
-        fill: rgba(255, 197, 117, .7);
-        stroke-width: 3px;
-        transition: fill .5s ease;
+        fill: rgb(200, 200, 200);
     }
-    .area-controller, .control-unit {
+    .area-controller, .control-unit, .zone-controller, .gateway {
         stroke: rgb(75, 113, 147);
-        fill: rgba(0, 198, 209, .7);
-        stroke-width: 3px;
-        transition: fill .5s ease;
-    }
-    .zone-controller {
-        stroke: rgb(75, 113, 147);
-        fill: rgba(0, 198, 209, .7);
-        stroke-width: 3px;
-        transition: fill .5s ease;
+        fill: rgb(219, 226, 233);
+        stroke-width: 2px;
     }
     .sensor {
         stroke: rgb(75, 113, 147);
         fill: rgb(219, 226, 233);
-        stroke-width: 3px;
-        transition: fill .5s ease;
     }
     .bursty-sensor {
         stroke: rgb(75, 113, 147);
         fill: rgb(129, 155, 179);
-        stroke-width: 3px;
-        transition: fill .5s ease;
-    }
-    .gateway {
-        stroke: rgb(75, 113, 147);
-        fill: rgba(0, 198, 209, .7);
-        stroke-width: 3px;
-        transition: fill .5s ease;
     }
     /****/
 
