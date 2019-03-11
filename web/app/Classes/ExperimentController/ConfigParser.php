@@ -42,14 +42,15 @@ class ConfigParser {
 
 		foreach ($res as $generic_id => $node_data) {
 			$data["nodes"][] = [
-				"id"        => $generic_id,
-				"name"      => $node_data["node_id"],
-				"role"      => $node_data["role"],
-				"area"      => $node_data["area"],
-				"_cssClass" => "node " . $node_data["role"],
-				"booted"    => false,
-				"failed"    => false,
-				"active"    => false
+				"id"              => $generic_id,
+				"name"            => $node_data["node_id"],
+				"role"            => $node_data["role"],
+				"area"            => $node_data["area"],
+				"_cssClass"       => "node " . $node_data["role"],
+				"defaultCssClass" => "node " . $node_data["role"],
+				"booted"    	  => false,
+				"failed"          => false,
+				"active"          => false
 			];
 			$data["links"] = $this->_append_node_links($data["links"], $generic_id, $node_data["destinations"]);
 		}
