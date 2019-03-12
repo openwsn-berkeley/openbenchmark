@@ -5,13 +5,17 @@ namespace App\Classes\ExperimentController;
 class ConfigParser {
 
 	private $scenario_config;
-	private $scenarios = [
-		"building-automation"   => "Building automation", 
-		"home-automation"       => "Home automation", 
-		"industrial-monitoring" => "Industrial monitoring"];
-	private $testbeds  = [
-		"iotlab" => "IoT-LAB",
-		"wilab"  => "w-iLab.t"
+
+	private $roles = [
+		"monitoring-sensor" => "Monitoring Sensor",
+		"event-sensor"      => "Event Sensor",
+		"actuator"          => "Actuator",
+		"area-controller"   => "Area Controller",
+		"zone-controller"   => "Zone Controller",
+		"control-unit"      => "Control Unit",
+		"sensor"            => "Sensor",
+		"bursty-sensor"     => "Bursty Sensor",
+		"gateway"           => "Gateway"
 	];
 	
 
@@ -42,15 +46,17 @@ class ConfigParser {
 
 		foreach ($res as $generic_id => $node_data) {
 			$data["nodes"][] = [
-				"id"              => $generic_id,
-				"name"            => $node_data["node_id"],
-				"role"            => $node_data["role"],
-				"area"            => $node_data["area"],
-				"_cssClass"       => "node " . $node_data["role"],
-				"defaultCssClass" => "node " . $node_data["role"],
-				"booted"    	  => false,
-				"failed"          => false,
-				"active"          => false
+				"id"                => $generic_id,
+				"name"              => $node_data["node_id"],
+				"role"              => $node_data["role"],
+				"roleFull"          => $this->roles[$node_data["role"]],
+				"area"              => $node_data["area"],
+				"_cssClass"         => "node " . $node_data["role"],
+				"defaultCssClass"   => "node " . $node_data["role"],
+				"transmissionPower" => $node_data["transmission_power_dbm"] . " dBm",
+				"booted"    	    => false,
+				"failed"            => false,
+				"active"            => false
 			];
 			$data["links"] = $this->_append_node_links($data["links"], $generic_id, $node_data["destinations"]);
 		}
@@ -67,4 +73,5 @@ class ConfigParser {
 		}
 		return $links;
 	}
+	
 }
