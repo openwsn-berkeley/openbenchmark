@@ -2,27 +2,30 @@
     <div class="parent">
         <div class="row">
             <div class="col-5 pr-5 pl-5">
-
-                <h4>Scenario: </h4>
+                
                 <div class="row">
-                    <div class="scenario col-direction" :class="{'scenario-selected': scenarioSelected === index}" @click="selectScenario(index)" v-for="(scenario, index) in scenarios">
-                        <i class="fas fa-3x text-center" :class="scenarioIcons[scenario.identifier]"></i>
-                        <span class="text-center">{{scenario.name}}</span>
+                    <div class="col-7">
+                        <h4>Scenario: </h4>
+                        <div class="row col-direction">
+                            <div class="scenario row-direction" :class="{'scenario-selected': scenarioSelected === index}" @click="selectScenario(index)" v-for="(scenario, index) in scenarios">
+                                <div class="row v-center mb-1" style="width:100%">
+                                    <div class="col-2">
+                                        <i class="fas fa-2x" :class="scenarioIcons[scenario.identifier]"></i>
+                                    </div>
+                                    <div class="col-10 pl-1">
+                                        <span>{{scenario.name}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-
-                <div class="justified bold" v-if="value !== null">
-                    <ul>
-                        <li v-for="item in value.description">
-                            {{item}}
-                        </li>
-                    </ul>
-                </div>
-
-                <h4>Testbed: </h4>
-                <div class="row ml-3">
-                    <div class="testbed col-direction" :class="{'testbed-selected': testbedSelected === index}" @click="selectTestbed(index)" v-for="(testbed, index) in testbeds">
-                        <img class="logo-sm mr-2" style="height: 55px" :src="testbedIcons[testbed.identifier]">
+                    <div class="col-4">
+                        <h4>Testbed: </h4>
+                        <div class="row col-direction">
+                            <div class="testbed" :class="{'testbed-selected': testbedSelected === index}" @click="selectTestbed(index)" v-for="(testbed, index) in testbeds">
+                                <img class="logo-sm mb-1" style="height: 55px" :src="testbedIcons[testbed.identifier]">
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -33,9 +36,21 @@
                     </div>
                 </div>
 
-                <button class="main-btn btn-width-full mt-2" v-if="scenarioSelected !== -1 && testbedSelected !== -1 && !dataFlowStarted" @click="processStart()" :disabled="processStarted">Start experiment</button>
-
-                <button class="main-btn btn-width-full btn-danger mt-2" v-if="dataFlowStarted" @click="processTerminate()">Terminate experiment</button>
+                <h4 class="mt-2" style="margin-bottom: 10px" v-if="selectedNode.length !== 0">Selected node: </h4>
+                <div class="row card mt-1 pt-1 pb-1 pl-1 pr-1 row-direction" v-if="selectedNode.length !== 0">
+                    <div class="row col-direction">
+                        <h4 class="mt-0 node-property">OpenBenchmark ID:</h4>
+                        <h4 class="mt-0 node-property">Testbed ID:</h4>
+                        <h4 class="mt-0 node-property">Transmission power:</h4>
+                        <h4 class="mt-0 node-property">Role:</h4>
+                    </div>
+                    <div class="row col-direction pl-2">
+                        <span class="node-property">{{selectedNode.id}}</span>
+                        <span class="node-property">{{selectedNode.name}}</span>
+                        <span class="node-property">{{selectedNode.transmissionPower}}</span>
+                        <span class="node-property">{{selectedNode.roleFull}}</span>
+                    </div>
+                </div>
 
             </div>
 
@@ -59,6 +74,11 @@
                 </div>
             </div>
 
+        </div>
+
+        <div class="row h-center">
+            <button class="main-btn btn-width-half mt-1" v-if="scenarioSelected !== -1 && testbedSelected !== -1 && !dataFlowStarted" @click="processStart()" :disabled="processStarted">Start experiment</button>
+            <button class="main-btn btn-width-half btn-danger mt-1" v-if="dataFlowStarted" @click="processTerminate()">Terminate experiment</button>
         </div>
     </div>
 </template>
@@ -109,7 +129,7 @@
                     links: []
                 },
 
-                selectedNode: null,
+                selectedNode: [],
 
                 gatewayIcon: '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="32" viewBox="0 0 24 32"><path d="M12 30c-6.626 0-12-1.793-12-4 0-1.207 0-2.527 0-4 0-0.348 0.174-0.678 0.424-1 1.338 1.723 5.99 3 11.576 3s10.238-1.277 11.576-3c0.25 0.322 0.424 0.652 0.424 1 0 1.158 0 2.387 0 4 0 2.207-5.375 4-12 4zM12 22c-6.626 0-12-1.793-12-4 0-1.208 0-2.526 0-4 0-0.212 0.080-0.418 0.188-0.622v0c0.061-0.128 0.141-0.254 0.236-0.378 1.338 1.722 5.99 3 11.576 3s10.238-1.278 11.576-3c0.096 0.124 0.176 0.25 0.236 0.378v0c0.107 0.204 0.188 0.41 0.188 0.622 0 1.158 0 2.386 0 4 0 2.207-5.375 4-12 4zM12 14c-6.626 0-12-1.792-12-4 0-0.632 0-1.3 0-2 0-0.636 0-1.296 0-2 0-2.208 5.374-4 12-4s12 1.792 12 4c0 0.624 0 1.286 0 2 0 0.612 0 1.258 0 2 0 2.208-5.375 4-12 4zM12 4c-4.418 0-8 0.894-8 2s3.582 2 8 2 8-0.894 8-2-3.582-2-8-2z"></path></svg>'
             }
@@ -245,11 +265,11 @@
                 let force;
 
                 nodeSize = 35;
-                force    = 1500;
+                force = 1500;
 
                 return {
                     force: force,
-                    size: {w:600, h:600},
+                    size: {w:600, h:550},
                     nodeSize: nodeSize,
                     nodeLabels: true,
                     canvas: false
@@ -351,7 +371,8 @@
 <style scoped>
     .parent {
         height: 100vh;
-        padding: 25px;
+        padding-left: 25px;
+        padding-right: 25px;
     }
 
     .scenario {
@@ -373,6 +394,10 @@
     }
     .testbed:not(.testbed-selected) {
         filter: grayscale(100%) opacity(0.3);
+    }
+
+    .node-property {
+        margin-bottom: 5px;
     }
 </style>
 
