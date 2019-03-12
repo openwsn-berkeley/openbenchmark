@@ -24,6 +24,9 @@
 .btn-width-full {
     width: 100%;
 }
+.btn-width-half {
+    width: 50%;
+}
 .btn-danger {
     background-color: red;
 }
