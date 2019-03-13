@@ -47,7 +47,7 @@
         },
         data: function () {
             return {
-                dataFlowStarted: false,
+                dataFlowStarted: true,
                 sidebarScroll: false,
                 root: document.getElementById('root'),
                 threshold: 0.05

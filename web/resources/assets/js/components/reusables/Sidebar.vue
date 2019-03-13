@@ -29,7 +29,7 @@
     export default {
         data: function () {
             return {
-                dataFlowStarted: false,
+                dataFlowStarted: true,
                 selectedId: 0
             }
         },
