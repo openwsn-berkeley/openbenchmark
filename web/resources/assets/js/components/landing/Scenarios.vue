@@ -160,6 +160,7 @@
                                     element.svgSym = thisComponent.gatewayIcon;
                             });
                             thisComponent.value = data;
+                            thisComponent.$eventHub.$emit('NODES_FETCHED', data);
                         })
                         .catch(function (error) {
                             console.log("Error: " + error);
