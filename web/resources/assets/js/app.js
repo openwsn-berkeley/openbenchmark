@@ -1,4 +1,5 @@
 import routes from './router/routes.js';
+import MQTTClient from './mqtt.js';
 import VueSocketio from 'vue-socket.io-extended';
 import io from 'socket.io-client';
 import { ObserveVisibility } from 'vue-observe-visibility'
@@ -12,6 +13,7 @@ window.Vue = require('vue');
 Vue.use(VueRouter);
 
 Vue.prototype.$eventHub = new Vue();
+Vue.prototype.$mqttClient = new MQTTClient('broker.mqttdashboard.com', 8000); //this.$mqttClient.publish(), this.$mqttClient.subscribe()
 
 Vue.component('arrow', require('./components/reusables/Arrow.vue'));
 Vue.component('multiselect', require('vue-multiselect').default);
