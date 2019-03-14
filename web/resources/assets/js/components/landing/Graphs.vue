@@ -58,7 +58,7 @@
 
         data: function () {
             return {
-                client: new Paho.Client("broker.mqttdashboard.com", Number(8000), "webBrowserClient"),
+                //client: new Paho.Client("broker.mqttdashboard.com", Number(8000), "webBrowserClient"),
 
                 expStartTimestamp: -1,
                 dataPerChart: 20,
@@ -235,28 +235,29 @@
             },
 
             /*** MQTT Configuration ***/
-            configurePaho() {
-                // set callback handlers
-                this.client.onConnectionLost = this.onConnectionLost;
-                this.client.onMessageArrived = this.onMessageArrived;
-
-                // connect the client
-                this.client.connect({onSuccess: this.onConnect});
+            subscribe() {
+                let interval = setInterval( function() {
+                    if (thisComponent.$mqttClient.subscribe("browser/event") !== "") {
+                        console.log("Retrying subscription in 1s...") 
+                    } else {
+                        clearInterval(interval)
+                    }
+                }, 1000);   
             },
             onConnect() {
                 // Once a connection has been made, make a subscription and send a message.
-                console.log("onConnect");
-                this.client.subscribe("browser/event");
-                let message = new Paho.Message("Browser connected to MQTT!");
-                message.destinationName = "browser/message";
-                this.client.send(message);
+                //console.log("onConnect");
+                //this.client.subscribe("browser/event");
+                //let message = new Paho.Message("Browser connected to MQTT!");
+                //message.destinationName = "browser/message";
+                //this.client.send(message);
             },
             onConnectionLost(responseObject) {
-                if (responseObject.errorCode !== 0)
-                    console.log("onConnectionLost: " + responseObject.errorMessage);
+                //if (responseObject.errorCode !== 0)
+                 //   console.log("onConnectionLost: " + responseObject.errorMessage);
             },
             onMessageArrived(message) {
-                console.log("onMessageArrived: " + message.payloadString);
+                //console.log("onMessageArrived: " + message.payloadString);
             }
 
         },
@@ -282,7 +283,7 @@
         },
 
         mounted() {
-            this.configurePaho();
+            this.subscribe();
 
             this.$eventHub.$on("NODES_FETCHED", payload => {
                 thisComponent.value = thisComponent.clone(payload);
