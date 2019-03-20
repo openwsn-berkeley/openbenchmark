@@ -708,6 +708,7 @@ clockDrift   | Local measurement of clock drift            | Drift in microsecon
 Field name | Event | Presence Requirement
 ---------- | ----- | ---------------------
 event      | all   | MUST
+source     | all   | MUST
 timestamp  | all   | MUST
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
