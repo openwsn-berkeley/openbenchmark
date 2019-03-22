@@ -44,6 +44,7 @@ class Simulator(object):
         self.bench_init_timeout = 3    #[s]
 
         self.scenario_config_dirs = {
+            "demo-scenario":         os.path.join(os.path.dirname(__file__), "..", "scenarios", "demo_scenario"),
             "building-automation":   os.path.join(os.path.dirname(__file__), "..", "scenarios", "building_automation"),
             "home-automation":       os.path.join(os.path.dirname(__file__), "..", "scenarios", "home_automation"),
             "industrial-monitoring": os.path.join(os.path.dirname(__file__), "..", "scenarios", "industrial_monitoring")
@@ -64,7 +65,7 @@ class Simulator(object):
             "sendPacket": "openbenchmark/experimentId/{0}/response/sendPacket".format(self.experiment_id),
             "configureTransmitPower": "openbenchmark/experimentId/{0}/response/configureTransmitPower".format(self.experiment_id),
             "triggerNetworkFormation": "openbenchmark/experimentId/{0}/response/triggerNetworkFormation".format(self.experiment_id),
-            "performanceData": "openbenchmark/experimentId/{0}/nodeId/00-12-4b-00-14-b5-b6-44/performanceData".format(self.experiment_id)
+            "performanceData": "openbenchmark/experimentId/{0}/nodeId/00-12-4b-00-14-b5-b6-10/performanceData".format(self.experiment_id)
         }
 
         self._mqtt_client_setup() 
@@ -153,8 +154,8 @@ class Simulator(object):
                     del self.sent[rand_position]
 
             sut_event_payload["packetToken"] = token
-            sut_event_payload["source"]      = "00-12-4b-00-14-b5-b6-44"
-            sut_event_payload["destination"] = "00-12-4b-00-14-b5-b6-45"
+            sut_event_payload["source"]      = "00-12-4b-00-14-b5-b6-10"
+            sut_event_payload["destination"] = "00-12-4b-00-14-b5-b6-11"
             sut_event_payload["hopLimit"]    = 255
 
         print "[SUT SIMULATOR] {0} event generated".format(event)

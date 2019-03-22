@@ -80,7 +80,7 @@ class Main():
 		)
 		parser.add_argument('--scenario', 
 	        dest       = 'scenario',
-	        choices    = ['building-automation', 'home-automation', 'industrial-monitoring'],    # building-automation, home-automation, industrial-monitoring
+	        choices    = ['demo-scenario', 'building-automation', 'home-automation', 'industrial-monitoring'],    # building-automation, home-automation, industrial-monitoring
 	        action     = 'store'
 		)
 
