@@ -25,18 +25,21 @@ class Wizard:
 		self.id_prefix = "openbenchmark"
 
 		self.identifiers = [
+			Identifiers.dm,
 			Identifiers.ba,
 			Identifiers.ha,
 			Identifiers.im
 		]
 
 		self.default_payload_size = {   # in bytes
+			Identifiers.dm: 10,
 			Identifiers.ba: 80,
 			Identifiers.ha: 10,
 			Identifiers.im: 10
 		}
 
 		self.nf_time_padding_min = {
+			Identifiers.dm: 5,
 			Identifiers.ba: 5,
 			Identifiers.ha: 5,
 			Identifiers.im: 5,
@@ -50,6 +53,7 @@ class Wizard:
 		}
 
 		self.locations = {
+			Identifiers.dm: "../demo-scenario/",
 			Identifiers.ba: "../building-automation/",
 			Identifiers.ha: "../home-automation/",
 			Identifiers.im: "../industrial-monitoring/"
@@ -62,7 +66,7 @@ class Wizard:
 		
 		
 		self.info['identifier'] = self.identifiers[input(
-				"Pick a scenario (0 - {0}, 1 - {1}, 2 - {2}): ".format(Identifiers.ba, Identifiers.ha, Identifiers.im)
+				"Pick a scenario (0 - {0}, 1 - {1}, 2 - {2}, 3 - {3}): ".format(Identifiers.dm, Identifiers.ba, Identifiers.ha, Identifiers.im)
 			)]
 		
 		self.info['duration_min'] = input("Duration in minutes (e.g. 30): ")
@@ -103,7 +107,7 @@ class Wizard:
 		identifier = self.info['identifier']
 		roles      = definitions[identifier]
 
-		role = Roles.zc if identifier == Identifiers.ba else Roles.cu if identifier == Identifiers.ha else Roles.g
+		role = Roles.zc if identifier == Identifiers.ba else Roles.cu if identifier in (Identifiers.ha, Identifiers.dm) else Roles.g
 		self.nodes["openbenchmark00"] = OrderedDict()
 		self.nodes["openbenchmark00"]['role'] = role
 		self.nodes["openbenchmark00"]['area'] = None
