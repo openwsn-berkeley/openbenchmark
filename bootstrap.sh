@@ -17,6 +17,12 @@ sudo apt-get -y update
 sudo apt-get -y upgrade
 sudo apt-get install -y software-properties-common
 
+# Create system swap as PHP installation may fail without it
+sudo fallocate -l 2G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+
 # Install Apache and Apache dependencies
 sudo apt-get -y install apache2
 cd /tmp && wget http://mirrors.kernel.org/ubuntu/pool/multiverse/liba/libapache-mod-fastcgi/libapache2-mod-fastcgi_2.4.7~0910052141-1.2_amd64.deb
@@ -24,7 +30,7 @@ sudo dpkg -i libapache2-mod-fastcgi_2.4.7~0910052141-1.2_amd64.deb; sudo apt ins
 
 # Install PHP 7.2 and Composer
 sudo apt-get -y install python-software-properties
-sudo add-apt-repository ppa:ondrej/php -y
+LC_ALL=C.UTF-8 sudo add-apt-repository ppa:ondrej/php -y
 sudo apt-get -y update
 sudo apt-get -y install php7.2 php7.2-fpm php7.2-common
 sudo apt-get -y install composer
