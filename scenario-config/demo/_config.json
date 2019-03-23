@@ -1,0 +1,43 @@
+{
+    "identifier": "demo",
+    "duration_min": 10,
+    "number_of_nodes": 3,
+    "payload_size": 10,
+    "nf_time_padding_min": 5,
+    "nodes": {
+        "openbenchmark00": {
+            "role": "control-unit",
+            "area": null,
+            "traffic_sending_points": [
+                {
+                    "time_sec": 167.653,
+                    "destination": "openbenchmark01",
+                    "packets_in_burst": 5,
+                    "confirmable": true
+                },
+            ]
+        },
+        "openbenchmark01": {
+            "role": "monitoring-sensor",
+            "area": 0,
+            "traffic_sending_points": [
+                {
+                    "time_sec": 296.416,
+                    "destination": "openbenchmark00",
+                    "confirmable": false
+                },
+            ]
+        },
+        "openbenchmark02": {
+            "role": "monitoring-sensor",
+            "area": 0,
+            "traffic_sending_points": [
+                {
+                    "time_sec": 216.653,
+                    "destination": "openbenchmark00",
+                    "confirmable": false
+                },
+            ]
+        },
+    }
+}
