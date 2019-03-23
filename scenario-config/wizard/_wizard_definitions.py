@@ -1,4 +1,5 @@
 class Identifiers:
+	dm = 'demo-scenario'
 	ba = 'building-automation'
 	ha = 'home-automation'
 	im = 'industrial-monitoring'
@@ -16,6 +17,36 @@ class Roles:
 
 
 definitions = {
+
+	Identifiers.dm: {
+		Roles.ms: {
+			'number': 50.0, 
+			'nodes': [], 
+			'dest_type': [Roles.cu], 
+			'confirmable': {Roles.cu: False}, 
+			'traffic_type': {Roles.cu: 'periodic'}, 
+			'traffic_properties': {'interval': [180, 300]}, 
+			'packets_in_burst': 1
+		}, 
+		Roles.a : {
+			'number': 50.0, 
+			'nodes': [], 
+			'dest_type': [Roles.cu], 
+			'confirmable': {Roles.cu: True},  
+			'traffic_type': {Roles.cu: 'periodic'}, 
+			'traffic_properties': {'interval': [180, 300]}, 
+			'packets_in_burst': 1
+		},
+		Roles.cu: {
+			'number': 1,
+			'nodes': [], 
+			'dest_type': [Roles.a], 
+			'confirmable': {Roles.a: True},  
+			'traffic_type': {Roles.a: 'poisson'},  
+			'traffic_properties': {'mean': 10},             
+			'packets_in_burst': 5
+		}
+	},
 
 	Identifiers.ba: {   # Data per area except `zone-controller`
 		Roles.ms: {

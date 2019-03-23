@@ -2,11 +2,21 @@
 
 # Overview
 
-This page documents the OpenBenchmark platform developed in the scope of the [SODA project](http://www.soda.ucg.ac.me/) in collaboration with [Inria-EVA](https://team.inria.fr/eva/).
+This page documents the OpenBenchmark platform developed jointly by the [SODA team](http://www.soda.ucg.ac.me/) at the [University of Montenegro](https://www.ucg.ac.me) and [Inria-EVA](https://team.inria.fr/eva/).
 OpenBenchmark automates the experimentation and network performance benchmarking on selected testbeds supporting Internet of Things devices compliant with IEEE 802.15.4 standard.
 OpenBenchmark instruments the execution of an experiment in real time following the pre-defined test scenarios and collects the data to calculate the network Key Performance Indicators (KPIs) in a fully automated manner.
+
+
+<figure>
+  <p align="center"><img src="_static/overview.png">
+  <figcaption>Fig. 1. Overview of OpenBenchmark functionality.</figcaption></p>
+</figure>
+
+See [Terminology](#terminology) for the definition of terms used in this documentation.
 See [Scenarios](#test-scenarios) for the definition of test scenarios.
 See [KPIs](#key-performance-indicators) for the list of Key Performance Indicators.
+See [OpenBenchmark Architecture](#openbenchmark-architecture) for the description of the OpenBenchmark software architecture.
+See [OpenBenchmark Compliance Requirements](#openbenchmark-compliance-requirements) for a summary of APIs, data formats and other relevant implementation choices.
 
 OpenBenchmark focuses on a wireless communication technology called 6TiSCH that enables wire-like reliability and up to a decade of device lifetime on a pair of AA batteries.
 The 6TiSCH stack is defined in the [IETF 6TiSCH working group](https://datatracker.ietf.org/wg/6tisch/about/) and relies on IEEE 802.15.4 hardware.
@@ -17,67 +27,10 @@ By default, OpenBenchmark supports the [OpenWSN](https://openwsn.atlassian.net/)
 # Terminology
 
 - 6LoWPAN Border Router (6LBR): A router that interconnects the low-power constrained network with the rest of the Internet.
-- Gateway: An entity executing application-level code that is typically co-located with the 6LBR of the network.
-- System Under Test (SUT): Refers to the low-power constrained network under test as a whole, encompassing the network Gateway and low-power constrained devices.
+- Network Gateway: An entity executing application-level code that is typically co-located with the 6LBR of the network.
+- System Under Test (SUT): Refers to the low-power constrained network under test as a whole, encompassing the Network Gateway and low-power constrained devices.
 - Implementation Under Test (IUT): Refers to the implementation of the 6TiSCH protocol stack under test.
 IUT is executed on low-power devices within the testbed.
-
-<!-- ====================================================================== -->
-
-# Architecture
-
-<p align="center"><img src="_static/architecture.png"></p>
-
-OpenBenchmark consists of following components:
-
-- OpenBenchmark Agent: A component running at the Network Gateway side, translating OpenBenchmark commands to the format that the IUT implements, and also converting performance data from the IUT to the format expected by OpenBenchmark.
-Agent implements [Experiment Control Commands API](#experiment-control-commands) and [Experiment Performance Event API](#experiment-performance-event).
-- Experiment Controller: A component in charge of communicating with the SUT and instrumenting it according to a given scenario (e.g. to send an application packet).
-This component is also in charge of starting the experiment, reserving nodes according to the testbed-specific APIs, etc.
-Experiment Controller MUST implements [Experiment Control Commands API](#experiment-control-commands).
-- Performance Event Handler: A component in charge of handling performance data coming from the SUT.
-Based on this data, OpenBenchmark is able to calculate different Key Performance Indicators (KPIs) of the IUT.
-Performance Event Handler implements [Experiment Performance Event API](#experiment-performance-event).
-- Web server: A PHP-based backend and Vue.js-based frontend allowing the user to access the OpenBenchmark platform through a graphical interface.
-
-Apart from developing new software components that will fully automate the benchmarking process, OpenBenchmark leverages and complements the existing effort in the open-source community to enable benchmarking of the pilot implementation of 6TiSCH: the OpenWSN project.
-These projects include:
-
-- OpenTestbed project: An open-source solution running on the testbed infrastructure that allows the communication with the firmware implementation executing in the testbed to be accessed as if it were running locally on the user’s machine.
-Essentially, OpenTestbed emulates the serial port connectivity over the MQTT protocol and allows the user to remotely flash the firmware on testbed devices.
-As part of the SODA effort, we extended the support of OpenTestbed to IoT-lab Saclay site, and our partners from iMec extended its support for w.iLab.t testbed.
-- OpenVisualizer project: An open-source implementation of a 6TiSCH gateway compatible with the OpenWSN firmware project.
-As part of the SODA effort, together with our external partners from Inria, we extended the OpenVisualizer to support the local execution on user’s premises while the 6TiSCH nodes are in testbed, by using the OpenTestbed functionalities.
-
-<!-- ====================================================================== -->
-
-# Requirements
-
-This section lists the implementation requirements that MUST be met to enable either a new
-
-- System Under Test (SUT), or
-- IEEE 802.15.4 testbed
-
-to be used with the OpenBenchmark platform.
-
-<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-
-## Implementation Under Test
-
-Implementation Under Test (IUT) communicates with the OpenBenchmark platform through the Agent component whose implementation is specific to the IUT.
-
-Specification                                                              | Requirement Level
--------------------------------------------------------------------------- | -----------------
-[Experiment Control Commands](#experiment-control-commands)                |        MUST
-[Experiment Performance Events](#experiment-performance-events)            |        MUST
-
-<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
-
-## Testbed
-
-Specification                                                              | Requirement Level
--------------------------------------------------------------------------- | -----------------
-[OpenTestbed Software](https://github.com/openwsn-berkeley/opentestbed)    |        MUST
 
 <!-- ====================================================================== -->
 
@@ -85,12 +38,6 @@ Specification                                                              | Req
 
 The goal of an OpenBenchmark *test scenario* is to capture real-life use cases of a technology in order to benchmark its performance in a setting that is relevant to the end users: companies adopting the technology for their products and their customers.
 A test scenario also allows the experiment to be fully reproducible and the results easily and fairly comparable, desirable properties from the research point of view.
-
-A test scenario is mapped to an executable logic implemented within the *Experiment Controller* component that runs on the OpenBenchmark platform concurrently with the experiment in the testbed.
-Experiment Controller sends commands to the nodes in the testbed in real time to trigger a desired action: configure radio transmit power, trigger application traffic, generate interference, ...
-This requires the SUT, through e.g. the network Gateway, to handle the commands originating from the Experiment Controller.
-These commands can be communicated to the IUT over the serial port thanks to the OpenTestbed software components running on the testbed infrastructure but how this exactly happens is specific to the SUT.
-The format of the commands from the Experiment Controller to the SUT is specified in [Experiment Control Commands](#experiment-control-commands).
 
 Each scenario describes the application traffic pattern and load and the desirable coverage requirements in the number of hops in the network.
 The description of a scenario is generic, with testbed-specific mappings.
@@ -131,6 +78,7 @@ Sender | Destination | Traffic pattern and load                       | Ack | Ac
 ------ | ----------- | ---------------------------------------------- | --- | -------------
 MS     |  AC         | Periodic, uniformly in [25, 35] seconds        | Yes | None
 ES     |  AC         | Poisson, mean of 10 packets/hour               | Yes | Forward to ZC
+AC     |  A          | Poisson, mean of 10 packets/hour               | Yes | None
 A      |  AC         | Periodic, uniformly in [25, 35] seconds        | Yes | None
 AC     |  ZC         | Periodic, uniformly in [120,140] milliseconds  | No  | None
 
@@ -139,7 +87,7 @@ The table below lists other relevant settings:
 Setting                   | Value
 ------------------------- | ----------------
 Coverage Requirement      |  4-6 hops
-Application Payload Size  |  100 bytes
+Application Payload Size  |  80 bytes
 
 The coverage requirement is an approximation based on RFC5867 deployment requirements.
 
@@ -216,15 +164,16 @@ Setting                     | Value
 --------------------------- | ----------------
 Coverage Requirement        |   5-10 hops
 Sensor Payload Size         |   10 bytes
-Bursty Sensor Payload Size  |   100 bytes
+Bursty Sensor Payload Size  |   80 bytes
 Packets per Burst           |   10
 
 <!-- ====================================================================== -->
 
 # Key Performance Indicators
 
-This section lists the high-level Key Performance Indicators (KPIs) that are calculated by OpenBenchmark.
+This section lists the high-level Key Performance Indicators (KPIs).
 Each subsection gives a short description of the KPI and what information is needed to calculate it.
+The first four presented KPIs are relevant for the industry stakeholders, while the latter KPIs are also useful from the research point of view.
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
@@ -242,14 +191,13 @@ Each receiver node needs to log the number of application packets received and t
 
 ## Latency
 
-Latency refers to the time interval between 
+Latency refers to the time interval between
 
-- the instant packet is generated at the sender, and 
+- the instant packet is generated by the applicaton layer at the sender, and
 - the instant the packet is received by the application layer of the destination.
 
 To calculate latency per packet, the sender needs to add a timestamp into the packets it sends.
 The receiver calculates the latency by subtracting the current time from the time indicated in the received packet.
-6TiSCH networks use the Absolute Slot Number (ASN) as the timestamp.
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
@@ -258,10 +206,24 @@ The receiver calculates the latency by subtracting the current time from the tim
 Radio Duty Cycle (RDC) refers to the ratio between 
 
 - the time that the radio chip is powered, and 
-- the duration of the measuring interval.
+- the duration of the measurement period.
 
 Each node in the network needs to log the RDC specific to it.
-In 6TiSCH network, RDC can be calculated based on the number of assigned cells in the TSCH schedule and the activity within the corresponding slots.
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+## Number of Hops Traversed per Packet
+
+A research relevant KPI, number of hops traversed per packet refers to the number of nodes in the network that have forwarded a given packet before it reached its final destination.
+Under the assumption that all nodes in the network use a common value to set the Hop Limit field in the IPv6 header when originating a packet, this metric can be calculated at the final destination node by subtracting this common value with the value of the Hop Limit field in the received packet.
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+## Synchronization Precision
+
+A research relevant KPI, synchronization precision refers to the average clock drift measured between a pair of nodes.
+In 6TiSCH networks, nodes exchange clock drift within the MAC-layer acknowledgment frames.
+Each node in the network needs to log the measured clock drift and the identifier of the peer.
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
@@ -269,15 +231,13 @@ In 6TiSCH network, RDC can be calculated based on the number of assigned cells i
 
 Network Formation Time refers to the initial phase when the network is forming.
 It is an important KPI from the installation point of view.
-We consider 3 different phases described in the following sections.
-
-Each node in the network needs to log the timestamp of the corresponding events.
+To aid during the research process, we consider 3 different subphases of the network formation time described in the following.
 
 <!-- . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  -->
 
-### Synchronization Phase
+### Synchronization Phase Time
 
-Synchronization phase refers to the time interval between
+Synchronization phase time refers to the time interval between
 
 - the instant when a device is booted, and
 - the instant when a device gets synchronized with the network and starts duty cycling.
@@ -286,9 +246,9 @@ In 6TiSCH networks, device is synchronized upon reception of a first Enhanced Be
 
 <!-- . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  -->
 
-### Secure Join Phase
+### Secure Join Phase Time
 
-Secure Join phase refers to the time interval between
+Secure Join phase time refers to the time interval between
 
 - the instant when a device gets synchronized with the network, and
 - the instant corresponding to the end of the authentication, key and parameter distribution protocol.
@@ -298,9 +258,9 @@ In 6TiSCH networks, a device completes the secure join phase upon reception and 
 
 <!-- . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .  -->
 
-### Parent Selection and Bandwidth Assignment
+### Parent Selection and Bandwidth Assignment Phase Time
 
-Parent selection and bandwidth assignment phase refers to the time interval between
+Parent selection and bandwidth assignment phase time refers to the time interval between
 
 - the instant corresponding to the end of the authentication, key and parameter distribution protocol, and
 - the instant the node has been successfully assigned the minimum bandwidth needed for it to start sending application traffic.
@@ -308,26 +268,71 @@ Parent selection and bandwidth assignment phase refers to the time interval betw
 For a node to complete this phase, it first needs to select a routing parent and then request bandwidth.
 Once the bandwidth with the default (preferred) parent is assigned, the node can start sending application traffic.
 
-<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+<!-- ====================================================================== -->
 
-## Number of Hops Traversed per Packet
+# OpenBenchmark Architecture
 
-Number of hops traversed per packet refers to the number of nodes in the network that have forwarded a given packet before it reached its final destination.
-Under the assumption that all nodes in the network use a common value to set the Hop Limit field in the IPv6 header when originating a packet, this metric can be calculated at the final destination node by subtracting this common value with the value of the Hop Limit field in the received packet.
+<figure>
+  <p align="center"><img src="_static/architecture.png">
+  <figcaption>Fig. 2. OpenBenchmark software architecture. SUT is composed of IUTs and the Network Gateway.</figcaption></p>
+</figure>
 
-<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+The OpenBenchmark consists of following components:
 
-## Synchronization Precision
+- Agent: A component running at the Network Gateway side, translating OpenBenchmark commands to the format that the IUT implements, and also converting performance data from the IUT to the format expected by OpenBenchmark.
+- Experiment Provisioner. A component in charge of testbed node reservation, firmware flashing, and launching the necessary software components that run at testbed infrastructure side. These include the Network Gateway, and the serial port emulation software (OpenTestbed) that make the testbed nodes appear to the Network Gateway as if they were physically connected.
+- Experiment Orchestrator. A component in charge of orchestrating the SUT according to the selected test scenario.
+The Experiment Orchestrator interprets the test scenario files and instruments the experiment based on the interpreted data.
+- Performance Event Handler. A component in charge of handling performance data events coming from the SUT.
+Based on these events, Performance Event Handler generates the experiment data sets and calculates the KPIs.
+- Web server. A Laravel-based (PHP) backend and Vue.js-based frontend allowing the user to access the OpenBenchmark platform through a graphical interface.
+The backend serves as a bridge between the frontend and the rest of the OpenBenchmark components that are implemented in Python.
+The backend provides a RESTful API that enables the use of OpenBenchmark by 3$^{rd}$ party applications.
 
-This metric refers to the average clock drift measured between a pair of nodes.
-In 6TiSCH networks, nodes exchange clock drift within the MAC-layer acknowledgment frames.
-Each node in the network needs to log the measured clock drift and the identifier of the peer.
+Apart from developing new software components that will fully automate the benchmarking process, OpenBenchmark leverages and complements the existing effort in the open-source community to enable benchmarking of the pilot implementation of 6TiSCH: the OpenWSN project.
+These projects include:
+
+- OpenTestbed project: An open-source solution running on the testbed infrastructure that allows the communication with the firmware implementation executing in the testbed to be accessed as if it were running locally on the user’s machine.
+Essentially, OpenTestbed emulates the serial port connectivity over the MQTT protocol and allows the user to remotely flash the firmware on testbed devices.
+As part of the SODA effort, we extended the support of OpenTestbed to IoT-lab Saclay site, and our partners from iMec extended its support for w.iLab.t testbed.
+- OpenVisualizer project: An open-source implementation of a 6TiSCH gateway compatible with the OpenWSN firmware project.
+As part of the SODA effort, together with our external partners from Inria, we extended the OpenVisualizer to support the local execution on user’s premises while the 6TiSCH nodes are in testbed, by using the OpenTestbed functionalities.
 
 <!-- ====================================================================== -->
 
-# Experiment Control Commands
+# OpenBenchmark Compliance Requirements
 
-`API version: 0.0.1`
+This section lists the implementation requirements that MUST be met to enable either a new
+
+- System Under Test (SUT), or
+- IEEE 802.15.4 testbed
+
+to be used with the OpenBenchmark platform.
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+## Implementation Under Test
+
+Implementation Under Test (IUT) communicates with the OpenBenchmark platform through the Agent component whose implementation is specific to the IUT.
+
+Specification                                                              | Requirement Level
+-------------------------------------------------------------------------- | -----------------
+[Experiment Control Commands API](#experiment-control-commands-api)        |        MUST
+[Experiment Performance Events API](#experiment-performance-events-api)    |        MUST
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+## Testbed
+
+Specification                                                              | Requirement Level
+-------------------------------------------------------------------------- | -----------------
+[OpenTestbed Software](https://github.com/openwsn-berkeley/opentestbed)    |        MUST
+
+<!-- ====================================================================== -->
+
+# Experiment Control Commands API
+
+`API version: "0.0.1"`
 
 This section lists the commands that MUST be handled by the SUT, as well as the behavior of the SUT when the Agent is first initialized.
 Commands are carried over MQTT in a request-response fashion.
@@ -354,12 +359,12 @@ Payload of the request MUST be a JSON object with following fields:
 
 Field name   | Description                                   | JSON Type
 ------------ | --------------------------------------------- | -------
-api_version  | Set to `0.0.1` string                         | string
+api_version  | Set to implemented API version                | string
 token        | Random token used to match the response       | string
-date         | UTC time when experiment is launched          | string
-firmware     | Identifier of the IUT used                    | string
-testbed      | Name of the testbed used                      | string
-nodes        | List of EUI64 of nodes used in the experiment | array of strings
+date         | RFC2822 time when experiment is launched      | string
+firmware     | [IUT identifier](#supported-iuts), with a custom suffix | string
+testbed      | [Testbed identifier](#supported-testbeds)     | string
+nodes        | Map of testbed hosts and nodes' EUI64 address | object
 scenario     | Identifier of the scenario requested          | string
 
 ```
@@ -367,13 +372,14 @@ Example:
     {
         "api_version"  : "0.0.1",
         "token"        : "123",
-        "date"         : "Sun Dec 2 14:41:13 UTC 2018",
+        "date"         : "Wed, 06 Feb 2019 17:46:55 +0100",
         "firmware"     : "OpenWSN-42a4007db7",
-        "testbed"      : "w-iLab.t"
-        "nodes"        : [  "00-12-4b-00-14-b5-b6-44",
-                            "00-12-4b-00-14-b5-b6-45",
-                            "00-12-4b-00-14-b5-b6-46"
-                         ]
+        "testbed"      : "wilab"
+        "nodes"        : {
+                            "nuc0-35": "00-12-4b-00-14-b5-b6-44",
+                            "nuc0-36": "00-12-4b-00-14-b5-b6-45",
+                            "nuc0-37": "00-12-4b-00-14-b5-b6-46"
+                         }
         "scenario"     : "building-automation"
     }
 ```
@@ -476,25 +482,28 @@ EXPERIMENTID MUST be set to the value obtained from the `startBenchmark` respons
 
 Payload of the request MUST be a JSON object with following fields:
 
-Field name    | Description                                                                              | JSON Type
-------------- | ---------------------------------------------------------------------------------------- | -------
-token         | Random token used to match the response                                                  | string
-source        | EUI-64 of the node that MUST send an application packet                                  | string
-destination   | EUI-64 of the destination node                                                           | string
-packetToken   | Array of 4 bytes that MUST be included in the payload of the packet sent                 | array
-packetPayload | Variable length array that MUST be included in the packet payload after the packetToken  | array
-confirmable   | Whether the packet should be acknowledged at the application layer                       | bool
+Field name       | Description                                                                                                           | JSON Type
+---------------- | --------------------------------------------------------------------------------------------------------------------- | -------
+token            | Random token used to match the response                                                                               | string
+source           | EUI-64 of the node that MUST send an application packet                                                               | string
+destination      | EUI-64 of the destination node                                                                                        | string
+packetsInBurst   | Number of packets in the burst that MUST be generated consequently by the node                                        | integer
+packetToken      | Array of 5 bytes, MUST be included in the payload. First byte of the included token MUST correspond to packet index in the burst | array
+packetPayloadLen | Length of the dummy payload that MUST be included in the packet                                                       | integer
+confirmable      | Whether the packet should be acknowledged at the application layer                                                    | bool
 
 ```
 Example:
     {
-        "token"         : "123",
-        "source"        : "00-12-4b-00-14-b5-b6-44",
-        "destination"   : "00-12-4b-00-14-b5-b6-45",
-        "packetToken"   : [124, 122, 34, 31],
-        "packetPayload" : [],
-        "confirmable"   : true
+        "token"            : "123",
+        "source"           : "00-12-4b-00-14-b5-b6-44",
+        "destination"      : "00-12-4b-00-14-b5-b6-45",
+        "packetsInBurst"   : 1
+        "packetToken"      : [00, 124, 122, 34, 31],
+        "packetPayloadLen" : 5,
+        "confirmable"      : true
     }
+
 ```
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
@@ -577,19 +586,73 @@ Example:
         "success"      : true,
     }
 ```
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
+## Trigger Network Formation
+
+*Description:* This command is sent by the Experiment Controller to the SUT to trigger the formation of the network, and so the experiment.
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+### Request
+
+MQTT topic:
+
+```
+    openbenchmark/experimentId/EXPERIMENTID/command/triggerNetworkFormation
+```
+
+EXPERIMENTID MUST be set to the value obtained from the `startBenchmark` response.
+
+Payload of the request MUST be a JSON object with following fields:
+
+Field name   | Description                                                        | JSON Type
+------------ | ------------------------------------------------------------------ | -------
+token        | Random token used to match the response                            | string
+source       | EUI-64 of the node that MUST act as the coordinator of the network | string
+
+```
+Example:
+    {
+        "token"        : "123",
+        "source"       : "00-12-4b-00-14-b5-b6-44",
+    }
+```
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+### Response
+
+```
+topic:
+    openbenchmark/experimentId/EXPERIMENTID/response/triggerNetworkFormation
+```
+Payload of the response MUST be a JSON object with following fields:
+
+Field name   | Description                             | JSON Type | Presence Requirement
+------------ | --------------------------------------- | --------- | ---------------------
+token        | Token echoed from the request           | string    | MUST
+success      | Indicator of success                    | bool      | MUST
+
+```
+Example:
+    {
+        "token"        : "123",
+        "success"      : true,
+    }
+```
 <!-- ====================================================================== -->
 
-# Experiment Performance Events
+# Experiment Performance Events API
 
 `API version: 0.0.1`
 
 Performance data needed to calculate the KPIs is calculated by OpenBenchmark based on the events generated by the SUT.
 SUT implements a software component called Agent bridging the constrained network and the OpenBenchmark platform.
-Typically, the Agent can be implemented as part of the network Gateway where hardware constraints are less pronounced compared to the rest of the low-power network such that it can subscribe to different topics, and translate events triggered by the IUT into the format expected by OpenBenchmark.
+Typically, the Agent can be implemented as part of the Network Gateway where hardware constraints are less pronounced compared to the rest of the low-power network such that it can subscribe to different topics, and translate events triggered by the IUT into the format expected by OpenBenchmark.
 
 How the Agent communicates with the IUT is specific to the implementation.
-For example, in the OpenWSN implementation, Gateway (i.e. OpenVisualizer component) communicates with the nodes in the network over the OpenTestbed-emulated serial port by using HDLC framing and custom commands.
+For example, in the OpenWSN implementation, Network Gateway (i.e. OpenVisualizer component) communicates with the nodes in the network over the OpenTestbed-emulated serial port by using HDLC framing and custom commands.
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
@@ -645,6 +708,7 @@ clockDrift   | Local measurement of clock drift            | Drift in microsecon
 Field name | Event | Presence Requirement
 ---------- | ----- | ---------------------
 event      | all   | MUST
+source     | all   | MUST
 timestamp  | all   | MUST
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
@@ -672,12 +736,12 @@ hopLimit    | packetSent   | MUST
 ```
 Example:
     {
-        "event"        : "packetSent"
-        "timestamp"    : 2131,
-        "packetToken"   : [124, 122, 34, 31],
-        "source"       : "bbbb::0012:4b00:14b5:b648",
-        "destination"  : "bbbb::1",
-        "hopLimit"     : 255,
+        "event"            : "packetSent"
+        "timestamp"        : 2131,
+        "packetToken"      : [124, 122, 34, 31],
+        "source"           : "00-12-4b-00-14-b5-b6-44",
+        "destination"      : "00-12-4b-00-14-b5-b6-45",
+        "hopLimit"         : 255,
     }
 ```
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
@@ -709,8 +773,8 @@ Example:
         "event"         : "packetReceived"
         "timestamp"     : 2151,
         "packetToken"   : [124, 122, 34, 31],
-        "source"        : "bbbb::0012:4b00:14b5:b648",
-        "destination"   : "bbbb::1",
+        "source"        : "00-12-4b-00-14-b5-b6-45",
+        "destination"   : "00-12-4b-00-14-b5-b6-44",
         "hopLimit"      : 252,
     }
 ```
@@ -880,17 +944,159 @@ All other lines are JSON strings corresponding to different events occurring in 
 
 ### Header
 
-First line of the log file MUST be a string representation of the JSON object with following fields, all fields being mandatory:
+First line of the log file MUST be a string representation of the JSON object with following fields:
 
-Field name   | Description                                                        | JSON Type
------------- | ------------------------------------------------------------------ | -------
-date         | UTC time when experiment is launched                               | string
-experimentId | Opaque identifier of the experiment                                | string
-testbed      | Name of the testbed used                                           | string
-firmware     | Identifier of the IUT used                                         | string
-nodes        | List of EUI64 of nodes used in the experiment                      | array of strings
-scenario     | Identifier of the scenario requested                               | string
+Field name   | Presence Requirement
+------------ | ---------------------
+date         | MUST
+experimentId | MUST
+testbed      | MUST
+firmware     | MUST
+nodes        | MUST
+scenario     | MUST
 
-The values of these fields are obtained from `startBenchmark` request and response messages, specified in [Start Benchmark](#start-benchmark).
+The values of these fields follow the format specified in [Start Benchmark](#start-benchmark).
 
 <!-- ====================================================================== -->
+
+# Test Scenario Implementation
+
+A test scenario is defined in a JSON config file.
+The JSON file consists of a generic part describing the scenario "instance", and a testbed-specific part describing how the instance is mapped to a specific testbed through physical nodes to use and their transmission power.
+Application traffic is encoded as an array of objects carrying the time instants relative to the beginning of the experiment when a node is instructed to send an application packet.
+These time instants follow the distributions discussed in [Test Scenarios](#test-scenarios).
+The following listing depicts a JSON snippet describing the generic building automation test scenario instance.
+
+```
+
+{
+    "identifier": "building-automation",
+    "duration_min": 180,
+    "number_of_nodes": 40,
+    "payload_size": 80,
+    "nodes": {
+        "openbenchmark00": {
+            "role": "zone-controller",
+            "area": 0,
+            "traffic_sending_points": {}
+        },
+        "openbenchmark01": {
+            "role": "monitoring-sensor",
+            "area": 0,
+            "traffic_sending_points": [
+                {
+                    "time_sec": 25.708,
+                    "destination": "openbenchmark26",
+                    "confirmable": true
+                },
+                {
+                    "time_sec": 57.885,
+                    "destination": "openbenchmark06",
+                    "confirmable": true
+                },
+                {
+                    "time_sec": 87.179,
+                    "destination": "openbenchmark06",
+                    "confirmable": true
+                },
+                ...
+        },
+        "openbenchmark04": {
+            "role": "actuator",
+            "area": 0,
+            "traffic_sending_points": [
+                {
+                    "time_sec": 34.606,
+                    "destination": "openbenchmark36",
+                    "confirmable": true
+                },
+                {
+                    "time_sec": 60.302,
+                    "destination": "openbenchmark16",
+                    "confirmable": true
+                },
+        },
+        ...
+    }
+}
+```
+
+An example scenario mapping to the wilab.t testbed is presented below with node_id field denoting wilab.t-specific testbed host identifier.
+
+```
+{
+    "openbenchmark00": {
+        "node_id": "nuc10-41-0",
+        "transmission_power_dbm": -5
+    },
+    "openbenchmark01": {
+        "node_id": "nuc10-13-0",
+        "transmission_power_dbm": -5
+    },
+    "openbenchmark02": {
+        "node_id": "nuc10-13-1",
+        "transmission_power_dbm": -5
+    },
+    "openbenchmark03": {
+        "node_id": "nuc10-36-0",
+        "transmission_power_dbm": -5
+    },
+    "openbenchmark04": {
+        "node_id": "nuc10-36-1",
+        "transmission_power_dbm": -5
+    },
+    "openbenchmark05": {
+        "node_id": "nuc10-35-0",
+        "transmission_power_dbm": -5
+    },
+    "openbenchmark06": {
+        "node_id": "nuc10-35-1",
+        "transmission_power_dbm": -5
+    },
+    "openbenchmark07": {
+        "node_id": "nuc10-34-0",
+        "transmission_power_dbm": -5
+    },
+    "openbenchmark08": {
+        "node_id": "nuc10-34-1",
+        "transmission_power_dbm": -5
+    },
+    ...
+}
+```
+
+The following figure depicts the mapping of the building-automation scenario to wilab resources, and the separation of logical areas:
+
+<figure>
+  <p align="center"><img src="_static/scenario-building-wilabt.png">
+  <figcaption>Fig. 3. Mapping of building-automation scenario to wilab testbed.</figcaption></p>
+</figure>
+
+The mapping of the same scenario to iotlab Saclay site is presented below:
+
+<figure>
+  <p align="center"><img src="_static/scenario-building-iotlab.png">
+  <figcaption>Fig. 4. Mapping of building-automation scenario to iotlab testbed, Saclay site.</figcaption></p>
+</figure>
+
+The reader is referred to the [OpenBenchmark github repository](https://github.com/openwsn-berkeley/openbenchmark) for the complete specification of scenarios.
+
+<!-- ====================================================================== -->
+
+# Supported IUTs
+
+Name                                                |  Identifier
+--------------------------------------------------- | ------------
+[OpenWSN](http://www.openwsn.org/)                  | "openwsn"
+
+<!-- ====================================================================== -->
+
+# Supported Testbeds
+
+Name                                                |  Identifier
+--------------------------------------------------- | ------------
+[IoT-LAB](https://www.iot-lab.info/)                | "iotlab"
+[w-iLab.t](https://doc.ilabt.imec.be/ilabt/wilab/)  | "wilab"
+
+<!-- ====================================================================== -->
+

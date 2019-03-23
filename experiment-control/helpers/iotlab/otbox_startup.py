@@ -28,6 +28,7 @@ class OTBoxStartup:
 
 
 	def __init__(self, user, domain, testbed, nodes, broker):
+
 		warnings.simplefilter(
 			action='ignore',
 			category=CryptographyDeprecationWarning

@@ -5,14 +5,13 @@ from abc import abstractmethod
 from socket_io_handler import SocketIoHandler
 from cryptography.utils import CryptographyDeprecationWarning
 from otbox_startup import OTBoxStartup
-
+import warnings
 import os
 import paramiko
 import json
 import time
 import subprocess
 import warnings
-
 
 class Reservation:
 	@abstractmethod
@@ -33,7 +32,6 @@ class IoTLABReservation(Reservation):
 	CMD_ERROR      = "cmd_error"
 	SSH_RETRY_TIME = 120
 	RETRY_PAUSE    = 10
-
 
 	def __init__(self, user, domain, broker, duration=None, nodes=None):
 		warnings.simplefilter(
