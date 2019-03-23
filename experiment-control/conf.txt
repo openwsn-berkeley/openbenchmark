@@ -1,6 +1,0 @@
-[iotlab-config]
-user = openbenc
-broker = argus.paris.inria.fr
-
-[wilab-config]
-broker = argus.paris.inria.fr
