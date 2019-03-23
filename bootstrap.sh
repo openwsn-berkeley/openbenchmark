@@ -49,7 +49,7 @@ php artisan key:generate
 
 # OpenWSN
 cd $OPENBENCHMARK_DIR
-git clone https://github.com/openwsn-berkeley/coap.git
+git clone -b develop_COAP-44 https://github.com/malishav/coap.git
 
 # FIXME private branch, change to the official repo once code is merged
 git clone -b ov-dynamic-topic --single-branch https://github.com/bozidars27/openvisualizer.git
