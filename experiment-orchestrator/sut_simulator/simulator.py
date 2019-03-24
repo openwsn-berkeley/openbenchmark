@@ -18,7 +18,7 @@ class Events:
     packetSent     = "packetSent"
     packetReceived = "packetReceived"
     networkFormationCompleted = "networkFormationCompleted"
-    syncronizationCompleted   = "syncronizationCompleted"
+    synchronizationCompleted   = "synchronizationCompleted"
     secureJoinCompleted       = "secureJoinCompleted"
     bandwidthAssigned         = "bandwidthAssigned"
     radioDutyCycleMeasurement = "radioDutyCycleMeasurement"

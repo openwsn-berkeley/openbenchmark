@@ -37,7 +37,7 @@ class KPIProcessing:
 			"packetSent"               : self._packet_sent,
 			"packetReceived"           : self._packet_received,
 			"networkFormationCompleted": self._networkFormationTime,
-			"syncronizationCompleted"  : self._synchronizationPhase,
+			"synchronizationCompleted" : self._synchronizationPhase,
 			"secureJoinCompleted"      : self._secureJoinPhase,
 			"bandwidthAssigned"        : self._bandwidthAssignment,
 			"radioDutyCycleMeasurement": self._radioDutyCycle,
