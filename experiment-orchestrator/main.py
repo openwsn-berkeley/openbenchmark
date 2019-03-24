@@ -44,6 +44,9 @@ class Main():
 
 		print self.sut_command_payload
 
+		# give SUT some time subscribe to the topics before firing
+		time.sleep(5)
+
 		self._start_network_prep()
 		thread = threading.Thread(target=self._start_kpi_processing)
 		thread.daemon = True
