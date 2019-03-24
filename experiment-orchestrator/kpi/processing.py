@@ -164,8 +164,8 @@ class KPIProcessing:
 	def _bandwidthAssignment(self, event_obj):
 		self.logger.log('kpi', {
 				'kpi'      : 'bandwidthAssignment',
-				'node_id'  : Utils.eui64_to_id[event_obj['eui64']],
-				'eui64'    : event_obj['eui64'],
+				'node_id'  : Utils.eui64_to_id[event_obj['source']],
+				'eui64'    : event_obj['source'],
 				'timestamp': event_obj['timestamp'],
 				'value'    : 1
 			})
@@ -173,8 +173,8 @@ class KPIProcessing:
 	def _radioDutyCycle(self, event_obj):
 		self.logger.log('kpi', {
 				'kpi'      : 'radioDutyCycle',
-				'eui64'    : event_obj['eui64'],
-				'node_id'  : Utils.eui64_to_id[event_obj['eui64']],
+				'eui64'    : event_obj['source'],
+				'node_id'  : Utils.eui64_to_id[event_obj['source']],
 				'timestamp': event_obj['timestamp'],
 				'value'    : event_obj['dutyCycle']
 			}) 
