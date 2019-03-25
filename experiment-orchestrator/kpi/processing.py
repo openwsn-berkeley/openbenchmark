@@ -157,7 +157,7 @@ class KPIProcessing:
 	def _secureJoinPhase(self, event_obj):
 		self.logger.log('kpi', {
 				'kpi'      : 'secureJoinPhase',
-				'timestamp': event_obj['event_payload']['timestamp'],
+				'timestamp': event_obj['timestamp'],
 				'value'    : 1
 			})
 
