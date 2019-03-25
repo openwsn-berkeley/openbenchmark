@@ -1,4 +1,5 @@
 import sys
+import os
 sys.path.append('..')
 
 from utils import Utils
@@ -44,6 +45,7 @@ class Scenario(object):
 
 		for generic_id in self.config_node_data:
 			config_params = self.config_node_data[generic_id]
+
 			params = {
 				'generic_id'        : generic_id,
 				'node_id'           : config_params['node_id'],
@@ -61,3 +63,5 @@ class Scenario(object):
 		self.nodes           = []                       # List of objects of type Node
 		self.main_config     = None                     # Scenario configuration parameters (type: dict)
 		self.testbed_config  = None 					# Testbed specific cenario configuration parameters (type: dict)
+		
+		self.scenario_config = os.path.join(os.path.dirname(__file__), "..", "..", "scenario-config")

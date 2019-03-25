@@ -43,11 +43,12 @@ class Simulator(object):
 
         self.bench_init_timeout = 3    #[s]
 
+        self.scenario_root_config = os.path.join(os.path.dirname(__file__), "..", "..", "scenario-config")
         self.scenario_config_dirs = {
-            "demo-scenario":         os.path.join(os.path.dirname(__file__), "..", "scenarios", "demo_scenario"),
-            "building-automation":   os.path.join(os.path.dirname(__file__), "..", "scenarios", "building_automation"),
-            "home-automation":       os.path.join(os.path.dirname(__file__), "..", "scenarios", "home_automation"),
-            "industrial-monitoring": os.path.join(os.path.dirname(__file__), "..", "scenarios", "industrial_monitoring")
+            "demo-scenario":         os.path.join(self.scenario_root_config, "demo-scenario"),
+            "building-automation":   os.path.join(self.scenario_root_config, "building-automation"),
+            "home-automation":       os.path.join(self.scenario_root_config, "home-automation"),
+            "industrial-monitoring": os.path.join(self.scenario_root_config, "industrial-monitoring")
         }
 
         self._form_sut_payload()
