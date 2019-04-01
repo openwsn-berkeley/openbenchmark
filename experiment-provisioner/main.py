@@ -162,11 +162,14 @@ class Wilab(Controller):
 		tree = etree.parse(rspec_file)
 		xml_root = tree.getroot()
 
+		for child in list(xml_root):
+			xml_root.remove(child)
+
 		nucs = self._get_nucs()
 		for nuc_id in nucs:
 			xml_root.append(self._rspec_node(nuc_id))
 
-		tree.write(rspec_file, xml_declaration=True, encoding='UTF-8', pretty_print=True)
+		tree.write(rspec_file, xml_declaration=True, encoding='UTF-8')
 
 	def _rspec_node(self, nuc_id):
 		node = etree.Element(
