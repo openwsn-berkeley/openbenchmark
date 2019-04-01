@@ -7,7 +7,7 @@ set -e
 set -o xtrace
 
 OPENBENCHMARK_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
-JFED_DIR=$OPENBENCHMARK_DIR/experiment-control/helpers/wilab/jfed_cli
+JFED_DIR=$OPENBENCHMARK_DIR/experiment-provisioner/helpers/wilab/jfed_cli
 
 # jFED installation
 sudo apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv-keys E7F4995E
