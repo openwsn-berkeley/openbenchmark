@@ -660,7 +660,7 @@ For example, in the OpenWSN implementation, Network Gateway (i.e. OpenVisualizer
 
 This section lists the events that MUST be handled by the SUT during the execution of the experiment.
 For each event, SUT MUST publish a message on an appropriate MQTT topic, enclosing the message payload specific to the event, as specified below.
-Additionally, SUT MAY log the events locally by generating a log file as specified in [Log File Format](log-file-format).
+Additionally, SUT MAY log the events locally by generating a log file as specified in [Log File Format](#log-file-format).
 
 <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
 
