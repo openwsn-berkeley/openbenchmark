@@ -3,7 +3,7 @@ import time
 
 class MQTTTest: 
 
-	BROKER = 'broker.mqttdashboard.com'
+	BROKER = 'argus.paris.inria.fr'
 	CLIENT = 'exp-auto-test'
 
 	is_data_arriving  = False
