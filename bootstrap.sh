@@ -9,7 +9,7 @@ set -o xtrace
 OPENBENCHMARK_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
 LARAVEL_ROOT="$OPENBENCHMARK_DIR/web/public"
 GROUP="$( id -gn )"
-INDEX_JS_PATH="$OPENBENCHMARK_DIR/experiment-control/nodejs_websocket/index.js"
+INDEX_JS_PATH="$OPENBENCHMARK_DIR/experiment-provisioner/nodejs_websocket/index.js"
 
 sudo apt-mark hold mysql-server-5.7
 
