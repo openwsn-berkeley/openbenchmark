@@ -47,7 +47,7 @@ class Controller(object):
 		parser.add_argument('--scenario', 
 	        dest       = 'scenario',
 	        choices    = ['demo-scenario', 'building-automation', 'home-automation', 'industrial-monitoring'],
-	        required   = True,
+	        default    = 'demo-scenario',
 	        action     = 'store'
 		)
 
