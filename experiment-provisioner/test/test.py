@@ -27,6 +27,3 @@ def test_firmware_flash():
 
 def test_ov_start():
 	assert general_test('ov-start')
-
-def test_ov_monitor():
-	assert general_test('ov-monitor')
