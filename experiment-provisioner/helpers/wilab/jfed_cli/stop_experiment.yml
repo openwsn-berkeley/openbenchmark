@@ -1,0 +1,18 @@
+action: DELETE                      
+proxy:                              
+  useForCalls: null                 
+  useForSsh: null                   
+slice:                              
+  failIfNoProject: true             
+  failOnExistingSlice: false        
+  failOnNonExistingSlice: true      
+  project: soda                     
+  projectSource: PROVIDED           
+  renewExistingSliceIfNeeded: false 
+  sliceName: bench00                
+user:                               
+  password: *****                   
+  passwordMethod: DIRECT            
+  pem:                              
+  - login.pem                       
+  speaksForCredential: []

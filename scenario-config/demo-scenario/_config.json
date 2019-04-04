@@ -1,399 +1,399 @@
 {
-    "identifier": "demo-scenario", 
-    "duration_min": 60, 
-    "number_of_nodes": 3, 
-    "payload_size": 10, 
-    "nf_time_padding_min": 5, 
+    "identifier": "demo-scenario",
+    "duration_min": 60,
+    "number_of_nodes": 3,
+    "payload_size": 10,
+    "nf_time_padding_min": 5,
     "nodes": {
         "openbenchmark00": {
-            "role": "control-unit", 
-            "area": null, 
+            "role": "control-unit",
+            "area": null,
             "traffic_sending_points": [
                 {
-                    "time_sec": 89.852, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 89.852,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 125.879, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 125.879,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 138.444, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 138.444,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 423.678, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 423.678,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 548.627, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 548.627,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 563.395, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 563.391,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 603.113, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 603.113,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 714.047, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 714.047,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 781.205, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 781.205,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 817.816, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 817.816,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 826.408, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 826.408,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 1228.265, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 1228.265,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 1313.615, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 1313.615,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 1326.184, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 1326.184,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 1411.443, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 1411.443,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 1528.48, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 1528.48,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 1701.006, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 1701.006,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 1748.406, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 1748.406,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 1811.769, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 1811.769,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 1917.96, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 1917.96,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 2012.362, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 2012.362,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 2143.045, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 2143.045,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 2160.948, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 2160.948,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 2214.6, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 2214.6,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 2245.431, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 2245.431,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 2278.457, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 2278.457,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 2466.92, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 2466.92,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 2553.856, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 2553.856,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 2579.589, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 2579.589,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 2637.308, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 2637.308,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 2849.925, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 2849.925,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 2871.351, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 2871.351,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 2967.878, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 2967.878,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 3149.111, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 3149.111,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 3218.542, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 3218.542,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 3325.784, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 3325.784,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 3363.349, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 3363.349,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 3435.162, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
-                }, 
+                    "time_sec": 3435.162,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 3510.328, 
-                    "destination": "openbenchmark02", 
-                    "packets_in_burst": 5, 
-                    "confirmable": true
+                    "time_sec": 3510.328,
+                    "destination": "openbenchmark02",
+                    "packets_in_burst": 1,
+                    "confirmable": false
                 }
             ]
-        }, 
+        },
         "openbenchmark01": {
-            "role": "monitoring-sensor", 
-            "area": 0, 
+            "role": "monitoring-sensor",
+            "area": 0,
             "traffic_sending_points": [
                 {
-                    "time_sec": 227.853, 
-                    "destination": "openbenchmark00", 
+                    "time_sec": 227.853,
+                    "destination": "openbenchmark00",
                     "confirmable": false
-                }, 
+                },
                 {
-                    "time_sec": 501.279, 
-                    "destination": "openbenchmark00", 
+                    "time_sec": 501.279,
+                    "destination": "openbenchmark00",
                     "confirmable": false
-                }, 
+                },
                 {
-                    "time_sec": 792.051, 
-                    "destination": "openbenchmark00", 
+                    "time_sec": 792.051,
+                    "destination": "openbenchmark00",
                     "confirmable": false
-                }, 
+                },
                 {
-                    "time_sec": 1032.104, 
-                    "destination": "openbenchmark00", 
+                    "time_sec": 1032.104,
+                    "destination": "openbenchmark00",
                     "confirmable": false
-                }, 
+                },
                 {
-                    "time_sec": 1265.75, 
-                    "destination": "openbenchmark00", 
+                    "time_sec": 1265.75,
+                    "destination": "openbenchmark00",
                     "confirmable": false
-                }, 
+                },
                 {
-                    "time_sec": 1480.062, 
-                    "destination": "openbenchmark00", 
+                    "time_sec": 1480.062,
+                    "destination": "openbenchmark00",
                     "confirmable": false
-                }, 
+                },
                 {
-                    "time_sec": 1730.502, 
-                    "destination": "openbenchmark00", 
+                    "time_sec": 1730.502,
+                    "destination": "openbenchmark00",
                     "confirmable": false
-                }, 
+                },
                 {
-                    "time_sec": 2025.657, 
-                    "destination": "openbenchmark00", 
+                    "time_sec": 2025.657,
+                    "destination": "openbenchmark00",
                     "confirmable": false
-                }, 
+                },
                 {
-                    "time_sec": 2219.062, 
-                    "destination": "openbenchmark00", 
+                    "time_sec": 2219.062,
+                    "destination": "openbenchmark00",
                     "confirmable": false
-                }, 
+                },
                 {
-                    "time_sec": 2479.534, 
-                    "destination": "openbenchmark00", 
+                    "time_sec": 2479.534,
+                    "destination": "openbenchmark00",
                     "confirmable": false
-                }, 
+                },
                 {
-                    "time_sec": 2763.979, 
-                    "destination": "openbenchmark00", 
+                    "time_sec": 2763.979,
+                    "destination": "openbenchmark00",
                     "confirmable": false
-                }, 
+                },
                 {
-                    "time_sec": 2957.341, 
-                    "destination": "openbenchmark00", 
+                    "time_sec": 2957.341,
+                    "destination": "openbenchmark00",
                     "confirmable": false
-                }, 
+                },
                 {
-                    "time_sec": 3177.439, 
-                    "destination": "openbenchmark00", 
+                    "time_sec": 3177.439,
+                    "destination": "openbenchmark00",
                     "confirmable": false
-                }, 
+                },
                 {
-                    "time_sec": 3387.137, 
-                    "destination": "openbenchmark00", 
+                    "time_sec": 3387.137,
+                    "destination": "openbenchmark00",
                     "confirmable": false
                 }
             ]
-        }, 
+        },
         "openbenchmark02": {
-            "role": "actuator", 
-            "area": 0, 
+            "role": "actuator",
+            "area": 0,
             "traffic_sending_points": [
                 {
-                    "time_sec": 251.909, 
-                    "destination": "openbenchmark00", 
-                    "confirmable": true
-                }, 
+                    "time_sec": 251.909,
+                    "destination": "openbenchmark00",
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 469.743, 
-                    "destination": "openbenchmark00", 
-                    "confirmable": true
-                }, 
+                    "time_sec": 469.743,
+                    "destination": "openbenchmark00",
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 661.189, 
-                    "destination": "openbenchmark00", 
-                    "confirmable": true
-                }, 
+                    "time_sec": 661.189,
+                    "destination": "openbenchmark00",
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 856.931, 
-                    "destination": "openbenchmark00", 
-                    "confirmable": true
-                }, 
+                    "time_sec": 856.931,
+                    "destination": "openbenchmark00",
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 1112.923, 
-                    "destination": "openbenchmark00", 
-                    "confirmable": true
-                }, 
+                    "time_sec": 1112.923,
+                    "destination": "openbenchmark00",
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 1354.294, 
-                    "destination": "openbenchmark00", 
-                    "confirmable": true
-                }, 
+                    "time_sec": 1354.294,
+                    "destination": "openbenchmark00",
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 1536.591, 
-                    "destination": "openbenchmark00", 
-                    "confirmable": true
-                }, 
+                    "time_sec": 1536.591,
+                    "destination": "openbenchmark00",
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 1791.233, 
-                    "destination": "openbenchmark00", 
-                    "confirmable": true
-                }, 
+                    "time_sec": 1791.233,
+                    "destination": "openbenchmark00",
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 2076.868, 
-                    "destination": "openbenchmark00", 
-                    "confirmable": true
-                }, 
+                    "time_sec": 2076.868,
+                    "destination": "openbenchmark00",
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 2317.207, 
-                    "destination": "openbenchmark00", 
-                    "confirmable": true
-                }, 
+                    "time_sec": 2317.207,
+                    "destination": "openbenchmark00",
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 2602.126, 
-                    "destination": "openbenchmark00", 
-                    "confirmable": true
-                }, 
+                    "time_sec": 2602.126,
+                    "destination": "openbenchmark00",
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 2870.812, 
-                    "destination": "openbenchmark00", 
-                    "confirmable": true
-                }, 
+                    "time_sec": 2870.812,
+                    "destination": "openbenchmark00",
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 3151.892, 
-                    "destination": "openbenchmark00", 
-                    "confirmable": true
-                }, 
+                    "time_sec": 3151.892,
+                    "destination": "openbenchmark00",
+                    "confirmable": false
+                },
                 {
-                    "time_sec": 3443.418, 
-                    "destination": "openbenchmark00", 
-                    "confirmable": true
+                    "time_sec": 3443.418,
+                    "destination": "openbenchmark00",
+                    "confirmable": false
                 }
             ]
         }

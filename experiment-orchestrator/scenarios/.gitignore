@@ -1,0 +1,4 @@
+*.pyc
+building_automation/*.pyc
+home_automation/*.pyc
+industrial_automation/*.pyc

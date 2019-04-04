@@ -1,3 +1,0 @@
-[exp-config]
-user = openbenc
-broker = broker.mqttdashboard.com

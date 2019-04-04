@@ -9,13 +9,19 @@ set -o xtrace
 OPENBENCHMARK_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
 LARAVEL_ROOT="$OPENBENCHMARK_DIR/web/public"
 GROUP="$( id -gn )"
-INDEX_JS_PATH="$OPENBENCHMARK_DIR/experiment-control/nodejs_websocket/index.js"
+INDEX_JS_PATH="$OPENBENCHMARK_DIR/experiment-provisioner/nodejs_websocket/index.js"
 
 sudo apt-mark hold mysql-server-5.7
 
 sudo apt-get -y update
 sudo apt-get -y upgrade
 sudo apt-get install -y software-properties-common
+
+# Create system swap as PHP installation may fail without it
+sudo fallocate -l 2G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
 
 # Install Apache and Apache dependencies
 sudo apt-get -y install apache2
@@ -24,7 +30,7 @@ sudo dpkg -i libapache2-mod-fastcgi_2.4.7~0910052141-1.2_amd64.deb; sudo apt ins
 
 # Install PHP 7.2 and Composer
 sudo apt-get -y install python-software-properties
-sudo add-apt-repository ppa:ondrej/php -y
+LC_ALL=C.UTF-8 sudo add-apt-repository ppa:ondrej/php -y
 sudo apt-get -y update
 sudo apt-get -y install php7.2 php7.2-fpm php7.2-common
 sudo apt-get -y install composer
@@ -49,10 +55,10 @@ php artisan key:generate
 
 # OpenWSN
 cd $OPENBENCHMARK_DIR
-git clone https://github.com/openwsn-berkeley/coap.git
+git clone -b develop_COAP-44 https://github.com/malishav/coap.git
 
 # FIXME private branch, change to the official repo once code is merged
-git clone -b ov-dynamic-topic --single-branch https://github.com/bozidars27/openvisualizer.git
+git clone -b OV-7 --single-branch https://github.com/malishav/openvisualizer.git
 
 # Python-dev
 sudo apt-get -y install python-dev

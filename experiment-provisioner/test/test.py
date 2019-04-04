@@ -22,14 +22,8 @@ def general_test(action):
 def test_reservation():
 	assert general_test('reserve')
 
-def test_otbox_startup():
-	assert general_test('otbox')
-
 def test_firmware_flash():
 	assert general_test('otbox-flash')
 
 def test_ov_start():
 	assert general_test('ov-start')
-
-def test_ov_monitor():
-	assert general_test('ov-monitor')

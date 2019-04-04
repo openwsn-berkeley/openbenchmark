@@ -32,7 +32,6 @@ class Wizard:
 		]
 
 		self.default_payload_size = {   # in bytes
-
 			Identifiers.dm: 10,
 			Identifiers.ba: 80,
 			Identifiers.ha: 10,
@@ -46,6 +45,7 @@ class Wizard:
 			Identifiers.im: 5,
 		}
 
+
 		self.info       = {}   # fields: identifier, duration_min, number_of_nodes, 
 		self.nodes      = OrderedDict()
 		self.specifics  = {
@@ -54,10 +54,10 @@ class Wizard:
 		}
 
 		self.locations = {
-			Identifiers.dm: "../demo-scenario/",
-			Identifiers.ba: "../building-automation/",
-			Identifiers.ha: "../home-automation/",
-			Identifiers.im: "../industrial-monitoring/"
+			Identifiers.dm: "../demo_scenario/",
+			Identifiers.ba: "../building_automation/",
+			Identifiers.ha: "../home_automation/",
+			Identifiers.im: "../industrial_monitoring/"
 		}
 
 
@@ -143,8 +143,8 @@ class Wizard:
 					self.nodes[generic_id]['role'] = role
 					self.nodes[generic_id]['area'] = 0
 					self.nodes[generic_id]['traffic_sending_points'] = []
-
 					roles[role]['nodes'].append(generic_id)
+
 					id_suffix += 1
 
 
@@ -156,11 +156,10 @@ class Wizard:
 
 			node_pool = {}
 			if dest_types != None:
-				confirmables = roles[role]['confirmable'] 
-
+				confirmables = roles[role]['confirmable']
 				for destination in dest_types:
 					node_group = []
-
+					
 					for generic_id in roles[destination]['nodes']:
 						if self.nodes[generic_id]['area'] == None or self.nodes[key]['area'] == None or self.nodes[generic_id]['area'] == self.nodes[key]['area']:
 							node_group.append({
@@ -188,9 +187,6 @@ class Wizard:
 	def _output_json(self):
 		identifier = self.info['identifier']
 		path       = self.locations[identifier]
-
-		if not os.path.exists(path):
-			os.mkdir(path)
 
 		with open(os.path.abspath(os.path.join(path, '_config.json')), 'w') as f:
 			content = OrderedDict()

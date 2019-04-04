@@ -1,13 +1,17 @@
-# experiment-control
+# experiment-provisioner
 paramiko
 socketIO_client_nexus
 watchdog
 paho-mqtt
 argparse
 pytest
+lxml
+
+# experiment-orchestrator
+numpy
 
 # docs
-sphinx
+Sphinx==1.8.5
 recommonmark
 sphinx_rtd_theme
 sphinx_markdown_tables

@@ -1,5 +1,4 @@
 from socket_io_handler import SocketIoHandler
-from exp_terminate import ExpTerminate
 
 import time
 import subprocess
@@ -40,7 +39,7 @@ class MyHandler(FileSystemEventHandler):
 	    threading.Timer(5, self.check_timestamp).start() # called every minute
 	    if time.time() - self.unix_timestamp > self.SHUT_DOWN_TIME:
 	    	socketIoHandler.publish('EXP_TERMINATE', '')
-	    	ExpTerminate().exp_terminate()
+	    	subprocess.Popen("python main.py --action=terminate", shell=True)
 
 	def get_last_line(self, file_path):
 		if os.path.isfile(file_path):
@@ -70,7 +69,7 @@ class OVLogMonitor:
 
 		else:
 			print("The path designated for monitoring does not exist.")
-			ExpTerminate().exp_terminate()
+			subprocess.Popen("python main.py --action=terminate", shell=True)
 
 
 

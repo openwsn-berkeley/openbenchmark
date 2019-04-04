@@ -49,8 +49,6 @@ class Testbed():
 	def output_check(self, action, return_code, stdout = "", stderr = ""):
 		if action == 'reserve':
 			return self.reserve(return_code, stdout, stderr)
-		elif action == 'otbox':
-			return self.otbox(return_code, stdout, stderr)
 		elif action == 'otbox-flash':
 			return self.otbox_flash(return_code, stdout, stderr)
 		elif action == 'ov-start':
@@ -93,10 +91,6 @@ class Testbed():
 		pass
 
 	@abstractmethod
-	def otbox(self, return_code, stdout, stderr):
-		pass
-
-	@abstractmethod
 	def otbox_flash(self, return_code, stdout, stderr):
 		pass
 
@@ -118,10 +112,6 @@ class IoTLAB(Testbed):
 
 	def reserve(self, return_code, stdout, stderr):
 		return return_code == 0 and stderr == '' and self.run_action('check')
-
-	def otbox(self, return_code, stdout, stderr):
-		mqttTest = MQTTTest('iotlab')
-		return return_code == 0 and stderr == '' and mqttTest.check_data()
 
 	def otbox_flash(self, return_code, stdout, stderr):
 		mqttTest = MQTTTest('iotlab')
