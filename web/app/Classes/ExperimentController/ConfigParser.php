@@ -28,9 +28,8 @@ class ConfigParser {
 		);
 	}
 
-	private function _invoke_python_interface($sc_identifier, $tb_identifier) {
+	private function _invoke_python_interface($param, $scenario, $testbed) {
 		$python_interface_path = base_path() . "/../scenario-config/interface.py";
-		$command = "python $python_interface_path --scenario=$sc_identifier --testbed=$tb_identifier";
 
 		$command = "python $python_interface_path --param=$param";
 		$command .= $param == 'nodes' ? " --scenario=$scenario --testbed=$testbed" : "";
