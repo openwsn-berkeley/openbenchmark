@@ -56,7 +56,13 @@ class ExperimentController extends Controller
     }
 
     // Scenario data retrieval
-    function get_config_data() {
-        return $this->config_parser->get_config_data();
+    function get_config_data($param, $scenario=null, $testbed=null) {
+        if ($param == null) 
+            return ErrorResponse::response(422, '`param` is a required argument');
+        else if ($param == 'nodes' && ($scenario == null or $testbed == null))
+            return ErrorResponse::response(422, 'If `param` is set to `nodes`, `scenario` and `testbed` cannot be null');
+        else 
+            return response()->json($this->config_parser->get_config_data($param, $scenario, $testbed));
     }
+
 }
