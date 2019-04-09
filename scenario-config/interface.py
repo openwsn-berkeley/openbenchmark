@@ -56,7 +56,6 @@ class Interface:
 	        required = True,
 	        action   = 'store'
 		)
-<<<<<<< HEAD
 	
 	def _read_config(self, scenario, testbed):
 		self.config_node_data = {}
@@ -78,7 +77,7 @@ class Interface:
 
 					self.config_node_data[generic_id] = node_data
 					del self.config_node_data[generic_id]['traffic_sending_points']
-=======
+
 
 	def _generate_json_data(self):
 		data = {}
@@ -138,8 +137,6 @@ class Interface:
 			print(json.dumps(json_obj[args['scenario']][args['testbed']][args['param']], indent=4, sort_keys=True))
 		else:	
 			print(json.dumps(json_obj[args['param']], indent=4, sort_keys=True))
-
->>>>>>> 00a9340... Issue #14: Expands `scenarios` and `testbeds` result JSONs with additional data
 
 
 
