@@ -165,11 +165,30 @@ class Wilab(Controller):
 		for child in list(xml_root):
 			xml_root.remove(child)
 
+		xml_root.append(self._rspec_server())
+
 		nucs = self._get_nucs()
 		for nuc_id in nucs:
 			xml_root.append(self._rspec_node(nuc_id))
 
 		tree.write(rspec_file, xml_declaration=True, encoding='UTF-8')
+
+	def _rspec_server(self):
+		server_node = etree.Element(
+			"node", 
+			client_id="server",
+			exclusive="true",
+			component_manager_id="urn:publicid:IDN+wall2.ilabt.iminds.be+authority+cm"
+		)
+
+		silver_type_node = etree.Element("silver_type", name="raw-pc")
+		silver_type_node.append(etree.Element("disk_image", name="urn:publicid:IDN+wall2.ilabt.iminds.be+image+emulab-ops:UBUNTU18-64-STD"))
+
+		server_node.append(silver_type_node)
+		server_node.append(etree.Element("location", xmlns="http://jfed.iminds.be/rspec/ext/jfed/1", x="213.0", y="155.0"))
+		server_node.append(etree.Element("ansible_group", xmlns="http://jfed.iminds.be/rspec/ext/jfed/1", name="server"))
+		
+		return server_node
 
 	def _rspec_node(self, nuc_id):
 		node = etree.Element(
