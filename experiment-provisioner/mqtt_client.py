@@ -11,11 +11,12 @@ class MQTTClient:
 	@staticmethod
 	def create():
 		if MQTTClient._instance == None:
-			MQTTClient._instance = MQTTClient()
+			MQTTClient._instance = MQTTClient(testbed)
 		return MQTTClient._instance
 
 
-	def __init__(self):
+	def __init__(self, testbed):
+		self.testbed          = testbed
 		self.broker           = 'broker.mqttdashboard.com' # Utils.broker
 		self.condition_object = ConditionObject.create()
 
