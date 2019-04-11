@@ -22,7 +22,9 @@ class MQTTClient:
 
 		self.experiment_id    = 'Notif'
 
-		self.sub_topics = {}
+		self.sub_topics = {
+			"data-stream": "{0}/deviceType/mote/deviceId/+/notif/frommoteserialbytes".format(self.testbed)
+		}
 		self.pub_topics = {
 			"notifications": "openbenchmark/notifications"
 		}
