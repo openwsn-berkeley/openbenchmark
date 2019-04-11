@@ -6,6 +6,7 @@ from abc import abstractmethod
 from socket_io_handler import SocketIoHandler
 from cryptography.utils import CryptographyDeprecationWarning
 from otbox_startup import OTBoxStartup
+from mqtt_client import MQTTClient
 
 import os
 import paramiko
@@ -39,6 +40,8 @@ class IoTLABReservation(Reservation):
             action='ignore',
             category=CryptographyDeprecationWarning
         )
+
+        self.mqtt_client = MQTTClient.create("iotlab")
 
         self.user = user
         self.domain = domain
@@ -127,6 +130,9 @@ class IoTLABReservation(Reservation):
             if output != self.CMD_ERROR:
                 print("Experiment check: " + output)
                 json_output = json.loads(output)['nodes']
+                
+                # Nodes reserved successfully
+                self.mqtt_client.push_notification("provisioned", True)
                 return True
             elif retries <= num_of_retries:
                 self.socketIoHandler.publish('RESERVATION_STATUS_RETRY', str(retries) + "/" + str(num_of_retries))
@@ -134,6 +140,7 @@ class IoTLABReservation(Reservation):
                 time.sleep(self.RETRY_PAUSE)
             else:
                 self.socketIoHandler.publish('RESERVATION_FAIL', str(retries) + "/" + str(num_of_retries))
+                self.mqtt_client.push_notification("provisioned", False)
                 break
 
             if not loop:
@@ -152,10 +159,14 @@ class IoTLABReservation(Reservation):
         time.sleep(3)
         subprocess.Popen(delete_logs, shell=True)
 
+        self.mqtt_client.push_notification("terminated", True)
+
 
 class WilabReservation(Reservation):
 
     def __init__(self, jfed_dir, run, delete, display):
+        self.mqtt_client = MQTTClient.create("wilab")
+        
         self.jfed_dir = jfed_dir
         self.actions = {
             "run": run,
