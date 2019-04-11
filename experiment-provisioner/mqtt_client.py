@@ -49,9 +49,6 @@ class MQTTClient:
 		for key in self.sub_topics:
 			sys.stdout.write("[PROV MQTT CLIENT] Subscribing to: {0}\n".format(self.sub_topics[key]))
 			self.client.subscribe(self.sub_topics[key])
-		for key in self.epe_sub_topics:
-			sys.stdout.write("[PROV MQTT CLIENT] Subscribing to: {0}\n".format(self.epe_sub_topics[key]))
-			self.client.subscribe(self.epe_sub_topics[key])
 
 	def _publish(self, topic, payload, custom=False):
 		if not custom:
