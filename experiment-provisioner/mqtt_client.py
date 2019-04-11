@@ -83,13 +83,20 @@ class MQTTClient:
 
 	##### Public methodss #####
 	def push_notification(self, step_identifier, success):
-		self._publish(
-			"notifications",
-			{
-				"step"   : step_identifier,
-				"success": success
-			}
-		)	def check_data_stream(self):
+		try:
+			if step_identifier not in ['provisioned', 'flashed', 'data-stream-started', 'terminated']:
+				raise Exception("Notification parameter not recognized")
+
+			self._publish(
+				"notifications",
+				{
+					"step"   : step_identifier,
+					"success": success
+				}
+			)
+
+		except Exception, e:
+			sys.stdout.write("[PROV MQTT CLIENT] {0}\nMessage: {1}\n".format(topic, payload))
 
 	def check_data_stream(self):
 		self._subscribe("data-stream")
