@@ -89,4 +89,22 @@ class MQTTClient:
 				"step"   : step_identifier,
 				"success": success
 			}
-		)
+		)	def check_data_stream(self):
+
+	def check_data_stream(self):
+		self._subscribe("data-stream")
+
+		data_stream_started = False
+		max_iter_num        = 30
+		iter_pause          = 5   # in seconds
+		
+		while True:
+			if self.data_stream_started:
+				self.push_notification("data-stream-started", True)
+				break
+
+			else:
+				time.sleep(iter_pause)
+
+		if not data_stream_started:
+			self.push_notification("data-stream-started", False)
