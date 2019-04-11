@@ -2,6 +2,8 @@ import paho.mqtt.client as mqtt
 import base64
 import json
 
+from mqtt_client import MQTTClient
+
 CLIENT = 'exp-auto'
 
 class OTBoxFlash:
@@ -11,6 +13,7 @@ class OTBoxFlash:
 		self.broker            = broker
 		self.testbed           = testbed
 
+		self.mqtt_client       = MQTTClient.create(testbed)
 		self.client            = mqtt.Client(CLIENT)
 		self.client.on_connect = self.on_connect
 
@@ -32,9 +35,11 @@ class OTBoxFlash:
 
 				print("Sending firmware to motes")
 				self.client.publish('{0}/deviceType/mote/deviceId/all/cmd/program'.format(self.testbed), json.dumps(payload))
+				self.mqtt_client.push_notification("flashed", True)
 
 		except Exception, e:
 			print("An exception occured: {0}".format(str(e)))
+			self.mqtt_client.push_notification("flashed", False)
 
 	def flash(self):
 		self.client.connect(self.broker)
