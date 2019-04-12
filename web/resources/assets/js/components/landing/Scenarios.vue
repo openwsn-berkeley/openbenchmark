@@ -108,6 +108,7 @@
                 scenarios: [],
                 scenarioSelected: -1,
                 scenarioIcons: {
+                    "demo-scenario": "fa-laptop",
                     "home-automation": "fa-home",
                     "building-automation": "fa-building",
                     "industrial-monitoring": "fa-industry",
