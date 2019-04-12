@@ -3,8 +3,6 @@ import ConfigParser
 import os
 import base64
 import json
-import xml.etree
-import xml.etree.ElementTree as ET
 
 from lxml import etree
 from abc import abstractmethod
