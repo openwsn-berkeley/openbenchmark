@@ -1,7 +1,7 @@
 action: RUN
 actionOutputs : [ { "format" : "TXT", "target" : "STDOUT"  } ]
 debugOutputs : [ { "level" : "DEBUG", "format" : "TXT_FULL", "target" : "STDOUT"} ]
-callOutputs: [ { "format" : "TEXT", "target" : "FILE", "filename" : "calls.txt" } ]
+callOutputs: [ { "format" : "HTML", "target" : "FILE", "filename" : "calls.html" } ]
 deleteOn:
   failBecomeReady: false
   failConnectivityTest: false
