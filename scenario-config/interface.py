@@ -8,6 +8,14 @@ class Interface:
 
 	def __init__(self):
 		self.scenarios = {
+			"demo-scenario": {
+				"full_title": "Demo scenario",
+				"config": {
+					"main"  : os.path.join(os.path.dirname(__file__), "demo-scenario", "_config.json"),
+					"iotlab": os.path.join(os.path.dirname(__file__), "demo-scenario", "_iotlab_config.json"),
+					"wilab" : os.path.join(os.path.dirname(__file__), "demo-scenario", "_wilab_config.json")
+				}
+			},
 			"building-automation": {
 				"full_title": "Building automation",
 				"config": {
@@ -59,6 +67,9 @@ class Interface:
 		param = args.param
 		scenario = args.scenario
 		testbed = args.testbed
+
+		if not generate_json and param == None:
+			parser.error('--param is required')
 
 		if not generate_json and param == 'nodes' and (scenario == None or testbed == None):
 			parser.error('Both --scenario and --testbed are required')
