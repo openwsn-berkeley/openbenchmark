@@ -156,8 +156,10 @@ class Wilab(Controller):
 
 	def _rspec_update(self):
 		rspec_file = os.path.join(self.JFED_DIR, "opentestbed", "deployment", "otb.rspec")
+		sensor_id = 1
 
-		tree = etree.parse(rspec_file)
+		parser = etree.XMLParser(remove_blank_text=True)
+		tree = etree.parse(rspec_file, parser)
 		xml_root = tree.getroot()
 
 		for child in list(xml_root):
@@ -167,9 +169,10 @@ class Wilab(Controller):
 
 		nucs = self._get_nucs()
 		for nuc_id in nucs:
-			xml_root.append(self._rspec_node(nuc_id))
+			xml_root.append(self._rspec_node(sensor_id, nuc_id))
+			sensor_id += 1
 
-		tree.write(rspec_file, xml_declaration=True, encoding='UTF-8')
+		tree.write(rspec_file, xml_declaration=True, pretty_print=True)
 
 	def _rspec_server(self):
 		server_node = etree.Element(
@@ -179,24 +182,24 @@ class Wilab(Controller):
 			component_manager_id="urn:publicid:IDN+wall2.ilabt.iminds.be+authority+cm"
 		)
 
-		silver_type_node = etree.Element("silver_type", name="raw-pc")
-		silver_type_node.append(etree.Element("disk_image", name="urn:publicid:IDN+wall2.ilabt.iminds.be+image+emulab-ops:UBUNTU18-64-STD"))
+		sliver_type_node = etree.Element("sliver_type", name="raw-pc")
+		sliver_type_node.append(etree.Element("disk_image", name="urn:publicid:IDN+wall2.ilabt.iminds.be+image+emulab-ops:UBUNTU18-64-STD"))
 
-		server_node.append(silver_type_node)
+		server_node.append(sliver_type_node)
 		server_node.append(etree.Element("location", xmlns="http://jfed.iminds.be/rspec/ext/jfed/1", x="213.0", y="155.0"))
 		server_node.append(etree.Element("ansible_group", xmlns="http://jfed.iminds.be/rspec/ext/jfed/1", name="server"))
 		
 		return server_node
 
-	def _rspec_node(self, nuc_id):
+	def _rspec_node(self, sensor_id, nuc_id):
 		node = etree.Element(
 			"node", 
-			client_id="sensor{0}".format(nuc_id.split("-")[1]),
+			client_id="sensor{0}".format(sensor_id),
 			exclusive="true",
 			component_manager_id="urn:publicid:IDN+wilab1.ilabt.iminds.be+authority+cm",
 			component_id="urn:publicid:IDN+wilab1.ilabt.iminds.be+node+{0}".format(nuc_id)
 		)
-		node.append(etree.Element("silver_type", name="raw-pc"))
+		node.append(etree.Element("sliver_type", name="raw-pc"))
 		node.append(etree.Element("ansible_group", xmlns="http://jfed.iminds.be/rspec/ext/jfed/1", name="sensor"))
 		
 		return node
