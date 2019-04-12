@@ -5,7 +5,7 @@
                 "openbenchmark00": {
                     "area": null, 
                     "destinations": [], 
-                    "node_id": "a8-124", 
+                    "node_id": "node-a8-124", 
                     "role": "zone-controller", 
                     "transmission_power_dbm": -7
                 }, 
@@ -14,7 +14,7 @@
                     "destinations": [
                         "openbenchmark06"
                     ], 
-                    "node_id": "a8-116", 
+                    "node_id": "node-a8-116", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": -7
                 }, 
@@ -23,7 +23,7 @@
                     "destinations": [
                         "openbenchmark06"
                     ], 
-                    "node_id": "a8-117", 
+                    "node_id": "node-a8-117", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": -7
                 }, 
@@ -32,7 +32,7 @@
                     "destinations": [
                         "openbenchmark06"
                     ], 
-                    "node_id": "a8-118", 
+                    "node_id": "node-a8-118", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": -7
                 }, 
@@ -41,7 +41,7 @@
                     "destinations": [
                         "openbenchmark06"
                     ], 
-                    "node_id": "a8-119", 
+                    "node_id": "node-a8-119", 
                     "role": "actuator", 
                     "transmission_power_dbm": -7
                 }, 
@@ -50,7 +50,7 @@
                     "destinations": [
                         "openbenchmark06"
                     ], 
-                    "node_id": "a8-120", 
+                    "node_id": "node-a8-120", 
                     "role": "actuator", 
                     "transmission_power_dbm": -7
                 }, 
@@ -58,10 +58,10 @@
                     "area": 0, 
                     "destinations": [
                         "openbenchmark00", 
-                        "openbenchmark04", 
-                        "openbenchmark05"
+                        "openbenchmark05", 
+                        "openbenchmark04"
                     ], 
-                    "node_id": "a8-121", 
+                    "node_id": "node-a8-121", 
                     "role": "area-controller", 
                     "transmission_power_dbm": -7
                 }, 
@@ -70,7 +70,7 @@
                     "destinations": [
                         "openbenchmark06"
                     ], 
-                    "node_id": "a8-122", 
+                    "node_id": "node-a8-122", 
                     "role": "event-sensor", 
                     "transmission_power_dbm": -7
                 }, 
@@ -79,7 +79,7 @@
                     "destinations": [
                         "openbenchmark06"
                     ], 
-                    "node_id": "a8-123", 
+                    "node_id": "node-a8-123", 
                     "role": "event-sensor", 
                     "transmission_power_dbm": -7
                 }, 
@@ -88,7 +88,7 @@
                     "destinations": [
                         "openbenchmark06"
                     ], 
-                    "node_id": "a8-125", 
+                    "node_id": "node-a8-125", 
                     "role": "event-sensor", 
                     "transmission_power_dbm": -7
                 }, 
@@ -97,7 +97,7 @@
                     "destinations": [
                         "openbenchmark06"
                     ], 
-                    "node_id": "a8-127", 
+                    "node_id": "node-a8-127", 
                     "role": "event-sensor", 
                     "transmission_power_dbm": -7
                 }, 
@@ -106,7 +106,7 @@
                     "destinations": [
                         "openbenchmark16"
                     ], 
-                    "node_id": "a8-128", 
+                    "node_id": "node-a8-128", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": -7
                 }, 
@@ -115,7 +115,7 @@
                     "destinations": [
                         "openbenchmark16"
                     ], 
-                    "node_id": "a8-129", 
+                    "node_id": "node-a8-129", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": -7
                 }, 
@@ -124,7 +124,7 @@
                     "destinations": [
                         "openbenchmark16"
                     ], 
-                    "node_id": "a8-130", 
+                    "node_id": "node-a8-130", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": -7
                 }, 
@@ -133,7 +133,7 @@
                     "destinations": [
                         "openbenchmark16"
                     ], 
-                    "node_id": "a8-131", 
+                    "node_id": "node-a8-131", 
                     "role": "actuator", 
                     "transmission_power_dbm": -7
                 }, 
@@ -142,7 +142,7 @@
                     "destinations": [
                         "openbenchmark16"
                     ], 
-                    "node_id": "a8-132", 
+                    "node_id": "node-a8-132", 
                     "role": "actuator", 
                     "transmission_power_dbm": -7
                 }, 
@@ -153,7 +153,7 @@
                         "openbenchmark14", 
                         "openbenchmark15"
                     ], 
-                    "node_id": "a8-133", 
+                    "node_id": "node-a8-133", 
                     "role": "area-controller", 
                     "transmission_power_dbm": -7
                 }, 
@@ -162,7 +162,7 @@
                     "destinations": [
                         "openbenchmark16"
                     ], 
-                    "node_id": "a8-134", 
+                    "node_id": "node-a8-134", 
                     "role": "event-sensor", 
                     "transmission_power_dbm": -7
                 }, 
@@ -171,7 +171,7 @@
                     "destinations": [
                         "openbenchmark16"
                     ], 
-                    "node_id": "a8-135", 
+                    "node_id": "node-a8-135", 
                     "role": "event-sensor", 
                     "transmission_power_dbm": -7
                 }, 
@@ -180,7 +180,7 @@
                     "destinations": [
                         "openbenchmark16"
                     ], 
-                    "node_id": "a8-137", 
+                    "node_id": "node-a8-137", 
                     "role": "event-sensor", 
                     "transmission_power_dbm": -7
                 }, 
@@ -189,7 +189,7 @@
                     "destinations": [
                         "openbenchmark16"
                     ], 
-                    "node_id": "a8-138", 
+                    "node_id": "node-a8-138", 
                     "role": "event-sensor", 
                     "transmission_power_dbm": -7
                 }, 
@@ -198,7 +198,7 @@
                     "destinations": [
                         "openbenchmark26"
                     ], 
-                    "node_id": "a8-139", 
+                    "node_id": "node-a8-139", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": -7
                 }, 
@@ -207,7 +207,7 @@
                     "destinations": [
                         "openbenchmark26"
                     ], 
-                    "node_id": "a8-140", 
+                    "node_id": "node-a8-140", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": -7
                 }, 
@@ -216,7 +216,7 @@
                     "destinations": [
                         "openbenchmark26"
                     ], 
-                    "node_id": "a8-141", 
+                    "node_id": "node-a8-141", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": -7
                 }, 
@@ -225,7 +225,7 @@
                     "destinations": [
                         "openbenchmark26"
                     ], 
-                    "node_id": "a8-142", 
+                    "node_id": "node-a8-142", 
                     "role": "actuator", 
                     "transmission_power_dbm": -7
                 }, 
@@ -234,7 +234,7 @@
                     "destinations": [
                         "openbenchmark26"
                     ], 
-                    "node_id": "18-143", 
+                    "node_id": "node-18-143", 
                     "role": "actuator", 
                     "transmission_power_dbm": 0
                 }, 
@@ -245,7 +245,7 @@
                         "openbenchmark24", 
                         "openbenchmark25"
                     ], 
-                    "node_id": "a8-144", 
+                    "node_id": "node-a8-144", 
                     "role": "area-controller", 
                     "transmission_power_dbm": 0
                 }, 
@@ -254,7 +254,7 @@
                     "destinations": [
                         "openbenchmark26"
                     ], 
-                    "node_id": "a8-145", 
+                    "node_id": "node-a8-145", 
                     "role": "event-sensor", 
                     "transmission_power_dbm": 0
                 }, 
@@ -263,7 +263,7 @@
                     "destinations": [
                         "openbenchmark26"
                     ], 
-                    "node_id": "a8-149", 
+                    "node_id": "node-a8-149", 
                     "role": "event-sensor", 
                     "transmission_power_dbm": 0
                 }, 
@@ -272,7 +272,7 @@
                     "destinations": [
                         "openbenchmark26"
                     ], 
-                    "node_id": "a8-148", 
+                    "node_id": "node-a8-148", 
                     "role": "event-sensor", 
                     "transmission_power_dbm": 0
                 }, 
@@ -281,7 +281,7 @@
                     "destinations": [
                         "openbenchmark26"
                     ], 
-                    "node_id": "a8-150", 
+                    "node_id": "node-a8-150", 
                     "role": "event-sensor", 
                     "transmission_power_dbm": 0
                 }, 
@@ -290,7 +290,7 @@
                     "destinations": [
                         "openbenchmark36"
                     ], 
-                    "node_id": "a8-146", 
+                    "node_id": "node-a8-146", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": 0
                 }, 
@@ -299,7 +299,7 @@
                     "destinations": [
                         "openbenchmark36"
                     ], 
-                    "node_id": "a8-151", 
+                    "node_id": "node-a8-151", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": -7
                 }, 
@@ -308,7 +308,7 @@
                     "destinations": [
                         "openbenchmark36"
                     ], 
-                    "node_id": "a8-152", 
+                    "node_id": "node-a8-152", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": -7
                 }, 
@@ -317,7 +317,7 @@
                     "destinations": [
                         "openbenchmark36"
                     ], 
-                    "node_id": "a8-153", 
+                    "node_id": "node-a8-153", 
                     "role": "actuator", 
                     "transmission_power_dbm": -7
                 }, 
@@ -326,7 +326,7 @@
                     "destinations": [
                         "openbenchmark36"
                     ], 
-                    "node_id": "a8-154", 
+                    "node_id": "node-a8-154", 
                     "role": "actuator", 
                     "transmission_power_dbm": -7
                 }, 
@@ -334,10 +334,10 @@
                     "area": 3, 
                     "destinations": [
                         "openbenchmark00", 
-                        "openbenchmark35", 
-                        "openbenchmark34"
+                        "openbenchmark34", 
+                        "openbenchmark35"
                     ], 
-                    "node_id": "a8-155", 
+                    "node_id": "node-a8-155", 
                     "role": "area-controller", 
                     "transmission_power_dbm": -7
                 }, 
@@ -346,7 +346,7 @@
                     "destinations": [
                         "openbenchmark36"
                     ], 
-                    "node_id": "a8-156", 
+                    "node_id": "node-a8-156", 
                     "role": "event-sensor", 
                     "transmission_power_dbm": -7
                 }, 
@@ -355,7 +355,7 @@
                     "destinations": [
                         "openbenchmark36"
                     ], 
-                    "node_id": "a8-157", 
+                    "node_id": "node-a8-157", 
                     "role": "event-sensor", 
                     "transmission_power_dbm": -7
                 }, 
@@ -364,7 +364,7 @@
                     "destinations": [
                         "openbenchmark36"
                     ], 
-                    "node_id": "a8-159", 
+                    "node_id": "node-a8-159", 
                     "role": "event-sensor", 
                     "transmission_power_dbm": -7
                 }, 
@@ -373,7 +373,7 @@
                     "destinations": [
                         "openbenchmark36"
                     ], 
-                    "node_id": "a8-160", 
+                    "node_id": "node-a8-160", 
                     "role": "event-sensor", 
                     "transmission_power_dbm": -7
                 }
@@ -437,8 +437,8 @@
                     "area": 0, 
                     "destinations": [
                         "openbenchmark00", 
-                        "openbenchmark04", 
-                        "openbenchmark05"
+                        "openbenchmark05", 
+                        "openbenchmark04"
                     ], 
                     "node_id": "nuc10-35-1", 
                     "role": "area-controller", 
@@ -713,8 +713,8 @@
                     "area": 3, 
                     "destinations": [
                         "openbenchmark00", 
-                        "openbenchmark35", 
-                        "openbenchmark34"
+                        "openbenchmark34", 
+                        "openbenchmark35"
                     ], 
                     "node_id": "nuc10-27-1", 
                     "role": "area-controller", 
@@ -752,9 +752,73 @@
                     "destinations": [
                         "openbenchmark36"
                     ], 
-                    "node_id": "nuc10-26-0", 
+                    "node_id": "nuc10-26-1", 
                     "role": "event-sensor", 
                     "transmission_power_dbm": -5
+                }
+            }
+        }
+    }, 
+    "demo-scenario": {
+        "iotlab": {
+            "nodes": {
+                "openbenchmark00": {
+                    "area": null, 
+                    "destinations": [
+                        "openbenchmark02"
+                    ], 
+                    "node_id": "node-a8-116", 
+                    "role": "control-unit", 
+                    "transmission_power_dbm": 0
+                }, 
+                "openbenchmark01": {
+                    "area": 0, 
+                    "destinations": [
+                        "openbenchmark00"
+                    ], 
+                    "node_id": "node-a8-117", 
+                    "role": "monitoring-sensor", 
+                    "transmission_power_dbm": 0
+                }, 
+                "openbenchmark02": {
+                    "area": 0, 
+                    "destinations": [
+                        "openbenchmark00"
+                    ], 
+                    "node_id": "node-a8-118", 
+                    "role": "actuator", 
+                    "transmission_power_dbm": 0
+                }
+            }
+        }, 
+        "wilab": {
+            "nodes": {
+                "openbenchmark00": {
+                    "area": null, 
+                    "destinations": [
+                        "openbenchmark02"
+                    ], 
+                    "node_id": "nuc10-35-0", 
+                    "role": "control-unit", 
+                    "transmission_power_dbm": 0
+                }, 
+                "openbenchmark01": {
+                    "area": 0, 
+                    "destinations": [
+                        "openbenchmark00"
+                    ], 
+                    "node_id": "nuc10-36-0", 
+                    "role": "monitoring-sensor", 
+                    "transmission_power_dbm": 0
+                }, 
+                "openbenchmark02": {
+                    "area": 0, 
+                    "destinations": [
+                        "openbenchmark00"
+                    ], 
+                    "node_id": "nuc10-36-1", 
+                    "role": "actuator", 
+                    "transmission_power_dbm": 0
                 }
             }
         }
@@ -765,20 +829,20 @@
                 "openbenchmark00": {
                     "area": null, 
                     "destinations": [
-                        "openbenchmark30", 
-                        "openbenchmark24", 
-                        "openbenchmark25", 
-                        "openbenchmark20", 
-                        "openbenchmark28", 
                         "openbenchmark22", 
-                        "openbenchmark31", 
-                        "openbenchmark21", 
-                        "openbenchmark27", 
+                        "openbenchmark32", 
+                        "openbenchmark24", 
+                        "openbenchmark30", 
+                        "openbenchmark28", 
                         "openbenchmark29", 
-                        "openbenchmark26", 
-                        "openbenchmark23"
+                        "openbenchmark27", 
+                        "openbenchmark25", 
+                        "openbenchmark21", 
+                        "openbenchmark31", 
+                        "openbenchmark23", 
+                        "openbenchmark26"
                     ], 
-                    "node_id": "a8-124", 
+                    "node_id": "node-a8-124", 
                     "role": "control-unit", 
                     "transmission_power_dbm": -2
                 }, 
@@ -787,7 +851,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-116", 
+                    "node_id": "node-a8-116", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": -2
                 }, 
@@ -796,7 +860,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-117", 
+                    "node_id": "node-a8-117", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": -2
                 }, 
@@ -805,7 +869,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-118", 
+                    "node_id": "node-a8-118", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": -2
                 }, 
@@ -814,7 +878,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-119", 
+                    "node_id": "node-a8-119", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": -2
                 }, 
@@ -823,7 +887,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-120", 
+                    "node_id": "node-a8-120", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": -2
                 }, 
@@ -832,7 +896,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-121", 
+                    "node_id": "node-a8-121", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": -2
                 }, 
@@ -841,7 +905,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-122", 
+                    "node_id": "node-a8-122", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": -2
                 }, 
@@ -850,7 +914,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-123", 
+                    "node_id": "node-a8-123", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": -2
                 }, 
@@ -859,7 +923,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-125", 
+                    "node_id": "node-a8-125", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": -2
                 }, 
@@ -868,7 +932,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-127", 
+                    "node_id": "node-a8-127", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": -2
                 }, 
@@ -877,7 +941,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-128", 
+                    "node_id": "node-a8-128", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": -2
                 }, 
@@ -886,7 +950,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-129", 
+                    "node_id": "node-a8-129", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": -2
                 }, 
@@ -895,7 +959,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-130", 
+                    "node_id": "node-a8-130", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": -2
                 }, 
@@ -904,7 +968,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-131", 
+                    "node_id": "node-a8-131", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": -2
                 }, 
@@ -913,7 +977,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-132", 
+                    "node_id": "node-a8-132", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": -2
                 }, 
@@ -922,7 +986,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-133", 
+                    "node_id": "node-a8-133", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": -2
                 }, 
@@ -931,7 +995,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-134", 
+                    "node_id": "node-a8-134", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": -2
                 }, 
@@ -940,7 +1004,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-135", 
+                    "node_id": "node-a8-135", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": -2
                 }, 
@@ -949,7 +1013,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-137", 
+                    "node_id": "node-a8-137", 
                     "role": "monitoring-sensor", 
                     "transmission_power_dbm": -2
                 }, 
@@ -958,8 +1022,8 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-138", 
-                    "role": "actuator", 
+                    "node_id": "node-a8-138", 
+                    "role": "monitoring-sensor", 
                     "transmission_power_dbm": -2
                 }, 
                 "openbenchmark21": {
@@ -967,7 +1031,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-139", 
+                    "node_id": "node-a8-139", 
                     "role": "actuator", 
                     "transmission_power_dbm": -2
                 }, 
@@ -976,7 +1040,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-140", 
+                    "node_id": "node-a8-140", 
                     "role": "actuator", 
                     "transmission_power_dbm": -2
                 }, 
@@ -985,7 +1049,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-141", 
+                    "node_id": "node-a8-141", 
                     "role": "actuator", 
                     "transmission_power_dbm": -2
                 }, 
@@ -994,7 +1058,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-142", 
+                    "node_id": "node-a8-142", 
                     "role": "actuator", 
                     "transmission_power_dbm": -2
                 }, 
@@ -1003,7 +1067,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "18-143", 
+                    "node_id": "node-a8-143", 
                     "role": "actuator", 
                     "transmission_power_dbm": 0
                 }, 
@@ -1012,7 +1076,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-144", 
+                    "node_id": "node-a8-144", 
                     "role": "actuator", 
                     "transmission_power_dbm": 0
                 }, 
@@ -1021,7 +1085,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-145", 
+                    "node_id": "node-a8-145", 
                     "role": "actuator", 
                     "transmission_power_dbm": 0
                 }, 
@@ -1030,7 +1094,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-149", 
+                    "node_id": "node-a8-149", 
                     "role": "actuator", 
                     "transmission_power_dbm": 0
                 }, 
@@ -1039,7 +1103,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-148", 
+                    "node_id": "node-a8-148", 
                     "role": "actuator", 
                     "transmission_power_dbm": 0
                 }, 
@@ -1048,7 +1112,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-150", 
+                    "node_id": "node-a8-150", 
                     "role": "actuator", 
                     "transmission_power_dbm": 0
                 }, 
@@ -1057,7 +1121,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-146", 
+                    "node_id": "node-a8-146", 
                     "role": "actuator", 
                     "transmission_power_dbm": 0
                 }, 
@@ -1066,8 +1130,8 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-151", 
-                    "role": "event-sensor", 
+                    "node_id": "node-a8-151", 
+                    "role": "actuator", 
                     "transmission_power_dbm": -2
                 }, 
                 "openbenchmark33": {
@@ -1075,7 +1139,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-152", 
+                    "node_id": "node-a8-152", 
                     "role": "event-sensor", 
                     "transmission_power_dbm": -2
                 }, 
@@ -1084,7 +1148,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-153", 
+                    "node_id": "node-a8-153", 
                     "role": "event-sensor", 
                     "transmission_power_dbm": -2
                 }, 
@@ -1093,7 +1157,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-154", 
+                    "node_id": "node-a8-154", 
                     "role": "event-sensor", 
                     "transmission_power_dbm": -2
                 }, 
@@ -1102,7 +1166,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-155", 
+                    "node_id": "node-a8-155", 
                     "role": "event-sensor", 
                     "transmission_power_dbm": -2
                 }, 
@@ -1111,7 +1175,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-156", 
+                    "node_id": "node-a8-156", 
                     "role": "event-sensor", 
                     "transmission_power_dbm": -2
                 }, 
@@ -1120,7 +1184,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-157", 
+                    "node_id": "node-a8-157", 
                     "role": "event-sensor", 
                     "transmission_power_dbm": -2
                 }, 
@@ -1129,7 +1193,16 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-159", 
+                    "node_id": "node-a8-159", 
+                    "role": "event-sensor", 
+                    "transmission_power_dbm": -2
+                }, 
+                "openbenchmark40": {
+                    "area": 0, 
+                    "destinations": [
+                        "openbenchmark00"
+                    ], 
+                    "node_id": "node-a8-160", 
                     "role": "event-sensor", 
                     "transmission_power_dbm": -2
                 }
@@ -1140,18 +1213,18 @@
                 "openbenchmark00": {
                     "area": null, 
                     "destinations": [
-                        "openbenchmark30", 
-                        "openbenchmark24", 
-                        "openbenchmark25", 
-                        "openbenchmark20", 
-                        "openbenchmark28", 
                         "openbenchmark22", 
-                        "openbenchmark31", 
-                        "openbenchmark21", 
-                        "openbenchmark27", 
+                        "openbenchmark32", 
+                        "openbenchmark24", 
+                        "openbenchmark30", 
+                        "openbenchmark28", 
                         "openbenchmark29", 
-                        "openbenchmark26", 
-                        "openbenchmark23"
+                        "openbenchmark27", 
+                        "openbenchmark25", 
+                        "openbenchmark21", 
+                        "openbenchmark31", 
+                        "openbenchmark23", 
+                        "openbenchmark26"
                     ], 
                     "node_id": "nuc10-41-0", 
                     "role": "control-unit", 
@@ -1334,7 +1407,7 @@
                         "openbenchmark00"
                     ], 
                     "node_id": "nuc10-37-1", 
-                    "role": "actuator", 
+                    "role": "monitoring-sensor", 
                     "transmission_power_dbm": 0
                 }, 
                 "openbenchmark21": {
@@ -1442,7 +1515,7 @@
                         "openbenchmark00"
                     ], 
                     "node_id": "nuc10-28-1", 
-                    "role": "event-sensor", 
+                    "role": "actuator", 
                     "transmission_power_dbm": 0
                 }, 
                 "openbenchmark33": {
@@ -1505,6 +1578,15 @@
                         "openbenchmark00"
                     ], 
                     "node_id": "nuc10-26-0", 
+                    "role": "event-sensor", 
+                    "transmission_power_dbm": 0
+                }, 
+                "openbenchmark40": {
+                    "area": 0, 
+                    "destinations": [
+                        "openbenchmark00"
+                    ], 
+                    "node_id": "nuc10-26-1", 
                     "role": "event-sensor", 
                     "transmission_power_dbm": 0
                 }
@@ -1517,7 +1599,7 @@
                 "openbenchmark00": {
                     "area": null, 
                     "destinations": [], 
-                    "node_id": "a8-124", 
+                    "node_id": "node-a8-124", 
                     "role": "gateway", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1526,7 +1608,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-116", 
+                    "node_id": "node-a8-116", 
                     "role": "sensor", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1535,7 +1617,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-117", 
+                    "node_id": "node-a8-117", 
                     "role": "sensor", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1544,7 +1626,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-118", 
+                    "node_id": "node-a8-118", 
                     "role": "sensor", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1553,7 +1635,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-119", 
+                    "node_id": "node-a8-119", 
                     "role": "sensor", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1562,7 +1644,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-120", 
+                    "node_id": "node-a8-120", 
                     "role": "sensor", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1571,7 +1653,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-121", 
+                    "node_id": "node-a8-121", 
                     "role": "sensor", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1580,7 +1662,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-122", 
+                    "node_id": "node-a8-122", 
                     "role": "sensor", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1589,7 +1671,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-123", 
+                    "node_id": "node-a8-123", 
                     "role": "sensor", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1598,7 +1680,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-125", 
+                    "node_id": "node-a8-125", 
                     "role": "sensor", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1607,7 +1689,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-127", 
+                    "node_id": "node-a8-127", 
                     "role": "sensor", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1616,7 +1698,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-128", 
+                    "node_id": "node-a8-128", 
                     "role": "sensor", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1625,7 +1707,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-129", 
+                    "node_id": "node-a8-129", 
                     "role": "sensor", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1634,7 +1716,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-130", 
+                    "node_id": "node-a8-130", 
                     "role": "sensor", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1643,7 +1725,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-131", 
+                    "node_id": "node-a8-131", 
                     "role": "sensor", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1652,7 +1734,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-132", 
+                    "node_id": "node-a8-132", 
                     "role": "sensor", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1661,7 +1743,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-133", 
+                    "node_id": "node-a8-133", 
                     "role": "sensor", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1670,7 +1752,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-134", 
+                    "node_id": "node-a8-134", 
                     "role": "sensor", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1679,7 +1761,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-135", 
+                    "node_id": "node-a8-135", 
                     "role": "sensor", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1688,7 +1770,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-137", 
+                    "node_id": "node-a8-137", 
                     "role": "sensor", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1697,7 +1779,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-138", 
+                    "node_id": "node-a8-138", 
                     "role": "sensor", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1706,7 +1788,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-139", 
+                    "node_id": "node-a8-139", 
                     "role": "sensor", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1715,7 +1797,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-140", 
+                    "node_id": "node-a8-140", 
                     "role": "sensor", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1724,7 +1806,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-141", 
+                    "node_id": "node-a8-141", 
                     "role": "sensor", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1733,7 +1815,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-142", 
+                    "node_id": "node-a8-142", 
                     "role": "sensor", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1742,7 +1824,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "18-143", 
+                    "node_id": "node-a8-143", 
                     "role": "sensor", 
                     "transmission_power_dbm": 0
                 }, 
@@ -1751,7 +1833,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-144", 
+                    "node_id": "node-a8-144", 
                     "role": "sensor", 
                     "transmission_power_dbm": 0
                 }, 
@@ -1760,7 +1842,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-145", 
+                    "node_id": "node-a8-145", 
                     "role": "sensor", 
                     "transmission_power_dbm": 0
                 }, 
@@ -1769,7 +1851,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-149", 
+                    "node_id": "node-a8-149", 
                     "role": "sensor", 
                     "transmission_power_dbm": 0
                 }, 
@@ -1778,7 +1860,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-148", 
+                    "node_id": "node-a8-148", 
                     "role": "sensor", 
                     "transmission_power_dbm": 0
                 }, 
@@ -1787,7 +1869,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-150", 
+                    "node_id": "node-a8-150", 
                     "role": "sensor", 
                     "transmission_power_dbm": 0
                 }, 
@@ -1796,7 +1878,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-146", 
+                    "node_id": "node-a8-146", 
                     "role": "sensor", 
                     "transmission_power_dbm": 0
                 }, 
@@ -1805,7 +1887,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-151", 
+                    "node_id": "node-a8-151", 
                     "role": "sensor", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1814,7 +1896,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-152", 
+                    "node_id": "node-a8-152", 
                     "role": "sensor", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1823,7 +1905,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-153", 
+                    "node_id": "node-a8-153", 
                     "role": "sensor", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1832,7 +1914,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-154", 
+                    "node_id": "node-a8-154", 
                     "role": "sensor", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1841,8 +1923,8 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-155", 
-                    "role": "bursty-sensor", 
+                    "node_id": "node-a8-155", 
+                    "role": "sensor", 
                     "transmission_power_dbm": -12
                 }, 
                 "openbenchmark37": {
@@ -1850,7 +1932,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-156", 
+                    "node_id": "node-a8-156", 
                     "role": "bursty-sensor", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1859,7 +1941,7 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-157", 
+                    "node_id": "node-a8-157", 
                     "role": "bursty-sensor", 
                     "transmission_power_dbm": -12
                 }, 
@@ -1868,7 +1950,16 @@
                     "destinations": [
                         "openbenchmark00"
                     ], 
-                    "node_id": "a8-159", 
+                    "node_id": "node-a8-159", 
+                    "role": "bursty-sensor", 
+                    "transmission_power_dbm": -12
+                }, 
+                "openbenchmark40": {
+                    "area": 0, 
+                    "destinations": [
+                        "openbenchmark00"
+                    ], 
+                    "node_id": "node-a8-160", 
                     "role": "bursty-sensor", 
                     "transmission_power_dbm": -12
                 }
@@ -2204,7 +2295,7 @@
                         "openbenchmark00"
                     ], 
                     "node_id": "nuc10-27-1", 
-                    "role": "bursty-sensor", 
+                    "role": "sensor", 
                     "transmission_power_dbm": -9
                 }, 
                 "openbenchmark37": {
@@ -2233,14 +2324,23 @@
                     "node_id": "nuc10-26-0", 
                     "role": "bursty-sensor", 
                     "transmission_power_dbm": -9
+                }, 
+                "openbenchmark40": {
+                    "area": 0, 
+                    "destinations": [
+                        "openbenchmark00"
+                    ], 
+                    "node_id": "nuc10-26-1", 
+                    "role": "bursty-sensor", 
+                    "transmission_power_dbm": -9
                 }
             }
         }
     }, 
     "scenarios": [
         {
-            "identifier": "industrial-monitoring", 
-            "name": "Industrial monitoring"
+            "identifier": "demo-scenario", 
+            "name": "Demo scenario"
         }, 
         {
             "identifier": "building-automation", 
@@ -2249,6 +2349,10 @@
         {
             "identifier": "home-automation", 
             "name": "Home automation"
+        }, 
+        {
+            "identifier": "industrial-monitoring", 
+            "name": "Industrial monitoring"
         }
     ], 
     "testbeds": [
