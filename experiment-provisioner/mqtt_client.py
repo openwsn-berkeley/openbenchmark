@@ -77,7 +77,7 @@ class MQTTClient:
 		topic   = message.topic
 		payload = message.payload.decode('string-escape').strip('"')
 
-		sys.stdout.write("[PROV MQTT CLIENT] Topic: {0}\nMessage: {1}\n".format(topic, payload))
+		sys.stdout.write("[PROV MQTT CLIENT] Message on topic: {0}".format(topic))
 
 
 	##### Public methodss #####
