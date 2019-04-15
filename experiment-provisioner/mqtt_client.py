@@ -95,7 +95,7 @@ class MQTTClient:
 			)
 
 		except Exception, e:
-			sys.stdout.write("[PROV MQTT CLIENT] {0}\nMessage: {1}\n".format(topic, payload))
+			sys.stdout.write("[PROV MQTT CLIENT] Message: {0}\n".format(e))
 
 	def check_data_stream(self):
 		self._subscribe("data-stream")
