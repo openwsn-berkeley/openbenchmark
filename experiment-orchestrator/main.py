@@ -32,7 +32,7 @@ class Main():
 			thread.start()
 
 		print "[MAIN] Starting MQTT client"
-		MQTTClient.create()
+		self.mqtt_client = MQTTClient.create()
 
 		self.co = ConditionObject.create()
 		print "[MAIN] Acquiring lock..."
@@ -54,6 +54,8 @@ class Main():
 
 		time_padding = Utils.scenario.main_config['nf_time_padding_min']
 		print "[MAIN] Scheduler will start in {0} minutes...".format(time_padding)
+
+		self.mqtt_client.push_notification("network-configured", True)
 
 		time.sleep(time_padding*60)
 		self._start_scheduler()
