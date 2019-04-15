@@ -49,7 +49,8 @@ class MQTTClient:
 			"echoResponse": "openbenchmark/experimentId/{0}/response/echo".format(self.experiment_id), ###
 			"sendPacket": "openbenchmark/experimentId/{0}/command/sendPacket".format(self.experiment_id),
 			"configureTransmitPower": "openbenchmark/experimentId/{0}/command/configureTransmitPower".format(self.experiment_id),
-			"triggerNetworkFormation": "openbenchmark/experimentId/{0}/command/triggerNetworkFormation".format(self.experiment_id)
+			"triggerNetworkFormation": "openbenchmark/experimentId/{0}/command/triggerNetworkFormation".format(self.experiment_id),
+			"notifications": "openbenchmark/notifications"
 		}
 		self.epe_sub_topics = {  # Experiment Performance Events
 			"performanceData": "openbenchmark/experimentId/{0}/nodeId/+/performanceData".format(self.experiment_id)
@@ -181,3 +182,22 @@ class MQTTClient:
 			cv.acquire()
 			cv.notifyAll()
 			cv.release()
+
+	def push_notification(self, step_identifier, success):
+		try:
+			if step_identifier not in ['network-configured', 'orchestration-started']:
+				raise Exception("Notification parameter not recognized")
+
+			self.publish(
+				"notifications",
+				{
+					"step"   : step_identifier,
+					"success": success
+				}
+			)
+
+		except Exception, e:
+			sys.stdout.write("[MQTT CLIENT] Message: {0}\n".format(e))
+
+	def push_kpi(self, kpi):
+		pass
