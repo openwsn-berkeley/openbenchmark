@@ -1,5 +1,11 @@
+import sys
+sys.path.append("..")
+
 import json
 import os
+
+from mqtt_client.mqtt_client import MQTTClient
+
 
 class Logger:
 
@@ -19,6 +25,8 @@ class Logger:
 		self.firmware = header['firmware']
 		self.nodes = header['nodes']
 		self.scenario = header['scenario']
+
+		self.mqtt_client = MQTTClient.create()
 
 		self.logs = {
 			'kpi': os.path.join(os.path.dirname(__file__), 'kpi.log'),
@@ -52,8 +60,10 @@ class Logger:
 		if reset:
 			self.reset()
 
+		self.mqtt_client.push_kpi(payload)
+
 		with open(self.logs[log_type], 'a') as f:
-			f.write(json.dumps(payload) + "\n") 
+			f.write(json.dumps(payload) + "\n")
 
 
 	def log_header(self):
