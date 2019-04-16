@@ -189,16 +189,19 @@ class MQTTClient:
 			if step_identifier not in ['network-configured', 'orchestration-started']:
 				raise Exception("Notification parameter not recognized")
 
-			self.publish(
-				"notifications",
-				{
-					"step"   : step_identifier,
-					"success": success
-				}
-			)
+			self.publish("notifications", {
+					"type": "notification", 
+					"content": {
+						"step"   : step_identifier,
+						"success": success
+					}
+				})
 
 		except Exception, e:
 			sys.stdout.write("[MQTT CLIENT] Message: {0}\n".format(e))
 
 	def push_kpi(self, payload):
-		self.publish("kpi", payload)
+		self.publish("kpi", {
+			"type": "kpi",
+			"content": payload
+		})

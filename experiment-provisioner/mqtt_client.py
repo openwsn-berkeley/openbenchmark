@@ -86,13 +86,13 @@ class MQTTClient:
 			if step_identifier not in ['provisioned', 'flashed', 'data-stream-started', 'terminated']:
 				raise Exception("Notification parameter not recognized")
 
-			self._publish(
-				"notifications",
-				{
-					"step"   : step_identifier,
-					"success": success
-				}
-			)
+			self._publish("notifications", {
+					"type": "notification", 
+					"content": {
+						"step"   : step_identifier,
+						"success": success
+					}
+				})
 
 		except Exception, e:
 			sys.stdout.write("[PROV MQTT CLIENT] Message: {0}\n".format(e))
