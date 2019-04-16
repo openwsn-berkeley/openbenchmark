@@ -17,13 +17,13 @@ export default class MQTTClient {
 	}
 
 	configurePaho() {
-		console.log("Configuring Paho");
+		console.log("Configuring Paho...");
 
-        // set callback handlers
+        // Set callback handlers
         this.client.onConnectionLost = this.onConnectionLost;
         this.client.onMessageArrived = this.onMessageArrived;
 
-        // connect the client
+        // Connect to the client
         this.client.connect({onSuccess: this.onConnect});
     }
 
@@ -35,7 +35,7 @@ export default class MQTTClient {
 	        console.log("onConnectionLost: " + responseObject.errorMessage)
 	}
 	onMessageArrived(message) {
-	    console.log("onMessageArrived: " + message.payloadString)
+	    eventHub.$emit('MQTT', message.payloadString)
 	}
 
 
@@ -69,10 +69,6 @@ export default class MQTTClient {
 		}
 
 		return ""
-	}
-
-	test() {
-		console.log("Printin' test!");
 	}
 
 }
