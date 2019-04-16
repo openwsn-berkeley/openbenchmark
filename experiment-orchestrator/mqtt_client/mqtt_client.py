@@ -50,7 +50,8 @@ class MQTTClient:
 			"sendPacket": "openbenchmark/experimentId/{0}/command/sendPacket".format(self.experiment_id),
 			"configureTransmitPower": "openbenchmark/experimentId/{0}/command/configureTransmitPower".format(self.experiment_id),
 			"triggerNetworkFormation": "openbenchmark/experimentId/{0}/command/triggerNetworkFormation".format(self.experiment_id),
-			"notifications": "openbenchmark/notifications"
+			"notifications": "openbenchmark/notifications",
+			"kpi": "openbenchmark/kpi"
 		}
 		self.epe_sub_topics = {  # Experiment Performance Events
 			"performanceData": "openbenchmark/experimentId/{0}/nodeId/+/performanceData".format(self.experiment_id)
@@ -199,5 +200,5 @@ class MQTTClient:
 		except Exception, e:
 			sys.stdout.write("[MQTT CLIENT] Message: {0}\n".format(e))
 
-	def push_kpi(self, kpi):
-		pass
+	def push_kpi(self, payload):
+		self.publish("kpi", payload)
