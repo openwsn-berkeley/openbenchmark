@@ -13,7 +13,7 @@ window.Vue = require('vue');
 Vue.use(VueRouter);
 
 Vue.prototype.$eventHub = new Vue();
-Vue.prototype.$mqttClient = new MQTTClient('broker.mqttdashboard.com', 8000); //this.$mqttClient.publish(), this.$mqttClient.subscribe()
+Vue.prototype.$mqttClient = new MQTTClient('broker.mqttdashboard.com', 8000, Vue.prototype.$eventHub); //this.$mqttClient.publish(), this.$mqttClient.subscribe()
 
 Vue.component('arrow', require('./components/reusables/Arrow.vue'));
 Vue.component('multiselect', require('vue-multiselect').default);

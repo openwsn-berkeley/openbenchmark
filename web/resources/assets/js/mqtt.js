@@ -1,12 +1,16 @@
 import Paho from 'paho-mqtt';
 
+let eventHub = null
+
 export default class MQTTClient {
 
-	constructor(hostname, port) {
+	constructor(hostname, port, vueEventHub) {
 		this.subTopics = [
 			"openbenchmark/notifications", 
 			"openbenchmark/kpi"
 		]
+
+		eventHub = vueEventHub
 
 		this.client = new Paho.Client(hostname, Number(port), "webBrowserClient")
 		this.configurePaho()
