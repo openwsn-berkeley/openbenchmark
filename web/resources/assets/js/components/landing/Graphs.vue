@@ -237,12 +237,12 @@
             /*** MQTT Configuration ***/
             subscribe() {
                 let interval = setInterval( function() {
-                    if (thisComponent.$mqttClient.subscribe("browser/event") !== "") {
+                    if (thisComponent.$mqttClient.subscribe() !== "") {
                         console.log("Retrying subscription in 1s...") 
                     } else {
                         clearInterval(interval)
                     }
-                }, 1000);   
+                }, 1000);  
             },
             onConnect() {
                 // Once a connection has been made, make a subscription and send a message.

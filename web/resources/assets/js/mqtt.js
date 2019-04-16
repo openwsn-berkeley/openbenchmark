@@ -3,6 +3,11 @@ import Paho from 'paho-mqtt';
 export default class MQTTClient {
 
 	constructor(hostname, port) {
+		this.subTopics = [
+			"openbenchmark/notifications", 
+			"openbenchmark/kpi"
+		]
+
 		this.client = new Paho.Client(hostname, Number(port), "webBrowserClient")
 		this.configurePaho()
 	}
@@ -45,13 +50,16 @@ export default class MQTTClient {
 	    return ""
 	}
 
-	subscribe(topic) {
+	subscribe() {
 		if (!this.client.isConnected())
 			"MQTT Client not connected"
 			
 		try {
-			this.client.subscribe(topic)
-			console.log("Subscribed to: " + topic)
+			for (let i = 0; i < this.subTopics.length; i++) {
+				this.client.subscribe(this.subTopics[i])
+				console.log("Subscribed to: " + this.subTopics[i])
+			}
+		
 		} catch (err) {
 			return err
 		}
