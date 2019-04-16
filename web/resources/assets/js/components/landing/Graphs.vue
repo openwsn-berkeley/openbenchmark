@@ -292,6 +292,10 @@
             this.$eventHub.$on("LOG_MODIFICATION", payload => {
                 thisComponent.parseLogData(payload);
             });
+
+            this.$eventHub.$on("MQTT", payload => {
+                console.log("From event: " + payload);
+            });
         },
 
         created() {
