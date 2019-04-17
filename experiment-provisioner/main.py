@@ -268,6 +268,7 @@ def main():
 	elif action == 'ov-monitor':
 		print 'Starting OV log monitoring'
 		OVLogMonitor().start()
+		OVStartup(scenario, args['testbed'], testbed.BROKER, simulator).start()
 
 
 if __name__ == '__main__':
