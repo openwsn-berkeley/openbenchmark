@@ -25,6 +25,11 @@ class Controller(object):
 		self.configParser.read(self.configFilePath)
 
 	def add_parser_args(self, parser):
+		parser.add_argument('--simulator', 
+	        dest       = 'simulator',
+	        default    = False,
+	        action     = 'store_true'
+	    )
 		parser.add_argument('--action', 
 	        dest       = 'action',
 	        choices    = ['check', 'reserve', 'terminate', 'otbox-flash', 'ov-start', 'ov-monitor'],
@@ -55,10 +60,11 @@ class Controller(object):
 		args = parser.parse_args()
 
 		return {
-			'action'  : args.action,
-			'testbed' : args.testbed,
-			'firmware': args.firmware,
-			'scenario': args.scenario
+			'simulator' : args.simulator,
+			'action'    : args.action,
+			'testbed'   : args.testbed,
+			'firmware'  : args.firmware,
+			'scenario'  : args.scenario
 		}
 
 	@abstractmethod
@@ -234,9 +240,10 @@ def main():
 
 	args = controller.get_args()
 
-	action   = args['action']
-	testbed  = args['testbed']
-	scenario = args['scenario']
+	simulator = args['simulator']
+	action    = args['action']
+	testbed   = args['testbed']
+	scenario  = args['scenario']
 
 	testbed  = TESTBEDS[testbed](scenario)
 	firmware = '{0}/{1}'.format(testbed.FIRMWARE, args['firmware'])
