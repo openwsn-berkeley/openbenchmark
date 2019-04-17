@@ -12,7 +12,7 @@ from reservation import WilabReservation
 from otbox_startup import OTBoxStartup
 from otbox_flash import OTBoxFlash
 from ov_startup import OVStartup
-from ov_log_monitor import OVLogMonitor
+
 
 class Controller(object):
 
@@ -32,7 +32,7 @@ class Controller(object):
 	    )
 		parser.add_argument('--action', 
 	        dest       = 'action',
-	        choices    = ['check', 'reserve', 'terminate', 'otbox-flash', 'ov-start', 'ov-monitor'],
+	        choices    = ['check', 'reserve', 'terminate', 'otbox-flash', 'ov-start'],
 	        required   = True,
 	        action     = 'store'
 		)
@@ -264,10 +264,6 @@ def main():
 		OTBoxFlash(firmware, testbed.BROKER, args['testbed']).flash()
 	elif action == 'ov-start':
 		print 'Starting OV'
-		OVStartup().start()
-	elif action == 'ov-monitor':
-		print 'Starting OV log monitoring'
-		OVLogMonitor().start()
 		OVStartup(scenario, args['testbed'], testbed.BROKER, simulator).start()
 
 
