@@ -52,7 +52,7 @@ class Main():
 		thread.daemon = True
 		thread.start()
 
-		time_padding = Utils.scenario.main_config['nf_time_padding_min']
+		time_padding = 0.1 if self.simulator else Utils.scenario.main_config['nf_time_padding_min']
 		print "[MAIN] Scheduler will start in {0} minutes...".format(time_padding)
 
 		self.mqtt_client.push_notification("network-configured", True)
