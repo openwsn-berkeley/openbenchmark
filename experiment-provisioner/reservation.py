@@ -1,11 +1,9 @@
 import sys
 
-sys.path.insert(0, 'helpers/iotlab')
-
 from abc import abstractmethod
 from socket_io_handler import SocketIoHandler
 from cryptography.utils import CryptographyDeprecationWarning
-from otbox_startup import OTBoxStartup
+from helpers.iotlab.otbox_startup import OTBoxStartup
 from mqtt_client import MQTTClient
 
 import os
