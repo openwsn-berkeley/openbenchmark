@@ -18,13 +18,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/start-exp', 'ExperimentController@start');
-Route::get('/terminate-exp', 'ExperimentController@exp_terminate');
 Route::post('/firmware-upload', 'ExperimentController@upload');
 
-//Test routes
-Route::get('/reserve-exp', 'ExperimentController@reserve_exp');
-Route::get('/start-otbox', 'ExperimentController@start_otbox');
-Route::get('/start-ov', 'ExperimentController@start_ov');
-Route::get('/start-watcher', 'ExperimentController@start_watcher');
+//Individual routes for every action
+Route::get('/reserve-nodes/{scenario}/{testbed}', 'ExperimentController@reserve_nodes');
+Route::get('/flash-firmware/{firmware?}', 'ExperimentController@flash_firmware');
+Route::get('/start-ov/{scenario}/{testbed}/{simulator?}', 'ExperimentController@start_ov');
+Route::get('/exp-terminate', 'ExperimentController@exp_terminate');
 
+//Scenario data retreival routes
 Route::get('/general/{param}/{scenario?}/{testbed?}', 'ExperimentController@get_config_data');

@@ -11,7 +11,7 @@ class ExperimentController extends Controller
 
     function __construct() {
         $this->config_parser   = new ConfigParser();
-        $this->command_handler = new CommandHandler();
+        $this->cmd_handler     = new CommandHandler();
     }
 
     function start() {
@@ -21,10 +21,6 @@ class ExperimentController extends Controller
         sleep($cmd_handler::OV_GUARD_TIME); //A guard time to wait for the nodes to start sending serial data before running OV
         
         $this->cmd_handler->ov_start();
-
-        sleep($cmd_handler::OV_LOG_GUARD_TIME); //A guard time to wait for OV to start writing the log
-        
-        return $this->cmd_handler->ov_monitor();
     }
 
     function upload() {
@@ -33,27 +29,24 @@ class ExperimentController extends Controller
         ]);
     }
 
+
+    // Experiment start-up steps
+    function reserve_nodes($scenario, $testbed) {
+        return $this->cmd_handler->reserve_nodes($scenario, $testbed);
+    }
+
+    function flash_firmware($firmware=null) {
+        return $this->cmd_handler->flash_firmware($firmware);
+    }
+
+    function start_ov($scenario, $testbed, $simulator=false) {
+        return $this->cmd_handler->start_ov($scenario, $testbed, $simulator);
+    }
+
     function exp_terminate() {
         return $this->cmd_handler->exp_terminate();
     }
 
-
-    // Functions for test routes
-    function reserve_exp() {
-        return $this->cmd_handler->reserve_nodes();
-    }
-
-    function start_otbox() {
-        return $this->cmd_handler->otbox_start();
-    }
-
-    function start_ov() {
-        return $this->cmd_handler->ov_start();
-    }
-
-    function start_watcher() {
-        return $this->cmd_handler->ov_monitor();
-    }
 
     // Scenario data retrieval
     function get_config_data($param, $scenario=null, $testbed=null) {
