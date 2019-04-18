@@ -9,7 +9,6 @@ from abc import abstractmethod
 from reservation import IoTLABReservation
 from reservation import WilabReservation
 
-from otbox_startup import OTBoxStartup
 from otbox_flash import OTBoxFlash
 from ov_startup import OVStartup
 
