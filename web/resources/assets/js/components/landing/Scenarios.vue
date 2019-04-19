@@ -286,7 +286,7 @@
 
                 if (type == "notification" && success) {
                     this.currentStep = this.workflowSteps.indexOf(step)    
-                } else if (!success) {
+                } else if (type == "notification" && !success) {
                     this.currentStep = -1
                     this.taskFailed = true
                 }
