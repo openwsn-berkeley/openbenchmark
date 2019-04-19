@@ -42,7 +42,7 @@ Vagrant.configure("2") do |config|
 		'docs/build', 
 		'web/public/js/app.js', 
 		'web/resources/assets/css/app.css',
-    'experiment-control/wilab/jfed_cli'
+        'experiment-provisioner/wilab/jfed_cli'
 	],
 	rsync__args: ['--verbose', '--archive', '-z', '--copy-links']
 
@@ -66,8 +66,8 @@ Vagrant.configure("2") do |config|
     apt-get update
     apt-get install -y dos2unix
 	  dos2unix ./openbenchmark/bootstrap.sh
-    dos2unix ./openbenchmark/jfed_bootstrap.sh
-    dos2unix ./openbenchmark/experiment-control/helpers/wilab/jfed_cli/*.sh
+      dos2unix ./openbenchmark/jfed_bootstrap.sh
+      dos2unix ./openbenchmark/experiment-provisioner/helpers/wilab/jfed_cli/*.sh
   SHELL
   
   config.vm.provision "shell", run: 'always', inline: <<-SHELL
