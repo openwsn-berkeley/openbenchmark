@@ -259,6 +259,34 @@
                 }
 
             },
+
+            /*** MQTT Configuration ***/
+            subscribe() {
+                let interval = setInterval( function() {
+                    if (thisComponent.$mqttClient.subscribe() !== "") {
+                        console.log("Retrying subscription in 1s...") 
+                    } else {
+                        clearInterval(interval)
+                    }
+                }, 1000);  
+            },
+
+            parseMqttEvent(payload) {
+                let payloadObj = JSON.parse(payload)
+                let type    = payloadObj["type"]
+                let step    = payloadObj["content"]["step"]
+                let success = payloadObj["content"]["success"]
+
+                if (type == "notification" && success) {
+                    this.currentStep = this.workflowSteps.indexOf(step)    
+                } else if (!success) {
+                    this.currentStep = -1
+                    this.taskFailed = true
+                }
+
+                console.log(this.currentStep);
+            }
+
         },
 
         computed:{
@@ -321,6 +349,12 @@
             this.fetch('scenarios');
             this.fetch('testbeds');
 
+            this.subscribe();
+
+            this.$eventHub.$on("MQTT", payload => {
+                console.log("From event: " + payload);
+                thisComponent.parseMqttEvent(payload);
+            });
             this.$eventHub.$on("RESERVATION_SUCCESS", payload => {
                 thisComponent.nodesReserved = true
             });
