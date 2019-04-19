@@ -111,7 +111,7 @@ class IoTLABReservation(Reservation):
                 nodes = self.get_reserved_nodes()
 
                 if len(nodes) > 0:
-                    OTBoxStartup(self.user, self.domain, 'iotlab', self.get_reserved_nodes(), self.broker).start()
+                    OTBoxStartup(self.user, self.domain, 'iotlab', self.get_reserved_nodes(), self.broker, self.mqtt_client).start()
                 else:
                     print('Experiment startup failed')
 
@@ -128,9 +128,6 @@ class IoTLABReservation(Reservation):
             if output != self.CMD_ERROR:
                 print("Experiment check: " + output)
                 json_output = json.loads(output)['nodes']
-                
-                # Nodes reserved successfully
-                self.mqtt_client.push_notification("provisioned", True)
                 return True
             elif retries <= num_of_retries:
                 self.socketIoHandler.publish('RESERVATION_STATUS_RETRY', str(retries) + "/" + str(num_of_retries))

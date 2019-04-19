@@ -27,16 +27,17 @@ class OTBoxStartup:
 
     timer = 0  # used for measuring the amount of time between status messages
 
-    def __init__(self, user, domain, testbed, nodes, broker):
+    def __init__(self, user, domain, testbed, nodes, broker, mqtt_client):
         warnings.simplefilter(
             action='ignore',
             category=CryptographyDeprecationWarning
         )
 
-        self.user = user
-        self.domain = domain
-        self.testbed = testbed
-        self.broker = broker
+        self.user        = user
+        self.domain      = domain
+        self.testbed     = testbed
+        self.broker      = broker
+        self.mqtt_client = mqtt_client
 
         self.socketIoHandler = SocketIoHandler()
 
@@ -128,6 +129,9 @@ class OTBoxStartup:
                     'ssh -o "StrictHostKeyChecking no" root@' + node_name + ' "source /etc/profile; cd A8; cd opentestbed; pip install requests; killall python; python otbox.py --testbed=iotlab --broker=' + self.broker + ' >& otbox-' + node_name + '.log &"')
                 self.active_nodes.append(node)
                 self.socketIoHandler.publish('NODE_ACTIVE', node_name)
+
+            self.mqtt_client.push_notification("provisioned", True)
+
         except:
             self.socketIoHandler.publish('NODE_ACTIVE_FAIL', node_name)
             print("Exception happened!")
