@@ -357,6 +357,11 @@
                 console.log("From event: " + payload);
                 thisComponent.parseMqttEvent(payload);
             });
+
+            this.$eventHub.$on("SHOW_MODAL", payload => {
+                this.$modal.show(payload)
+            });
+
             this.$eventHub.$on("RESERVATION_SUCCESS", payload => {
                 thisComponent.nodesReserved = true
             });
