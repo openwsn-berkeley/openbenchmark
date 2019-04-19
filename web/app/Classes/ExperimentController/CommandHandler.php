@@ -16,7 +16,7 @@ class CommandHandler {
     }
 
     function flash_firmware($firmware) {
-        $cmd = self::PROVISIONER_MAIN . " --action=flash";
+        $cmd = self::PROVISIONER_MAIN . " --action=otbox-flash";
         
         if ($firmware != null)
             $cmd .= " --firmware= " . $firmware;
