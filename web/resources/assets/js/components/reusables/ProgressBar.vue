@@ -11,14 +11,10 @@
             </li>
             <li :class="{done: currentStep >= 2, todo: currentStep < 2}">
                 <em>3</em>
-                <span>Starting data stream</span>
+                <span>Configuring network</span>
             </li>
             <li :class="{done: currentStep >= 3, todo: currentStep < 3}">
                 <em>4</em>
-                <span>Configuring network</span>
-            </li>
-            <li :class="{done: currentStep >= 4, todo: currentStep < 4}">
-                <em>5</em>
                 <span>Orchestrating</span>
             </li>
         </ol>
@@ -63,7 +59,7 @@
         color: #bbb;
         border-bottom: 4px #bbb solid;
         line-height: 3em;
-        width: 20%;
+        width: 25%;
         float: left;
     }
     .track-progress li:after {

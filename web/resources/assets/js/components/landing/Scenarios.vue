@@ -133,7 +133,6 @@
                 workflowSteps: [
                     "provisioned",
                     "flashed",
-                    "data-stream-started",
                     "network-configured",
                     "orchestration-started"
                 ],
