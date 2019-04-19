@@ -34,11 +34,13 @@ class OTBoxFlash:
 				}
 
 				print("Sending firmware to motes")
+				self.mqtt_client.push_debug_log('FW_FLASHING', "Sending firmware to motes")
 				self.client.publish('{0}/deviceType/mote/deviceId/all/cmd/program'.format(self.testbed), json.dumps(payload))
 				self.mqtt_client.push_notification("flashed", True)
 
 		except Exception, e:
 			print("An exception occured: {0}".format(str(e)))
+			self.mqtt_client.push_debug_log('FW_FLASHING_ERROR', str(e))
 			self.mqtt_client.push_notification("flashed", False)
 
 	def flash(self):

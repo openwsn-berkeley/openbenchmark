@@ -107,13 +107,17 @@ class OTBoxStartup:
                     print("Node " + node_name + ": retrying")
                     self.socketIoHandler.publish('BOOT_RETRY',
                                                  node_name + ": " + str(retries) + "/" + str(num_of_retries))
+                    self.mqtt_client.push_debug_log('BOOT_RETRY',
+                                                 node_name + ": " + str(retries) + "/" + str(num_of_retries))
                     retries += 1
                     time.sleep(self.RETRY_PAUSE)
                 elif retries > num_of_retries:
                     self.socketIoHandler.publish('BOOT_FAIL', node_name)
+                    self.mqtt_client.push_debug_log('BOOT_FAIL', node_name)
                     break
                 else:
                     self.socketIoHandler.publish('NODE_BOOTED', node_name)
+                    self.mqtt_client.push_debug_log('NODE_BOOTED', node_name)
                     self.booted_nodes.append(node)
                     break
 
@@ -129,9 +133,11 @@ class OTBoxStartup:
                     'ssh -o "StrictHostKeyChecking no" root@' + node_name + ' "source /etc/profile; cd A8; cd opentestbed; pip install requests; killall python; python otbox.py --testbed=iotlab --broker=' + self.broker + ' >& otbox-' + node_name + '.log &"')
                 self.active_nodes.append(node)
                 self.socketIoHandler.publish('NODE_ACTIVE', node_name)
+                self.mqtt_client.push_debug_log('NODE_ACTIVE', node_name)
 
             self.mqtt_client.push_notification("provisioned", True)
 
         except:
             self.socketIoHandler.publish('NODE_ACTIVE_FAIL', node_name)
+            self.mqtt_client.push_debug_log('NODE_ACTIVE_FAIL', node_name)
             print("Exception happened!")

@@ -25,7 +25,8 @@ class MQTTClient:
 			"data-stream": "{0}/deviceType/mote/deviceId/+/notif/frommoteserialbytes".format(self.testbed)
 		}
 		self.pub_topics = {
-			"notifications": "openbenchmark/notifications"
+			"notifications": "openbenchmark/notifications",
+			"debug": "openbenchmark/debug"
 		}
 
 		self._mqtt_client_setup()
@@ -114,3 +115,9 @@ class MQTTClient:
 
 		if not data_stream_started:
 			self.push_notification("data-stream-started", False)
+
+	def push_debug_log(self, action, log_entry):
+		self._publish("debug", {
+				"action": action,
+				"log_entry": log_entry
+			})

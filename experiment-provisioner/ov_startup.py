@@ -31,6 +31,8 @@ class OVStartup:
 
 	def _start_orchestrator(self):
 		print "[OV STARTUP] Starting orchestrator"
+		self.mqtt_client.push_debug_log('OV_STARTUP', "Starting orchestrator")
+
 		if self.simulator:
 			pipe = subprocess.Popen(['python', 'main.py', '--simulator', '--testbed={0}'.format(self.testbed), '--scenario={0}'.format(self.scenario)], cwd=orch_dir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
 		else:
@@ -44,5 +46,7 @@ class OVStartup:
 
 
 	def _start_ov(self):
-		print "[OV STARTUP] Starting openvisualizer"
+		print "[OV STARTUP] Starting OpenVisualizer"
+		self.mqtt_client.push_debug_log('OV_STARTUP', "Starting OpenVisualizer")
+
 		subprocess.Popen(['sudo', 'scons', 'runweb', '--port=8080', '--benchmark={0}'.format(self.scenario), '--testbed={0}'.format(self.testbed), '--mqttBroker={0}'.format(self.broker)], cwd=ov_dir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
