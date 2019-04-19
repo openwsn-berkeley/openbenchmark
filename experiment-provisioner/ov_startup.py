@@ -15,15 +15,13 @@ class OVStartup:
 		self.broker    = broker
 		self.simulator = simulator
 
-		self.orchestartor_wait = 5    # in seconds
-
 		self.mqtt_client = MQTTClient.create(self.testbed)
 
 
 	def start(self):
 		self._start_orchestrator()
 		if not self.simulator:
-			time.sleep(self.orchestartor_wait)
+			self.mqtt_client.check_data_stream()
 			self._start_ov()
 
 	def data_stream_check(self):
