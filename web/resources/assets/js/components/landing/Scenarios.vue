@@ -1,5 +1,19 @@
 <template>
     <div class="parent">
+
+        <modal name="modal-progress-bar" width="90%" height="165px">
+            <!-- The Progress Bar -->
+            <div class="row pl-3 pr-3 h-center v-center col-direction">
+                <h3 class="primary pulse mb-0">Starting experiment...</h3>                    
+                <progress-bar :current-step="currentStep"></progress-bar>
+            </div>
+
+            <div class="row h-center v-center col-direction mt-2" v-if="currentStep > 4">
+                <h3 class="mt-0 mb-0" style="margin-bottom: 5px">Experiment started! <span class="pulse clickable" @click.prevent="scrollContent">Monitor the progress in real time</span></h3>
+                <i class="fas fa-check-circle fa-3x primary-light"></i>
+            </div>
+        </modal>
+
         <div class="row">
             <div class="col-5 pr-5 pl-5">
                 
@@ -60,18 +74,6 @@
                     :net-links="value.links" 
                     :options="options" 
                     v-if="value !== null" @node-click="selectNode"/>
-                <div class="row pl-3 pr-3 h-center v-center col-direction" v-if="processStarted && !dataFlowStarted">
-                    <h3 class="primary pulse mb-0" v-if="!dataFlowStarted">Starting experiment...</h3>
-                    <progress-bar
-                            :nodes-reserved="nodesReserved"
-                            :all-booted="allBooted"
-                            :all-active="allActive"
-                            :data-flow-started="dataFlowStarted"></progress-bar>
-                </div>
-                <div class="row h-center v-center col-direction mt-1" v-if="dataFlowStarted">
-                    <h3 class="mt-0 mb-0" style="margin-bottom: 5px">Experiment started! <span class="pulse clickable" @click.prevent="scrollContent">Monitor the progress in real time</span></h3>
-                    <i class="fas fa-check-circle fa-3x primary-light"></i>
-                </div>
             </div>
 
         </div>
