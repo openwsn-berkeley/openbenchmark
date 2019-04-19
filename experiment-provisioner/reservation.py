@@ -149,16 +149,16 @@ class IoTLABReservation(Reservation):
     def terminate_experiment(self):
         self.ssh_command_exec('iotlab-experiment stop')
         self.socketIoHandler.publish('EXP_TERMINATE', '')
-        self.socketIoHandler.publish('EXP_TERMINATE', '')
+        self.mqtt_client.push_debug_log('EXP_TERMINATE', '')
 
         python_proc_kill = "sudo kill $(ps aux | grep '[p]ython' | awk '{print $2}')"
         delete_logs = "rm ~/soda/openvisualizer/openvisualizer/build/runui/*.log; rm ~/soda/openvisualizer/openvisualizer/build/runui/*.log.*;"
 
+        self.mqtt_client.push_notification("terminated", True)
+        
         subprocess.Popen(python_proc_kill, shell=True)
         time.sleep(3)
         subprocess.Popen(delete_logs, shell=True)
-
-        self.mqtt_client.push_notification("terminated", True)
 
 
 class WilabReservation(Reservation):
