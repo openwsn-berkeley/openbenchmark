@@ -10,13 +10,13 @@
                     <i class="fas fa-cogs"></i>
                     <span class="tooltip">Configuration</span>
                 </li>
-                <li :class="{active: selectedId === 2}" @click="scrollContent('graphs')" v-if="dataFlowStarted">
+                <li :class="{active: selectedId === 2}" @click="scrollContent('graphs')" v-if="graphs">
                     <i class="fas fa-tachometer-alt"></i>
                     <span class="tooltip">Monitoring</span>
                 </li>
             </ul>
             <ul class="bottom-list">
-                <li @click="showProgressModal">
+                <li @click="showProgressModal" v-if="progressBar">
                     <i class="fas fa-sync fa-spin"></i>
                     <span class="tooltip">Show progress</span>
                 </li>
@@ -30,11 +30,16 @@
 </template>
 
 <script>
+
+    let thisComponent;
+
     export default {
         data: function () {
             return {
-                dataFlowStarted: true,
-                selectedId: 0
+                selectedId: 0,
+
+                progressBar: false,
+                graphs: false
             }
         },
 
@@ -68,12 +73,19 @@
                         break;
                 }
             });
-            this.$eventHub.$on("LOG_MODIFICATION", payload => {
-                this.dataFlowStarted = true;
+
+            this.$eventHub.$on("SIDEBAR", payload => {
+                if (payload.element == 'progress-bar') {
+                    thisComponent.progressBar = payload.show
+                } else if (element == 'graphs') {
+                    thisComponent.graphs = payload.show
+                }
             });
-            this.$eventHub.$on("EXP_TERMINATE", payload => {
-                this.dataFlowStarted = false;
-            });
+
+        },
+
+        created() {
+            thisComponent = this;
         }
 
     }
