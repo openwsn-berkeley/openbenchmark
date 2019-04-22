@@ -14,13 +14,13 @@ class ExperimentController extends Controller
         $this->cmd_handler     = new CommandHandler();
     }
 
-    function start() {
-        $this->cmd_handler->reserve_nodes();
-        $this->cmd_handler->otbox_start();
+    function start($scenario, $testbed, $simulator=false, $firmware=null) {
+        $this->reserve_nodes($scenario, $testbed);
+        $this->flash_firmware($firmware);
 
-        sleep($cmd_handler::OV_GUARD_TIME); //A guard time to wait for the nodes to start sending serial data before running OV
+        sleep($this->cmd_handler::OV_GUARD_TIME); //A guard time to wait for the nodes to start sending serial data before running OV
         
-        $this->cmd_handler->ov_start();
+        $this->start_ov($scenario, $testbed, $simulator);
     }
 
     function upload() {
