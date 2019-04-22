@@ -224,15 +224,6 @@
                     .then(function () {
                         // always executed
                     });
-
-                this.processStarted = true;
-
-                let nodes = this.value['nodes'];
-                let num = nodes.length;
-
-                for (let i=0; i<num; i++) {
-                    nodes[i]['_cssClass'] = 'node-loading';
-                }
             },
             processTerminate() {
                 axios.get('/api/terminate-exp')
