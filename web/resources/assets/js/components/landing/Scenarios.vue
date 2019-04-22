@@ -212,7 +212,12 @@
             },
 
             processStart() {
-                axios.get('/api/start-exp')
+                this.currentStep = -1
+                let scenario = this.scenarios[this.scenarioSelected].identifier
+                let testbed  = this.testbeds[this.testbedSelected].identifier
+                
+                //Currently, simulator is hardcoded to 'true', and 'firmware' is omitted
+                axios.get('/api/start-exp/' + scenario + '/' + testbed + '/true') 
                     .then(function (response) {
                         // handle success
                         console.log(response);
