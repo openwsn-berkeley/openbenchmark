@@ -142,6 +142,17 @@
             }
         },
 
+        watch: {
+            currentStep: function (newQuestion, oldQuestion) {
+                if (thisComponent.currentStep == -1) {
+                    thisComponent.sidebarUpdate("progress-bar", true);
+                } else if (thisComponent.currentStep == 3) {
+                    thisComponent.sidebarUpdate("progress-bar", false);
+                    thisComponent.sidebarUpdate("graphs", true);
+                }
+            }
+        },
+
         methods: {
             fetch(param) {
                 axios.get('/api/general/' + param)
