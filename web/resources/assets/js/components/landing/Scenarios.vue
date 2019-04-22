@@ -384,30 +384,6 @@
                 thisComponent.markNode(payload, 'failed', true);
             });
 
-            this.$eventHub.$on("LOG_MODIFICATION", payload => {
-                thisComponent.dataFlowStarted = true;
-
-                thisComponent.selectScenario(0);
-                let nodes = thisComponent.value['nodes'];
-                let num = nodes.length;
-
-                for (let i=0; i<num; i++) {
-                    nodes[i]['_cssClass'] = 'node-on';
-                }
-            });
-
-            this.$eventHub.$on("EXP_TERMINATE", payload => {
-                this.processStarted = false;
-                this.nodesReserved = false;
-                this.dataFlowStarted = false;
-
-                let nodes = this.value['nodes'];
-                let num = nodes.length;
-
-                for (let i=0; i<num; i++) {
-                    nodes[i]['_cssClass'] = 'node-off';
-                }
-            });
         }
     }
 </script>
