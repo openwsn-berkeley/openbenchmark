@@ -1,6 +1,7 @@
 import subprocess
 import os
 import time
+import threading
 from mqtt_client import MQTTClient
 
 ov_dir   = os.path.join(os.path.dirname(__file__), "..", "openvisualizer")
@@ -19,9 +20,12 @@ class OVStartup:
 
 
 	def start(self):
-		self._start_orchestrator()
-		if not self.simulator:
-			self.mqtt_client.check_data_stream()
+		if self.simulator:
+			self._start_orchestrator()
+		else:
+			thread_orch = threading.Thread(target=self._start_orchestrator)
+			thread_orch.start()
+		
 			self._start_ov()
 
 	def data_stream_check(self):
@@ -37,9 +41,6 @@ class OVStartup:
 			pipe = subprocess.Popen(['python', 'main.py'], cwd=orch_dir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
 
 		for line in iter(pipe.stdout.readline, b''):
-			print(">>> " + line.rstrip())
-
-		for line in iter(pipe.stderr.readline, b''):
 			print(">>> " + line.rstrip())
 
 
