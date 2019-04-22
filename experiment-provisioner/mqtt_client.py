@@ -29,6 +29,8 @@ class MQTTClient:
 			"debug": "openbenchmark/debug"
 		}
 
+		self.data_stream_started = False
+
 		self._mqtt_client_setup()
 
 
@@ -78,7 +80,10 @@ class MQTTClient:
 		topic   = message.topic
 		payload = message.payload.decode('string-escape').strip('"')
 
-		sys.stdout.write("[PROV MQTT CLIENT] Message on topic: {0}".format(topic))
+		# sys.stdout.write("[PROV MQTT CLIENT] Message on topic: {0}".format(topic))
+
+		# Setting to `true` without checking any conditions because `data-stream` is the only subscription topic
+		self.data_stream_started = True
 
 
 	##### Public methodss #####
@@ -102,15 +107,17 @@ class MQTTClient:
 		self._subscribe("data-stream")
 
 		data_stream_started = False
+		current_iter        = 0
 		max_iter_num        = 30
 		iter_pause          = 5   # in seconds
 		
-		while True:
+		while current_iter < max_iter_num:
 			if self.data_stream_started:
-				self.push_notification("data-stream-started", True)
+				self.push_debug_log("PROV_MQTT_CLIENT", "Data stream started")
 				break
-
 			else:
+				current_iter += 1
+				self.push_debug_log("PROV_MQTT_CLIENT", "Waiting for data stream {0}/{1}".format(current_iter, max_iter_num))
 				time.sleep(iter_pause)
 
 		if not data_stream_started:
