@@ -8,7 +8,7 @@
                 <progress-bar :current-step="currentStep"></progress-bar>
             </div>
 
-            <div class="row h-center v-center col-direction mt-2" v-if="currentStep > 4">
+            <div class="row h-center v-center col-direction mt-2" v-if="currentStep == 3">
                 <h3 class="mt-0 mb-0" style="margin-bottom: 5px">Experiment started! <span class="pulse clickable" @click.prevent="scrollContent">Monitor the progress in real time</span></h3>
                 <i class="fas fa-check-circle fa-3x primary-light"></i>
             </div>
@@ -79,8 +79,8 @@
         </div>
 
         <div class="row h-center">
-            <button class="main-btn btn-width-half mt-1" v-if="scenarioSelected !== -1 && testbedSelected !== -1 && !dataFlowStarted" @click="processStart()" :disabled="processStarted">Start experiment</button>
-            <button class="main-btn btn-width-half btn-danger mt-1" v-if="dataFlowStarted" @click="processTerminate()">Terminate experiment</button>
+            <button class="main-btn btn-width-half mt-1" v-if="scenarioSelected !== -1 && testbedSelected !== -1" @click="processStart()" :disabled="currentStep > -2">Start experiment</button>
+            <!--<button class="main-btn btn-width-half btn-danger mt-1" v-if="dataFlowStarted" @click="processTerminate()">Terminate experiment</button>-->
         </div>
     </div>
 </template>
@@ -137,7 +137,7 @@
                     "orchestration-started"
                 ],
 
-                currentStep: -1,   //If -1, process has not started yet
+                currentStep: -2,   //If -2, process has not started yet; -1: process started, waiting for notifications
                 taskFailed: false
             }
         },
