@@ -60,7 +60,10 @@ class Logger:
 		if reset:
 			self.reset()
 
-		self.mqtt_client.push_kpi(payload)
+		if log_type == 'kpi':
+			self.mqtt_client.push_kpi(payload)
+		elif log_type == 'raw':
+			self.mqtt_client.push_raw(payload)
 
 		with open(self.logs[log_type], 'a') as f:
 			f.write(json.dumps(payload) + "\n")

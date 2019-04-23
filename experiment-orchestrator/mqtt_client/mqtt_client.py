@@ -51,7 +51,8 @@ class MQTTClient:
 			"configureTransmitPower": "openbenchmark/experimentId/{0}/command/configureTransmitPower".format(self.experiment_id),
 			"triggerNetworkFormation": "openbenchmark/experimentId/{0}/command/triggerNetworkFormation".format(self.experiment_id),
 			"notifications": "openbenchmark/notifications",
-			"kpi": "openbenchmark/kpi"
+			"kpi": "openbenchmark/kpi",
+			"raw": "openbenchmark/raw"
 		}
 		self.epe_sub_topics = {  # Experiment Performance Events
 			"performanceData": "openbenchmark/experimentId/{0}/nodeId/+/performanceData".format(self.experiment_id)
@@ -203,5 +204,11 @@ class MQTTClient:
 	def push_kpi(self, payload):
 		self.publish("kpi", {
 			"type": "kpi",
+			"content": payload
+		})
+
+	def push_raw(self, payload):
+		self.publish("raw", {
+			"type": "raw",
 			"content": payload
 		})
