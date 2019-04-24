@@ -14,7 +14,7 @@
             <div class="card row ml-1 mr-1 pt-1 col-8 wrap" style="overflow-y: auto; overflow-x: hidden">
 
                 <span v-for="node in dataset">
-                    <span v-if="node.id === selectedNode">
+                    <span v-if="node.id === selectedNode.name">
                         <span v-for="item in node.nodeData">
                             <line-chart class="chart ml-3 mr-3"
                                         :label="item.label"
@@ -61,7 +61,7 @@
                     links: []
                 },
 
-                selectedNode : '',
+                selectedNode : {},
 
                 dataset: [
                     /*{//Corresponds to a single node
@@ -96,7 +96,7 @@
                 //Creates a blank dataset for all the existing nodes in the 'nodes' field
                 this.value.nodes.forEach(element => {
                     this.dataset.push({
-                        id: element.id,
+                        id: element.name,
                         eui64: '',
                         nodeData: []
                     })
