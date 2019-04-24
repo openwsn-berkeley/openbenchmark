@@ -379,7 +379,6 @@
             this.subscribe();
 
             this.$eventHub.$on("MQTT", payload => {
-                console.log("From event: " + payload);
                 thisComponent.parseMqttEvent(payload);
             });
 
