@@ -103,38 +103,44 @@
                 });
             },
 
-            appendNodeData(id, info, label, xVal, yVal) {
+            appendNodeData(id, label, xVal, yVal) {
                 //Appends to 'xAxis' and 'yAxis' of a 'nodeData' (of the node with the given 'eui64') element with the corresponding label
                 //Creates new 'nodeData' element if the label does not exist
-                let node = this.getNodeByProperty('id', id);
+                if (id !== undefined) {
+                    let node = this.getNodeByProperty('id', id);
 
-                let num = node.nodeData.length;
-                let valueAppended = false;
+                    console.log("Fetching node: " + id);
+        
+                    let num = node.nodeData.length;
+                    let valueAppended = false;
 
-                for (let i=0; i<num; i++) {
-                    if (node.nodeData[i].label === label) {
-                        node.nodeData[i].xAxis.push(xVal);
-                        node.nodeData[i].yAxis.push(yVal);
+                    for (let i=0; i<num; i++) {
+                        if (node.nodeData[i].label === label) {
+                            node.nodeData[i].xAxis.push(xVal);
+                            node.nodeData[i].yAxis.push(yVal);
 
-                        valueAppended = true;
+                            valueAppended = true;
 
-                        if (node.nodeData[i].xAxis.length > this.dataPerChart) {
-                            node.nodeData[i].xAxis.shift();
-                            node.nodeData[i].yAxis.shift();
+                            if (node.nodeData[i].xAxis.length > this.dataPerChart) {
+                                node.nodeData[i].xAxis.shift();
+                                node.nodeData[i].yAxis.shift();
+                            }
                         }
                     }
-                }
 
-                if (!valueAppended) {
-                    node.nodeData.push({
-                        label: label,
-                        xAxis: [xVal],
-                        yAxis: [yVal]
-                    });
+                    if (!valueAppended) {
+                        node.nodeData.push({
+                            label: label,
+                            xAxis: [xVal],
+                            yAxis: [yVal]
+                        });
+                    }
+                } else {
+                    this.generalData.push({
+                        "identifier": label,
+                        "value": xVal
+                    })
                 }
-
-                node.eui64 = info['64bAddr'];
-                node.isDag = (info.isDAGroot === 1) ? 'Yes' : 'No';
             },
 
             nodeClick(event, nodeObject) {
