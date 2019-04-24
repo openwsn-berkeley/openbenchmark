@@ -77,7 +77,7 @@
             this.$eventHub.$on("SIDEBAR", payload => {
                 if (payload.element == 'progress-bar') {
                     thisComponent.progressBar = payload.show
-                } else if (element == 'graphs') {
+                } else if (payload.element == 'graphs') {
                     thisComponent.graphs = payload.show
                 }
             });
