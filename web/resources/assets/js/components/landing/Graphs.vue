@@ -63,6 +63,11 @@
 
                 selectedNode : {},
 
+                generalData: [],
+                generalDataTitles: {
+                    "networkFormationTime": "Network formation completed at"
+                },
+
                 dataset: [
                     /*{//Corresponds to a single node
                         "id":"node-a8-106",
