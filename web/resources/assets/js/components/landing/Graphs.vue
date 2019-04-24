@@ -5,17 +5,10 @@
                 <div class="node-card card mb-1" style="width: 100%; height: 50%;">
                     <d3-network :net-nodes="value.nodes" :net-links="value.links" :options="options" @node-click="nodeClick"/>
                 </div>
-                <div class="card col-direction" style="width: 100%; height: 50%;">
+                <div class="card col-direction" style="width: 100%; height: 50%;" v-for="data in generalData">
                     <span class="mt-1" v-if="selectedNode !== ''">
-                        <span class="bold ml-1 mr-1">Name: </span> {{currentData.id}}
+                        <span class="bold ml-1 mr-1">{{generalDataTitles[data.identifier]}}:</span> {{data.value}}
                     </span>
-                    <span class="data-row" v-if="selectedNode !== ''">
-                        <span class="bold ml-1 mr-1">EUI-64: </span> {{currentData.eui64}}
-                    </span>
-                    <span class="data-row" v-if="selectedNode !== ''">
-                        <span class="bold ml-1 mr-1">DAG Root?: </span> {{currentData.isDag}}
-                    </span>
-                    <!--<span class="data-row"><span class="bold ml-1 mr-1">Radio Duty Cycle: </span> 0.55%</span>-->
                 </div>
             </div>
             <div class="card row ml-1 mr-1 pt-1 col-8 wrap" style="overflow-y: auto; overflow-x: hidden">
