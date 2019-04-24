@@ -178,18 +178,15 @@
                 return result;
             },
 
-            parseLogData(payload) {
-                let obj = JSON.parse(payload);
+            parseLogData(obj) {
+                let id    = obj.node_id;
+                let label = obj.kpi;
+                let xVal  = obj.timestamp;
+                let yVal  = obj.value;
 
-                let label = obj._type.split('.')[1];
+                console.log("Parsing data: " + label + " " + yVal + " id: " + id);
 
-                let id = obj._mote_info.serial.split('_')[1];
-
-                //let xVal = this.relativeTimestampParse(obj._timestamp);
-                let xVal = obj._timestamp;
-                let yVal = obj[label];
-
-                this.appendNodeData(id, obj._mote_info, label, this.timestampDiff(xVal), parseFloat(yVal));
+                this.appendNodeData(id, label, this.timestampDiff(xVal), parseFloat(yVal));
             },
 
             timestampDiff(stmp) {
@@ -256,6 +253,15 @@
             },
             onMessageArrived(message) {
                 //console.log("onMessageArrived: " + message.payloadString);
+            },
+
+            parseMqttEvent(payload) {
+                let payloadObj = JSON.parse(payload)
+                let type       = payloadObj["type"]
+
+                if (type == "kpi") {
+                    this.parseLogData(payloadObj["content"])
+                }
             }
 
         },
@@ -273,7 +279,7 @@
             currentData() {
                 let currentNode = this.getNodeByProperty('id', this.selectedNode.id);
                 return {
-                    id: currentNode.id,
+                    id:    currentNode.id,
                     eui64: currentNode.eui64,
                     isDag: currentNode.isDag
                 }
@@ -282,6 +288,10 @@
 
         mounted() {
             this.subscribe();
+
+            this.$eventHub.$on("MQTT", payload => {
+                thisComponent.parseMqttEvent(payload);
+            });
 
             this.$eventHub.$on("NODES_FETCHED", payload => {
                 thisComponent.value = thisComponent.clone(payload);
