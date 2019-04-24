@@ -159,7 +159,6 @@
             selectNodeData(node) {
                 //Put dataset element with the given 'id' in 'selectedNode' variable (used for filling the UI with the data)
                 this.selectedNode = node;
-                this.createBlankDataset();
                 console.log("Currently showing: " + JSON.stringify(this.getNodeByProperty('id', this.selectedNode)));
             },
 
@@ -286,6 +285,7 @@
 
             this.$eventHub.$on("NODES_FETCHED", payload => {
                 thisComponent.value = thisComponent.clone(payload);
+                this.createBlankDataset();
             });
 
             this.$eventHub.$on("LOG_MODIFICATION", payload => {
