@@ -43,6 +43,7 @@ sudo apt-get -y install php7.2-tokenizer
 sudo apt-get -y install php7.2-xml
 sudo apt-get -y install php7.2-ctype
 sudo apt-get -y install php7.2-json
+sudo apt-get -y install php7.2-mysql
 sudo apt -y install unzip
 
 # Laravel
@@ -50,8 +51,9 @@ cd $OPENBENCHMARK_DIR
 composer global require "laravel/installer"
 composer create-project --prefer-dist laravel/laravel temp "5.6.*"
 cd temp
-mv .env.example .env
+cp $OPENBENCHMARK_DIR/system-config/.env .env
 php artisan key:generate
+rm .env.example
 
 # OpenWSN
 cd $OPENBENCHMARK_DIR
@@ -133,6 +135,15 @@ npm run dev
 # generate the docs
 cd $OPENBENCHMARK_DIR/docs
 make html
+
+# install MySQL
+if [ ! -z "$1" ] && [ "$1" = "-mysql" ]
+then
+     sudo apt-get install mysql-server
+     mysql -u root -p -e 'CREATE USER "openbenchmark"@"localhost" IDENTIFIED BY "openbenchmark";'
+     mysqladmin -u root -p create openbenchmark
+     mysql -u root -p -e 'GRANT ALL PRIVILEGES ON openbenchmark.* TO "openbenchmark"@"localhost";'
+fi
 
 ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
 echo "==================================="
