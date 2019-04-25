@@ -15,7 +15,7 @@
                        root,
                        threshold
                    }
-            }"></scenarios>
+            }" :experiment-id="id"></scenarios>
             <graphs id="graphs"  v-if="dataFlowStarted" v-observe-visibility="{
                    callback: visibilityChanged,
                    intersection: {
@@ -38,6 +38,8 @@
     let socketConnected = false;
 
     export default {
+        props: ['id'],
+
         components: {
             ExampleComponent,
             Intro,
@@ -45,6 +47,7 @@
             Graphs,
             Sidebar
         },
+
         data: function () {
             return {
                 dataFlowStarted: true,

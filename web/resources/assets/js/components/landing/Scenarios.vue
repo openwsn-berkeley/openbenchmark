@@ -94,6 +94,8 @@
     let thisComponent;
 
     export default {
+        props: ['experiment-id'],
+
         components: {
             D3Network,
             FileUploadSimple
@@ -160,8 +162,42 @@
                         thisComponent[param] = response.data;
                     })
                     .catch(function (error) {
-                        console.log("Error: " + error);
+                        console.log(error);
+                    })
+                    .then(function() {
+                        if (thisComponent.scenarios.length > 0 && thisComponent.testbeds.length > 0 && thisComponent.experimentId !== undefined) {
+                            thisComponent.fetchConfiguration();
+                        }
                     });
+            },
+
+            getParamIndex(arrayName, identifier) {
+                let returnIndex = -1;
+
+                thisComponent[arrayName].forEach(function(element, index) {
+                    if (element.identifier === identifier) {
+                        returnIndex = index;
+                    }
+                });
+
+                return returnIndex;
+            },
+
+            fetchConfiguration() {
+                axios.get('/api/experiment/' + thisComponent.experimentId)
+                    .then(function (response) {
+                            if (response.data.length > 0) {
+                                let experiment = response.data[0];
+                                
+                                thisComponent.scenarioSelected = thisComponent.getParamIndex('scenarios', experiment.scenario);
+                                thisComponent.testbedSelected  = thisComponent.getParamIndex('testbeds', experiment.testbed);
+
+                                thisComponent.fetchNodes();
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        })
             },
 
             fetchNodes() {
@@ -224,11 +260,23 @@
                     })
                     .catch(function (error) {
                         // handle error
-                        console.log("Error: " + error);
+                        console.log(error);
                     })
-                    .then(function () {
-                        // always executed
-                    });
+
+                axios.post('/api/store', {
+                        experiment_id: 'ab356ol4',
+                        scenario     : scenario,
+                        testbed      : testbed,
+                        firmware     : 'default'
+                    }) 
+                    .then(function (response) {
+                        // handle success
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        console.log(error);
+                    })
             },
             processTerminate() {
                 axios.get('/api/terminate-exp')
