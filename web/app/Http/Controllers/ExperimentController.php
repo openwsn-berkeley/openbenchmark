@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use CommandHandler;
 use ConfigParser;
+use App\Experiment;
+use Response;
+
 
 class ExperimentController extends Controller
 {
@@ -56,6 +59,23 @@ class ExperimentController extends Controller
             return ErrorResponse::response(422, 'If `param` is set to `nodes`, `scenario` and `testbed` cannot be null');
         else 
             return response()->json($this->config_parser->get_config_data($param, $scenario, $testbed));
+    }
+
+    function store_experiment(Request $request) {
+        $experiment = new Experiment;
+        $experiment->experiment_id = $request->experiment_id;
+        $experiment->scenario      = $request->scenario;
+        $experiment->testbed       = $request->testbed;
+        $experiment->firmware      = $request->firmware;
+        $experiment->save();
+
+        return Response::json([
+            "success"     => true
+        ], 200);
+    }
+
+    function get_experiment($id) {
+        return Experiment::where('experiment_id', $id)->get();
     }
 
 }

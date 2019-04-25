@@ -19,6 +19,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/start-exp/{scenario}/{testbed}/{simulator?}/{firmware?}', 'ExperimentController@start');
 Route::post('/firmware-upload', 'ExperimentController@upload');
+Route::post('/store', 'ExperimentController@store_experiment');
+Route::get('/experiment/{id}', 'ExperimentController@get_experiment');
 
 //Individual routes for every action
 Route::get('/reserve-nodes/{scenario}/{testbed}', 'ExperimentController@reserve_nodes');
