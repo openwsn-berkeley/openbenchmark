@@ -114,19 +114,9 @@ class IoTLAB(Testbed):
 		return return_code == 0 and stderr == '' and self.run_action('check')
 
 	def otbox_flash(self, return_code, stdout, stderr):
-		mqttTest = MQTTTest('iotlab')
+		mqttTest = MQTTTest('iotlab', 'otbox-flash')
 		return return_code == 0 and stderr == '' and mqttTest.check_data()
 
 	def ov_start(self, return_code, stdout, stderr):
-		return return_code == 0 and stderr == ''
-
-	def exp_check(self, return_code, stdout, stderr):
-		line = stdout.split('Experiment check: ')[1].replace(" ", "")
-		json_obj = None
-		
-		try:
-			json_obj = json.loads(line)
-		except Exception, e:
-			json_obj = None
-
-		return return_code == 0 and stderr == '' and json_obj != None
+		mqttTest = MQTTTest('iotlab', 'ov-start')
+		return return_code == 0 and stderr == '' and mqttTest.check_data()

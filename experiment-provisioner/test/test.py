@@ -11,10 +11,7 @@ def general_test(action):
 
 	for Testbed in TESTBEDS:
 		testbed = Testbed()
-		if action != 'ov-monitor':
-			res.append(testbed.run_action(action))
-		else:
-			res.append(testbed.check_ov_log())
+		res.append(testbed.run_action(action))
 
 	return all(res)
 
