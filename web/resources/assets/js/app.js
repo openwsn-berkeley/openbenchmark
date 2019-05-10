@@ -15,9 +15,9 @@ Vue.use(VueRouter);
 Vue.prototype.$eventHub = new Vue();
 Vue.prototype.$mqttClient = new MQTTClient('broker.mqttdashboard.com', 8000, Vue.prototype.$eventHub); //this.$mqttClient.publish(), this.$mqttClient.subscribe()
 
-Vue.component('arrow', require('./components/reusables/Arrow.vue'));
+Vue.component('arrow', require('./components/reusables/Arrow.vue').default);
 Vue.component('multiselect', require('vue-multiselect').default);
-Vue.component('progress-bar', require('./components/reusables/ProgressBar.vue'));
+Vue.component('progress-bar', require('./components/reusables/ProgressBar.vue').default);
 
 //Vue.use(VueSocketio, io('http://89.188.32.132:3000'));
 //Vue.use(VueSocketio, io('http://192.168.10.192:3000'));
