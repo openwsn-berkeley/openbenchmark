@@ -15,6 +15,11 @@ class ExperimentController extends Controller
     function __construct() {
         $this->config_parser   = new ConfigParser();
         $this->cmd_handler     = new CommandHandler();
+
+        // Temporarily hardcodes user id. The id shall be taken from the database
+        // by searching the database for a user with the same bearer token as the 
+        // one provided in the header of a request 
+        $this->user_id         = 1; 
     }
 
     function start($scenario, $testbed, $simulator=false, $firmware=null) {
@@ -35,19 +40,19 @@ class ExperimentController extends Controller
 
     // Experiment start-up steps
     function reserve_nodes($scenario, $testbed) {
-        return $this->cmd_handler->reserve_nodes($scenario, $testbed);
+        return $this->cmd_handler->reserve_nodes($this->user_id, $scenario, $testbed);
     }
 
     function flash_firmware($firmware=null) {
-        return $this->cmd_handler->flash_firmware($firmware);
+        return $this->cmd_handler->flash_firmware($this->user_id, $firmware);
     }
 
     function start_ov($scenario, $testbed, $simulator=false) {
-        return $this->cmd_handler->start_ov($scenario, $testbed, $simulator);
+        return $this->cmd_handler->start_ov($this->user_id, $scenario, $testbed, $simulator);
     }
 
     function exp_terminate() {
-        return $this->cmd_handler->exp_terminate();
+        return $this->cmd_handler->exp_terminate($this->user_id);
     }
 
 
