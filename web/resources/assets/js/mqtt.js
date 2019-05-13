@@ -5,9 +5,10 @@ let eventHub = null
 export default class MQTTClient {
 
 	constructor(hostname, port, vueEventHub) {
+		// User ID is temporarily hardcoded to 1
 		this.subTopics = [
-			"openbenchmark/notifications", 
-			"openbenchmark/kpi"
+			"openbenchmark/1/notifications", 
+			"openbenchmark/1/kpi"
 		]
 
 		eventHub = vueEventHub
