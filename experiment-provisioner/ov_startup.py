@@ -10,13 +10,13 @@ orch_dir = os.path.join(os.path.dirname(__file__), "..", "experiment-orchestrato
 
 class OVStartup:
 
-	def __init__(self, scenario, testbed, broker, simulator):
+	def __init__(self, user_id, scenario, testbed, broker, simulator):
 		self.testbed   = testbed
 		self.scenario  = scenario
 		self.broker    = broker
 		self.simulator = simulator
 
-		self.mqtt_client = MQTTClient.create(self.testbed)
+		self.mqtt_client = MQTTClient.create(self.testbed, user_id)
 
 
 	def start(self):

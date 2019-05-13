@@ -33,19 +33,19 @@ class IoTLABReservation(Reservation):
     SSH_RETRY_TIME = 120
     RETRY_PAUSE = 10
 
-    def __init__(self, user, domain, broker, duration=None, nodes=None):
+    def __init__(self, user_id, user, domain, broker, duration=None, nodes=None):
         warnings.simplefilter(
             action='ignore',
             category=CryptographyDeprecationWarning
         )
 
-        self.mqtt_client = MQTTClient.create("iotlab")
+        self.mqtt_client = MQTTClient.create("iotlab", user_id)   # User ID specific to OpenBenchmark platform
 
-        self.user = user
-        self.domain = domain
+        self.user     = user         # IoT-LAB acc username defined within the config file
+        self.domain   = domain
         self.duration = duration
-        self.nodes = nodes
-        self.broker = broker
+        self.nodes    = nodes
+        self.broker   = broker
 
         self.socketIoHandler = SocketIoHandler()
 

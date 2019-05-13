@@ -9,13 +9,14 @@ class MQTTClient:
 	_instance = None
 
 	@staticmethod
-	def create(testbed):
+	def create(testbed, user_id):
 		if MQTTClient._instance == None:
-			MQTTClient._instance = MQTTClient(testbed)
+			MQTTClient._instance = MQTTClient(testbed, user_id)
 		return MQTTClient._instance
 
 
-	def __init__(self, testbed):
+	def __init__(self, testbed, user_id):
+		self.user_id          = user_id
 		self.testbed          = testbed
 		self.broker           = 'broker.mqttdashboard.com' # Utils.broker
 
@@ -25,8 +26,8 @@ class MQTTClient:
 			"data-stream": "{0}/deviceType/mote/deviceId/+/notif/frommoteserialbytes".format(self.testbed)
 		}
 		self.pub_topics = {
-			"notifications": "openbenchmark/notifications",
-			"debug": "openbenchmark/debug"
+			"notifications": "openbenchmark/{0}/notifications".format(self.user_id),
+			"debug": "openbenchmark/{0}/debug".format(self.user_id)
 		}
 
 		self.data_stream_started = False

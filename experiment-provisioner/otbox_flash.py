@@ -8,12 +8,12 @@ CLIENT = 'exp-auto'
 
 class OTBoxFlash:
 
-	def __init__(self, firmware_path, broker, testbed):
+	def __init__(self, user_id, firmware_path, broker, testbed):
 		self.firmware_path     = firmware_path
 		self.broker            = broker
 		self.testbed           = testbed
 
-		self.mqtt_client       = MQTTClient.create(testbed)
+		self.mqtt_client       = MQTTClient.create(testbed, user_id)
 		self.client            = mqtt.Client(CLIENT)
 		self.client.on_connect = self.on_connect
 
