@@ -73,7 +73,14 @@ class Main():
 		if self.simulator and (self.testbed == None or self.scenario == None):
 			parser.error('--simulator requires both --testbed and --scenario')
 
+		Utils.user_id = args.user_id
+
 	def _add_parser_args(self, parser):
+		parser.add_argument('--user-id', 
+	        dest       = 'user_id',
+	        required   = True,
+	        action     = 'store'
+	    )
 		parser.add_argument('--simulator', 
 	        dest       = 'simulator',
 	        default    = False,

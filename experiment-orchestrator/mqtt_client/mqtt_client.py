@@ -50,9 +50,9 @@ class MQTTClient:
 			"sendPacket": "openbenchmark/experimentId/{0}/command/sendPacket".format(self.experiment_id),
 			"configureTransmitPower": "openbenchmark/experimentId/{0}/command/configureTransmitPower".format(self.experiment_id),
 			"triggerNetworkFormation": "openbenchmark/experimentId/{0}/command/triggerNetworkFormation".format(self.experiment_id),
-			"notifications": "openbenchmark/notifications",
-			"kpi": "openbenchmark/kpi",
-			"raw": "openbenchmark/raw"
+			"notifications": "openbenchmark/{0}/notifications".format(Utils.user_id),
+			"kpi": "openbenchmark/{0}/kpi".format(Utils.user_id),
+			"raw": "openbenchmark/{0}/raw".format(Utils.user_id)
 		}
 		self.epe_sub_topics = {  # Experiment Performance Events
 			"performanceData": "openbenchmark/experimentId/{0}/nodeId/+/performanceData".format(self.experiment_id)
