@@ -11,7 +11,6 @@ import threading
 import os
 
 from cryptography.utils import CryptographyDeprecationWarning
-from socket_io_handler import SocketIoHandler
 
 
 class OTBoxStartup:
@@ -37,8 +36,6 @@ class OTBoxStartup:
         self.domain = domain
         self.testbed = testbed
         self.broker = broker
-
-        self.socketIoHandler = SocketIoHandler()
 
         self.client = paramiko.SSHClient()
         self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -103,16 +100,14 @@ class OTBoxStartup:
                     print 'Error executing command: ssh -o "StrictHostKeyChecking no" root@' + node_name
 
                 if boot_op == self.CMD_ERROR and retries <= num_of_retries:
-                    print("Node " + node_name + ": retrying")
-                    self.socketIoHandler.publish('BOOT_RETRY',
-                                                 node_name + ": " + str(retries) + "/" + str(num_of_retries))
+                    print("Node {0} retry: {1}/{2}".format(node_name, retries, num_of_retries))
                     retries += 1
                     time.sleep(self.RETRY_PAUSE)
                 elif retries > num_of_retries:
-                    self.socketIoHandler.publish('BOOT_FAIL', node_name)
+                    print("Boot failed: {0}".format(node_name))
                     break
                 else:
-                    self.socketIoHandler.publish('NODE_BOOTED', node_name)
+                    print("Node booted: {0}".format(node_name))
                     self.booted_nodes.append(node)
                     break
 
@@ -127,7 +122,6 @@ class OTBoxStartup:
                 self.ssh_command_exec(
                     'ssh -o "StrictHostKeyChecking no" root@' + node_name + ' "source /etc/profile; cd A8; cd opentestbed; pip install requests; killall python; python otbox.py --testbed=iotlab --broker=' + self.broker + ' >& otbox-' + node_name + '.log &"')
                 self.active_nodes.append(node)
-                self.socketIoHandler.publish('NODE_ACTIVE', node_name)
+                print("Node active: {0}".format(node_name))
         except:
-            self.socketIoHandler.publish('NODE_ACTIVE_FAIL', node_name)
-            print("Exception happened!")
+            print("Node failed to activate: {0}".format(node_name))
