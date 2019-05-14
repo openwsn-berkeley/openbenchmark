@@ -27,7 +27,7 @@ class Controller(object):
 	def add_parser_args(self, parser):
 		parser.add_argument('--action', 
 	        dest       = 'action',
-	        choices    = ['check', 'reserve', 'terminate', 'otbox-flash', 'ov-start', 'ov-monitor'],
+	        choices    = ['check', 'reserve', 'terminate', 'otbox-flash', 'ov-start'],
 	        required   = True,
 	        action     = 'store'
 		)
@@ -258,9 +258,6 @@ def main():
 	elif action == 'ov-start':
 		print 'Starting OV'
 		OVStartup().start()
-	elif action == 'ov-monitor':
-		print 'Starting OV log monitoring'
-		OVLogMonitor().start()
 
 
 if __name__ == '__main__':
