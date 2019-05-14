@@ -9,7 +9,6 @@ set -o xtrace
 OPENBENCHMARK_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
 LARAVEL_ROOT="$OPENBENCHMARK_DIR/web/public"
 GROUP="$( id -gn )"
-INDEX_JS_PATH="$OPENBENCHMARK_DIR/experiment-provisioner/nodejs_websocket/index.js"
 
 sudo apt-mark hold mysql-server-5.7
 
@@ -95,13 +94,6 @@ sudo sed -i "s#@USER@#$USER#" /etc/php/7.2/fpm/pool.d/www.conf
 sudo sed -i "s#@GROUP@#$GROUP#" /etc/php/7.2/fpm/pool.d/www.conf
 
 sudo chown -R $USER:$USER /var/lib/apache2/fastcgi
-
-# Start node.js as a deamon
-sudo cp $OPENBENCHMARK_DIR/system-config/index.service /lib/systemd/system/index.service
-sudo sed -i "s#@USER@#$USER#" /lib/systemd/system/index.service
-sudo sed -i "s#@INDEX_JS_PATH@#$INDEX_JS_PATH#" /lib/systemd/system/index.service
-sudo systemctl daemon-reload
-sudo systemctl restart index
 
 # compile app.js and app.css for development
 npm run dev
