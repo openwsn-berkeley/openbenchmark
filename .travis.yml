@@ -8,6 +8,10 @@ before_script:
   - sudo apt-get install -y dos2unix
   - dos2unix bootstrap.sh
   - bash bootstrap.sh
+  - dos2unix bootstrap_webdev.sh
+  - bash bootstrap_webdev.sh
+  - dos2unix bootstrap_jfed.sh
+  - bash bootstrap_jfed.sh
 
 script:
   - sudo service index stop

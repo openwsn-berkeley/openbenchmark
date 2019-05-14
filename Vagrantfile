@@ -35,17 +35,7 @@ Vagrant.configure("2") do |config|
   # argument is a set of non-required options.
 
 
-  config.vm.synced_folder ".", "/home/vagrant/openbenchmark",
-	type: 'rsync',
-	rsync__exclude: [
-		'web/node_modules', 
-		'docs/build', 
-		'web/public/js/app.js', 
-		'web/resources/assets/css/app.css',
-    'experiment-control/wilab/jfed_cli'
-	],
-	rsync__args: ['--verbose', '--archive', '-z', '--copy-links']
-
+  config.vm.synced_folder ".", "/home/vagrant/openbenchmark"
   
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
@@ -65,9 +55,13 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", inline: <<-SHELL
     apt-get update
     apt-get install -y dos2unix
-	  dos2unix ./openbenchmark/bootstrap.sh
-    dos2unix ./openbenchmark/jfed_bootstrap.sh
+    dos2unix ./openbenchmark/bootstrap.sh
+    dos2unix ./openbenchmark/bootstrap_webdev.sh
+    dos2unix ./openbenchmark/bootstrap_jfed.sh
     dos2unix ./openbenchmark/experiment-control/helpers/wilab/jfed_cli/*.sh
+    bash bootstrap.sh
+    bash bootstrap_webdev.sh
+    bash bootstrap_jfed.sh
   SHELL
   
   config.vm.provision "shell", run: 'always', inline: <<-SHELL
