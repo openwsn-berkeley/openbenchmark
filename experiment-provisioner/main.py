@@ -12,7 +12,7 @@ from reservation import WilabReservation
 from otbox_startup import OTBoxStartup
 from otbox_flash import OTBoxFlash
 from ov_startup import OVStartup
-from ov_log_monitor import OVLogMonitor
+
 
 class Controller(object):
 
