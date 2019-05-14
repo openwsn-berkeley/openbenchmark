@@ -58,6 +58,7 @@ git remote add -t $TAG_OV -f repository $REPO_OV
 git checkout $TAG_OV
 
 # Install OpenBenchmark requirements; OpenBenchmark scripts do not run with sudo
+pip install --upgrade pip
 pip install -r $OPENBENCHMARK_DIR/requirements.txt --user
 
 ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
