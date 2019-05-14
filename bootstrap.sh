@@ -6,6 +6,8 @@ set -e
 # Print each command before executing it
 set -o xtrace
 
+export LC_ALL=en_US.UTF-8
+
 OPENBENCHMARK_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
 
 # FIXME private branch, change to the official repo once code is merged
@@ -32,7 +34,7 @@ sudo apt-get install -y scons
 cd ../openvisualizer/
 sudo apt-get install -y python-pip
 sudo apt-get install -y python-tk
-sudo pip install -r requirements.txt
+sudo pip install -r requirements.txt --ignore-installed
 cd ../coap/
 sudo pip install -r requirements.txt
 sudo apt-get install -y gcc-arm-none-eabi
