@@ -1,7 +1,6 @@
 import sys
 
 from abc import abstractmethod
-from socket_io_handler import SocketIoHandler
 from cryptography.utils import CryptographyDeprecationWarning
 from helpers.iotlab.otbox_startup import OTBoxStartup
 from mqtt_client import MQTTClient
@@ -46,8 +45,6 @@ class IoTLABReservation(Reservation):
         self.duration = duration
         self.nodes    = nodes
         self.broker   = broker
-
-        self.socketIoHandler = SocketIoHandler()
 
         self.client = paramiko.SSHClient()
         self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -100,14 +97,14 @@ class IoTLABReservation(Reservation):
 
     def reserve_experiment(self):
         if self.check_experiment():
-            self.socketIoHandler.publish('NODE_RESERVATION', 'Experiment exists')
+            print('Experiment already exists')
         else:
             output = self.ssh_command_exec(
                 'iotlab-experiment submit -n a8_exp -d ' + str(self.duration) + ' -l ' + self.nodes)
             if output != self.CMD_ERROR:
                 self.experiment_id = json.loads(output)['id']
-                self.socketIoHandler.publish('NODE_RESERVATION', 'All nodes reserved')
                 self.mqtt_client.push_debug_log('NODE_RESERVATION', 'All nodes reserved')
+                print('All nodes reserved')
 
                 nodes = self.get_reserved_nodes()
 
@@ -131,12 +128,12 @@ class IoTLABReservation(Reservation):
                 json_output = json.loads(output)['nodes']
                 return True
             elif retries <= num_of_retries:
-                self.socketIoHandler.publish('RESERVATION_STATUS_RETRY', str(retries) + "/" + str(num_of_retries))
+                print('Retrying... {0}/{1}'.format(retries, num_of_retries))
                 self.mqtt_client.push_debug_log('RESERVATION_STATUS_RETRY', str(retries) + "/" + str(num_of_retries))
                 retries += 1
                 time.sleep(self.RETRY_PAUSE)
             else:
-                self.socketIoHandler.publish('RESERVATION_FAIL', str(retries) + "/" + str(num_of_retries))
+                print('Reservation fail: {0}/{1}'.format(retries, num_of_retries))
                 self.mqtt_client.push_debug_log('RESERVATION_FAIL', str(retries) + "/" + str(num_of_retries))
                 self.mqtt_client.push_notification("provisioned", False)
                 break
@@ -148,7 +145,7 @@ class IoTLABReservation(Reservation):
 
     def terminate_experiment(self):
         self.ssh_command_exec('iotlab-experiment stop')
-        self.socketIoHandler.publish('EXP_TERMINATE', '')
+        print('Terminating experiment...')
         self.mqtt_client.push_debug_log('EXP_TERMINATE', '')
 
         python_proc_kill = "sudo kill $(ps aux | grep '[p]ython' | awk '{print $2}')"
