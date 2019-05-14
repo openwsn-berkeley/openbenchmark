@@ -4,9 +4,8 @@ import time
 import threading
 from mqtt_client import MQTTClient
 
-ov_dir   = os.path.join(os.path.dirname(__file__), "..", "openvisualizer")
+ov_dir   = os.path.join(os.path.dirname(__file__), "..", "..", "openwsn", "openvisualizer")
 orch_dir = os.path.join(os.path.dirname(__file__), "..", "experiment-orchestrator")
-
 
 class OVStartup:
 
