@@ -52,8 +52,6 @@ cd temp
 mv .env.example .env
 php artisan key:generate
 
-sudo pip install -U pyopenssl
-
 # Node.js and NPM
 curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
 sudo apt-get install -fy nodejs
