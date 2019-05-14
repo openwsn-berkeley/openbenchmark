@@ -69,9 +69,5 @@ Vagrant.configure("2") do |config|
       dos2unix ./openbenchmark/jfed_bootstrap.sh
       dos2unix ./openbenchmark/experiment-provisioner/helpers/wilab/jfed_cli/*.sh
   SHELL
-  
-  config.vm.provision "shell", run: 'always', inline: <<-SHELL
-    sudo systemctl restart index
-  SHELL
 
 end
