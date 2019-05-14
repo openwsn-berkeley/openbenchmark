@@ -35,7 +35,16 @@ Vagrant.configure("2") do |config|
   # argument is a set of non-required options.
 
 
-  config.vm.synced_folder ".", "/home/vagrant/openbenchmark"
+  config.vm.synced_folder ".", "/home/vagrant/openbenchmark",
+  type: 'rsync',
+  rsync__exclude: [
+    'web/node_modules', 
+    'docs/build', 
+    'web/public/js/app.js', 
+    'web/resources/assets/css/app.css',
+    'experiment-provisioner/wilab/jfed_cli'
+  ],
+  rsync__args: ['--verbose', '--archive', '-z', '--copy-links']
   
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
