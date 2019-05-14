@@ -63,9 +63,5 @@ Vagrant.configure("2") do |config|
     bash bootstrap_webdev.sh
     bash bootstrap_jfed.sh
   SHELL
-  
-  config.vm.provision "shell", run: 'always', inline: <<-SHELL
-    sudo systemctl restart index
-  SHELL
 
 end
