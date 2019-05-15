@@ -14,8 +14,6 @@ before_script:
   - bash bootstrap_jfed.sh
 
 script:
-  - sudo service index stop
-  - node ./experiment-provisioner/nodejs_websocket/index.js > index.log 2>&1 &
   - pytest ./experiment-provisioner/test/test.py -s
   - cd docs; make html
 
