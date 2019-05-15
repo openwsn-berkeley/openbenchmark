@@ -31,8 +31,13 @@ git clone https://github.com/openwsn-berkeley/openvisualizer.git
 git clone https://github.com/openwsn-berkeley/coap.git
 cd $OPENWSN_DIR/openwsn-fw/
 sudo apt-get install -y python-dev
+
+# Installing Python pip
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+sudo python get-pip.py
+rm get-pip.py
+
 sudo apt-get install -y scons
-sudo apt-get install -y python-pip
 cd $OPENWSN_DIR/openvisualizer/
 sudo apt-get install -y python-tk
 sudo pip install -r requirements.txt --ignore-installed
@@ -59,7 +64,6 @@ git remote add -t $TAG_OV -f repository $REPO_OV
 git checkout $TAG_OV
 
 # Install OpenBenchmark requirements; OpenBenchmark scripts do not run with sudo
-pip install --upgrade pip
 pip install -r $OPENBENCHMARK_DIR/requirements.txt --user
 
 ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
