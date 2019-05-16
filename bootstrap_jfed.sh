@@ -8,15 +8,16 @@ set -o xtrace
 
 OPENBENCHMARK_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
 JFED_DIR=$OPENBENCHMARK_DIR/experiment-provisioner/helpers/wilab/jfed_cli
+JVM_DIR="/usr/lib/jvm"
 
 # Java 11 and JavaFX 11 download
 cd $JFED_DIR
-if [ ! -f "/usr/lib/jvm/jdk-11.0.2" ]; then
 	wget https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz
 	sudo tar xfz openjdk-11.0.2_linux-x64_bin.tar.gz --directory /usr/lib/jvm
 	rm openjdk-11.0.2_linux-x64_bin.tar.gz
+if [ ! -f "$JVM_DIR/jdk-12.0.1" ]; then
 fi
-if [ ! -f "/usr/lib/jvm/javafx-sdk-11.0.2" ]; then
+if [ ! -f "$JVM_DIR/javafx-sdk-11.0.2" ]; then
 	wget -O openjfx-11.0.2_linux-x64_bin-sdk.zip http://gluonhq.com/download/javafx-11-0-2-sdk-linux/
 	sudo unzip openjfx-11.0.2_linux-x64_bin-sdk.zip -d /usr/lib/jvm
 	rm openjfx-11.0.2_linux-x64_bin-sdk.zip
