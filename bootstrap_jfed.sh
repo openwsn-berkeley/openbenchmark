@@ -18,10 +18,11 @@ sudo apt-get install unzip
 
 # Java 11 and JavaFX 11 download
 cd $JFED_DIR
-	wget https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz
-	sudo tar xfz openjdk-11.0.2_linux-x64_bin.tar.gz --directory /usr/lib/jvm
-	rm openjdk-11.0.2_linux-x64_bin.tar.gz
 if [ ! -f "$JVM_DIR/jdk-12.0.1" ]; then
+	wget https://cdn.azul.com/zulu/bin/zulu12.2.3-ca-jdk12.0.1-linux_x64.tar.gz
+	sudo tar xfz zulu12.2.3-ca-jdk12.0.1-linux_x64.tar.gz --directory /usr/lib/jvm
+	rm zulu12.2.3-ca-jdk12.0.1-linux_x64.tar.gz
+	sudo mv $JVM_DIR/zulu12.2.3-ca-jdk12.0.1-linux_x64 $JVM_DIR/jdk12.0.1
 fi
 if [ ! -f "$JVM_DIR/javafx-sdk-11.0.2" ]; then
 	wget -O openjfx-11.0.2_linux-x64_bin-sdk.zip http://gluonhq.com/download/javafx-11-0-2-sdk-linux/
