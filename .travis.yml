@@ -10,8 +10,6 @@ before_script:
   - bash bootstrap.sh
   - dos2unix bootstrap_webdev.sh
   - bash bootstrap_webdev.sh
-  - dos2unix bootstrap_jfed.sh
-  - bash bootstrap_jfed.sh
 
 script:
   - pytest ./experiment-provisioner/test/test.py -s
