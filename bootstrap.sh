@@ -9,6 +9,7 @@ set -o xtrace
 export LC_ALL=en_US.UTF-8
 
 OPENBENCHMARK_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
+OPENWSN_DIR=$OPENBENCHMARK_DIR/../openwsn
 
 # FIXME private branch, change to the official repo once code is merged
 TAG_COAP=develop_COAP-44
@@ -22,25 +23,30 @@ sudo apt -y install git
 
 ### Below is a verbatim copy of the OpenWSN install.sh script
 # until a typo in openvisualizer installation gets fixed
-mkdir openwsn
+mkdir $OPENWSN_DIR
 sudo apt-get install -y git
-cd ./openwsn/
+cd $OPENWSN_DIR
 git clone https://github.com/openwsn-berkeley/openwsn-fw.git
 git clone https://github.com/openwsn-berkeley/openvisualizer.git
 git clone https://github.com/openwsn-berkeley/coap.git
-cd ./openwsn-fw/
+cd $OPENWSN_DIR/openwsn-fw/
 sudo apt-get install -y python-dev
+
+# Installing Python pip
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+sudo python get-pip.py
+rm get-pip.py
+
 sudo apt-get install -y scons
-cd ../openvisualizer/
-sudo apt-get install -y python-pip
+cd $OPENWSN_DIR/openvisualizer/
 sudo apt-get install -y python-tk
 sudo pip install -r requirements.txt --ignore-installed
-cd ../coap/
+cd $OPENWSN_DIR/coap/
 sudo pip install -r requirements.txt
 sudo apt-get install -y gcc-arm-none-eabi
 sudo apt-get install -y gcc-msp430
 
-cd ../..
+cd $OPENBENCHMARK_DIR
 ### End of OpenWSN install.sh script copy
 
 wget https://openwsn.atlassian.net/wiki/download/attachments/29196302/install.sh 
@@ -48,17 +54,16 @@ wget https://openwsn.atlassian.net/wiki/download/attachments/29196302/install.sh
 rm install.sh
 
 # Update OpenWSN-CoAP with the correct commit name
-cd ./openwsn/coap
+cd $OPENWSN_DIR/coap
 git remote add -t $TAG_COAP -f repository $REPO_COAP
 git checkout $TAG_COAP
 
 # Update OpenVisualizer with the correct commit name
-cd ../openvisualizer
+cd $OPENWSN_DIR/openvisualizer
 git remote add -t $TAG_OV -f repository $REPO_OV
 git checkout $TAG_OV
 
 # Install OpenBenchmark requirements; OpenBenchmark scripts do not run with sudo
-pip install --upgrade pip
 pip install -r $OPENBENCHMARK_DIR/requirements.txt --user
 
 ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
