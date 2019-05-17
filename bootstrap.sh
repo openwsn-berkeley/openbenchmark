@@ -11,8 +11,6 @@ LARAVEL_ROOT="$OPENBENCHMARK_DIR/web/public"
 GROUP="$( id -gn )"
 INDEX_JS_PATH="$OPENBENCHMARK_DIR/experiment-provisioner/nodejs_websocket/index.js"
 
-sudo apt-mark hold mysql-server-5.7
-
 sudo apt-get -y update
 sudo apt-get -y upgrade
 sudo apt-get install -y software-properties-common
@@ -139,7 +137,7 @@ make html
 # install MySQL
 if [ ! -z "$1" ] && [ "$1" = "-mysql" ]
 then
-     sudo apt-get install mysql-server
+     sudo apt-get install -y mysql-server
      mysql -u root -p -e 'CREATE USER "openbenchmark"@"localhost" IDENTIFIED BY "openbenchmark";'
      mysqladmin -u root -p create openbenchmark
      mysql -u root -p -e 'GRANT ALL PRIVILEGES ON openbenchmark.* TO "openbenchmark"@"localhost";'
