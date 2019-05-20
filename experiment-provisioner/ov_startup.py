@@ -15,8 +15,9 @@ class OVStartup:
 		self.scenario  = scenario
 		self.broker    = broker
 		self.simulator = simulator
+		self.user_id   = user_id
 
-		self.mqtt_client = MQTTClient.create(self.testbed, user_id)
+		self.mqtt_client = MQTTClient.create(self.testbed, self.user_id)
 
 
 	def start(self):
@@ -36,9 +37,9 @@ class OVStartup:
 		self.mqtt_client.push_debug_log('OV_STARTUP', "Starting orchestrator")
 
 		if self.simulator:
-			pipe = subprocess.Popen(['python', 'main.py', '--simulator', '--testbed={0}'.format(self.testbed), '--scenario={0}'.format(self.scenario)], cwd=orch_dir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+			pipe = subprocess.Popen(['python', 'main.py', '--simulator', '--testbed={0}'.format(self.testbed), '--scenario={0}'.format(self.scenario), '--user-id={0}'.format(self.user_id)], cwd=orch_dir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
 		else:
-			pipe = subprocess.Popen(['python', 'main.py'], cwd=orch_dir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+			pipe = subprocess.Popen(['python', 'main.py', '--user-id={0}'.format(self.user_id)], cwd=orch_dir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
 
 		for line in iter(pipe.stdout.readline, b''):
 			print(">>> " + line.rstrip())
