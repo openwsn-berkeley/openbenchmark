@@ -141,6 +141,8 @@ then
      mysql -u root -p -e 'CREATE USER "openbenchmark"@"localhost" IDENTIFIED BY "openbenchmark";'
      mysqladmin -u root -p create openbenchmark
      mysql -u root -p -e 'GRANT ALL PRIVILEGES ON openbenchmark.* TO "openbenchmark"@"localhost";'
+     cd $OPENBENCHMARK_DIR/web
+     php artisan migrate
 fi
 
 ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
