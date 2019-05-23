@@ -13,7 +13,13 @@ class MQTTTest:
 		self.client.on_connect = self.on_connect
 		self.client.on_message = self.on_message
 
-		self.pause = 30 if self.test_type == 'otbox-flash' else 360
+		self.pauses = {
+			"reserve":      5,
+			"otbox-flash": 50,
+			"ov-start":   180 
+		}
+
+		self.pause = self.pauses[self.test_type] if self.test_type in self.pauses else 5
 		self.is_data_arriving = False
 
 		self.client.connect(self.BROKER)
@@ -21,15 +27,18 @@ class MQTTTest:
 
 
 	def on_connect(self, client, userdata, flags, rc):
-		if self.test_type == 'otbox-flash':
+		if self.test_type in ['reserve', 'otbox-flash']:
 			self.client.subscribe('{0}/deviceType/mote/deviceId/+/notif/frommoteserialbytes'.format(self.testbed))
+			print "[TEST] otbox-flash subscribing..."
 		elif self.test_type == 'ov-start':
-			self.client.subscribe('openbenchmark/experimentId/+/command/sendPacket')
+			print "[TEST] ov-start subscribing..."
+			self.client.subscribe('openbenchmark/command/startBenchmark')
 
 	def on_message(self, client, userdata, message):
 		self.is_data_arriving = True
 
 	def check_data(self):
+		print "[TEST] Waiting for the data: {0} seconds".format(self.pause)
 		time.sleep(self.pause)
 		self.client.loop_stop()
 		self.client.disconnect()
