@@ -959,6 +959,185 @@ The values of these fields follow the format specified in [Start Benchmark](#sta
 
 <!-- ====================================================================== -->
 
+# RESTful API
+
+`API version: "0.0.1"`
+
+This section lists HTTP routes that can be used to trigger an experiment on OpenBenchmark platform without having to access the GUI. This method of access is particularly useful for machine users and CI systems. The actions which assume a longer process can be monitored in real-time via the following MQTT topics:
+
+Data                | Topic                         | Description
+------------------- | ------------------------------|------------------------------------------------------------- 
+step-notifications  | openbenchmark/1/notifications | Notifications indicating a completed step/action                
+debug-notifications | openbenchmark/1/debug         | Debugging data provided by the OpenBenchmark core                
+kpi-data            | openbenchmark/1/kpi           | Calculated KPIs                                             
+raw-data            | openbenchmark/1/raw           | Raw data acquired from the SUT used for calculating the KPIs
+
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+## General data retreival
+
+*Description:* This route is used for fetching all the information about available scenarios and testbeds. Additionally, the route may be used to retrieve the information about the structure of a particular scenario
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+`GET`
+
+```
+    http://127.0.0.1/api/general/{param}/{scenario}/{testbed}
+```
+
+Field name   | Description                                                                       | Type                  | Values
+------------ | ----------------------------------------------------------------------------------| ----------------------| --------------------------
+param        | Indicates what type of information is going to be fetched                         | string                | scenarios, testbeds, nodes
+scenario     | Used with `param=nodes` to indicate which scenario should the data be fetched for | string                |
+testbed      | Used with `param=nodes` to indicate which testbed should the data be fetched for  | string                |
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+## Experiment startup
+
+*Description:* This set of routes is used for completing every step of the experiment startup workflow. All of the routes share a similar response JSON:
+
+```
+Response:
+{
+    "http_code": 200,
+    "message": {
+        "action": "reserve",
+        "broker": "broker.mqttdashboard.com",
+        "monitoring-topics": {
+            "step-notifications"  : "openbenchmark/1/notifications",
+            "debug-notifications" : "openbenchmark/1/debug",
+            "kpi-data"            : "openbenchmark/1/kpi",
+            "raw-data"            : "openbenchmark/1/raw"
+        }
+    }
+}
+
+```  
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+### Node reservation
+
+*Description:* This route is used to reserve the resources on a selected testbed for a selected scenario
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+`GET`
+
+```
+    http://127.0.0.1/api/reserve-nodes/{scenario}/{testbed}
+```
+
+Field name   | Description     | Type                  
+------------ | ----------------| -------
+scenario     | Chosen scenario | string                
+testbed      | Chosen testbed  | string
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+### Starting SUT and Experiment Orchestrator
+
+*Description:* This route is used for starting SUT and 
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+`GET`
+
+```
+    http://127.0.0.1/api/start-ov/{scenario}/{testbed}/{simulator}
+```
+
+Field name   | Description                             | Type                  
+------------ | ----------------------------------------| -------
+scenario     | Chosen scenario                         | string                
+testbed      | Chosen testbed                          | string
+simulator    | Start an experiment with SUT simulator  | string/optional
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+### Experiment termination
+
+*Description:* This route is used for terminating an ongoing experiment
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+`GET`
+
+```
+    http://127.0.0.1/api/exp-terminate
+```
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+## Experiment repeatability
+
+*Description:* This set of routes is used for storing and retreiving the information about a previously executed experiment, in order to allow repeatability
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+### Fetch experiment configuration
+
+`GET`
+
+```
+    http://127.0.0.1/api/experiment/{experiment_token}
+```
+
+Field name         | Description                     | Type   
+------------------ | --------------------------------| -------
+experiment_token   | A unique experiment identifier  | string               
+
+```
+Response:
+{
+    "http_code": 200,
+    "message": {
+        "experiment_token": "ab356ol4",
+        "scenario": "demo-scenario",
+        "testbed": "iotlab",
+        "firmware": "default",
+        "created_at": "2019-05-20 15:20:05",
+        "updated_at": "2019-05-20 15:20:05"
+    }
+}
+
+```   
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+
+### Store experiment configuration
+
+`POST`
+
+```
+    http://127.0.0.1/api/store
+```
+
+Field name        | Description                     | Type   
+----------------- | --------------------------------| -------
+scenario          | Selected scenario               | string
+testbed           | Selected testbed                | string   
+
+```
+Response:
+{
+    "http_code": 200,
+    "message": {
+        "experiment_token": "ab356ol4",
+        "scenario": "demo-scenario",
+        "testbed": "iotlab",
+        "firmware": "default",
+        "created_at": "2019-05-20 15:20:05",
+        "updated_at": "2019-05-20 15:20:05"
+    }
+}
+
+```         
+<!-- ====================================================================== -->
+
 # Test Scenario Implementation
 
 A test scenario is defined in a JSON config file.
