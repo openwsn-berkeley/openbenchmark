@@ -2,6 +2,8 @@
 
 namespace App\Classes\ExperimentController;
 
+use App\Classes\SuccessResponse;
+
 
 class CommandHandler {
 
@@ -10,36 +12,61 @@ class CommandHandler {
 
 
     function reserve_nodes($user_id, $scenario, $testbed) {
-        //2>&1 added to insure that all output is given as a return of shell_exec function
-        $cmd = self::PROVISIONER_MAIN . " --user-id=$user_id --action=reserve --scenario=$scenario --testbed=$testbed &>>reserve.txt";
-        return shell_exec($cmd);
+        $action = "reserve";
+        $cmd = self::PROVISIONER_MAIN . " --user-id=$user_id --action=$action --scenario=$scenario --testbed=$testbed > /dev/null &";
+        shell_exec($cmd);
+
+        return SuccessResponse::response(200, $this->get_response_messages($action, $user_id));
     }
 
     function flash_firmware($user_id, $firmware) {
-        $cmd = self::PROVISIONER_MAIN . " --user-id=$user_id --action=otbox-flash";
+        $action = "otbox-flash";
+        $cmd = self::PROVISIONER_MAIN . " --user-id=$user_id --action=$action";
         
         if ($firmware != null)
             $cmd .= " --firmware=$firmware";
 
-        $cmd .= " &>>flash.txt";
+        $cmd .= " > /dev/null &";
 
-        return shell_exec($cmd);
+        shell_exec($cmd);
+
+        return SuccessResponse::response(200, $this->get_response_messages($action, $user_id));
     }
 
     function start_ov($user_id, $scenario, $testbed, $simulator) {
+        $action = "ov-start";
         $cmd = self::PROVISIONER_MAIN . " --user-id=$user_id --action=ov-start --scenario=$scenario --testbed=$testbed";
 
         if ($simulator != null)
              $cmd .= " --simulator";
 
-         $cmd .= " &>>start_ov.txt";
+        $cmd .= " > /dev/null &";
 
-        return shell_exec($cmd);
+        shell_exec($cmd);
+
+        return SuccessResponse::response(200, $this->get_response_messages($action, $user_id));
     }
 
     function exp_terminate($user_id) {
-        $cmd = self::PROVISIONER_MAIN . " --user-id=$user_id --action=terminate &>>exp_terminate.txt";
-        return shell_exec($cmd);
+        $action = "terminate";
+        $cmd = self::PROVISIONER_MAIN . " --user-id=$user_id --action=$action > /dev/null &";
+        shell_exec($cmd);
+
+        return SuccessResponse::response(200, $this->get_response_messages($action, $user_id));
     }
+
+
+    private function get_response_messages($action, $user_id) {
+        return [
+            "action" => $action,
+            "broker" => "broker.mqttdashboard.com",
+            "monitoring-topics" => [
+                "step-notifications"  => "openbenchmark/$user_id/notifications",
+                "debug-notifications" => "openbenchmark/$user_id/debug",
+                "kpi-data"            => "openbenchmark/$user_id/kpi",
+                "raw-data"            => "openbenchmark/$user_id/raw",
+            ]
+        ];
+    } 
 
 }

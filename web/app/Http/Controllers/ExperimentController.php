@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use CommandHandler;
 use ConfigParser;
+use App\Classes\ErrorResponse;
 use App\Experiment;
 use Response;
 
