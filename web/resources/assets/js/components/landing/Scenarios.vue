@@ -264,10 +264,8 @@
                     })
 
                 axios.post('/api/store', {
-                        experiment_id: 'ab356ol4',
-                        scenario     : scenario,
-                        testbed      : testbed,
-                        firmware     : 'default'
+                        scenario         : scenario,
+                        testbed          : testbed
                     }) 
                     .then(function (response) {
                         // handle success
@@ -279,7 +277,7 @@
                     })
             },
             processTerminate() {
-                axios.get('/api/terminate-exp')
+                axios.get('/api/exp-terminate')
                     .then(function (response) {
                         // handle success
                         console.log(response);
