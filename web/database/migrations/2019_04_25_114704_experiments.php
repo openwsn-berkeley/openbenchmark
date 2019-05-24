@@ -14,7 +14,7 @@ class Experiments extends Migration
     public function up()
     {
          Schema::create('experiments', function (Blueprint $table) {
-            $table->string('experiment_id')->index();
+            $table->string('experiment_token')->index();
             $table->string('scenario');
             $table->string('testbed');
             $table->string('firmware');

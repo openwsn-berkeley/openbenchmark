@@ -69,10 +69,10 @@ class ExperimentController extends Controller
 
     function store_experiment(Request $request) {
         $experiment = new Experiment;
-        $experiment->experiment_id = $request->experiment_id;
-        $experiment->scenario      = $request->scenario;
-        $experiment->testbed       = $request->testbed;
-        $experiment->firmware      = $request->firmware;
+        $experiment->experiment_token = $this->create_random(8);
+        $experiment->scenario         = $request->scenario;
+        $experiment->testbed          = $request->testbed;
+        $experiment->firmware         = $request->has("firmware") ? $request->firmware : "default";
         $experiment->save();
 
         return Response::json([
