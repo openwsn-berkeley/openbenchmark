@@ -82,6 +82,18 @@ class ExperimentController extends Controller
 
     function get_experiment($id) {
         return Experiment::where('experiment_id', $id)->get();
+
+
+    private function create_random($length) {
+        $characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+        $string = '';
+
+        $max = strlen($characters) - 1;
+        for ($i = 0; $i < $length; $i++) {
+            $string .= $characters[mt_rand(0, $max)];
+        }
+
+        return $string;
     }
 
 }
