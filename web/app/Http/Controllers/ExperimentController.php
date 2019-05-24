@@ -7,7 +7,7 @@ use CommandHandler;
 use ConfigParser;
 use App\Classes\ErrorResponse;
 use App\Experiment;
-use Response;
+use App\Classes\SuccessResponse;
 
 
 class ExperimentController extends Controller
@@ -75,13 +75,12 @@ class ExperimentController extends Controller
         $experiment->firmware         = $request->has("firmware") ? $request->firmware : "default";
         $experiment->save();
 
-        return Response::json([
-            "success"     => true
-        ], 200);
+        return SuccessResponse::response(200, Experiment::latest()->first());
     }
 
     function get_experiment($id) {
-        return Experiment::where('experiment_id', $id)->get();
+        return SuccessResponse::response(200, Experiment::where('experiment_token', $id)->first());
+    }
 
 
     private function create_random($length) {
