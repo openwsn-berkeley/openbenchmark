@@ -32,8 +32,9 @@ class OVStartup:
 		self.mqtt_client.check_data_stream()
 
 	def _start_orchestrator(self):
-		print "[OV STARTUP] Starting orchestrator"
-		self.mqtt_client.push_debug_log('OV_STARTUP', "Starting orchestrator")
+		message = "[OV STARTUP] Starting orchestrator" if not self.simulator else "[OV STARTUP] Starting SUT simulator"
+		print message 
+		self.mqtt_client.push_debug_log('OV_STARTUP', message)
 
 		if self.simulator:
 			pipe = subprocess.Popen(['python', 'main.py', '--simulator', '--testbed={0}'.format(self.testbed), '--scenario={0}'.format(self.scenario), '--user-id={0}'.format(self.user_id)], cwd=orch_dir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
