@@ -48,7 +48,8 @@ cd $OPENBENCHMARK_DIR
 composer global require "laravel/installer"
 composer create-project --prefer-dist laravel/laravel temp "5.6.*"
 cd temp
-mv .env.example .env
+sudo cp $OPENBENCHMARK_DIR/system-config/.env $OPENBENCHMARK_DIR/web/.env
+sudo dos2unix $OPENBENCHMARK_DIR/web/.env
 php artisan key:generate
 
 # Node.js and NPM
@@ -89,9 +90,6 @@ sudo cp $OPENBENCHMARK_DIR/system-config/www.conf /etc/php/7.2/fpm/pool.d/www.co
 sudo dos2unix /etc/php/7.2/fpm/pool.d/www.conf
 sudo sed -i "s#@USER@#$USER#" /etc/php/7.2/fpm/pool.d/www.conf
 sudo sed -i "s#@GROUP@#$GROUP#" /etc/php/7.2/fpm/pool.d/www.conf
-
-sudo cp $OPENBENCHMARK_DIR/system-config/.env $OPENBENCHMARK_DIR/web/.env
-sudo dos2unix $OPENBENCHMARK_DIR/web/.env
 
 sudo chown -R $USER:$USER /var/lib/apache2/fastcgi
 
