@@ -23,10 +23,10 @@ class OVStartup:
 		if self.simulator:
 			self._start_orchestrator()
 		else:
-			thread_orch = threading.Thread(target=self._start_orchestrator)
+			thread_orch = threading.Thread(target=self._start_ov)
 			thread_orch.start()
 		
-			self._start_ov()
+			self._start_orchestrator()
 
 	def data_stream_check(self):
 		self.mqtt_client.check_data_stream()
