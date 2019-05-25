@@ -106,9 +106,9 @@ make html
 if [ ! -z "$1" ] && [ "$1" = "-mysql" ]
 then
     sudo apt-get install -y mysql-server
-    mysql -u root -p -e 'CREATE USER "openbenchmark"@"localhost" IDENTIFIED BY "openbenchmark";'
-    mysqladmin -u root -p create openbenchmark
-    mysql -u root -p -e 'GRANT ALL PRIVILEGES ON openbenchmark.* TO "openbenchmark"@"localhost";'
+    sudo mysql -u root -p -e 'CREATE USER "openbenchmark"@"localhost" IDENTIFIED BY "openbenchmark";'
+    sudo mysqladmin -u root -p create openbenchmark
+    sudo mysql -u root -p -e 'GRANT ALL PRIVILEGES ON openbenchmark.* TO "openbenchmark"@"localhost";'
     cd $OPENBENCHMARK_DIR/web
     php artisan migrate
 fi
