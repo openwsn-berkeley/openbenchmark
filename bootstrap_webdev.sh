@@ -113,9 +113,6 @@ then
     php artisan migrate
 fi
 
-# Run migration
-php artisan migrate
-
 # Restart Apache and PHP7.2-FPM
 sudo a2enmod rewrite
 sudo service apache2 restart
