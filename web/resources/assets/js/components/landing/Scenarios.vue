@@ -253,7 +253,7 @@
                 let testbed  = this.testbeds[this.testbedSelected].identifier
                 
                 //Currently, simulator is hardcoded to 'true', and 'firmware' is omitted
-                axios.get('/api/start-exp/' + scenario + '/' + testbed + '/true') 
+                axios.get('/api/start-exp/' + scenario + '/' + testbed + '/false') 
                     .then(function (response) {
                         // handle success
                         console.log(response);

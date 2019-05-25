@@ -49,7 +49,7 @@ class ExperimentController extends Controller
     }
 
     function start_ov($scenario, $testbed, $simulator=false) {
-        return $this->cmd_handler->start_ov($this->user_id, $scenario, $testbed, $simulator);
+        return $this->cmd_handler->start_ov($this->user_id, $scenario, $testbed, ($simulator == "true"));
     }
 
     function exp_terminate() {

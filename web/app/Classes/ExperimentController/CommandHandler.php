@@ -37,8 +37,8 @@ class CommandHandler {
         $action = "ov-start";
         $cmd = self::PROVISIONER_MAIN . " --user-id=$user_id --action=ov-start --scenario=$scenario --testbed=$testbed";
 
-        if ($simulator != null)
-             $cmd .= " --simulator";
+        if ($simulator)
+            $cmd .= " --simulator";
 
         $cmd .= " > /dev/null &";
 
