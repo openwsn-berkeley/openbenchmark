@@ -11,12 +11,11 @@ LARAVEL_ROOT="$OPENBENCHMARK_DIR/web/public"
 GROUP="$( id -gn )"
 
 sudo apt-mark hold mysql-server-5.7
-
 # Create system swap as PHP installation may fail without it
-#sudo fallocate -l 2G /swapfile
-#sudo chmod 600 /swapfile
-#sudo mkswap /swapfile
-#sudo swapon /swapfile
+sudo fallocate -l 2G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
 
 sudo apt-get -y update
 sudo apt-get -y upgrade
