@@ -10,7 +10,6 @@ OPENBENCHMARK_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
 LARAVEL_ROOT="$OPENBENCHMARK_DIR/web/public"
 GROUP="$( id -gn )"
 
-sudo apt-mark hold mysql-server-5.7
 # Create system swap as PHP installation may fail without it
 sudo fallocate -l 2G /swapfile
 sudo chmod 600 /swapfile
@@ -41,6 +40,7 @@ sudo apt-get -y install php7.2-tokenizer
 sudo apt-get -y install php7.2-xml
 sudo apt-get -y install php7.2-ctype
 sudo apt-get -y install php7.2-json
+sudo apt-get -y install php7.2-mysql
 sudo apt -y install unzip
 
 # Laravel
@@ -90,6 +90,9 @@ sudo dos2unix /etc/php/7.2/fpm/pool.d/www.conf
 sudo sed -i "s#@USER@#$USER#" /etc/php/7.2/fpm/pool.d/www.conf
 sudo sed -i "s#@GROUP@#$GROUP#" /etc/php/7.2/fpm/pool.d/www.conf
 
+sudo cp $OPENBENCHMARK_DIR/system-config/.env $OPENBENCHMARK_DIR/web/.env
+sudo dos2unix $OPENBENCHMARK_DIR/web/.env
+
 sudo chown -R $USER:$USER /var/lib/apache2/fastcgi
 
 # compile app.js and app.css for development
@@ -98,6 +101,20 @@ npm run dev
 # generate the docs
 cd $OPENBENCHMARK_DIR/docs
 make html
+
+# install MySQL
+if [ ! -z "$1" ] && [ "$1" = "-mysql" ]
+then
+    sudo apt-get install -y mysql-server
+    mysql -u root -p -e 'CREATE USER "openbenchmark"@"localhost" IDENTIFIED BY "openbenchmark";'
+    mysqladmin -u root -p create openbenchmark
+    mysql -u root -p -e 'GRANT ALL PRIVILEGES ON openbenchmark.* TO "openbenchmark"@"localhost";'
+    cd $OPENBENCHMARK_DIR/web
+    php artisan migrate
+fi
+
+# Run migration
+php artisan migrate
 
 # Restart Apache and PHP7.2-FPM
 sudo a2enmod rewrite
