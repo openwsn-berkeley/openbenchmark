@@ -5,8 +5,8 @@
                 <div class="node-card card mb-1" style="width: 100%; height: 50%;">
                     <d3-network :net-nodes="value.nodes" :net-links="value.links" :options="options" @node-click="nodeClick"/>
                 </div>
-                <div class="card col-direction" style="width: 100%; height: 50%;" v-for="data in generalData">
-                    <span class="mt-1" v-if="selectedNode !== ''">
+                <div class="card col-direction" style="width: 100%; height: 50%;">
+                    <span class="mt-1" v-for="data in generalData">
                         <span class="bold ml-1 mr-1">{{generalDataTitles[data.identifier]}}:</span> {{data.value}}
                     </span>
                 </div>
@@ -65,7 +65,9 @@
 
                 generalData: [],
                 generalDataTitles: {
-                    "networkFormationTime": "Network formation completed at"
+                    "networkFormationTime": "Network formation completed at",
+                    "syncronizationPhase" : "Synchronization completed at",
+                    "secureJoinPhase"     : "Secure join phase completed at"
                 },
 
                 dataset: [
@@ -141,10 +143,26 @@
                         });
                     }
                 } else {
+                    this.updateGeneralData(label, xVal);
+                }
+            },
+
+            updateGeneralData(label, xVal) {
+                let hasElement = false;
+
+                for (let i=0; i<this.generalData.length; i++) {
+                    if (this.generalData[i]["identifier"] === label) {
+                        this.generalData[i]["value"] = xVal;
+                        hasElement = true;
+                        break;    
+                    } 
+                }
+
+                if (!hasElement && this.generalDataTitles.hasOwnProperty(label)) {
                     this.generalData.push({
                         "identifier": label,
                         "value": xVal
-                    })
+                    });
                 }
             },
 
