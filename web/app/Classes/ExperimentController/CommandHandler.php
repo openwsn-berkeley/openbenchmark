@@ -11,36 +11,46 @@ class CommandHandler {
     const OV_GUARD_TIME    = 20; //A guard time in seconds for the nodes to start sending serial data before running OV
 
 
-    function reserve_nodes($user_id, $scenario, $testbed) {
+    function reserve_nodes($user_id, $scenario, $testbed, $async=true) {
         $action = "reserve";
-        $cmd = self::PROVISIONER_MAIN . " --user-id=$user_id --action=$action --scenario=$scenario --testbed=$testbed > /dev/null &";
+        $cmd = self::PROVISIONER_MAIN . " --user-id=$user_id --action=$action --scenario=$scenario --testbed=$testbed > /dev/null";
+
+        if ($async)
+            $cmd .= " &";
+
         shell_exec($cmd);
 
         return SuccessResponse::response(200, $this->get_response_messages($action, $user_id));
     }
 
-    function flash_firmware($user_id, $firmware) {
+    function flash_firmware($user_id, $firmware, $async=true) {
         $action = "otbox-flash";
         $cmd = self::PROVISIONER_MAIN . " --user-id=$user_id --action=$action";
         
         if ($firmware != null)
             $cmd .= " --firmware=$firmware";
 
-        $cmd .= " > /dev/null &";
+        $cmd .= " > /dev/null";
+
+        if ($async)
+            $cmd .= " &";
 
         shell_exec($cmd);
 
         return SuccessResponse::response(200, $this->get_response_messages($action, $user_id));
     }
 
-    function start_ov($user_id, $scenario, $testbed, $simulator) {
+    function start_ov($user_id, $scenario, $testbed, $simulator, $async=true) {
         $action = "ov-start";
         $cmd = self::PROVISIONER_MAIN . " --user-id=$user_id --action=ov-start --scenario=$scenario --testbed=$testbed";
 
         if ($simulator)
             $cmd .= " --simulator";
 
-        $cmd .= " > /dev/null &";
+        $cmd .= " > /dev/null";
+
+        if ($async)
+            $cmd .= " &";
 
         shell_exec($cmd);
 
