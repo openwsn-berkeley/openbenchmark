@@ -43,6 +43,7 @@ sudo apt-get -y install php7.2-xml
 sudo apt-get -y install php7.2-ctype
 sudo apt-get -y install php7.2-json
 sudo apt-get -y install php7.2-mysql
+
 sudo apt -y install unzip
 
 # Laravel
@@ -50,8 +51,10 @@ cd $OPENBENCHMARK_DIR
 composer global require "laravel/installer"
 composer create-project --prefer-dist laravel/laravel temp "5.6.*"
 cd temp
+
 sudo cp $OPENBENCHMARK_DIR/system-config/.env $OPENBENCHMARK_DIR/web/.env
 sudo dos2unix $OPENBENCHMARK_DIR/web/.env
+
 php artisan key:generate
 
 # Node.js and NPM

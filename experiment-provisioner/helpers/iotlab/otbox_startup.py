@@ -113,6 +113,9 @@ class OTBoxStartup:
                 else:
                     print("Node booted: {0}".format(node_name))
                     self.mqtt_client.push_debug_log('NODE_BOOTED', node_name)
+                    break
+                else:
+                    print("Node booted: {0}".format(node_name))
                     self.booted_nodes.append(node)
                     break
 
