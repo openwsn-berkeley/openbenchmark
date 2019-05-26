@@ -16,6 +16,8 @@ sudo chmod 600 /swapfile
 sudo mkswap /swapfile
 sudo swapon /swapfile
 
+sudo apt-mark hold mysql-server-5.7
+
 sudo apt-get -y update
 sudo apt-get -y upgrade
 sudo apt-get install -y software-properties-common
