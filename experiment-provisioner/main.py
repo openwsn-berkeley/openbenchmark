@@ -9,7 +9,6 @@ from abc import abstractmethod
 from reservation import IoTLABReservation
 from reservation import WilabReservation
 
-from otbox_startup import OTBoxStartup
 from otbox_flash import OTBoxFlash
 from ov_startup import OVStartup
 
@@ -25,6 +24,16 @@ class Controller(object):
 		self.configParser.read(self.configFilePath)
 
 	def add_parser_args(self, parser):
+		parser.add_argument('--user-id',   # User ID is tied to the OpenBenchmark account
+	        dest       = 'user_id',
+	        required   = True,
+	        action     = 'store'
+	    )
+		parser.add_argument('--simulator', 
+	        dest       = 'simulator',
+	        default    = False,
+	        action     = 'store_true'
+	    )
 		parser.add_argument('--action', 
 	        dest       = 'action',
 	        choices    = ['check', 'reserve', 'terminate', 'otbox-flash', 'ov-start'],
@@ -55,10 +64,12 @@ class Controller(object):
 		args = parser.parse_args()
 
 		return {
-			'action'  : args.action,
-			'testbed' : args.testbed,
-			'firmware': args.firmware,
-			'scenario': args.scenario
+			'user_id'   : args.user_id,
+			'simulator' : args.simulator,
+			'action'    : args.action,
+			'testbed'   : args.testbed,
+			'firmware'  : args.firmware,
+			'scenario'  : args.scenario
 		}
 
 	@abstractmethod
@@ -68,7 +79,7 @@ class Controller(object):
 
 class IoTLAB(Controller):
 
-	def __init__(self, scenario):
+	def __init__(self, user_id, scenario):
 		super(IoTLAB, self).__init__()
 
 		self.CONFIG_SECTION = 'iotlab-config'
@@ -85,7 +96,7 @@ class IoTLAB(Controller):
 		self.BROKER = self.configParser.get(self.CONFIG_SECTION, 'broker')
 
 		self.add_files_from_env()
-		self.reservation = IoTLABReservation(self.USERNAME, self.HOSTNAME, self.BROKER, self.EXP_DURATION, self.NODES)
+		self.reservation = IoTLABReservation(user_id, self.USERNAME, self.HOSTNAME, self.BROKER, self.EXP_DURATION, self.NODES)
 
 	def add_files_from_env(self):
 		if self.PRIVATE_SSH != "":
@@ -111,7 +122,7 @@ class IoTLAB(Controller):
 
 class Wilab(Controller):
 
-	def __init__(self, scenario):
+	def __init__(self, user_id, scenario):
 		super(Wilab, self).__init__()
 
 		self.CONFIG_SECTION = 'wilab-config'
@@ -234,11 +245,13 @@ def main():
 
 	args = controller.get_args()
 
-	action   = args['action']
-	testbed  = args['testbed']
-	scenario = args['scenario']
+	user_id   = args['user_id']
+	simulator = args['simulator']
+	action    = args['action']
+	testbed   = args['testbed']
+	scenario  = args['scenario']
 
-	testbed  = TESTBEDS[testbed](scenario)
+	testbed  = TESTBEDS[testbed](user_id, scenario)
 	firmware = '{0}/{1}'.format(testbed.FIRMWARE, args['firmware'])
 
 	print 'Script started'
@@ -254,10 +267,10 @@ def main():
 		testbed.reservation.terminate_experiment()
 	elif action == 'otbox-flash':
 		print 'Flashing OTBox'
-		OTBoxFlash(firmware, testbed.BROKER, args['testbed']).flash()
+		OTBoxFlash(user_id, firmware, testbed.BROKER, args['testbed']).flash()
 	elif action == 'ov-start':
 		print 'Starting OV'
-		OVStartup().start()
+		OVStartup(user_id, scenario, args['testbed'], testbed.BROKER, simulator).start()
 
 
 if __name__ == '__main__':

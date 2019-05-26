@@ -26,16 +26,17 @@ class OTBoxStartup:
 
     timer = 0  # used for measuring the amount of time between status messages
 
-    def __init__(self, user, domain, testbed, nodes, broker):
+    def __init__(self, user, domain, testbed, nodes, broker, mqtt_client):
         warnings.simplefilter(
             action='ignore',
             category=CryptographyDeprecationWarning
         )
 
-        self.user = user
-        self.domain = domain
-        self.testbed = testbed
-        self.broker = broker
+        self.user        = user
+        self.domain      = domain
+        self.testbed     = testbed
+        self.broker      = broker
+        self.mqtt_client = mqtt_client
 
         self.client = paramiko.SSHClient()
         self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -101,10 +102,17 @@ class OTBoxStartup:
 
                 if boot_op == self.CMD_ERROR and retries <= num_of_retries:
                     print("Node {0} retry: {1}/{2}".format(node_name, retries, num_of_retries))
+                    self.mqtt_client.push_debug_log('BOOT_RETRY',
+                                                 node_name + ": " + str(retries) + "/" + str(num_of_retries))
                     retries += 1
                     time.sleep(self.RETRY_PAUSE)
                 elif retries > num_of_retries:
                     print("Boot failed: {0}".format(node_name))
+                    self.mqtt_client.push_debug_log('BOOT_FAIL', node_name)
+                    break
+                else:
+                    print("Node booted: {0}".format(node_name))
+                    self.mqtt_client.push_debug_log('NODE_BOOTED', node_name)
                     break
                 else:
                     print("Node booted: {0}".format(node_name))
@@ -123,5 +131,10 @@ class OTBoxStartup:
                     'ssh -o "StrictHostKeyChecking no" root@' + node_name + ' "source /etc/profile; cd A8; cd opentestbed; pip install requests; killall python; python otbox.py --testbed=iotlab --broker=' + self.broker + ' >& otbox-' + node_name + '.log &"')
                 self.active_nodes.append(node)
                 print("Node active: {0}".format(node_name))
+                self.mqtt_client.push_debug_log('NODE_ACTIVE', node_name)
+
+            self.mqtt_client.push_notification("provisioned", True)
+
         except:
             print("Node failed to activate: {0}".format(node_name))
+            self.mqtt_client.push_debug_log('NODE_ACTIVE_FAIL', node_name)

@@ -1,21 +1,21 @@
 <template>
     <div class="top-container">
         <ol class="track-progress">
-            <li :class="{done: nodesReserved, todo: !nodesReserved}">
+            <li :class="{done: currentStep >= 0, todo: currentStep < 0}">
                 <em>1</em>
-                <span>Reserving</span>
+                <span>Provisioning</span>
             </li>
-            <li :class="{done: allBooted, todo: !allBooted}">
+            <li :class="{done: currentStep >= 1, todo: currentStep < 1}">
                 <em>2</em>
-                <span>Booting</span>
-            </li>
-            <li :class="{done: allActive, todo: !allActive}">
-                <em>3</em>
                 <span>Flashing</span>
             </li>
-            <li :class="{done: dataFlowStarted, todo: !dataFlowStarted}">
+            <li :class="{done: currentStep >= 2, todo: currentStep < 2}">
+                <em>3</em>
+                <span>Configuring network</span>
+            </li>
+            <li :class="{done: currentStep >= 3, todo: currentStep < 3}">
                 <em>4</em>
-                <span>Pending</span>
+                <span>Orchestrating</span>
             </li>
         </ol>
     </div>
@@ -23,12 +23,7 @@
 
 <script>
     export default {
-        props: [
-            'nodesReserved',
-            'allBooted',
-            'allActive',
-            'dataFlowStarted'
-        ],
+        props: ['currentStep'],
 
         data: function () {
             return {
@@ -40,7 +35,7 @@
 
 <style scoped>
     .top-container {
-        width: 112%;
+        width: 100%;
     }
 
     body {

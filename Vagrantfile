@@ -36,15 +36,16 @@ Vagrant.configure("2") do |config|
 
 
   config.vm.synced_folder ".", "/home/vagrant/openbenchmark",
-  type: 'rsync',
-  rsync__exclude: [
-    'web/node_modules', 
-    'docs/build', 
-    'web/public/js/app.js', 
-    'web/resources/assets/css/app.css',
+
+	type: 'rsync',
+	rsync__exclude: [
+		'web/node_modules', 
+		'docs/build', 
+		'web/public/js/app.js', 
+		'web/resources/assets/css/app.css',
     'experiment-provisioner/wilab/jfed_cli'
-  ],
-  rsync__args: ['--verbose', '--archive', '-z', '--copy-links']
+	],
+	rsync__args: ['--verbose', '--archive', '-z', '--copy-links']
   
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
@@ -67,7 +68,7 @@ Vagrant.configure("2") do |config|
     dos2unix ./openbenchmark/bootstrap.sh
     dos2unix ./openbenchmark/bootstrap_webdev.sh
     dos2unix ./openbenchmark/bootstrap_jfed.sh
-    dos2unix ./openbenchmark/experiment-control/helpers/wilab/jfed_cli/*.sh
+    dos2unix ./openbenchmark/experiment-provisioner/helpers/wilab/jfed_cli/*.sh
   SHELL
 
 end

@@ -7,6 +7,7 @@ import threading
 import collections
 
 from utils import Utils
+from mqtt_client.mqtt_client import MQTTClient
 
 
 class Scheduler:
@@ -18,6 +19,7 @@ class Scheduler:
 
 	def __init__(self):
 		self.scenario = Utils.scenario
+		self.mqtt_client = MQTTClient.create()
 
 	def start(self):
 		self._generate_schedule()
@@ -91,6 +93,8 @@ class Scheduler:
 		schedule_len = self._print_schedule()
 		sys.stdout.write("[SCHEDULER] Starting scheduler in {0} seconds...\n".format(self.scheduler_delay))
 		time.sleep(self.scheduler_delay)
+
+		self.mqtt_client.push_notification("orchestration-started", True)
 
 		for i in range(0, schedule_len):
 			currently_on = self.schedule[i]

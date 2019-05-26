@@ -3,25 +3,18 @@
         <div class="row" style="height: 100%">
             <div class="col-direction ml-1 mr-1 col-4" style="height: 100%;">
                 <div class="node-card card mb-1" style="width: 100%; height: 50%;">
-                    <d3-network :net-nodes="nodes" :net-links="links" :options="options" @node-click="nodeClick"/>
+                    <d3-network :net-nodes="value.nodes" :net-links="value.links" :options="options" @node-click="nodeClick"/>
                 </div>
                 <div class="card col-direction" style="width: 100%; height: 50%;">
-                    <span class="mt-1" v-if="currentlyShowing !== ''">
-                        <span class="bold ml-1 mr-1">Name: </span> {{currentData.id}}
+                    <span class="mt-1" v-for="data in generalData">
+                        <span class="bold ml-1 mr-1">{{generalDataTitles[data.identifier]}}:</span> {{data.value}}
                     </span>
-                    <span class="data-row" v-if="currentlyShowing !== ''">
-                        <span class="bold ml-1 mr-1">EUI-64: </span> {{currentData.eui64}}
-                    </span>
-                    <span class="data-row" v-if="currentlyShowing !== ''">
-                        <span class="bold ml-1 mr-1">DAG Root?: </span> {{currentData.isDag}}
-                    </span>
-                    <!--<span class="data-row"><span class="bold ml-1 mr-1">Radio Duty Cycle: </span> 0.55%</span>-->
                 </div>
             </div>
             <div class="card row ml-1 mr-1 pt-1 col-8 wrap" style="overflow-y: auto; overflow-x: hidden">
 
                 <span v-for="node in dataset">
-                    <span v-if="node.id === currentlyShowing">
+                    <span v-if="node.id === selectedNode.name">
                         <span v-for="item in node.nodeData">
                             <line-chart class="chart ml-3 mr-3"
                                         :label="item.label"
@@ -46,6 +39,7 @@
 <script>
     import LineChart from './../charts/LineChart.vue'
     import D3Network from 'vue-d3-network';
+    import Paho from 'paho-mqtt';
 
     let thisComponent;
 
@@ -57,24 +51,24 @@
 
         data: function () {
             return {
+                //client: new Paho.Client("broker.mqttdashboard.com", Number(8000), "webBrowserClient"),
+
                 expStartTimestamp: -1,
                 dataPerChart: 20,
 
-                name: 'Scenario 1',
-                description: 'Scenario1: Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.',
-                nodes: [ //This should be created dynamically via eventBus from Scenarios.vue
-                    { id: 1, name: 'node-a8-106', _cssClass: 'node-on'},
-                    { id: 2, name: 'node-a8-107', _cssClass: 'node-on'},
-                    //{ id: 3, name:'orange node', _color: 'orange' },
-                    //{ id: 4, _color: '#0022ff'},
-                    { id: 3, name: 'node-a8-102', _cssClass: 'node-on'},
-                ],
-                links: [
-                    { sid: 1, tid: 2 },
-                    { sid: 2, tid: 3 },
-                ],
+                value: {
+                    nodes: [],
+                    links: []
+                },
 
-                currentlyShowing : '',
+                selectedNode : {},
+
+                generalData: [],
+                generalDataTitles: {
+                    "networkFormationTime": "Network formation completed at",
+                    "syncronizationPhase" : "Synchronization completed at",
+                    "secureJoinPhase"     : "Secure join phase completed at"
+                },
 
                 dataset: [
                     /*{//Corresponds to a single node
@@ -94,10 +88,7 @@
                             }
                         ]
                     }*/
-                ],
-
-                nodeSize:35,
-                canvas:false
+                ]
             }
         },
 
@@ -110,7 +101,7 @@
 
             createBlankDataset() {
                 //Creates a blank dataset for all the existing nodes in the 'nodes' field
-                this.nodes.forEach(element => {
+                this.value.nodes.forEach(element => {
                     this.dataset.push({
                         id: element.name,
                         eui64: '',
@@ -118,44 +109,80 @@
                     })
                 });
             },
-            appendNodeData(id, info, label, xVal, yVal) {
+
+            appendNodeData(id, label, xVal, yVal) {
                 //Appends to 'xAxis' and 'yAxis' of a 'nodeData' (of the node with the given 'eui64') element with the corresponding label
                 //Creates new 'nodeData' element if the label does not exist
-                let node = this.getNodeByProperty('id', id);
+                if (id !== undefined) {
+                    let node = this.getNodeByProperty('id', id);
 
-                let num = node.nodeData.length;
-                let valueAppended = false;
+                    console.log("Fetching node: " + id);
+        
+                    let num = node.nodeData.length;
+                    let valueAppended = false;
 
-                for (let i=0; i<num; i++) {
-                    if (node.nodeData[i].label === label) {
-                        node.nodeData[i].xAxis.push(xVal);
-                        node.nodeData[i].yAxis.push(yVal);
+                    for (let i=0; i<num; i++) {
+                        if (node.nodeData[i].label === label) {
+                            node.nodeData[i].xAxis.push(xVal);
+                            node.nodeData[i].yAxis.push(yVal);
 
-                        valueAppended = true;
+                            valueAppended = true;
 
-                        if (node.nodeData[i].xAxis.length > this.dataPerChart) {
-                            node.nodeData[i].xAxis.shift();
-                            node.nodeData[i].yAxis.shift();
+                            if (node.nodeData[i].xAxis.length > this.dataPerChart) {
+                                node.nodeData[i].xAxis.shift();
+                                node.nodeData[i].yAxis.shift();
+                            }
                         }
                     }
-                }
 
-                if (!valueAppended) {
-                    node.nodeData.push({
-                        label: label,
-                        xAxis: [xVal],
-                        yAxis: [yVal]
-                    });
+                    if (!valueAppended) {
+                        node.nodeData.push({
+                            label: label,
+                            xAxis: [xVal],
+                            yAxis: [yVal]
+                        });
+                    }
+                } else {
+                    this.updateGeneralData(label, xVal);
                 }
-
-                node.eui64 = info['64bAddr'];
-                node.isDag = (info.isDAGroot === 1) ? 'Yes' : 'No';
             },
 
-            selectNodeData(id) {
-                //Put dataset element with the given 'id' in 'currentlyShowing' variable (used for filling the UI with the data)
-                this.currentlyShowing = id;
-                console.log("Currently showing: " + JSON.stringify(this.getNodeByProperty('id', this.currentlyShowing)));
+            updateGeneralData(label, xVal) {
+                let hasElement = false;
+
+                for (let i=0; i<this.generalData.length; i++) {
+                    if (this.generalData[i]["identifier"] === label) {
+                        this.generalData[i]["value"] = xVal;
+                        hasElement = true;
+                        break;    
+                    } 
+                }
+
+                if (!hasElement && this.generalDataTitles.hasOwnProperty(label)) {
+                    this.generalData.push({
+                        "identifier": label,
+                        "value": xVal
+                    });
+                }
+            },
+
+            nodeClick(event, nodeObject) {
+                this.value.nodes.forEach(function(element) {
+                    if (element === nodeObject) {
+                        thisComponent.selectedNode = element;
+                        element._cssClass += " selected";
+                    } else {
+                        element._cssClass = element.defaultCssClass;
+                    }
+                });
+                nodeObject._cssClass += " selected";
+                this.selectNodeData(nodeObject);
+            },
+
+            selectNodeData(node) {
+                //Put dataset element with the given 'id' in 'selectedNode' variable (used for filling the UI with the data)
+                this.selectedNode = node;
+                console.log("Currently showing: " + JSON.stringify(this.getNodeByProperty('id', this.selectedNode)));
             },
 
             getNodeByProperty(property, val) {
@@ -174,22 +201,15 @@
                 return result;
             },
 
-            parseLogData(payload) {
-                let obj = JSON.parse(payload);
+            parseLogData(obj) {
+                let id    = obj.node_id;
+                let label = obj.kpi;
+                let xVal  = obj.timestamp;
+                let yVal  = obj.value;
 
-                let label = obj._type.split('.')[1];
+                console.log("Parsing data: " + label + " " + yVal + " id: " + id);
 
-                let id = obj._mote_info.serial.split('_')[1];
-
-                //let xVal = this.relativeTimestampParse(obj._timestamp);
-                let xVal = obj._timestamp;
-                let yVal = obj[label];
-
-                this.appendNodeData(id, obj._mote_info, label, this.timestampDiff(xVal), parseFloat(yVal));
-            },
-
-            nodeClick(event, node) {
-                this.selectNodeData(node.name);
+                this.appendNodeData(id, label, this.timestampDiff(xVal), parseFloat(yVal));
             },
 
             timestampDiff(stmp) {
@@ -221,24 +241,68 @@
                             this.getMilliseconds();
                     },
                 };
+            },
+
+            clone(obj) {
+                if (null === obj || "object" !== typeof obj) return obj;
+                let copy = obj.constructor();
+                for (let attr in obj) {
+                    if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
+                }
+                return copy;
+            },
+
+            /*** MQTT Configuration ***/
+            subscribe() {
+                let interval = setInterval( function() {
+                    if (thisComponent.$mqttClient.subscribe() !== "") {
+                        console.log("Retrying subscription in 1s...") 
+                    } else {
+                        clearInterval(interval)
+                    }
+                }, 1000);  
+            },
+            onConnect() {
+                // Once a connection has been made, make a subscription and send a message.
+                //console.log("onConnect");
+                //this.client.subscribe("browser/event");
+                //let message = new Paho.Message("Browser connected to MQTT!");
+                //message.destinationName = "browser/message";
+                //this.client.send(message);
+            },
+            onConnectionLost(responseObject) {
+                //if (responseObject.errorCode !== 0)
+                 //   console.log("onConnectionLost: " + responseObject.errorMessage);
+            },
+            onMessageArrived(message) {
+                //console.log("onMessageArrived: " + message.payloadString);
+            },
+
+            parseMqttEvent(payload) {
+                let payloadObj = JSON.parse(payload)
+                let type       = payloadObj["type"]
+
+                if (type == "kpi") {
+                    this.parseLogData(payloadObj["content"])
+                }
             }
 
         },
 
         computed:{
-            options(){
-                return{
-                    force: 3000,
+            options() {
+                return {
+                    force: 500,
                     size: {w:350, h:320},
-                    nodeSize: this.nodeSize,
+                    nodeSize: 20,
                     nodeLabels: true,
-                    canvas: this.canvas
+                    canvas: false
                 }
             },
             currentData() {
-                let currentNode = this.getNodeByProperty('id', this.currentlyShowing);
+                let currentNode = this.getNodeByProperty('id', this.selectedNode.id);
                 return {
-                    id: currentNode.id,
+                    id:    currentNode.id,
                     eui64: currentNode.eui64,
                     isDag: currentNode.isDag
                 }
@@ -246,13 +310,23 @@
         },
 
         mounted() {
+            this.subscribe();
+
+            this.$eventHub.$on("MQTT", payload => {
+                thisComponent.parseMqttEvent(payload);
+            });
+
+            this.$eventHub.$on("NODES_FETCHED", payload => {
+                thisComponent.value = thisComponent.clone(payload);
+                this.createBlankDataset();
+            });
+
             this.$eventHub.$on("LOG_MODIFICATION", payload => {
                 thisComponent.parseLogData(payload);
             });
         },
 
         created() {
-            this.createBlankDataset();
             thisComponent = this;
             this.expStartTimestamp = new Date().valueOf();
         }

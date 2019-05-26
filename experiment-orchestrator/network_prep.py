@@ -12,6 +12,8 @@ from scenarios.industrial_monitoring.industrial_monitoring import IndustrialMoni
 from helpers.reflash.reflash import IotlabReflash
 from helpers.reflash.reflash import WilabReflash
 
+from mqtt_client.mqtt_client import MQTTClient
+
 
 class NetworkPrep:
 
@@ -43,11 +45,15 @@ class NetworkPrep:
 		Utils.scenario    = self.scenarios[sut_command['scenario']](sut_command) 
 		self.scenario = Utils.scenario
 
+		self.mqtt_client = MQTTClient.create()
+
 
 	def start(self):
 		try:
 			if not self._configure_transmit_power():
 				raise Exception("Failed to configure transmission power. Exiting...")
+				self.mqtt_client.push_notification("network-configured", False)
+
 			sys.stdout.write("{0}[NETWORK PREP] {1}\n{2}".format(
 				colorama.Fore.GREEN,
 				"Transmission power configured successfully", 
@@ -56,6 +62,8 @@ class NetworkPrep:
 
 			if not json.loads(self._trigger_network_formation())["success"]:
 				raise Exception("Failed to trigger network formation. Exiting...")
+				self.mqtt_client.push_notification("network-configured", False)
+
 			sys.stdout.write("{0}[NETWORK PREP] {1}\n{2}".format(
 				colorama.Fore.GREEN,
 				"Network formation triggered successfully", 

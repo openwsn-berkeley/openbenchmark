@@ -1,10 +1,9 @@
 import sys
 
-sys.path.insert(0, 'helpers/iotlab')
-
 from abc import abstractmethod
 from cryptography.utils import CryptographyDeprecationWarning
-from otbox_startup import OTBoxStartup
+from helpers.iotlab.otbox_startup import OTBoxStartup
+from mqtt_client import MQTTClient
 
 import os
 import paramiko
@@ -33,17 +32,19 @@ class IoTLABReservation(Reservation):
     SSH_RETRY_TIME = 120
     RETRY_PAUSE = 10
 
-    def __init__(self, user, domain, broker, duration=None, nodes=None):
+    def __init__(self, user_id, user, domain, broker, duration=None, nodes=None):
         warnings.simplefilter(
             action='ignore',
             category=CryptographyDeprecationWarning
         )
 
-        self.user = user
-        self.domain = domain
+        self.mqtt_client = MQTTClient.create("iotlab", user_id)   # User ID specific to OpenBenchmark platform
+
+        self.user     = user         # IoT-LAB acc username defined within the config file
+        self.domain   = domain
         self.duration = duration
-        self.nodes = nodes
-        self.broker = broker
+        self.nodes    = nodes
+        self.broker   = broker
 
         self.client = paramiko.SSHClient()
         self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -102,12 +103,13 @@ class IoTLABReservation(Reservation):
                 'iotlab-experiment submit -n a8_exp -d ' + str(self.duration) + ' -l ' + self.nodes)
             if output != self.CMD_ERROR:
                 self.experiment_id = json.loads(output)['id']
+                self.mqtt_client.push_debug_log('NODE_RESERVATION', 'All nodes reserved')
                 print('All nodes reserved')
 
                 nodes = self.get_reserved_nodes()
 
                 if len(nodes) > 0:
-                    OTBoxStartup(self.user, self.domain, 'iotlab', self.get_reserved_nodes(), self.broker).start()
+                    OTBoxStartup(self.user, self.domain, 'iotlab', self.get_reserved_nodes(), self.broker, self.mqtt_client).start()
                 else:
                     print('Experiment startup failed')
 
@@ -127,10 +129,13 @@ class IoTLABReservation(Reservation):
                 return True
             elif retries <= num_of_retries:
                 print('Retrying... {0}/{1}'.format(retries, num_of_retries))
+                self.mqtt_client.push_debug_log('RESERVATION_STATUS_RETRY', str(retries) + "/" + str(num_of_retries))
                 retries += 1
                 time.sleep(self.RETRY_PAUSE)
             else:
                 print('Reservation fail: {0}/{1}'.format(retries, num_of_retries))
+                self.mqtt_client.push_debug_log('RESERVATION_FAIL', str(retries) + "/" + str(num_of_retries))
+                self.mqtt_client.push_notification("provisioned", False)
                 break
 
             if not loop:
@@ -140,11 +145,14 @@ class IoTLABReservation(Reservation):
 
     def terminate_experiment(self):
         self.ssh_command_exec('iotlab-experiment stop')
-        print('Terminating experiment')
+        print('Terminating experiment...')
+        self.mqtt_client.push_debug_log('EXP_TERMINATE', '')
 
         python_proc_kill = "sudo kill $(ps aux | grep '[p]ython' | awk '{print $2}')"
         delete_logs = "rm ~/soda/openvisualizer/openvisualizer/build/runui/*.log; rm ~/soda/openvisualizer/openvisualizer/build/runui/*.log.*;"
 
+        self.mqtt_client.push_notification("terminated", True)
+        
         subprocess.Popen(python_proc_kill, shell=True)
         time.sleep(3)
         subprocess.Popen(delete_logs, shell=True)
@@ -153,6 +161,8 @@ class IoTLABReservation(Reservation):
 class WilabReservation(Reservation):
 
     def __init__(self, jfed_dir, run, delete, display):
+        self.mqtt_client = MQTTClient.create("wilab")
+        
         self.jfed_dir = jfed_dir
         self.actions = {
             "run": run,

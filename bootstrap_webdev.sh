@@ -10,13 +10,13 @@ OPENBENCHMARK_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
 LARAVEL_ROOT="$OPENBENCHMARK_DIR/web/public"
 GROUP="$( id -gn )"
 
-sudo apt-mark hold mysql-server-5.7
-
 # Create system swap as PHP installation may fail without it
-#sudo fallocate -l 2G /swapfile
-#sudo chmod 600 /swapfile
-#sudo mkswap /swapfile
-#sudo swapon /swapfile
+sudo fallocate -l 2G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+
+sudo apt-mark hold mysql-server-5.7
 
 sudo apt-get -y update
 sudo apt-get -y upgrade
@@ -42,6 +42,8 @@ sudo apt-get -y install php7.2-tokenizer
 sudo apt-get -y install php7.2-xml
 sudo apt-get -y install php7.2-ctype
 sudo apt-get -y install php7.2-json
+sudo apt-get -y install php7.2-mysql
+
 sudo apt -y install unzip
 
 # Laravel
@@ -49,7 +51,10 @@ cd $OPENBENCHMARK_DIR
 composer global require "laravel/installer"
 composer create-project --prefer-dist laravel/laravel temp "5.6.*"
 cd temp
-mv .env.example .env
+
+sudo cp $OPENBENCHMARK_DIR/system-config/.env $OPENBENCHMARK_DIR/web/.env
+sudo dos2unix $OPENBENCHMARK_DIR/web/.env
+
 php artisan key:generate
 
 # Node.js and NPM
@@ -99,6 +104,17 @@ npm run dev
 # generate the docs
 cd $OPENBENCHMARK_DIR/docs
 make html
+
+# install MySQL
+if [ ! -z "$1" ] && [ "$1" = "-mysql" ]
+then
+    sudo apt-get install -y mysql-server
+    sudo mysql -u root -p -e 'CREATE USER "openbenchmark"@"localhost" IDENTIFIED BY "openbenchmark";'
+    sudo mysqladmin -u root -p create openbenchmark
+    sudo mysql -u root -p -e 'GRANT ALL PRIVILEGES ON openbenchmark.* TO "openbenchmark"@"localhost";'
+    cd $OPENBENCHMARK_DIR/web
+    php artisan migrate
+fi
 
 # Restart Apache and PHP7.2-FPM
 sudo a2enmod rewrite

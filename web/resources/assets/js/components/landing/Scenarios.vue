@@ -1,62 +1,86 @@
 <template>
     <div class="parent">
+
+        <modal name="modal-progress-bar" width="90%" height="165px">
+            <!-- The Progress Bar -->
+            <div class="row pl-3 pr-3 h-center v-center col-direction">
+                <h3 class="primary pulse mb-0">Starting experiment...</h3>                    
+                <progress-bar :current-step="currentStep"></progress-bar>
+            </div>
+
+            <div class="row h-center v-center col-direction mt-2" v-if="currentStep == 3">
+                <h3 class="mt-0 mb-0" style="margin-bottom: 5px">Experiment started! <span class="pulse clickable" @click.prevent="scrollContent">Monitor the progress in real time</span></h3>
+                <i class="fas fa-check-circle fa-3x primary-light"></i>
+            </div>
+        </modal>
+
         <div class="row">
             <div class="col-5 pr-5 pl-5">
-                <h4>Scenario: </h4>
+                
                 <div class="row">
-                    <div class="scenario col-direction" :class="{'scenario-selected': scenarioSelected === 0}" @click="selectScenario(0)">
-                        <i class="fas fa-desktop fa-3x text-center"></i>
-                        <span class="text-center">Demo</span>
+                    <div class="col-7">
+                        <h4>Scenario: </h4>
+                        <div class="row col-direction">
+                            <div class="scenario row-direction" :class="{'scenario-selected': scenarioSelected === index}" @click="selectScenario(index)" v-for="(scenario, index) in scenarios">
+                                <div class="row v-center mb-1" style="width:100%">
+                                    <div class="col-2">
+                                        <i class="fas fa-2x" :class="scenarioIcons[scenario.identifier]"></i>
+                                    </div>
+                                    <div class="col-10 pl-1">
+                                        <span>{{scenario.name}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="scenario col-direction" :class="{'scenario-selected': scenarioSelected === 1}" @click="selectScenario(1)">
-                        <i class="fas fa-building fa-3x text-center"></i>
-                        <span class="text-center">Smart office</span>
-                    </div>
-                    <div class="scenario col-direction" :class="{'scenario-selected': scenarioSelected === 2}" @click="selectScenario(2)">
-                        <i class="fas fa-industry fa-3x text-center"></i>
-                        <span class="text-center">Smart factory</span>
-                    </div>
-                </div>
-                <div class="justified bold" v-if="value !== null">
-                    <ul>
-                        <li v-for="item in value.description">
-                            {{item}}
-                        </li>
-                    </ul>
-                </div>
-                <h4>Testbed: </h4>
-                <div class="row ml-3">
-                    <div class="testbed col-direction" :class="{'testbed-selected': testbedSelected === 0}" @click="selectTestbed(0)">
-                        <img class="logo-sm mr-2" style="height: 55px" src="https://www.iot-lab.info/wp-content/themes/alienship-1.2.5-child/templates/parts/fit-iotlab3.png">
-                    </div>
-                    <div class="testbed col-direction" :class="{'testbed-selected': testbedSelected === 1}" @click="selectTestbed(1)">
-                        <img class="logo-sm mr-2" style="height: 55px" src="images/w-ilabt.png">
+                    <div class="col-4">
+                        <h4>Testbed: </h4>
+                        <div class="row col-direction">
+                            <div class="testbed" :class="{'testbed-selected': testbedSelected === index}" @click="selectTestbed(index)" v-for="(testbed, index) in testbeds">
+                                <img class="logo-sm mb-1" style="height: 55px" :src="testbedIcons[testbed.identifier]">
+                            </div>
+                        </div>
                     </div>
                 </div>
+
                 <div class="row">
                     <file-upload-simple :allow-upload="useOpenWSNFirmware" @click.native="useOpenWSNFirmware = false"></file-upload-simple>
                     <div class="testbed" style="position: relative" :class="{'testbed-selected': useOpenWSNFirmware}" @click="useOpenWSNFirmware = true">
                         <img class="logo-sm ml-2" style="position: absolute; bottom: 0; height: 55px" src="images/openwsn_cropped.png">
                     </div>
                 </div>
-                <button class="main-btn btn-width-full mt-2" v-if="scenarioSelected !== -1 && testbedSelected !== -1 && !dataFlowStarted" @click="processStart()" :disabled="processStarted">Start experiment</button>
-                <button class="main-btn btn-width-full btn-danger mt-2" v-if="dataFlowStarted" @click="processTerminate()">Terminate experiment</button>
+
+                <h4 class="mt-2" style="margin-bottom: 10px" v-if="selectedNode.length !== 0">Selected node: </h4>
+                <div class="row card mt-1 pt-1 pb-1 pl-1 pr-1 row-direction" v-if="selectedNode.length !== 0">
+                    <div class="row col-direction">
+                        <h4 class="mt-0 node-property">OpenBenchmark ID:</h4>
+                        <h4 class="mt-0 node-property">Testbed ID:</h4>
+                        <h4 class="mt-0 node-property">Transmission power:</h4>
+                        <h4 class="mt-0 node-property">Role:</h4>
+                    </div>
+                    <div class="row col-direction pl-2">
+                        <span class="node-property">{{selectedNode.id}}</span>
+                        <span class="node-property">{{selectedNode.name}}</span>
+                        <span class="node-property">{{selectedNode.transmissionPower}}</span>
+                        <span class="node-property">{{selectedNode.roleFull}}</span>
+                    </div>
+                </div>
+
             </div>
+
             <div class="col-7">
-                <d3-network style="height: 78%" :net-nodes="value.nodes" :net-links="value.links" :options="options" v-if="value !== null"/>
-                <div class="row pl-3 pr-3 h-center v-center col-direction" v-if="processStarted && !dataFlowStarted">
-                    <h3 class="primary pulse mb-0" v-if="!dataFlowStarted">Starting experiment...</h3>
-                    <progress-bar
-                            :nodes-reserved="nodesReserved"
-                            :all-booted="allBooted"
-                            :all-active="allActive"
-                            :data-flow-started="dataFlowStarted"></progress-bar>
-                </div>
-                <div class="row h-center v-center col-direction mt-1" v-if="dataFlowStarted">
-                    <h3 class="mt-0 mb-0" style="margin-bottom: 5px">Experiment started! <span class="pulse clickable" @click.prevent="scrollContent">Monitor the progress in real time</span></h3>
-                    <i class="fas fa-check-circle fa-3x primary-light"></i>
-                </div>
+                <d3-network style="height: 78%" 
+                    :net-nodes="value.nodes" 
+                    :net-links="value.links" 
+                    :options="options" 
+                    v-if="value !== null" @node-click="selectNode"/>
             </div>
+
+        </div>
+
+        <div class="row h-center">
+            <button class="main-btn btn-width-half mt-1" v-if="scenarioSelected !== -1 && testbedSelected !== -1" @click="processStart()" :disabled="currentStep > -2">Start experiment</button>
+            <!--<button class="main-btn btn-width-half btn-danger mt-1" v-if="dataFlowStarted" @click="processTerminate()">Terminate experiment</button>-->
         </div>
     </div>
 </template>
@@ -70,233 +94,190 @@
     let thisComponent;
 
     export default {
+        props: ['experiment-id'],
+
         components: {
             D3Network,
             FileUploadSimple
         },
+
         data: function () {
             return {
-                stepsCompleted: -1,
-
-                processStarted: false,
-                nodesReserved: false,
-                dataFlowStarted: false,
-
+                scenarios: [],
                 scenarioSelected: -1,
+                scenarioIcons: {
+                    "demo-scenario": "fa-laptop",
+                    "home-automation": "fa-home",
+                    "building-automation": "fa-building",
+                    "industrial-monitoring": "fa-industry",
+                },
+
+                testbeds: [],
                 testbedSelected: -1,
+                testbedIcons: {
+                    "iotlab": "https://www.iot-lab.info/wp-content/themes/alienship-1.2.5-child/templates/parts/fit-iotlab3.png",
+                    "wilab": "images/w-ilabt.png"
+                },
+            
                 useOpenWSNFirmware: true,
 
-                value: null,
-                multiselectOptions: [
-                    {
-                        name: 'Demo',
-                        description: [
-                            'Number of nodes: 3',
-                            'Traffic pattern: Periodic, 10 s',
-                            'Transmission power: 0 dBm',
-                            'Interference: None'
-                        ],
-                        nodes: [
-                            { id: 1, name: 'node-a8-106', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 2, name: 'node-a8-107', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            //{ id: 3, name:'orange node', _color: 'orange' },
-                            //{ id: 4, _color: '#0022ff'},
-                            { id: 3, name: 'node-a8-102', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                        ],
-                        links: [
-                            { sid: 1, tid: 2 },
-                            { sid: 2, tid: 3 },
-                        ],
-                    },
-                    {
-                        name: 'Smart office',
-                        description: [
-                            'Number of nodes: 5',
-                            'Traffic pattern: Periodic, 10 s',
-                            'Transmission power: 0 dBm',
-                            'Interference: 2.4 GHz Wi-Fi'
-                        ],
-                        nodes: [
-                            { id: 1, name: 'node-a8-106', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 2, name: 'node-a8-107', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 3, name: 'node-a8-108', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 4, name: 'node-a8-109', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 5, name: 'node-a8-110', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 6, name: 'node-a8-111', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 7, name: 'node-a8-112', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 8, name: 'node-a8-113', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 9, name: 'node-a8-114', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 10, name: 'node-a8-115', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 11, name: 'node-a8-116', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 12, name: 'node-a8-117', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 13, name: 'node-a8-118', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 14, name: 'node-a8-119', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 15, name: 'node-a8-120', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 16, name: 'node-a8-121', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 17, name: 'node-a8-122', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 18, name: 'node-a8-123', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 19, name: 'node-a8-124', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 20, name: 'node-a8-125', _cssClass: 'node-off', booted: false, failed: false, active: false}
-                        ],
-                        links: [
-                            { sid: 1, tid: 2 },
-                            { sid: 2, tid: 3 },
-                            { sid: 3, tid: 4 },
-                            { sid: 3, tid: 5 },
-                            { sid: 3, tid: 6 },
-                            { sid: 6, tid: 7 },
-                            { sid: 6, tid: 8 },
-                            { sid: 6, tid: 9 },
-                            { sid: 6, tid: 10 },
-                            { sid: 10, tid: 11 },
-                            { sid: 11, tid: 12 },
-                            { sid: 11, tid: 13 },
-                            { sid: 13, tid: 14 },
-                            { sid: 14, tid: 15 },
-                            { sid: 15, tid: 16 },
-                            { sid: 16, tid: 17 },
-                            { sid: 17, tid: 18 },
-                            { sid: 18, tid: 19 },
-                            { sid: 19, tid: 20 },
-                        ],
-                    },
+                multiselectOptions: [],
+                
+                value: {
+                    nodes: [],
+                    links: []
+                },
 
-                    {
-                        name: 'Smart factory',
-                        description: [
-                            'Number of nodes: 10',
-                            'Traffic pattern: Periodic, 10 s',
-                            'Transmission power: 0 dBm',
-                            'Interference: 2.4 GHz Wi-Fi'
-                        ],
-                        nodes: [
-                            { id: 1, name: 'node-a8-106', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 2, name: 'node-a8-107', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 3, name: 'node-a8-108', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 4, name: 'node-a8-109', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 5, name: 'node-a8-110', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 6, name: 'node-a8-111', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 7, name: 'node-a8-112', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 8, name: 'node-a8-113', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 9, name: 'node-a8-114', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 10, name: 'node-a8-115', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 11, name: 'node-a8-116', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 12, name: 'node-a8-117', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 13, name: 'node-a8-118', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 14, name: 'node-a8-119', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 15, name: 'node-a8-120', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 16, name: 'node-a8-121', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 17, name: 'node-a8-122', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 18, name: 'node-a8-123', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 19, name: 'node-a8-124', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 20, name: 'node-a8-125', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 21, name: 'node-a8-106', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 22, name: 'node-a8-107', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 23, name: 'node-a8-108', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 24, name: 'node-a8-109', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 25, name: 'node-a8-110', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 26, name: 'node-a8-111', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 27, name: 'node-a8-112', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 28, name: 'node-a8-113', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 29, name: 'node-a8-114', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 30, name: 'node-a8-115', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 31, name: 'node-a8-116', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 32, name: 'node-a8-117', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 33, name: 'node-a8-118', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 34, name: 'node-a8-119', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 35, name: 'node-a8-120', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 36, name: 'node-a8-121', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 37, name: 'node-a8-122', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 38, name: 'node-a8-123', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 39, name: 'node-a8-124', _cssClass: 'node-off', booted: false, failed: false, active: false},
-                            { id: 40, name: 'node-a8-125', _cssClass: 'node-off', booted: false, failed: false, active: false}
-                        ],
-                        links: [
-                            { sid: 1, tid: 2 },
-                            { sid: 2, tid: 3 },
-                            { sid: 3, tid: 4 },
-                            { sid: 3, tid: 5 },
-                            { sid: 3, tid: 6 },
-                            { sid: 6, tid: 7 },
-                            { sid: 6, tid: 8 },
-                            { sid: 6, tid: 9 },
-                            { sid: 6, tid: 10 },
-                            { sid: 10, tid: 11 },
-                            { sid: 11, tid: 12 },
-                            { sid: 11, tid: 13 },
-                            { sid: 13, tid: 14 },
-                            { sid: 14, tid: 15 },
-                            { sid: 15, tid: 16 },
-                            { sid: 16, tid: 17 },
-                            { sid: 17, tid: 18 },
-                            { sid: 18, tid: 19 },
-                            { sid: 19, tid: 20 },
-                            { sid: 20, tid: 21 },
-                            { sid: 21, tid: 22 },
-                            { sid: 22, tid: 23 },
-                            { sid: 23, tid: 24 },
-                            { sid: 23, tid: 25 },
-                            { sid: 23, tid: 26 },
-                            { sid: 26, tid: 27 },
-                            { sid: 26, tid: 28 },
-                            { sid: 26, tid: 29 },
-                            { sid: 26, tid: 30 },
-                            { sid: 30, tid: 31 },
-                            { sid: 31, tid: 32 },
-                            { sid: 31, tid: 33 },
-                            { sid: 33, tid: 34 },
-                            { sid: 34, tid: 35 },
-                            { sid: 35, tid: 36 },
-                            { sid: 36, tid: 37 },
-                            { sid: 37, tid: 38 },
-                            { sid: 38, tid: 39 },
-                            { sid: 39, tid: 40 },
-                        ],
-                    }
+                selectedNode: [],
+
+                gatewayIcon: '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="24" height="32" viewBox="0 0 24 32"><path d="M12 30c-6.626 0-12-1.793-12-4 0-1.207 0-2.527 0-4 0-0.348 0.174-0.678 0.424-1 1.338 1.723 5.99 3 11.576 3s10.238-1.277 11.576-3c0.25 0.322 0.424 0.652 0.424 1 0 1.158 0 2.387 0 4 0 2.207-5.375 4-12 4zM12 22c-6.626 0-12-1.793-12-4 0-1.208 0-2.526 0-4 0-0.212 0.080-0.418 0.188-0.622v0c0.061-0.128 0.141-0.254 0.236-0.378 1.338 1.722 5.99 3 11.576 3s10.238-1.278 11.576-3c0.096 0.124 0.176 0.25 0.236 0.378v0c0.107 0.204 0.188 0.41 0.188 0.622 0 1.158 0 2.386 0 4 0 2.207-5.375 4-12 4zM12 14c-6.626 0-12-1.792-12-4 0-0.632 0-1.3 0-2 0-0.636 0-1.296 0-2 0-2.208 5.374-4 12-4s12 1.792 12 4c0 0.624 0 1.286 0 2 0 0.612 0 1.258 0 2 0 2.208-5.375 4-12 4zM12 4c-4.418 0-8 0.894-8 2s3.582 2 8 2 8-0.894 8-2-3.582-2-8-2z"></path></svg>',
+
+                workflowSteps: [
+                    "provisioned",
+                    "flashed",
+                    "network-configured",
+                    "orchestration-started"
                 ],
 
-                canvas:false
+                currentStep: -2,   //If -2, process has not started yet; -1: process started, waiting for notifications
+                taskFailed: false
+            }
+        },
+
+        watch: {
+            currentStep: function (newQuestion, oldQuestion) {
+                if (thisComponent.currentStep == -1) {
+                    thisComponent.sidebarUpdate("progress-bar", true);
+                } else if (thisComponent.currentStep == 3) {
+                    thisComponent.sidebarUpdate("progress-bar", false);
+                    thisComponent.sidebarUpdate("graphs", true);
+                }
             }
         },
 
         methods: {
+            fetch(param) {
+                axios.get('/api/general/' + param)
+                    .then(function (response) {
+                        thisComponent[param] = response.data;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+                    .then(function() {
+                        if (thisComponent.scenarios.length > 0 && thisComponent.testbeds.length > 0 && thisComponent.experimentId !== undefined) {
+                            thisComponent.fetchConfiguration();
+                        }
+                    });
+            },
+
+            getParamIndex(arrayName, identifier) {
+                let returnIndex = -1;
+
+                thisComponent[arrayName].forEach(function(element, index) {
+                    if (element.identifier === identifier) {
+                        returnIndex = index;
+                    }
+                });
+
+                return returnIndex;
+            },
+
+            fetchConfiguration() {
+                axios.get('/api/experiment/' + thisComponent.experimentId)
+                    .then(function (response) {
+                            if (response.data.length > 0) {
+                                let experiment = response.data[0];
+                                
+                                thisComponent.scenarioSelected = thisComponent.getParamIndex('scenarios', experiment.scenario);
+                                thisComponent.testbedSelected  = thisComponent.getParamIndex('testbeds', experiment.testbed);
+
+                                thisComponent.fetchNodes();
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        })
+            },
+
+            fetchNodes() {
+                if (this.scenarioSelected != -1 && this.testbedSelected != -1) {
+
+                    let scenario = this.scenarios[this.scenarioSelected].identifier;
+                    let testbed  = this.testbeds[this.testbedSelected].identifier;
+
+                    axios.get('/api/general/nodes/' + scenario + '/' + testbed)
+                        .then(function (response) {
+                            let data = response.data;
+                            data['nodes'].forEach(function(element) {
+                                if (['area-controller', 'zone-controller', 'control-unit', 'gateway'].includes(element.role))
+                                    element.svgSym = thisComponent.gatewayIcon;
+                            });
+                            thisComponent.value = data;
+                            thisComponent.$eventHub.$emit('NODES_FETCHED', data);
+                        })
+                        .catch(function (error) {
+                            console.log("Error: " + error);
+                        });  
+                }
+            },
+
+            selectNode(event, nodeObject) {
+                this.value.nodes.forEach(function(element) {
+                    if (element === nodeObject) {
+                        thisComponent.selectedNode = element;
+                        element._cssClass += " selected";
+                    } else {
+                        element._cssClass = element.defaultCssClass;
+                    }
+                });
+                nodeObject._cssClass += " selected";
+            },
+
             scrollContent() {
                 this.$eventHub.$emit('SCROLL', 'graphs');
             },
 
             selectScenario(ind) {
                 this.scenarioSelected = ind;
-                this.value = this.multiselectOptions[this.scenarioSelected];
+                this.fetchNodes();
             },
             selectTestbed(ind) {
                 this.testbedSelected = ind;
+                this.fetchNodes();
             },
 
             processStart() {
-                axios.get('/api/start-exp')
+                this.currentStep = -1
+                let scenario = this.scenarios[this.scenarioSelected].identifier
+                let testbed  = this.testbeds[this.testbedSelected].identifier
+                
+                //Currently, simulator is hardcoded to 'true', and 'firmware' is omitted
+                axios.get('/api/start-exp/' + scenario + '/' + testbed + '/false') 
                     .then(function (response) {
                         // handle success
                         console.log(response);
                     })
                     .catch(function (error) {
                         // handle error
-                        console.log("Error: " + error);
+                        console.log(error);
                     })
-                    .then(function () {
-                        // always executed
-                    });
 
-                this.processStarted = true;
-
-                let nodes = this.value['nodes'];
-                let num = nodes.length;
-
-                for (let i=0; i<num; i++) {
-                    nodes[i]['_cssClass'] = 'node-loading';
-                }
+                axios.post('/api/store', {
+                        scenario         : scenario,
+                        testbed          : testbed
+                    }) 
+                    .then(function (response) {
+                        // handle success
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        console.log(error);
+                    })
             },
             processTerminate() {
-                axios.get('/api/terminate-exp')
+                axios.get('/api/exp-terminate')
                     .then(function (response) {
                         // handle success
                         console.log(response);
@@ -338,42 +319,47 @@
 
             },
 
-            /*simulateExpStartup() {
-                console.log("Simulation started");
-                this.stepsCompleted++;
-
-                let nodeNum = thisComponent.value.nodes.length;
-                for (let i=0; i<nodeNum; i++) {
-                    thisComponent.value.nodes[i]._cssClass = 'node-loading';
-                }
-
-                let sim = setInterval(function() {
-                    thisComponent.stepsCompleted++;
-                    console.log("Steps completed: " + thisComponent.stepsCompleted);
-
-                    if (thisComponent.stepsCompleted === 4) {
-                        clearInterval(sim);
-
-                        let nodeNum = thisComponent.value.nodes.length;
-
-                        for (let i=0; i<nodeNum; i++) {
-                            thisComponent.sleep(1000*(i+1)).then(() => {
-                                    thisComponent.value.nodes[i]._cssClass = 'node-on';
-
-                                if (i === nodeNum-1)
-                                    thisComponent.sleep(500).then(() => {
-                                        thisComponent.stepsCompleted++;
-                                    });
-                            });
-                        }
+            /*** MQTT Configuration ***/
+            subscribe() {
+                let interval = setInterval( function() {
+                    if (thisComponent.$mqttClient.subscribe() !== "") {
+                        console.log("Retrying subscription in 1s...") 
+                    } else {
+                        clearInterval(interval)
                     }
-
-                }, 2000);
+                }, 1000);  
             },
 
-            sleep(time) {
-                return new Promise(resolve => setTimeout(resolve, time));
-            }*/
+            parseMqttEvent(payload) {
+                let payloadObj = JSON.parse(payload)
+                let type    = payloadObj["type"]
+                let step    = payloadObj["content"]["step"]
+                let success = payloadObj["content"]["success"]
+
+                if (type == "notification" && success) {
+                    this.currentStep = this.workflowSteps.indexOf(step)
+                    if (this.currentStep == 3) {
+                        this.sidebarUpdate("progress-bar", false)
+                        this.sidebarUpdate("graphs", true)
+                    }
+
+                } else if (type == "notification" && !success) {
+                    this.currentStep = -1
+                    this.taskFailed = true
+                }
+
+                console.log(this.currentStep);
+            },
+
+
+            /*** Sidebar manipulation ***/
+            sidebarUpdate(element, show) {
+                thisComponent.$eventHub.$emit('SIDEBAR', {
+                    'element': element,
+                    'show': show
+                });
+            }
+
         },
 
         computed:{
@@ -381,23 +367,15 @@
                 let nodeSize;
                 let force;
 
-                if (this.value.name === "Demo") {
-                    nodeSize = 35;
-                    force = 3000;
-                } else if (this.value.name === "Smart office") {
-                    nodeSize = 25;
-                    force = 1000;
-                } else {
-                    nodeSize = 25;
-                    force = 500;
-                }
+                nodeSize = 35;
+                force = 1500;
 
-                return{
+                return {
                     force: force,
-                    size: {w:600, h:450},
+                    size: {w:600, h:550},
                     nodeSize: nodeSize,
                     nodeLabels: true,
-                    canvas: this.canvas
+                    canvas: false
                 }
             },
 
@@ -441,6 +419,19 @@
         },
 
         mounted() {
+            this.fetch('scenarios');
+            this.fetch('testbeds');
+
+            this.subscribe();
+
+            this.$eventHub.$on("MQTT", payload => {
+                thisComponent.parseMqttEvent(payload);
+            });
+
+            this.$eventHub.$on("SHOW_MODAL", payload => {
+                this.$modal.show(payload)
+            });
+
             this.$eventHub.$on("RESERVATION_SUCCESS", payload => {
                 thisComponent.nodesReserved = true
             });
@@ -459,30 +450,6 @@
                 thisComponent.markNode(payload, 'failed', true);
             });
 
-            this.$eventHub.$on("LOG_MODIFICATION", payload => {
-                thisComponent.dataFlowStarted = true;
-
-                thisComponent.selectScenario(0);
-                let nodes = thisComponent.value['nodes'];
-                let num = nodes.length;
-
-                for (let i=0; i<num; i++) {
-                    nodes[i]['_cssClass'] = 'node-on';
-                }
-            });
-
-            this.$eventHub.$on("EXP_TERMINATE", payload => {
-                this.processStarted = false;
-                this.nodesReserved = false;
-                this.dataFlowStarted = false;
-
-                let nodes = this.value['nodes'];
-                let num = nodes.length;
-
-                for (let i=0; i<num; i++) {
-                    nodes[i]['_cssClass'] = 'node-off';
-                }
-            });
         }
     }
 </script>
@@ -493,7 +460,8 @@
 <style scoped>
     .parent {
         height: 100vh;
-        padding: 25px;
+        padding-left: 25px;
+        padding-right: 25px;
     }
 
     .scenario {
@@ -516,6 +484,10 @@
     .testbed:not(.testbed-selected) {
         filter: grayscale(100%) opacity(0.3);
     }
+
+    .node-property {
+        margin-bottom: 5px;
+    }
 </style>
 
 <style>
@@ -530,6 +502,43 @@
         50% {fill: rgba(200, 200, 200, .3);}
         100% {fill: rgba(200, 200, 200, .7);}
     }
+
+    /***** Role-related classes *****/
+    .node {
+        stroke-width: 3px;
+    }
+    .node:hover, .selected {
+        stroke: rgb(220, 146, 2);
+        fill: rgba(255, 197, 117) !important;
+        width: rgb(255, 180, 4);
+        stroke-width: 4px;
+    }
+    .monitoring-sensor {
+        stroke: rgb(75, 113, 147);
+        fill: rgb(219, 226, 233);
+    }
+    .event-sensor {
+        stroke: rgb(75, 113, 147);
+        fill: rgb(129, 155, 179);
+    }
+    .actuator {
+        stroke: rgb(75, 113, 147);
+        fill: rgb(200, 200, 200);
+    }
+    .area-controller, .control-unit, .zone-controller, .gateway {
+        stroke: rgb(75, 113, 147);
+        fill: rgb(219, 226, 233);
+        stroke-width: 2px;
+    }
+    .sensor {
+        stroke: rgb(75, 113, 147);
+        fill: rgb(219, 226, 233);
+    }
+    .bursty-sensor {
+        stroke: rgb(75, 113, 147);
+        fill: rgb(129, 155, 179);
+    }
+    /****/
 
     .node-off {
         stroke: rgba(100, 100, 100, .7);
