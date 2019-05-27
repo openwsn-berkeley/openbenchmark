@@ -1138,6 +1138,31 @@ Response:
 ```         
 <!-- ====================================================================== -->
 
+# Experiment Provisioner
+
+Experiment Provisioner is a part of the Python core which communicates with the testbed, provisions the resources, and triggers the Experiment Orchestrator and SUT. All the calls of the RESTful API (which are used by the GUI as well), infact, trigger one of the actions of the Experiment Provisioner. Experiment Provisioner may be started manually from the console, by invoking the entry point Python script in its directory (`python ~/openbenchmark/experiment-provisioner/main.py`) with the following parameters:
+
+Parameter name    | Type    | Choices                                                                    | Required  | Default  
+----------------- | --------| ---------------------------------------------------------------------------| ----------| --------
+--action          | string  | check, reserve, terminate, otbox-flash, ov-start                           | true      | -
+--scenario        | string  | demo-scenario, building-automation, home-automation, industrial-monitoring | false     | demo-scenario
+--testbed         | string  | iotlab, wilab                                                              | false     | iotlab
+--firmware        | string  | - 																		 | false     | 03oos_openwsn_prog
+--user-id         | string  | -																			 | true      | -
+--simulator       | boolean | -																			 | false     | false
+
+
+Parameter name    | Description
+----------------- | ----------------------------------------------------------------------------------------------------------------------
+--action          | Type of action the provisioner needs to perform: experiment check, resource reservation, experiment termination, firmware flashing (via OTBox), SUT and Orchestrator startup
+--scenario        | Selected scenario
+--testbed         | Selected testbed
+--firmware        | Selected firmware
+--user-id         | OpenBenchmark user account ID (since the work on OpenBenchmark user management is still in progress, any generic ID may be used for now)
+--simulator       | Indicates whether the provisioner should start the SUT or simulate its events
+
+<!-- ====================================================================== -->
+
 # Test Scenario Implementation
 
 A test scenario is defined in a JSON config file.
