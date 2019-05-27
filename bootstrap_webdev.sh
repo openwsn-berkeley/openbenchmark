@@ -52,9 +52,11 @@ composer global require "laravel/installer"
 composer create-project --prefer-dist laravel/laravel temp "5.6.*"
 cd temp
 
-sudo cp $OPENBENCHMARK_DIR/system-config/.env $OPENBENCHMARK_DIR/web/.env
-sudo dos2unix $OPENBENCHMARK_DIR/web/.env
+sudo cp $OPENBENCHMARK_DIR/system-config/.env $OPENBENCHMARK_DIR/temp/.env
+sudo dos2unix $OPENBENCHMARK_DIR/temp/.env
+sudo chown -R $USER:$USER $OPENBENCHMARK_DIR/temp/.env
 
+cd $OPENBENCHMARK_DIR/temp
 php artisan key:generate
 
 # Node.js and NPM
