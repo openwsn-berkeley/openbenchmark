@@ -29,21 +29,27 @@ OpenWSN
 vagrant up
 ```
 
-2. SSH into the server and run bootstrap.sh script:
+2. SSH into the server and run `bootstrap.sh` script:
 ```
 vagrant ssh
 ./openbenchmark/bootstrap.sh
 ```
 
-3. Upon the completion of the process, you will be given a public SSH key which is to be copied and pasted in your IoT-LAB account configuration
+3. Upon the completion of the process, you will be given a public SSH key which is to be copied and pasted into your IoT-LAB account configuration
 
-4. Write your IoT-LAB username into the experiment config file (../iotlab-exp-auto/conf.txt)
+4. Run `bootstrap_webdev.sh` script:
 ```
-[exp-config]
+./openbenchmark/bootstrap_webdev.sh -mysql
+```
+
+4. Write your IoT-LAB username into the experiment configuration file: `~/openbenchmark/experiment-provisioner/conf.txt`
+```
+[iotlab-config]
 user = YOUR_USER_NAME
+broker = broker.mqttdashboard.com
 ```
 
-5. Open a web browser and go to 127.0.0.1:8081
+5. To start the GUI, open a web browser and go to `127.0.0.1:8081`. To start an experiment from the console, SSH into the server and refer to the documentation given with the OpenBenchmark platform: `127.0.0.1:8081/docs`
 
 
 ## Development
@@ -56,8 +62,6 @@ vagrant rsync-auto
 2. Run Laravel Mix on the guest machine:
 ```
 vagrant ssh
-cd openbenchmark
+cd ~/openbenchmark/web
 npm run watch
 ```
-
-
