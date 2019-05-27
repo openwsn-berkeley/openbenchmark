@@ -49,7 +49,7 @@ user = YOUR_USER_NAME
 broker = broker.mqttdashboard.com
 ```
 
-5. To start the GUI, open a web browser and go to `127.0.0.1:8081`. To start an experiment from the console, SSH into the server and refer to the documentation given with the OpenBenchmark platform: `127.0.0.1:8081/docs`
+5. To start the GUI, open a web browser and go to `127.0.0.1:8081`. To start an experiment from the console, SSH into the server and refer to the documentation given with the OpenBenchmark platform: `http://127.0.0.1:8081/docs/#experiment-provisioner`
 
 
 ## Development
