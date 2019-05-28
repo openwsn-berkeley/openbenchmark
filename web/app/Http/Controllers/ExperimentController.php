@@ -8,10 +8,13 @@ use ConfigParser;
 use App\Classes\ErrorResponse;
 use App\Experiment;
 use App\Classes\SuccessResponse;
+use Exception;
 
 
 class ExperimentController extends Controller
 {
+
+    const FILE_DESTINATION = "/home/vagrant/openbenchmark/experiment-provisioner/firmware";
 
     function __construct() {
         $this->config_parser   = new ConfigParser();
@@ -32,10 +35,25 @@ class ExperimentController extends Controller
         $this->cmd_handler->start_ov($this->user_id, $scenario, $testbed, ($simulator == "true"), false);
     }
 
-    function upload() {
-        return response()->json([
-            'status' => 'success'
-        ]);
+    function upload(Request $request) {
+        try {
+            $file = $request->file("file");
+            $new_filename = $this->create_random(10);
+
+            if ($file != null) {
+                $file->move(self::FILE_DESTINATION, $new_filename);
+
+                return SuccessResponse::response(200, [
+                    "action" => "firmware-upload",
+                    "name"   => $new_filename,
+                ]);
+            } else {
+                throw new Exception("Error uploading the file");
+            }
+
+        } catch (Exception $e) {
+            return ErrorResponse::response(500, $e->getMessage());
+        }
     }
 
 

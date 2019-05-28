@@ -140,7 +140,9 @@
                 ],
 
                 currentStep: -2,   //If -2, process has not started yet; -1: process started, waiting for notifications
-                taskFailed: false
+                taskFailed: false,
+
+                firmware: ""
             }
         },
 
@@ -248,19 +250,26 @@
             },
 
             processStart() {
-                this.currentStep = -1
                 let scenario = this.scenarios[this.scenarioSelected].identifier
                 let testbed  = this.testbeds[this.testbedSelected].identifier
                 
-                //Currently, simulator is hardcoded to 'true', and 'firmware' is omitted
-                axios.get('/api/start-exp/' + scenario + '/' + testbed + '/false') 
+                let route = '/api/start-exp/' + scenario + '/' + testbed + '/false'
+
+                if (this.firmware && this.firmware !== "") {
+                    route += '/' + this.firmware
+                }
+
+                thisComponent.currentStep = -1
+
+                axios.get(route) 
                     .then(function (response) {
                         // handle success
-                        console.log(response);
+                        console.log(response)
                     })
                     .catch(function (error) {
                         // handle error
-                        console.log(error);
+                        console.log(error)
+                        thisComponent.currentStep = -2
                     })
 
                 axios.post('/api/store', {
@@ -450,6 +459,14 @@
                 thisComponent.markNode(payload, 'failed', true);
             });
 
+            this.$eventHub.$on("FIRMWARE_UPLOADED", payload => {
+                if (payload.http_code == 200) {
+                    thisComponent.firmware = payload.message.name
+                    console.log("Firmware successfully uploaded: " + thisComponent.firmware);
+                } else {
+                    console.log("Error uploading firmware. Will revert to default OpenWSN");
+                }
+            });
         }
     }
 </script>
