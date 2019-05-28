@@ -78,19 +78,44 @@
             },
             inputFile(newFile, oldFile) {
                 if (newFile && !oldFile) {
-                    // add
-                    console.log('add', newFile)
+                    this.processResponse(newFile)
+                    console.log('add')
                 }
                 if (newFile && oldFile) {
-                    // update
-                    console.log('update', newFile)
+                    this.processResponse(newFile)
+                    console.log('update')
                 }
                 if (!newFile && oldFile) {
                     // remove
-                    console.log('remove', oldFile)
+                    console.log('remove')
+                }
+            },
+
+            processResponse(newFile) {
+                if (newFile.xhr && newFile.xhr.status > 0) {
+                    this.$eventHub.$emit('FIRMWARE_UPLOADED', newFile.response)
+                } else {
+                    console.log('Firmware upload failed')
                 }
             }
+        },
+
+        filters: {
+            formatSize(size) {
+                if (size > 1024 * 1024 * 1024 * 1024) {
+                    return (size / 1024 / 1024 / 1024 / 1024).toFixed(2) + ' TB'
+                } else if (size > 1024 * 1024 * 1024) {
+                    return (size / 1024 / 1024 / 1024).toFixed(2) + ' GB'
+                } else if (size > 1024 * 1024) {
+                    return (size / 1024 / 1024).toFixed(2) + ' MB'
+                } else if (size > 1024) {
+                    return (size / 1024).toFixed(2) + ' KB'
+                }
+                
+                return size.toString() + ' B'
+            }
         }
+
     }
 </script>
 
