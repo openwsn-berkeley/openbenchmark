@@ -20,14 +20,15 @@ sudo apt-get install unzip
 cd $JFED_DIR
 if [ ! -f "$JVM_DIR/jdk-12.0.1" ]; then
 	wget https://cdn.azul.com/zulu/bin/zulu12.2.3-ca-jdk12.0.1-linux_x64.tar.gz
-	sudo tar xfz zulu12.2.3-ca-jdk12.0.1-linux_x64.tar.gz --directory /usr/lib/jvm
+	sudo tar xfz zulu12.2.3-ca-jdk12.0.1-linux_x64.tar.gz --directory $JVM_DIR
 	rm zulu12.2.3-ca-jdk12.0.1-linux_x64.tar.gz
-	sudo mv $JVM_DIR/zulu12.2.3-ca-jdk12.0.1-linux_x64 $JVM_DIR/jdk12.0.1
+	sudo mv $JVM_DIR/zulu12.2.3-ca-jdk12.0.1-linux_x64 $JVM_DIR/jdk-12.0.1
 fi
 if [ ! -f "$JVM_DIR/javafx-sdk-11.0.2" ]; then
 	wget -O openjfx-11.0.2_linux-x64_bin-sdk.zip http://gluonhq.com/download/javafx-11-0-2-sdk-linux/
 	sudo unzip openjfx-11.0.2_linux-x64_bin-sdk.zip -d /usr/lib/jvm
 	rm openjfx-11.0.2_linux-x64_bin-sdk.zip
+	sudo mv $JVM_DIR/zulu12.2.3-ca-jdk12.0.1-linux_x64 $JVM_DIR/javafx-sdk-11.0.2
 fi
 
 # Install xvfb and xrandr
