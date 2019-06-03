@@ -15,11 +15,18 @@
     flex-wrap: wrap;
 }
 
-.v-center {
+.h-center {
     align-items: center;
 }
-.h-center {
+.v-center {
     justify-content: center;
+}
+
+.align-left {
+    align-self: flex-start;
+}
+.align-right {
+    align-self: flex-end;
 }
 
 .col .col-1 {
