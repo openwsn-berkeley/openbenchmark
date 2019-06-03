@@ -60,10 +60,10 @@ Object.defineProperty(Number.prototype, "pad", {
  */
 
 const router = new VueRouter({
-    routes
+    routes,
+    mode: 'history'
 });
 
 const app = new Vue({
-    el: '#app',
-    router: router
-});
+    router
+}).$mount('#app');
