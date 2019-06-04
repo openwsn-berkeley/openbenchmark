@@ -34,15 +34,6 @@ fi
 sudo apt-get install xvfb -y
 sudo apt-get install x11-xserver-utils -y
 
-# jFED installation
-sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0xB1998361219BD9C9
-sudo apt-add-repository 'deb http://repos.azulsystems.com/ubuntu stable main'
-
-sudo apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv-keys E7F4995E
-echo "deb http://jfed.ilabt.imec.be/deb-repo stable main" | sudo tee /etc/apt/sources.list.d/jfed.list
-sudo apt-get update
-sudo apt-get -y install jfed 
-
 # jFED CLI tools download
 cd $JFED_DIR
 wget https://jfed.ilabt.imec.be/releases/develop/190206-192/jar/jfed_cli.tar.gz
