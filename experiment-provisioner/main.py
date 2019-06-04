@@ -147,7 +147,7 @@ class Wilab(Controller):
 
 		self._rspec_update()
 
-		self.reservation = WilabReservation(self.JFED_DIR, self.RUN, self.DELETE, self.DISPLAY)
+		self.reservation = WilabReservation(user_id, self.JFED_DIR, self.RUN, self.DELETE, self.DISPLAY)
 
 	def add_files_from_env(self):
 		if self.CERTIFICATE_B64 != "":
