@@ -3,6 +3,10 @@ import ConfigParser
 import os
 import base64
 import json
+import yaml
+import string
+import random
+import subprocess
 
 from lxml import etree
 from abc import abstractmethod
@@ -145,9 +149,13 @@ class Wilab(Controller):
 		self.FIRMWARE = os.path.join(os.path.dirname(__file__), 'firmware')
 		self.BROKER = self.configParser.get(self.CONFIG_SECTION, 'broker')
 
-		self._rspec_update()
+		self.EXP_DURATION = 30
 
-		self.reservation = WilabReservation(self.JFED_DIR, self.RUN, self.DELETE, self.DISPLAY)
+		self._rspec_update()
+		self._set_broker()
+		self._update_yml_files()
+
+		self.reservation = WilabReservation(user_id, self.JFED_DIR, self.RUN, self.DELETE, self.DISPLAY)
 
 	def add_files_from_env(self):
 		if self.CERTIFICATE_B64 != "":
@@ -231,7 +239,42 @@ class Wilab(Controller):
 
 		return nucs
 
+	def _set_broker(self):
+		otbox_conf_file = os.path.join(self.JFED_DIR, "opentestbed", "deployment", "sensor", "sensor-supervisord.conf.j2")
+		content = "[program:otbox]\ncommand     = /usr/local/bin/opentestbed -v\nenvironment = OTB_TESTBED='wilab', OTB_BROKER='{0}'\nautostart   = true\nautorestart = true\ndirectory = /tmp".format(self.BROKER)
 
+		with open(otbox_conf_file, 'w') as f:
+			f.write(content)
+
+	def _update_yml_files(self):
+		start_exp_yml = os.path.join(self.JFED_DIR, "start_experiment.yml")
+		stop_exp_yml  = os.path.join(self.JFED_DIR, "stop_experiment.yml")
+
+		slice_name = "bench{0}".format(self._get_random_string())
+		yml_conf = None
+
+		with open(start_exp_yml, 'r') as f:
+			yml_conf = yaml.load(f, Loader=yaml.FullLoader)
+			yml_conf['experiment']['slice']['sliceName'] = slice_name
+			yml_conf['experiment']['slice']['expireTimeMin'] = 30
+
+		with open(start_exp_yml, 'w') as f:
+			yaml.dump(yml_conf, f)
+
+		with open(stop_exp_yml, 'r') as f:
+			yml_conf = yaml.load(f, Loader=yaml.FullLoader)
+			yml_conf['slice']['sliceName'] = slice_name
+
+		with open(stop_exp_yml, 'w') as f:
+			yaml.dump(yml_conf, f)
+
+		subprocess.call('dos2unix *.yml', cwd=self.JFED_DIR, shell=True)
+		subprocess.call('dos2unix *.sh', cwd=self.JFED_DIR, shell=True)		
+
+
+	def _get_random_string(self, string_length = 5):
+		letters = string.ascii_uppercase
+		return ''.join(random.choice(letters) for i in range(string_length))
 
 
 

@@ -160,8 +160,8 @@ class IoTLABReservation(Reservation):
 
 class WilabReservation(Reservation):
 
-    def __init__(self, jfed_dir, run, delete, display):
-        self.mqtt_client = MQTTClient.create("wilab")
+    def __init__(self, user_id, jfed_dir, run, delete, display):
+        self.mqtt_client = MQTTClient.create("wilab", user_id)
         
         self.jfed_dir = jfed_dir
         self.actions = {

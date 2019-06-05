@@ -29,7 +29,7 @@ shareWith:
   projectMembers: false
   users: []
 user:
-  password: *****
+  password: YOUR_PASSWORD
   passwordMethod: DIRECT
   pem:
   - login.pem

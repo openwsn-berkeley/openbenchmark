@@ -11,7 +11,7 @@ slice:
   renewExistingSliceIfNeeded: false 
   sliceName: bench00                
 user:                               
-  password: *****                   
+  password: YOUR_PASSWORD                   
   passwordMethod: DIRECT            
   pem:                              
   - login.pem                       
