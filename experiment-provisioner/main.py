@@ -146,6 +146,7 @@ class Wilab(Controller):
 		self.BROKER = self.configParser.get(self.CONFIG_SECTION, 'broker')
 
 		self._rspec_update()
+		self._set_broker()
 
 		self.reservation = WilabReservation(user_id, self.JFED_DIR, self.RUN, self.DELETE, self.DISPLAY)
 
@@ -231,7 +232,12 @@ class Wilab(Controller):
 
 		return nucs
 
+	def _set_broker(self):
+		otbox_conf_file = os.path.join(self.JFED_DIR, "opentestbed", "deployment", "sensor", "sensor-supervisord.conf.j2")
+		content = "[program:otbox]\ncommand     = /usr/local/bin/opentestbed -v\nenvironment = OTB_TESTBED='wilab', OTB_BROKER='{0}'\nautostart   = true\nautorestart = true\ndirectory = /tmp".format(self.BROKER)
 
+		with open(otbox_conf_file, 'w') as f:
+			f.write(content)
 
 
 
