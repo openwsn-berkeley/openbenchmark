@@ -268,6 +268,10 @@ class Wilab(Controller):
 		with open(stop_exp_yml, 'w') as f:
 			yaml.dump(yml_conf, f)
 
+		subprocess.call('dos2unix *.yml', cwd=self.JFED_DIR, shell=True)
+		subprocess.call('dos2unix *.sh', cwd=self.JFED_DIR, shell=True)		
+
+
 	def _get_random_string(self, string_length = 5):
 		letters = string.ascii_uppercase
 		return ''.join(random.choice(letters) for i in range(string_length))
