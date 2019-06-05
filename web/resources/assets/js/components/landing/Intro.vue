@@ -18,7 +18,7 @@
             <img class="logo-sm" style="position: absolute; left: 50%; transform:translateX(-50%)" src="images/ucg.png">
             <img class="logo" style="position: absolute; right: 0" src="https://fed4fire.eu/wp-content/uploads/sites/10/2017/01/fed4fire_logo_extended.png">
         </div>
-        <div class="scroll-down row h-center mt-3" @click="scrollContent">
+        <div class="scroll-down row v-center mt-3" @click="scrollContent">
             <arrow></arrow>
         </div>
     </div>
