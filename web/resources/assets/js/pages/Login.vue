@@ -1,7 +1,6 @@
 <template>
     <div class="parent col-direction v-center h-center">
-        <img src="images/bgd.jpg" style="position: fixed; width: 100vw; top: 0; left: 0;"/>
-        <div class="card col-direction h-center pl-5 pr-5 pb-4">
+        <div class="card shadow col-direction h-center pl-5 pr-5 pb-4">
             <img class="title-image" src="/images/6tisch_no_text.png">
             <span class="title bold">OpenBenchmark</span>
             <span class="bold align-left mt-2">Username</span>
@@ -69,6 +68,7 @@
     .parent {
         width: 100%;
         height: 100vh;
+        background-image: linear-gradient(#0e315d, #7dbdda);
     }
 
     .card {
