@@ -176,10 +176,14 @@ class WilabReservation(Reservation):
                                 stderr=subprocess.PIPE, stdout=subprocess.PIPE)
 
         for line in iter(pipe.stdout.readline, b''):
-            print(">>> " + line.rstrip())
+            output = line.rstrip()
+            print(">>> " + output)
+            self.mqtt_client.push_debug_log('WILAB_PROVISIONING', output)
 
         for line in iter(pipe.stderr.readline, b''):
-            print(">>> " + line.rstrip())
+            output = line.rstrip()
+            print(">>> " + output)
+            self.mqtt_client.push_debug_log('WILAB_PROVISIONING', output)
 
     def _start_display(self):
         pipe = subprocess.Popen(['xrandr', '-d', ':99'], stdin=subprocess.PIPE, stderr=subprocess.PIPE,
