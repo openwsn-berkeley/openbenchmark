@@ -197,10 +197,15 @@ class WilabReservation(Reservation):
 
     def reserve_experiment(self):
         self.run_yml_action(action="run")
+        if self.check_experiment():
+            print("w-iLab.t provisioning successful")
+            self.mqtt_client.push_notification("provisioned", True)
+        else
+            print("w-iLab.t provisioning failed")
+            self.mqtt_client.push_notification("provisioned", False)
 
     def check_experiment(self):
-        # TO-DO
-        pass
+        return self.mqtt_client.check_data_stream()
 
     def terminate_experiment(self):
         self.run_yml_action(action="delete")
