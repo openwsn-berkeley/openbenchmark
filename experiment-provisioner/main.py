@@ -52,7 +52,6 @@ class Controller(object):
 		)
 		parser.add_argument('--firmware', 
 	        dest       = 'firmware',
-	        default    = '03oos_openwsn_prog',
 	        action     = 'store'
 		)
 		parser.add_argument('--scenario', 
@@ -67,12 +66,16 @@ class Controller(object):
 		self.add_parser_args(parser)
 		args = parser.parse_args()
 
+		args_firmware = '03oos_openwsn_prog_{0}'.format(args.testbed)
+		if args.firmware is not None:
+			args_firmware = args.firmware
+
 		return {
 			'user_id'   : args.user_id,
 			'simulator' : args.simulator,
 			'action'    : args.action,
 			'testbed'   : args.testbed,
-			'firmware'  : args.firmware,
+			'firmware'  : args_firmware,
 			'scenario'  : args.scenario
 		}
 
