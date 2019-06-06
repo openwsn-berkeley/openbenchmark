@@ -200,7 +200,7 @@ class WilabReservation(Reservation):
         if self.check_experiment():
             print("w-iLab.t provisioning successful")
             self.mqtt_client.push_notification("provisioned", True)
-        else
+        else:
             print("w-iLab.t provisioning failed")
             self.mqtt_client.push_notification("provisioned", False)
 
@@ -209,3 +209,4 @@ class WilabReservation(Reservation):
 
     def terminate_experiment(self):
         self.run_yml_action(action="delete")
+        self.mqtt_client.push_notification("terminated", True)
