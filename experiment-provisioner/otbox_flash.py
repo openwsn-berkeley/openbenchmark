@@ -33,8 +33,8 @@ class OTBoxFlash:
 					'description': ''
 				}
 
-				print("Sending firmware to motes")
-				self.mqtt_client.push_debug_log('FW_FLASHING', "Sending firmware to motes")
+				print("Sending {0} firmware to motes".format(self.firmware_path))
+				self.mqtt_client.push_debug_log('FW_FLASHING', "Sending {0} firmware to motes".format(self.firmware_path))
 				self.client.publish('{0}/deviceType/mote/deviceId/all/cmd/program'.format(self.testbed), json.dumps(payload))
 				self.mqtt_client.push_notification("flashed", True)
 
