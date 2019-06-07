@@ -23,6 +23,8 @@
                        threshold
                    }
             }"></graphs>
+
+            <bottom-sheet></bottom-sheet>
         </div>
     </div>
 </template>
@@ -33,6 +35,7 @@
     import Scenarios from './../components/landing/Scenarios.vue'
     import Graphs from './../components/landing/Graphs.vue'
     import Sidebar from './../components/reusables/Sidebar.vue'
+    import BottomSheet from './../components/reusables/BottomSheet.vue'
 
     let thisComponent;
     let socketConnected = false;
@@ -45,7 +48,8 @@
             Intro,
             Scenarios,
             Graphs,
-            Sidebar
+            Sidebar,
+            BottomSheet
         },
 
         data: function () {
