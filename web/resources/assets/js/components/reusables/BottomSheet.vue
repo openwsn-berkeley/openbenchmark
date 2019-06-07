@@ -75,8 +75,8 @@
 	.collapsed {
 		width: 40px;
 		height: 40px;
-		margin-right: 10px;
-		margin-bottom: 10px;
+		right: 10px;
+		bottom: 10px;
 		border-radius: 50%;
 		background: #0e305d;
 		cursor: pointer;
@@ -96,5 +96,13 @@
 		position: absolute;
 		top: 13px;
 		left: 33px;
+	}
+
+	.dialog-content {
+		position: absolute;
+		top: 40px;
+		left: 0;
+		width: 100%;
+		height: calc(100% - 40px);
 	}
 </style>
