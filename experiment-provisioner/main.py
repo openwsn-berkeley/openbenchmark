@@ -29,6 +29,11 @@ class Controller(object):
 		self.configParser.read(self.configFilePath)
 
 	def add_parser_args(self, parser):
+		self.default_fws = {
+			"iotlab": "03oos_openwsn_prog_iotlab",
+			"wilab" : "03oos_openwsn_prog_wilab.ihex"
+		}
+
 		parser.add_argument('--user-id',   # User ID is tied to the OpenBenchmark account
 	        dest       = 'user_id',
 	        required   = True,
@@ -67,16 +72,12 @@ class Controller(object):
 		self.add_parser_args(parser)
 		args = parser.parse_args()
 
-		args_firmware = '03oos_openwsn_prog_{0}'.format(args.testbed)
-		if args.firmware is not None:
-			args_firmware = args.firmware
-
 		return {
 			'user_id'   : args.user_id,
 			'simulator' : args.simulator,
 			'action'    : args.action,
 			'testbed'   : args.testbed,
-			'firmware'  : args_firmware,
+			'firmware'  : args.firmware,
 			'scenario'  : args.scenario
 		}
 
@@ -299,7 +300,10 @@ def main():
 	scenario  = args['scenario']
 
 	testbed  = TESTBEDS[testbed](user_id, scenario)
-	firmware = '{0}/{1}'.format(testbed.FIRMWARE, args['firmware'])
+
+	default_fw = controller.default_fws[args['testbed']]
+	fw = default_fw if (args['firmware'] is None) else args['firmware']
+	firmware = '{0}/{1}'.format(testbed.FIRMWARE, fw)
 
 	print 'Script started'
 	
