@@ -4,12 +4,21 @@
 			<i id="terminal" class="fas fa-terminal" v-if="collapsed"></i>
 			<i id="close" class="fas fa-times" v-if="!collapsed" @click="action($event)"></i>
 			<span class="dialog-title" v-if="!collapsed">Debug output: </span>
+			<div class="dialog-content">
+				<debug-window class="debug-window" v-if="!collapsed"></debug-window>
+			</div>
 		</div>
 	</div>
 </template>
 
 <script>
+	import DebugWindow from './../landing/DebugWindow.vue';
+
 	export default {
+		components: {
+			DebugWindow
+		},
+
 		data: function() {
 			return {
 				collapsed: true
