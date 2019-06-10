@@ -433,7 +433,7 @@
 
             this.subscribe();
 
-            this.$eventHub.$on("MQTT", payload => {
+            this.$eventHub.$on("openbenchmark/1/notifications", payload => {
                 thisComponent.parseMqttEvent(payload);
             });
 
