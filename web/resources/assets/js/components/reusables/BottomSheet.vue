@@ -1,6 +1,7 @@
 <template>
 	<div class="top-container" :class="{'black-overlay': !collapsed}">
-		<div id="parent" class="container shadow" :class="{collapsed: collapsed}" @click="action($event)">
+		<div id="parent" class="container shadow" :class="{collapsed: collapsed}" :style="{height: computedHeight}" @click="action($event)">
+			<span class="top-span" draggable="true" @mousedown="startDragging($event)"></span>
 			<i id="terminal" class="fas fa-terminal" v-if="collapsed"></i>
 			<i id="close" class="fas fa-times" v-if="!collapsed" @click="action($event)"></i>
 			<span class="dialog-title" v-if="!collapsed">Debug output: </span>
@@ -21,19 +22,35 @@
 
 		data: function() {
 			return {
-				collapsed: true
+				collapsed: true,
+				height: 350
+			}
+		},
+
+		computed: {
+			computedHeight() {
+				return (this.collapsed ? 40 : this.height) + "px"
 			}
 		},
 
 		methods: {
 			action(event, isCollapsed) {
-				console.log(event)
 				if (this.collapsed)
 					this.collapsed = false
 				else if (event.target.id === "close")
 					this.collapsed = true
 
 				event.stopPropagation()
+			},
+			startDragging(event) {
+				document.addEventListener("mousemove", this.resize, false)
+				document.addEventListener("mouseup", this.stopDragging, false)
+			},
+			resize(event) {
+				this.height = event.clientY
+			},
+			stopDragging(event) {
+				document.removeEventListener("mousemove", this.resize, false)
 			}
 		}
 	}
@@ -48,7 +65,6 @@
 		bottom: 0;
 		right: 0;
 		width: 100vw;
-		height: 50vh;
 		transition: 0.3s ease;
 		z-index: 3;
 		background: white;
@@ -71,10 +87,18 @@
 		color: #0e305d;
 		z-index: 4;
 	}
+	.top-span {
+		position: absolute;
+		top: 0;	
+		width: 100%;
+		height: 5px;
+		background: transparent;
+		cursor: n-resize;
+	}
+
 
 	.collapsed {
 		width: 40px;
-		height: 40px;
 		right: 10px;
 		bottom: 10px;
 		border-radius: 50%;
