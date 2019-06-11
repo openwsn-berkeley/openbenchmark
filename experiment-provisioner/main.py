@@ -19,18 +19,18 @@ from ov_startup import OVStartup
 
 class Controller(object):
 
-	CONFIG_FILE = 'conf.txt'
+	CONFIG_FILE = os.path.join(os.path.dirname(__file__), "..", "conf.txt")
 	SCENARIO_CONFIG = os.path.join(os.path.dirname(__file__), "..", "scenario-config")
 
 	def __init__(self):
 		self.configParser = ConfigParser.RawConfigParser()   
-		self.configFilePath = os.path.join(os.path.dirname(__file__), self.CONFIG_FILE)
-		self.configParser.read(self.configFilePath)
+		self.configParser.read(self.CONFIG_FILE)
 
 	def add_parser_args(self, parser):
 		parser.add_argument('--user-id',   # User ID is tied to the OpenBenchmark account
 	        dest       = 'user_id',
-	        required   = True,
+	        default    = 0,
+                required   = False,
 	        action     = 'store'
 	    )
 		parser.add_argument('--simulator', 

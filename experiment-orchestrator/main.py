@@ -78,7 +78,8 @@ class Main():
 	def _add_parser_args(self, parser):
 		parser.add_argument('--user-id', 
 	        dest       = 'user_id',
-	        required   = True,
+	        default    = 0,            
+	        required   = False,
 	        action     = 'store'
 	    )
 		parser.add_argument('--simulator', 
