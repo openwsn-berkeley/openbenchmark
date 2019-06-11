@@ -29,8 +29,8 @@ class Logger:
 		self.mqtt_client = MQTTClient.create()
 
 		self.logs = {
-			'kpi': os.path.join(os.path.dirname(__file__), 'kpi.log'),
-			'raw': os.path.join(os.path.dirname(__file__), 'raw.log')
+			'kpi': os.path.join(os.path.dirname(__file__), 'kpis', 'kpi_{0}.log'.format(self.experiment_id)),
+			'raw': os.path.join(os.path.dirname(__file__), 'raw', 'raw_{0}.log'.format(self.experiment_id))
 		}
 
 		self.log_header()
