@@ -41,19 +41,21 @@ class LogParser:
 	
 	def _fetch_log_list(self):
 		files = [f for f in os.listdir('.') if os.path.isfile(f) and f != os.path.basename(__file__)]
-		return {
-			"logs": files
-		}
+		return json.dumps({"logs": files})
 
 	def _fetch_log_data(self):
-		return {
-			"data": {}   # Read data from cache
-		}
+		log_file = os.path.join(os.path.dirname(__file__), ".cache", "cached_kpi_{0}.json".format(self.experiment_id))
+
+		if os.path.isfile(log_file):
+			with open(log_file, 'r') as f:
+				return f.read()
+
+		return json.dumps({})
 
 
 
 def main():
-	print json.dumps(LogParser().fetch_data())
+	print LogParser().fetch_data()
 
 if __name__ == '__main__':
 	main()
