@@ -32,3 +32,6 @@ Route::get('/exp-terminate', 'ExperimentController@exp_terminate');
 
 //Scenario data retreival routes
 Route::get('/general/{param}/{scenario?}/{testbed?}', 'ExperimentController@get_config_data');
+
+//Routes for accessing scenario logs
+Route::get('/logs/{action}/{experiment_id?}', 'LogsController@get');
