@@ -40,13 +40,11 @@ class LogParser:
 
 	
 	def _fetch_log_list(self):
-
-		files = [f for f in os.listdir('./.cache') if os.path.isfile('./.cache/{0}'.format(f)) and f[0] != "."]
+		files = [f for f in os.listdir(os.path.join(os.path.dirname(__file__), '.cache')) if os.path.isfile(os.path.join(os.path.dirname(__file__), '.cache', f)) and f[0] != "."]
 		data = []
 
-		
 		for file in files:
-			with open('./.cache/{0}'.format(f), 'r') as f:
+			with open(os.path.join(os.path.dirname(__file__), '.cache', f), 'r') as f:
 				header = json.loads(f.read())["header"]
 				data.append({
 						"date"          : header["date"],
