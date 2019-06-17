@@ -2,13 +2,13 @@
     <div class="parent row">
         <sidebar></sidebar>
         <div id="root" style="margin-left: 80px">
-            <intro id="intro" v-observe-visibility="{
+            <logs-list id="intro" v-observe-visibility="{
                    callback: visibilityChanged,
                    intersection: {
                        root,
                        threshold
                    }
-            }"></intro>
+            }"></logs-list>
             <scenarios id="scenarios"  v-observe-visibility="{
                    callback: visibilityChanged,
                    intersection: {
@@ -32,6 +32,7 @@
 <script>
     import ExampleComponent from './../components/ExampleComponent.vue'
     import Intro from './../components/landing/Intro.vue'
+    import LogsList from './../components/landing/LogsList.vue'
     import Scenarios from './../components/landing/Scenarios.vue'
     import Graphs from './../components/landing/Graphs.vue'
     import Sidebar from './../components/reusables/Sidebar.vue'
@@ -46,6 +47,7 @@
         components: {
             ExampleComponent,
             Intro,
+            LogsList,
             Scenarios,
             Graphs,
             Sidebar,
@@ -114,5 +116,9 @@
 <style scoped>
     .parent {
         position: relative;
+    }
+
+    #root {
+        width: 100%;
     }
 </style>
