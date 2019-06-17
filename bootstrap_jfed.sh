@@ -34,6 +34,9 @@ fi
 sudo apt-get install xvfb -y
 sudo apt-get install x11-xserver-utils -y
 
+# Installation of the missing dependencies needed by jFed
+sudo apt-get install -y -f libxrender1 libxtst6 libxi6 gtk2-engines libxtst6 libxxf86vm1 freeglut3 libxslt1.1 xbase-clients xterm
+
 # jFED CLI tools download
 cd $JFED_DIR
 wget https://jfed.ilabt.imec.be/releases/develop/190206-192/jar/jfed_cli.tar.gz
