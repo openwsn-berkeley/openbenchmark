@@ -7,7 +7,7 @@
             <span class="log-row col-3 bold">Testbed</span>
             <span class="log-row col-3 bold">Scenario</span>
         </div>
-        <div class="row hoverable" :class="{gray: ind%2===0}" v-for="(item, ind) in outputs">
+        <div class="row hoverable" :class="{gray: ind%2===0}" v-for="(item, ind) in outputs" @click="showDetails(item.id)">
             <span class="log-row col-2">{{item.id}}</span>
             <span class="log-row col-3 bold">{{item.date}}</span>
             <span class="log-row col-3 bold">{{item.testbed}}</span>
@@ -17,6 +17,8 @@
 </template>
 
 <script>
+    const axios = require('axios');
+
     let thisComponent;
 
     export default {
@@ -24,17 +26,55 @@
             return {
                 outputs: [
                     // Item example {id: "659xv", date: "17.06.2019 10:47:05", testbed: "IoT-LAB", scenario: "Demo scenario"}
-                    {id: "659xv", date: "17.06.2019 10:47:05", testbed: "IoT-LAB", scenario: "Demo scenario"},
-                    {id: "659xv", date: "17.06.2019 10:47:05", testbed: "IoT-LAB", scenario: "Demo scenario"},
-                    {id: "659xv", date: "17.06.2019 10:47:05", testbed: "IoT-LAB", scenario: "Demo scenario"},
-                    {id: "659xv", date: "17.06.2019 10:47:05", testbed: "IoT-LAB", scenario: "Demo scenario"},
-                    {id: "659xv", date: "17.06.2019 10:47:05", testbed: "IoT-LAB", scenario: "Demo scenario"}
-                ]
+                ],
             }
         },
 
         methods: {
-            
+            showDetails(id) {
+                this.$router.push('details/' + id)
+            },
+
+            fetchLogs() {
+                axios.get('/api/logs/log-list')
+                    .then(function (response) {
+                        thisComponent.outputs = thisComponent.sanitize(response.data.message.data)
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+                    .then(function() {
+
+                    });
+            },
+
+            sanitize(jsObject) {
+                let newObj = []
+
+                let scenarios = {
+                    "demo-scenario"        : "Demo Scenario",
+                    "home-automation"      : "Home Automation",
+                    "building-automation"  : "Building Automation",
+                    "industrial-monitoring": "Industrial Monitoring"
+                }
+
+                let testbeds = {
+                    "iotlab": "IoT-LAB",
+                    "wilab" : "w-iLab.t"
+                }
+
+                jsObject.forEach((el) => {
+                    newObj.push({
+                        "id"      : el.experiment_id,
+                        "date"    : el.date,
+                        "firmware": el.firmware,
+                        "scenario": scenarios[el.scenario],
+                        "testbed" : testbeds[el.testbed]
+                    })
+                })
+
+                return newObj
+            }
         },
 
         created() {
@@ -42,7 +82,7 @@
         },
 
         mounted() {
-            
+            this.fetchLogs()
         }
     }
 </script>

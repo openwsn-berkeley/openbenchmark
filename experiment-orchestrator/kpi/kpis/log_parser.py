@@ -44,7 +44,7 @@ class LogParser:
 		data = []
 
 		for file in files:
-			with open(os.path.join(os.path.dirname(__file__), '.cache', f), 'r') as f:
+			with open(os.path.join(os.path.dirname(__file__), '.cache', file), 'r') as f:
 				header = json.loads(f.read())["header"]
 				data.append({
 						"date"          : header["date"],
