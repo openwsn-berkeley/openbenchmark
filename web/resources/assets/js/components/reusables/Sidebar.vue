@@ -3,8 +3,8 @@
         <nav class="sidebar-navigation">
             <ul>
                 <li :class="{active: selectedId === 0}" @click="scrollContent('intro')">
-                    <i class="fas fa-home"></i>
-                    <span class="tooltip">Home</span>
+                    <i class="fas fa-flask"></i>
+                    <span class="tooltip">Experiment history</span>
                 </li>
                 <li :class="{active: selectedId === 1}" @click="scrollContent('scenarios')">
                     <i class="fas fa-cogs"></i>
