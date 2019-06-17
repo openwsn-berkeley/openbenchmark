@@ -336,7 +336,7 @@
 
 <style scoped>
     .top-content {
-        height: 93vh;
+        height: 100%;
         padding: 25px;
         background-color: #eeeeee;
     }

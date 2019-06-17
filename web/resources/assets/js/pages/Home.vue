@@ -2,27 +2,33 @@
     <div class="parent row">
         <sidebar></sidebar>
         <div id="root" style="margin-left: 80px">
-            <logs-list id="intro" v-observe-visibility="{
-                   callback: visibilityChanged,
-                   intersection: {
-                       root,
-                       threshold
-                   }
-            }"></logs-list>
-            <scenarios id="scenarios"  v-observe-visibility="{
-                   callback: visibilityChanged,
-                   intersection: {
-                       root,
-                       threshold
-                   }
-            }" :experiment-id="id"></scenarios>
-            <graphs id="graphs"  v-if="dataFlowStarted" v-observe-visibility="{
-                   callback: visibilityChanged,
-                   intersection: {
-                       root,
-                       threshold
-                   }
-            }"></graphs>
+            <div id="intro" class="section">
+                <logs-list v-observe-visibility="{
+                       callback: visibilityChanged,
+                       intersection: {
+                           root,
+                           threshold
+                       }
+                }"></logs-list>
+            </div>
+            <div id="scenarios" class="section">
+                <scenarios v-observe-visibility="{
+                       callback: visibilityChanged,
+                       intersection: {
+                           root,
+                           threshold
+                       }
+                }" :experiment-id="id"></scenarios>
+            </div>
+            <div id="graphs" class="section">
+                <graphs v-if="dataFlowStarted" v-observe-visibility="{
+                       callback: visibilityChanged,
+                       intersection: {
+                           root,
+                           threshold
+                       }
+                }"></graphs>
+            </div>
 
             <bottom-sheet></bottom-sheet>
         </div>
@@ -120,5 +126,9 @@
 
     #root {
         width: 100%;
+    }
+
+    .section {
+        height: 100vh;
     }
 </style>
