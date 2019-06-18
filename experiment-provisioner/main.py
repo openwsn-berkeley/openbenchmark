@@ -142,7 +142,7 @@ class Wilab(Controller):
 		# The nodes will be defined by RSpec file within ESpec directory.
 		# Each scenario should have its own RSpec. RSpecs should be chosen based on scenario config
 		self.JFED_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), 'helpers', 'wilab', 'jfed_cli'))
-		self.DELETE   = 'delete_experiment.sh' # Script for terminating the experiment
+		self.DELETE   = 'stop_experiment.sh' # Script for terminating the experiment
 		self.RUN      = 'start_experiment.sh'  # Script for starting the experiment
 		self.DISPLAY  = 'start_display.sh'     # Script for starting a fake display
 
