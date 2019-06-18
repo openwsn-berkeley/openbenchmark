@@ -21,6 +21,7 @@ class Controller(object):
 
 	CONFIG_FILE = os.path.join(os.path.dirname(__file__), "..", "conf.txt")
 	SCENARIO_CONFIG = os.path.join(os.path.dirname(__file__), "..", "scenario-config")
+        DEFAULT_FIRMWARE = '03oos_openwsn_prog'
 
 	def __init__(self):
 		self.configParser = ConfigParser.RawConfigParser()   
@@ -32,12 +33,12 @@ class Controller(object):
 	        default    = 0,
                 required   = False,
 	        action     = 'store'
-	    )
+	        )
 		parser.add_argument('--simulator', 
 	        dest       = 'simulator',
 	        default    = False,
 	        action     = 'store_true'
-	    )
+	        )
 		parser.add_argument('--action', 
 	        dest       = 'action',
 	        choices    = ['check', 'reserve', 'terminate', 'otbox-flash', 'ov-start'],
@@ -52,8 +53,8 @@ class Controller(object):
 		)
 		parser.add_argument('--firmware', 
 	        dest       = 'firmware',
-	        default    = '03oos_openwsn_prog',
-	        action     = 'store'
+                required   = False,
+	        action     = 'store',
 		)
 		parser.add_argument('--scenario', 
 	        dest       = 'scenario',
@@ -96,7 +97,6 @@ class IoTLAB(Controller):
 		self.EXP_DURATION = 30 # Duration in minutes
 		self.NODES = self._get_nodes()
 
-		self.FIRMWARE = os.path.join(os.path.dirname(__file__), 'firmware')
 		self.BROKER = self.configParser.get(self.CONFIG_SECTION, 'broker')
 
 		self.add_files_from_env()
@@ -146,7 +146,6 @@ class Wilab(Controller):
 		self.RUN      = 'start_experiment.sh'  # Script for starting the experiment
 		self.DISPLAY  = 'start_display.sh'     # Script for starting a fake display
 
-		self.FIRMWARE = os.path.join(os.path.dirname(__file__), 'firmware')
 		self.BROKER = self.configParser.get(self.CONFIG_SECTION, 'broker')
 
 		self.EXP_DURATION = 30
@@ -295,10 +294,11 @@ def main():
 	scenario  = args['scenario']
 
 	testbed  = TESTBEDS[testbed](user_id, scenario)
-	firmware = '{0}/{1}'.format(testbed.FIRMWARE, args['firmware'])
 
-	print 'Script started'
-	
+        # default firmware is openwsn with testbed name suffix
+        if args['firmware'] is None:
+	    firmware = os.path.join(os.path.dirname(__file__), 'firmware', controller.DEFAULT_FIRMWARE + '.' + args['testbed'])
+
 	if action == 'reserve':
 		print 'Reserving nodes'
 		testbed.reservation.reserve_experiment()
@@ -309,8 +309,9 @@ def main():
 		print 'Terminating experiment'
 		testbed.reservation.terminate_experiment()
 	elif action == 'otbox-flash':
-		print 'Flashing OTBox'
-		OTBoxFlash(user_id, firmware, testbed.BROKER, args['testbed']).flash()
+            assert firmware is not None
+            print 'Flashing firmware: {0}'.format(firmware)
+	    OTBoxFlash(user_id, firmware, testbed.BROKER, args['testbed']).flash()
 	elif action == 'ov-start':
 		print 'Starting OV'
 		OVStartup(user_id, scenario, args['testbed'], testbed.BROKER, simulator).start()

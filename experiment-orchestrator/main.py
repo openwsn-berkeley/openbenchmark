@@ -78,7 +78,7 @@ class Main():
 	def _add_parser_args(self, parser):
 		parser.add_argument('--user-id', 
 	        dest       = 'user_id',
-	        default    = 0,            
+	        default    = 0,
 	        required   = False,
 	        action     = 'store'
 	    )
