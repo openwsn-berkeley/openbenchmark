@@ -153,6 +153,8 @@ class Wilab(Controller):
 		self._rspec_update()
 		self._set_broker()
 		self._update_yml_files()
+		if action == 'reserve':
+			self._update_yml_files()
 
 		self.reservation = WilabReservation(user_id, self.JFED_DIR, self.RUN, self.DELETE, self.DISPLAY)
 
