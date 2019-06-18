@@ -146,13 +146,14 @@ class Wilab(Controller):
 		self.RUN      = 'start_experiment.sh'  # Script for starting the experiment
 		self.DISPLAY  = 'start_display.sh'     # Script for starting a fake display
 
-		self.BROKER = self.configParser.get(self.CONFIG_SECTION, 'broker')
+		self.BROKER   = self.configParser.get(self.CONFIG_SECTION, 'broker')
+		self.PASSWORD = self.configParser.get(self.CONFIG_SECTION, 'password')
 
 		self.EXP_DURATION = 30
 
 		self._rspec_update()
 		self._set_broker()
-		self._update_yml_files()
+
 		if action == 'reserve':
 			self._update_yml_files()
 
@@ -258,6 +259,7 @@ class Wilab(Controller):
 			yml_conf = yaml.load(f, Loader=yaml.FullLoader)
 			yml_conf['experiment']['slice']['sliceName'] = slice_name
 			yml_conf['experiment']['slice']['expireTimeMin'] = 30
+			yml_conf['user']['password'] = self.PASSWORD
 
 		with open(start_exp_yml, 'w') as f:
 			yaml.dump(yml_conf, f)
