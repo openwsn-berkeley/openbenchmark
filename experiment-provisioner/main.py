@@ -21,7 +21,7 @@ class Controller(object):
 
 	CONFIG_FILE = os.path.join(os.path.dirname(__file__), "..", "conf.txt")
 	SCENARIO_CONFIG = os.path.join(os.path.dirname(__file__), "..", "scenario-config")
-        DEFAULT_FIRMWARE = '03oos_openwsn_prog'
+	DEFAULT_FIRMWARE = '03oos_openwsn_prog'
 
 	def __init__(self):
 		self.configParser = ConfigParser.RawConfigParser()   
@@ -41,7 +41,7 @@ class Controller(object):
 	        )
 		parser.add_argument('--action', 
 	        dest       = 'action',
-	        choices    = ['check', 'reserve', 'terminate', 'otbox-flash', 'ov-start'],
+	        choices    = ['check', 'reserve', 'terminate', 'flash', 'ov-start'],
 	        required   = True,
 	        action     = 'store'
 		)
@@ -84,10 +84,10 @@ class Controller(object):
 
 class IoTLAB(Controller):
 
-	def __init__(self, user_id, scenario):
+	def __init__(self, user_id, scenario, action):
 		super(IoTLAB, self).__init__()
 
-		self.CONFIG_SECTION = 'iotlab-config'
+		self.CONFIG_SECTION = 'iotlab'
 		self.scenario = scenario
 
 		self.USERNAME = os.environ["user"] if "user" in os.environ else self.configParser.get(self.CONFIG_SECTION, 'user')
@@ -126,10 +126,10 @@ class IoTLAB(Controller):
 
 class Wilab(Controller):
 
-	def __init__(self, user_id, scenario):
+	def __init__(self, user_id, scenario, action):
 		super(Wilab, self).__init__()
 
-		self.CONFIG_SECTION = 'wilab-config'
+		self.CONFIG_SECTION = 'wilab'
 		self.scenario = scenario
 
 		# Checks if the following files' content has been set as env variables content
@@ -142,17 +142,20 @@ class Wilab(Controller):
 		# The nodes will be defined by RSpec file within ESpec directory.
 		# Each scenario should have its own RSpec. RSpecs should be chosen based on scenario config
 		self.JFED_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), 'helpers', 'wilab', 'jfed_cli'))
-		self.DELETE   = 'delete_experiment.sh' # Script for terminating the experiment
+		self.DELETE   = 'stop_experiment.sh' # Script for terminating the experiment
 		self.RUN      = 'start_experiment.sh'  # Script for starting the experiment
 		self.DISPLAY  = 'start_display.sh'     # Script for starting a fake display
 
-		self.BROKER = self.configParser.get(self.CONFIG_SECTION, 'broker')
+		self.BROKER   = self.configParser.get(self.CONFIG_SECTION, 'broker')
+		self.PASSWORD = self.configParser.get(self.CONFIG_SECTION, 'password')
 
 		self.EXP_DURATION = 30
 
 		self._rspec_update()
 		self._set_broker()
-		self._update_yml_files()
+
+		if action == 'reserve':
+			self._update_yml_files()
 
 		self.reservation = WilabReservation(user_id, self.JFED_DIR, self.RUN, self.DELETE, self.DISPLAY)
 
@@ -256,6 +259,7 @@ class Wilab(Controller):
 			yml_conf = yaml.load(f, Loader=yaml.FullLoader)
 			yml_conf['experiment']['slice']['sliceName'] = slice_name
 			yml_conf['experiment']['slice']['expireTimeMin'] = 30
+			yml_conf['user']['password'] = self.PASSWORD
 
 		with open(start_exp_yml, 'w') as f:
 			yaml.dump(yml_conf, f)
@@ -263,6 +267,7 @@ class Wilab(Controller):
 		with open(stop_exp_yml, 'r') as f:
 			yml_conf = yaml.load(f, Loader=yaml.FullLoader)
 			yml_conf['slice']['sliceName'] = slice_name
+			yml_conf['user']['password'] = self.PASSWORD
 
 		with open(stop_exp_yml, 'w') as f:
 			yaml.dump(yml_conf, f)
@@ -293,11 +298,13 @@ def main():
 	testbed   = args['testbed']
 	scenario  = args['scenario']
 
-	testbed  = TESTBEDS[testbed](user_id, scenario)
+	testbed  = TESTBEDS[testbed](user_id, scenario, action)
 
-        # default firmware is openwsn with testbed name suffix
-        if args['firmware'] is None:
-	    firmware = os.path.join(os.path.dirname(__file__), 'firmware', controller.DEFAULT_FIRMWARE + '.' + args['testbed'])
+    # Default firmware is "openwsn" with testbed name suffix
+	if args['firmware'] is None:
+		firmware = os.path.join(os.path.dirname(__file__), 'firmware', controller.DEFAULT_FIRMWARE + '.' + args['testbed'])
+	else:
+		firmware = args['firmware']
 
 	if action == 'reserve':
             print 'Reserving nodes'
@@ -308,7 +315,7 @@ def main():
 	elif action == 'terminate':
             print 'Terminating experiment'
             testbed.reservation.terminate_experiment()
-	elif action == 'otbox-flash':
+	elif action == 'flash':
             assert firmware is not None
             print 'Flashing firmware: {0}'.format(firmware)
 	    OTBoxFlash(user_id, firmware, testbed.BROKER, args['testbed']).flash()

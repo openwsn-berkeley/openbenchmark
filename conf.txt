@@ -1,6 +1,7 @@
-[iotlab-config]
+[iotlab]
 user = openbenc
 broker = broker.mqttdashboard.com
 
-[wilab-config]
+[wilab]
 broker = broker.mqttdashboard.com
+password = YOUR_PASSWORD

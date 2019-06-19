@@ -1144,7 +1144,7 @@ Experiment Provisioner is a part of the Python core which communicates with the 
 
 Parameter name    | Type    | Choices                                                                    | Required  | Default  
 ----------------- | --------| ---------------------------------------------------------------------------| ----------| --------
---action          | string  | check, reserve, terminate, otbox-flash, ov-start                           | true      | -
+--action          | string  | check, reserve, terminate, flash, ov-start                           | true      | -
 --scenario        | string  | demo-scenario, building-automation, home-automation, industrial-monitoring | false     | demo-scenario
 --testbed         | string  | iotlab, wilab                                                              | false     | iotlab
 --firmware        | string  | - 																		 | false     | 03oos_openwsn_prog

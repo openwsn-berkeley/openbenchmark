@@ -20,7 +20,7 @@ def test_reservation():
 	assert general_test('reserve')
 
 def test_firmware_flash():
-	assert general_test('otbox-flash')
+	assert general_test('flash')
 
 def test_ov_start():
 	assert general_test('ov-start')
