@@ -267,6 +267,7 @@ class Wilab(Controller):
 		with open(stop_exp_yml, 'r') as f:
 			yml_conf = yaml.load(f, Loader=yaml.FullLoader)
 			yml_conf['slice']['sliceName'] = slice_name
+			yml_conf['user']['password'] = self.PASSWORD
 
 		with open(stop_exp_yml, 'w') as f:
 			yaml.dump(yml_conf, f)
