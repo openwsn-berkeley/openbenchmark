@@ -84,10 +84,10 @@ class Controller(object):
 
 class IoTLAB(Controller):
 
-	def __init__(self, user_id, scenario):
+	def __init__(self, user_id, scenario, action):
 		super(IoTLAB, self).__init__()
 
-		self.CONFIG_SECTION = 'iotlab-config'
+		self.CONFIG_SECTION = 'iotlab'
 		self.scenario = scenario
 
 		self.USERNAME = os.environ["user"] if "user" in os.environ else self.configParser.get(self.CONFIG_SECTION, 'user')
@@ -126,10 +126,10 @@ class IoTLAB(Controller):
 
 class Wilab(Controller):
 
-	def __init__(self, user_id, scenario):
+	def __init__(self, user_id, scenario, action):
 		super(Wilab, self).__init__()
 
-		self.CONFIG_SECTION = 'wilab-config'
+		self.CONFIG_SECTION = 'wilab'
 		self.scenario = scenario
 
 		# Checks if the following files' content has been set as env variables content
