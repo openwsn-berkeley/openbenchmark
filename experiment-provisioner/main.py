@@ -21,7 +21,7 @@ class Controller(object):
 
 	CONFIG_FILE = os.path.join(os.path.dirname(__file__), "..", "conf.txt")
 	SCENARIO_CONFIG = os.path.join(os.path.dirname(__file__), "..", "scenario-config")
-        DEFAULT_FIRMWARE = '03oos_openwsn_prog'
+	DEFAULT_FIRMWARE = '03oos_openwsn_prog'
 
 	def __init__(self):
 		self.configParser = ConfigParser.RawConfigParser()   
@@ -299,9 +299,11 @@ def main():
 
 	testbed  = TESTBEDS[testbed](user_id, scenario)
 
-        # default firmware is openwsn with testbed name suffix
-        if args['firmware'] is None:
-	    firmware = os.path.join(os.path.dirname(__file__), 'firmware', controller.DEFAULT_FIRMWARE + '.' + args['testbed'])
+    # Default firmware is "openwsn" with testbed name suffix
+    if args['firmware'] is None:
+    	firmware = os.path.join(os.path.dirname(__file__), 'firmware', controller.DEFAULT_FIRMWARE + '.' + args['testbed'])
+    else:
+    	firmware = args['firmware']
 
 	if action == 'reserve':
             print 'Reserving nodes'
