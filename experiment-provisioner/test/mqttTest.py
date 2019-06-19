@@ -15,7 +15,7 @@ class MQTTTest:
 
 		self.pauses = {
 			"reserve":      5,
-			"otbox-flash": 50,
+			"flash": 50,
 			"ov-start":   180 
 		}
 
@@ -27,9 +27,9 @@ class MQTTTest:
 
 
 	def on_connect(self, client, userdata, flags, rc):
-		if self.test_type in ['reserve', 'otbox-flash']:
+		if self.test_type in ['reserve', 'flash']:
 			self.client.subscribe('{0}/deviceType/mote/deviceId/+/notif/frommoteserialbytes'.format(self.testbed))
-			print "[TEST] otbox-flash subscribing..."
+			print "[TEST] flash subscribing..."
 		elif self.test_type == 'ov-start':
 			print "[TEST] ov-start subscribing..."
 			self.client.subscribe('openbenchmark/command/startBenchmark')

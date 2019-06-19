@@ -41,7 +41,7 @@ class Controller(object):
 	        )
 		parser.add_argument('--action', 
 	        dest       = 'action',
-	        choices    = ['check', 'reserve', 'terminate', 'otbox-flash', 'ov-start'],
+	        choices    = ['check', 'reserve', 'terminate', 'flash', 'ov-start'],
 	        required   = True,
 	        action     = 'store'
 		)
@@ -297,13 +297,13 @@ def main():
 	testbed   = args['testbed']
 	scenario  = args['scenario']
 
-	testbed  = TESTBEDS[testbed](user_id, scenario)
+	testbed  = TESTBEDS[testbed](user_id, scenario, action)
 
     # Default firmware is "openwsn" with testbed name suffix
-    if args['firmware'] is None:
-    	firmware = os.path.join(os.path.dirname(__file__), 'firmware', controller.DEFAULT_FIRMWARE + '.' + args['testbed'])
-    else:
-    	firmware = args['firmware']
+	if args['firmware'] is None:
+		firmware = os.path.join(os.path.dirname(__file__), 'firmware', controller.DEFAULT_FIRMWARE + '.' + args['testbed'])
+	else:
+		firmware = args['firmware']
 
 	if action == 'reserve':
             print 'Reserving nodes'
@@ -314,7 +314,7 @@ def main():
 	elif action == 'terminate':
             print 'Terminating experiment'
             testbed.reservation.terminate_experiment()
-	elif action == 'otbox-flash':
+	elif action == 'flash':
             assert firmware is not None
             print 'Flashing firmware: {0}'.format(firmware)
 	    OTBoxFlash(user_id, firmware, testbed.BROKER, args['testbed']).flash()
