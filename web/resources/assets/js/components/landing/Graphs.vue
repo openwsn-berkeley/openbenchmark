@@ -3,10 +3,10 @@
         <div class="row" style="height: 100%">
             <div class="col-direction ml-1 mr-1 col-4" style="height: 100%;">
 
-                <div class="node-card card mb-1 pl-1 col-direction">
-                    <span class="bold mt-1">Nodes: </span>
+                <div class="node-card card mb-1 col-direction">
+                    <span class="bold mt-1 ml-1">Nodes: </span>
                     <div v-bar>   
-                        <div>            
+                        <div class="ml-1">            
                             <label class="radio" v-for="key in Object.keys(dataset)" @click="selectedNodeKey = key">
                                 <input type="radio" name="r" :value="key" checked>
                                 <span>{{key}}</span>
