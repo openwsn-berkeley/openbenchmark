@@ -22,7 +22,7 @@
                 </div>
 
             </div>
-            <div class="card col-direction ml-1 mr-1 pt-1 col-8 wrap">
+            <div class="card col-direction ml-1 mr-1 pt-1 pb-1 col-8 wrap">
                 
                 <div v-bar>   
                     <div>
