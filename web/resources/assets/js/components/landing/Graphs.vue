@@ -2,24 +2,27 @@
     <div class="top-content">
         <div class="row" style="height: 100%">
             <div class="col-direction ml-1 mr-1 col-4" style="height: 100%;">
-                <div class="node-card card mb-1" style="width: 100%; height: 50%;">
-                    <d3-network :net-nodes="value.nodes" :net-links="value.links" :options="options" @node-click="nodeClick"/>
+                <div class="node-card card mb-1 pl-1 col-direction">                    
+                    <label class="radio" v-for="key in Object.keys(dataset)" @click="selectedNodeKey = key">
+                        <input type="radio" name="r" :value="key" checked>
+                        <span>{{key}}</span>
+                    </label>
                 </div>
                 <div class="card col-direction" style="width: 100%; height: 50%;">
-                    <span class="mt-1" v-for="data in generalData">
-                        <span class="bold ml-1 mr-1">{{generalDataTitles[data.identifier]}}:</span> {{data.value}}
+                    <span class="mt-1" v-for="key in Object.keys(generalData)">
+                        <span class="bold ml-1 mr-1">{{generalDataTitles[key]}}:</span> {{generalData[key]}}
                     </span>
                 </div>
             </div>
             <div class="card row ml-1 mr-1 pt-1 col-8 wrap" style="overflow-y: auto; overflow-x: hidden">
 
-                <span v-for="node in dataset">
-                    <span v-if="node.id === selectedNode.name">
-                        <span v-for="item in node.nodeData">
+                <span v-for="key in Object.keys(dataset)">
+                    <span v-if="key === selectedNodeKey">
+                        <span v-for="label in Object.keys(dataset[key])">
                             <line-chart class="chart ml-3 mr-3"
-                                        :label="item.label"
-                                        :x-axis="item.xAxis"
-                                        :y-axis="item.yAxis"
+                                        :label="label"
+                                        :x-axis="dataset[key][label]['timestamp']"
+                                        :y-axis="dataset[key][label]['value']"
                                         :width="650"
                                         :height="300"></line-chart>
                         </span>
@@ -41,6 +44,8 @@
     import D3Network from 'vue-d3-network';
     import Paho from 'paho-mqtt';
 
+    const axios = require('axios');
+
     let thisComponent;
 
     export default {
@@ -48,6 +53,8 @@
             LineChart,
             D3Network
         },
+
+        props: ['experiment-id'],
 
         data: function () {
             return {
@@ -61,38 +68,59 @@
                     links: []
                 },
 
-                selectedNode : {},
+                selectedNodeKey: "",
 
-                generalData: [],
+                generalData: {
+                    /* EXAMPLE ITEM: 
+                    "networkFormationTime": 1560761378.408148, 
+                    ... 
+                    */
+                },
                 generalDataTitles: {
-                    "networkFormationTime": "Network formation completed at",
-                    "syncronizationPhase" : "Synchronization completed at",
-                    "secureJoinPhase"     : "Secure join phase completed at"
+                    "networkFormationTime": "Network formation",
+                    "syncronizationPhase" : "Synchronization",
+                    "secureJoinPhase"     : "Secure join phase"
                 },
 
-                dataset: [
-                    /*{//Corresponds to a single node
-                        "id":"node-a8-106",
-                        "eui64":"05-43-32-ff-03-dc-a3-66",
-                        "isDag": 0,
-                        "nodeData":[
-                            {
-                                "label":"numRx",
-                                "xAxis":[15388500.87438082,15388500.905358542,15388500.935934938,15388500.966604061,15388500.99736588,15388501.01802762,15388501.04889744],
-                                "yAxis":[0,0,0,0,0,0,0]
-                            },
-                            {
-                                "label":"dutycycle",
-                                "xAxis":[15388500.987090621],
-                                "yAxis":[100]
-                            }
-                        ]
-                    }*/
-                ]
+                dataset: {
+                    /* EXAMPLE ITEM:
+                    "node-a8-106": {
+                        "latency": {
+                            "timestamp":[15388500.87438082,15388500.905358542,15388500.935934938,15388500.966604061,15388500.99736588,15388501.01802762,15388501.04889744],
+                            "value":[0,0,0,0,0,0,0]
+                        },
+                        "reliabilty": {
+                            "timestamp":[15388500.987090621],
+                            "value":[100]
+                        }
+                    },
+                    ...
+                    */
+                }
             }
         },
 
         methods: {
+            loadData() {
+                if (this.experimentId !== undefined) {
+                    this.fetchDataFromLogs()
+                }
+            },
+
+            fetchDataFromLogs(experimentId) {
+                axios.get('/api/logs/data-fetch/' + this.experimentId)
+                    .then(function (response) {
+                        thisComponent.generalData = response.data.message.general_data
+                        thisComponent.dataset = response.data.message.data
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+                    .then(function() {
+                        
+                    });
+            },
+
             relativeTimestampParse(timestamp) {
                 //Converts relative timestamp to milliseconds or seconds since the experiment start
                 //Timestamp in units of timeslots. Each timeslot is 10ms
@@ -312,6 +340,8 @@
         mounted() {
             this.subscribe();
 
+            this.loadData();
+
             this.$eventHub.$on("MQTT", payload => {
                 thisComponent.parseMqttEvent(payload);
             });
@@ -346,9 +376,9 @@
     }
 
     .node-card {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        width: 100%; 
+        height: 50%;
+        overflow-y: auto;
     }
 
     .data-row {
