@@ -11,6 +11,10 @@
     flex-direction: column;
 }
 
+.flex-space-between {
+    justify-content: space-between;
+}
+
 .wrap {
     flex-wrap: wrap;
 }

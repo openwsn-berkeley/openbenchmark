@@ -77,6 +77,8 @@
 
                 selectedNodeKey: "",
 
+                headerData: {},
+
                 generalData: {
                     /* EXAMPLE ITEM: 
                     "networkFormationTime": 1560761378.408148, 
@@ -117,8 +119,10 @@
             fetchDataFromLogs(experimentId) {
                 axios.get('/api/logs/data-fetch/' + this.experimentId)
                     .then(function (response) {
+                        thisComponent.headerData = response.data.message.header
                         thisComponent.generalData = response.data.message.general_data
                         thisComponent.dataset = response.data.message.data
+                        thisComponent.$eventHub.$emit('LOG_DATA_FETCHED', thisComponent.headerData);
                     })
                     .catch(function (error) {
                         console.log(error);

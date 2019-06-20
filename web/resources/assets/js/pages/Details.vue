@@ -1,9 +1,16 @@
 <template>
     <div class="parent col-direction">
-        <span class="ml-3 mt-1">
-            <i class="fas fa-arrow-left clickable" @click="back()"></i>
-            <span class="ml-1">KPIs for experiment</span>
-            <span class="bold">{{id}}</span>
+        <span class="ml-3 mt-1 row-direction flex-space-between">
+            <span>
+                <i class="fas fa-arrow-left clickable" @click="back()"></i>
+                <span class="ml-1">KPIs for experiment <span class="bold">{{id}}</span>, firmware: <span class="bold">{{headerData.firmware}}</span></span>
+            </span>
+            
+            <span class="align-right mr-3">
+                <span class="bold">{{testbeds[headerData.testbed]}}, </span>
+                <span class="bold">{{scenarios[headerData.scenario]}}, </span>
+                <span class="bold">{{headerData.date}}</span>
+            </span>
         </span>
         <div id="root">
             <graphs id="graphs" :experiment-id="id"></graphs>
@@ -26,7 +33,18 @@
 
         data: function () {
             return {
-                
+                headerData: {},
+
+                testbeds: {
+                    "iotlab": "IoT-LAB",
+                    "wilab": "w-iLab.t"
+                },
+                scenarios: {
+                    "demo-scenario": "Demo Scenario",
+                    "home-automation": "Home Automation",
+                    "building-automation": "Building Automation",
+                    "industrial-monitoring": "Industrial Monitoring"
+                }
             }
         },
 
@@ -37,7 +55,9 @@
         },
 
         mounted() {
-            console.log(this.id)
+            this.$eventHub.$on("LOG_DATA_FETCHED", payload => {
+                thisComponent.headerData = payload
+            });
         },
 
         created() {
