@@ -3,7 +3,7 @@
         <div class="row" style="height: 100%">
             <div class="col-direction ml-1 mr-1 col-4" style="height: 100%;">
 
-                <div class="node-card card mb-1 col-direction">
+                <div class="node-card card bordered mb-1 col-direction">
                     <span class="bold mt-1 ml-1">Nodes: </span>
                     <div v-bar>   
                         <div class="ml-1">            
@@ -15,14 +15,14 @@
                     </div>
                 </div>
 
-                <div class="card col-direction" style="width: 100%; height: 50%;">
+                <div class="card col-direction bordered " style="width: 100%; height: 50%;">
                     <span class="mt-1" v-for="key in Object.keys(generalData)">
                         <span class="bold ml-1 mr-1">{{generalDataTitles[key]}}:</span> {{generalData[key]}}
                     </span>
                 </div>
 
             </div>
-            <div class="card col-direction ml-1 mr-1 pt-1 pb-1 col-8 wrap">
+            <div class="card col-direction bordered ml-1 mr-1 pt-1 pb-1 col-8 wrap">
                 
                 <div v-bar>   
                     <div>
