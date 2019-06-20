@@ -49,6 +49,7 @@
 <style src="./../../sass/styles/animations.css"></style>
 <style src="./../../sass/styles/cards.css"></style>
 <style src="./../../sass/styles/radio.css"></style>
+<style src="./../../sass/styles/vuebar.css"></style>
 
 <style scoped>
     .parent {

@@ -2,38 +2,45 @@
     <div class="top-content">
         <div class="row" style="height: 100%">
             <div class="col-direction ml-1 mr-1 col-4" style="height: 100%;">
-                <div class="node-card card mb-1 pl-1 col-direction">                    
-                    <label class="radio" v-for="key in Object.keys(dataset)" @click="selectedNodeKey = key">
-                        <input type="radio" name="r" :value="key" checked>
-                        <span>{{key}}</span>
-                    </label>
+
+                <div class="node-card card mb-1 pl-1 col-direction">
+                    <span class="bold mt-1">Nodes: </span>
+                    <div v-bar>   
+                        <div>            
+                            <label class="radio" v-for="key in Object.keys(dataset)" @click="selectedNodeKey = key">
+                                <input type="radio" name="r" :value="key" checked>
+                                <span>{{key}}</span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
+
                 <div class="card col-direction" style="width: 100%; height: 50%;">
                     <span class="mt-1" v-for="key in Object.keys(generalData)">
                         <span class="bold ml-1 mr-1">{{generalDataTitles[key]}}:</span> {{generalData[key]}}
                     </span>
                 </div>
+
             </div>
-            <div class="card row ml-1 mr-1 pt-1 col-8 wrap" style="overflow-y: auto; overflow-x: hidden">
-
-                <span v-for="key in Object.keys(dataset)">
-                    <span v-if="key === selectedNodeKey">
-                        <span v-for="label in Object.keys(dataset[key])">
-                            <line-chart class="chart ml-3 mr-3"
-                                        :label="label"
-                                        :x-axis="dataset[key][label]['timestamp']"
-                                        :y-axis="dataset[key][label]['value']"
-                                        :width="700"
-                                        :height="300"></line-chart>
+            <div class="card col-direction ml-1 mr-1 pt-1 col-8 wrap">
+                
+                <div v-bar>   
+                    <div>
+                        <span v-for="key in Object.keys(dataset)">
+                            <span v-if="key === selectedNodeKey">
+                                <span v-for="label in Object.keys(dataset[key])">
+                                    <line-chart class="chart ml-3 mr-3"
+                                                :label="label"
+                                                :x-axis="dataset[key][label]['timestamp']"
+                                                :y-axis="dataset[key][label]['value']"
+                                                :width="700"
+                                                :height="300"></line-chart>
+                                </span>
+                            </span>
                         </span>
-                    </span>
-                </span>
+                    </div>
+                </div>
 
-                <!--
-                <line-chart class="chart ml-3 mr-3"></line-chart>
-                <line-chart class="chart ml-3 mr-3"></line-chart>
-                <line-chart class="chart ml-3 mr-3"></line-chart>
-                <line-chart class="chart ml-3 mr-3"></line-chart>-->
             </div>
         </div>
     </div>
@@ -378,7 +385,6 @@
     .node-card {
         width: 100%; 
         height: 50%;
-        overflow-y: auto;
     }
 
     .data-row {
