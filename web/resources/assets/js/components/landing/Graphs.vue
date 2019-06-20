@@ -23,7 +23,7 @@
                                         :label="label"
                                         :x-axis="dataset[key][label]['timestamp']"
                                         :y-axis="dataset[key][label]['value']"
-                                        :width="650"
+                                        :width="700"
                                         :height="300"></line-chart>
                         </span>
                     </span>
