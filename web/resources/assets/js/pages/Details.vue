@@ -1,6 +1,10 @@
 <template>
     <div class="parent col-direction">
-        <span class="ml-3 mt-1">KPIs for experiment <span class="bold">{{id}}</span></span>
+        <span class="ml-3 mt-1">
+            <i class="fas fa-arrow-left clickable" @click="back()"></i>
+            <span class="ml-1">KPIs for experiment</span>
+            <span class="bold">{{id}}</span>
+        </span>
         <div id="root">
             <graphs id="graphs" :experiment-id="id"></graphs>
         </div>
@@ -27,7 +31,9 @@
         },
 
         methods: {
-            
+            back() {
+                this.$router.back()
+            }
         },
 
         mounted() {

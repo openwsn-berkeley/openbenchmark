@@ -33,3 +33,7 @@
 .btn-danger:hover {
     background-color: red;
 }
+
+.clickable {
+    cursor: pointer;
+}
