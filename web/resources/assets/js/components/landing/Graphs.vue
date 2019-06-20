@@ -17,7 +17,7 @@
 
                 <div class="card col-direction bordered " style="width: 100%; height: 50%;">
                     <span class="mt-1" v-for="key in Object.keys(generalData)">
-                        <span class="bold ml-1 mr-1">{{generalDataTitles[key]}}:</span> {{generalData[key]}}
+                        <span class="ml-1 mr-1">{{generalDataTitles[key]}}: <span class="bold">{{generalData[key]}}</span></span>
                     </span>
                 </div>
 
