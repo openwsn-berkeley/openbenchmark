@@ -14,32 +14,44 @@
             </div>
         </modal>
 
+        <modal name="testbed-pick">
+            <div class="row col-direction">
+                <div class="testbed" :class="{'testbed-selected': testbedSelected === index}" @click="selectTestbed(index)" v-for="(testbed, index) in testbeds">
+                    <img class="logo-sm mb-1" style="height: 55px" :src="testbedIcons[testbed.identifier]">
+                </div>
+            </div>
+        </modal>
+
+        <modal name="scenario-pick">
+            <div class="row col-direction">
+                <div class="scenario row-direction" :class="{'scenario-selected': scenarioSelected === index}" @click="selectScenario(index)" v-for="(scenario, index) in scenarios">
+                    <div class="row v-center mb-1" style="width:100%">
+                        <div class="col-2">
+                            <i class="fas fa-2x" :class="scenarioIcons[scenario.identifier]"></i>
+                        </div>
+                        <div class="col-10 pl-1">
+                            <span>{{scenario.name}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </modal>
+
         <div class="row">
-            <div class="col-5 pr-5 pl-5">
+            <div class="card bordered col-5 pr-5 pl-5">
                 
                 <div class="row">
                     <div class="col-7">
                         <h4>Scenario: </h4>
-                        <div class="row col-direction">
-                            <div class="scenario row-direction" :class="{'scenario-selected': scenarioSelected === index}" @click="selectScenario(index)" v-for="(scenario, index) in scenarios">
-                                <div class="row v-center mb-1" style="width:100%">
-                                    <div class="col-2">
-                                        <i class="fas fa-2x" :class="scenarioIcons[scenario.identifier]"></i>
-                                    </div>
-                                    <div class="col-10 pl-1">
-                                        <span>{{scenario.name}}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <span v-if="scenarioSelected == -1">Choose scenario</span>
+                        <span v-if="scenarioSelected > -1">{{scenarios[scenarioSelected].name}}</span>
+                        <span class="clickable primary-light" @click="showModal('scenario-pick')">Change</span>
                     </div>
-                    <div class="col-4">
+                    <div class="row-direction col-4">
                         <h4>Testbed: </h4>
-                        <div class="row col-direction">
-                            <div class="testbed" :class="{'testbed-selected': testbedSelected === index}" @click="selectTestbed(index)" v-for="(testbed, index) in testbeds">
-                                <img class="logo-sm mb-1" style="height: 55px" :src="testbedIcons[testbed.identifier]">
-                            </div>
-                        </div>
+                        <span v-if="testbedSelected == -1">Choose testbed</span>
+                        <span v-if="testbedSelected > -1">{{testbeds[testbedSelected].name}}</span>
+                        <span class="clickable primary-light" @click="showModal('testbed-pick')">Change</span>
                     </div>
                 </div>
 
@@ -68,7 +80,7 @@
 
             </div>
 
-            <div class="col-7">
+            <div class="card bordered col-7">
                 <d3-network style="height: 78%" 
                     :net-nodes="value.nodes" 
                     :net-links="value.links" 
@@ -158,6 +170,10 @@
         },
 
         methods: {
+            showModal(name) {
+                this.$modal.show(name)
+            },
+
             fetch(param) {
                 axios.get('/api/general/' + param)
                     .then(function (response) {
@@ -479,6 +495,7 @@
         height: 100vh;
         padding-left: 25px;
         padding-right: 25px;
+        background-color: #eeeeee;
     }
 
     .scenario {
