@@ -45,6 +45,15 @@
             </div>
         </modal>
 
+        <modal name="firmware-pick">
+            <div class="row ml-1">
+                <file-upload-simple :allow-upload="useOpenWSNFirmware" @click.native="useOpenWSNFirmware = false"></file-upload-simple>
+                <div class="testbed ml-1" :class="{'testbed-selected': useOpenWSNFirmware}" @click="useOpenWSNFirmware = true">
+                    <img class="logo-sm" style="height: 55px" src="images/openwsn_cropped.png">
+                </div>
+            </div>
+        </modal>
+
         <div class="row">
             <div class="relative card bordered col-5 mr-1 mt-1">
                 
@@ -65,11 +74,12 @@
 
                 <div class="separator gray-gradient ml-1 mt-2 mb-1"/>
 
-                <h4 class="mt-2 mb-1 ml-1">Upload firmware (or use the default): </h4>
-                <div class="row ml-1">
-                    <file-upload-simple :allow-upload="useOpenWSNFirmware" @click.native="useOpenWSNFirmware = false"></file-upload-simple>
-                    <div class="testbed ml-1" :class="{'testbed-selected': useOpenWSNFirmware}" @click="useOpenWSNFirmware = true">
-                        <img class="logo-sm" style="height: 55px" src="images/openwsn_cropped.png">
+                <div class="row">
+                    <div class="col-2 pl-1 col-direction">
+                        <h4>Firmware: </h4>
+                        <span v-if="useOpenWSNFirmware">Default OpenWSN firmware</span>
+                        <span class="bold" v-else>{{firmware}}</span>
+                        <span class="clickable primary-light" @click="showModal('firmware-pick')">Change</span>
                     </div>
                 </div>
 
