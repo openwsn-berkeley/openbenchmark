@@ -46,11 +46,17 @@
         </modal>
 
         <modal name="firmware-pick">
-            <div class="row ml-1">
-                <file-upload-simple :allow-upload="useOpenWSNFirmware" @click.native="useOpenWSNFirmware = false"></file-upload-simple>
-                <div class="testbed ml-1" :class="{'testbed-selected': useOpenWSNFirmware}" @click="useOpenWSNFirmware = true">
-                    <img class="logo-sm" style="height: 55px" src="images/openwsn_cropped.png">
+            <div class="modal-content row col-direction h-center">
+                <span class="bold align-left mt-1 ml-1 mb-1">Upload firmware (or choose the default): </span>
+                
+                <div class="row-direction v-center mt-1" style="width: 100%">
+                    <file-upload-simple :allow-upload="useOpenWSNFirmware" @click.native="useOpenWSNFirmware = false"></file-upload-simple>
+                    <div class="testbed row ml-1 h-center" :class="{'testbed-selected': useOpenWSNFirmware}" @click="useOpenWSNFirmware = true">
+                        <img class="logo-sm" style="height: 55px" src="images/openwsn_cropped.png">
+                    </div>
                 </div>
+
+                <button class="modal-btn main-btn btn-small" @click="closeModal('firmware-pick')">OK</button>
             </div>
         </modal>
 
