@@ -15,25 +15,33 @@
         </modal>
 
         <modal name="testbed-pick">
-            <div class="row col-direction">
-                <div class="testbed" :class="{'testbed-selected': testbedSelected === index}" @click="selectTestbed(index)" v-for="(testbed, index) in testbeds">
+            <div class="modal-content row col-direction h-center">
+                <span class="bold align-left mt-1 ml-1">Select a testbed: </span>
+
+                <div class="testbed mt-1" :class="{'testbed-selected': testbedSelected === index}" @click="selectTestbed(index)" v-for="(testbed, index) in testbeds">
                     <img class="logo-sm mb-1" style="height: 55px" :src="testbedIcons[testbed.identifier]">
                 </div>
+
+                <button class="modal-btn main-btn btn-small" @click="closeModal('testbed-pick')">OK</button>
             </div>
         </modal>
 
         <modal name="scenario-pick">
-            <div class="row col-direction">
-                <div class="scenario row-direction" :class="{'scenario-selected': scenarioSelected === index}" @click="selectScenario(index)" v-for="(scenario, index) in scenarios">
-                    <div class="row v-center mb-1" style="width:100%">
-                        <div class="col-2">
+            <div class="modal-content row col-direction h-center">
+                <span class="bold align-left mt-1 ml-1 mb-1">Select a scenario: </span>
+
+                <div class="scenario mb-1 ml-3" :class="{'scenario-selected': scenarioSelected === index}" @click="selectScenario(index)" v-for="(scenario, index) in scenarios">
+                    <div class="row" style="width:100%">
+                        <div class="row col-2 v-center">
                             <i class="fas fa-2x" :class="scenarioIcons[scenario.identifier]"></i>
                         </div>
-                        <div class="col-10 pl-1">
-                            <span>{{scenario.name}}</span>
+                        <div class="row col-10 h-center">
+                            <span class="dark-gray ml-1" :class="{'scenario-selected': scenarioSelected === index}">{{scenario.name}}</span>
                         </div>
                     </div>
                 </div>
+
+                <button class="modal-btn main-btn btn-small" @click="closeModal('scenario-pick')">OK</button>
             </div>
         </modal>
 
@@ -172,6 +180,10 @@
         methods: {
             showModal(name) {
                 this.$modal.show(name)
+            },
+
+            closeModal(name) {
+                this.$modal.hide(name)
             },
 
             fetch(param) {
@@ -499,9 +511,9 @@
     }
 
     .scenario {
+        width: 50%;
         color: rgba(200, 200, 200, .7);
         cursor: pointer;
-        flex: 1;
         transition: 0.3s ease;
     }
     .scenario > span {
@@ -517,6 +529,18 @@
     }
     .testbed:not(.testbed-selected) {
         filter: grayscale(100%) opacity(0.3);
+    }
+
+    .modal-content {
+        height: 100%;
+        position: relative;
+    }
+    .modal-btn {
+        position: absolute;
+        width: 150px;
+        bottom: 15px;
+        left: 50%;
+        transform: translateX(-50%);
     }
 
     .node-property {

@@ -18,3 +18,10 @@
 .primary-light-bgd {
     background-color: #B2CCE5;
 }
+
+.black {
+	color: black;
+}
+.dark-gray {
+	color: #333333;
+}
