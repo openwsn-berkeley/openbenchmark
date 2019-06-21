@@ -42,8 +42,7 @@ Vagrant.configure("2") do |config|
 		'web/node_modules', 
 		'docs/build', 
 		'web/public/js/app.js', 
-		'web/resources/assets/css/app.css',
-    'experiment-provisioner/wilab/jfed_cli'
+		'web/resources/assets/css/app.css'
 	],
 	rsync__args: ['--verbose', '--archive', '-z', '--copy-links']
   
