@@ -142,7 +142,7 @@ class Wilab(Controller):
 		# The nodes will be defined by RSpec file within ESpec directory.
 		# Each scenario should have its own RSpec. RSpecs should be chosen based on scenario config
 		self.JFED_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), 'helpers', 'wilab', 'jfed_cli'))
-		self.DELETE   = 'stop_experiment.sh' # Script for terminating the experiment
+		self.DELETE   = 'stop_experiment.sh'   # Script for terminating the experiment
 		self.RUN      = 'start_experiment.sh'  # Script for starting the experiment
 		self.DISPLAY  = 'start_display.sh'     # Script for starting a fake display
 
@@ -249,13 +249,15 @@ class Wilab(Controller):
 			f.write(content)
 
 	def _update_yml_files(self):
-		start_exp_yml = os.path.join(self.JFED_DIR, "start_experiment.yml")
-		stop_exp_yml  = os.path.join(self.JFED_DIR, "stop_experiment.yml")
+		start_exp_yml_temp = os.path.join(self.JFED_DIR, "start_experiment_temp.yml")
+		stop_exp_yml_temp  = os.path.join(self.JFED_DIR, "stop_experiment_temp.yml")
+		start_exp_yml      = os.path.join(self.JFED_DIR, "start_experiment.yml")
+		stop_exp_yml       = os.path.join(self.JFED_DIR, "stop_experiment.yml")
 
 		slice_name = "bench{0}".format(self._get_random_string())
 		yml_conf = None
 
-		with open(start_exp_yml, 'r') as f:
+		with open(start_exp_yml_temp, 'r') as f:
 			yml_conf = yaml.load(f, Loader=yaml.FullLoader)
 			yml_conf['experiment']['slice']['sliceName'] = slice_name
 			yml_conf['experiment']['slice']['expireTimeMin'] = 30
@@ -264,7 +266,7 @@ class Wilab(Controller):
 		with open(start_exp_yml, 'w') as f:
 			yaml.dump(yml_conf, f)
 
-		with open(stop_exp_yml, 'r') as f:
+		with open(stop_exp_yml_temp, 'r') as f:
 			yml_conf = yaml.load(f, Loader=yaml.FullLoader)
 			yml_conf['slice']['sliceName'] = slice_name
 			yml_conf['user']['password'] = self.PASSWORD
