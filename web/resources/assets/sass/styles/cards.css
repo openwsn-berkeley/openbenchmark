@@ -12,3 +12,8 @@
 	border-style: solid;
 	border-color: #cccccc;
 }
+
+.separator {
+	height: 2px;
+	width: 250px;
+}

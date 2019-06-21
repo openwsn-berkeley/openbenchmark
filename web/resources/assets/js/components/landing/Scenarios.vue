@@ -46,49 +46,63 @@
         </modal>
 
         <div class="row">
-            <div class="card bordered col-5 pr-5 pl-5">
+            <div class="relative card bordered col-5 mr-1 mt-1">
                 
                 <div class="row">
-                    <div class="col-7">
+                    <div class="col-2 pl-1 col-direction">
                         <h4>Scenario: </h4>
                         <span v-if="scenarioSelected == -1">Choose scenario</span>
-                        <span v-if="scenarioSelected > -1">{{scenarios[scenarioSelected].name}}</span>
+                        <span class="bold" v-else>{{scenarios[scenarioSelected].name}}</span>
                         <span class="clickable primary-light" @click="showModal('scenario-pick')">Change</span>
                     </div>
-                    <div class="row-direction col-4">
+                    <div class="col-2 pl-1 col-direction">
                         <h4>Testbed: </h4>
                         <span v-if="testbedSelected == -1">Choose testbed</span>
-                        <span v-if="testbedSelected > -1">{{testbeds[testbedSelected].name}}</span>
+                        <span class="bold" v-else>{{testbeds[testbedSelected].name}}</span>
                         <span class="clickable primary-light" @click="showModal('testbed-pick')">Change</span>
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="separator gray-gradient ml-1 mt-2 mb-1"/>
+
+                <h4 class="mt-2 mb-1 ml-1">Upload firmware (or use the default): </h4>
+                <div class="row ml-1">
                     <file-upload-simple :allow-upload="useOpenWSNFirmware" @click.native="useOpenWSNFirmware = false"></file-upload-simple>
-                    <div class="testbed" style="position: relative" :class="{'testbed-selected': useOpenWSNFirmware}" @click="useOpenWSNFirmware = true">
-                        <img class="logo-sm ml-2" style="position: absolute; bottom: 0; height: 55px" src="images/openwsn_cropped.png">
+                    <div class="testbed ml-1" :class="{'testbed-selected': useOpenWSNFirmware}" @click="useOpenWSNFirmware = true">
+                        <img class="logo-sm" style="height: 55px" src="images/openwsn_cropped.png">
                     </div>
                 </div>
 
-                <h4 class="mt-2" style="margin-bottom: 10px" v-if="selectedNode.length !== 0">Selected node: </h4>
-                <div class="row card mt-1 pt-1 pb-1 pl-1 pr-1 row-direction" v-if="selectedNode.length !== 0">
+                <div class="separator gray-gradient ml-1 mt-2 mb-1"/>
+
+                <h4 class="mt-2 mb-1 ml-1">Selected node: </h4>
+                <div class="row card pl-1 pr-1 row-direction" v-if="selectedNode.length !== 0">
                     <div class="row col-direction">
-                        <h4 class="mt-0 node-property">OpenBenchmark ID:</h4>
-                        <h4 class="mt-0 node-property">Testbed ID:</h4>
-                        <h4 class="mt-0 node-property">Transmission power:</h4>
-                        <h4 class="mt-0 node-property">Role:</h4>
+                        <span class="mt-0 node-property">OpenBenchmark ID:</span>
+                        <span class="mt-0 node-property">Testbed ID:</span>
+                        <span class="mt-0 node-property">Transmission power:</span>
+                        <span class="mt-0 node-property">Role:</span>
                     </div>
                     <div class="row col-direction pl-2">
-                        <span class="node-property">{{selectedNode.id}}</span>
-                        <span class="node-property">{{selectedNode.name}}</span>
-                        <span class="node-property">{{selectedNode.transmissionPower}}</span>
-                        <span class="node-property">{{selectedNode.roleFull}}</span>
+                        <span class="bold node-property">{{selectedNode.id}}</span>
+                        <span class="bold node-property">{{selectedNode.name}}</span>
+                        <span class="bold node-property">{{selectedNode.transmissionPower}}</span>
+                        <span class="bold node-property">{{selectedNode.roleFull}}</span>
                     </div>
+                </div>
+
+                <div class="buttons row h-center">
+                    <!-- Condition for enabling the start button -->
+                    <!-- v-if="scenarioSelected !== -1 && testbedSelected !== -1" -->
+                    <!-- Condition for disabling the start button -->
+                    <!-- :disabled="currentStep > -2 -->
+                    <button id="start-btn" class="main-btn btn-small btn-width-half ml-1"  @click="processStart()">Start</button>
+                    <button id="terminate-btn" class="main-btn btn-small btn-width-half btn-danger mr-1" @click="processTerminate()">Terminate</button>
                 </div>
 
             </div>
 
-            <div class="card bordered col-7">
+            <div class="card bordered col-7 mt-1">
                 <d3-network style="height: 78%" 
                     :net-nodes="value.nodes" 
                     :net-links="value.links" 
@@ -96,11 +110,6 @@
                     v-if="value !== null" @node-click="selectNode"/>
             </div>
 
-        </div>
-
-        <div class="row h-center">
-            <button class="main-btn btn-width-half mt-1" v-if="scenarioSelected !== -1 && testbedSelected !== -1" @click="processStart()" :disabled="currentStep > -2">Start experiment</button>
-            <!--<button class="main-btn btn-width-half btn-danger mt-1" v-if="dataFlowStarted" @click="processTerminate()">Terminate experiment</button>-->
         </div>
     </div>
 </template>
@@ -541,6 +550,18 @@
         bottom: 15px;
         left: 50%;
         transform: translateX(-50%);
+    }
+
+    .buttons {
+        position: absolute;
+        bottom: 15px;
+        width: 100%
+    }
+    #start-btn {
+        margin-right: 7px;
+    }
+    #terminate-btn {
+        margin-left: 7px;
     }
 
     .node-property {

@@ -69,3 +69,7 @@
 .col-12 {
     flex: 12;
 }
+
+.relative {
+    position: relative;
+}

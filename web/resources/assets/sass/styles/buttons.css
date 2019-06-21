@@ -28,10 +28,10 @@
     width: 50%;
 }
 .btn-danger {
-    background-color: red;
+    background-color: #E7424F;
 }
 .btn-danger:hover {
-    background-color: red;
+    background-color: #E7424F;
 }
 
 .clickable {
