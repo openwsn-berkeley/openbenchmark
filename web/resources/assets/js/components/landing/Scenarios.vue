@@ -680,6 +680,10 @@
         transition: fill .5s ease;
     }
 
+    .net-svg {
+        width: 100% !important;
+    }
+
     /*.net {
         height: 78%;
     }*/
