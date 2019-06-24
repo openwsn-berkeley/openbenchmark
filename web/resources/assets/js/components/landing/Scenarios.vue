@@ -440,8 +440,8 @@
                 let nodeSize;
                 let force;
 
-                nodeSize = 35;
-                force = 1500;
+                nodeSize = 30;
+                force = 800;
 
                 return {
                     force: force,
