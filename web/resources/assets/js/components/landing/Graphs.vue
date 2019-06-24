@@ -47,9 +47,9 @@
                 </div>
 
             </div>
-            <div class="card col-direction bordered ml-1 mr-1 pt-1 pb-1 col-8 wrap">
+            <div class="card col-direction bordered ml-1 mr-1 pt-1 pb-1 col-8 wrap v-center h-center">
                 
-                <div v-bar>   
+                <div v-bar v-if="selectedNodeKey !== ''">   
                     <div>
                         <span v-for="key in Object.keys(dataset)">
                             <span v-if="key === selectedNodeKey">
@@ -65,6 +65,8 @@
                         </span>
                     </div>
                 </div>
+
+                <i class="fas fa-chart-area fa-9x light-gray" v-else/>
 
             </div>
         </div>
