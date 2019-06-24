@@ -560,18 +560,6 @@
         filter: grayscale(100%) opacity(0.3);
     }
 
-    .modal-content {
-        height: 100%;
-        position: relative;
-    }
-    .modal-btn {
-        position: absolute;
-        width: 150px;
-        bottom: 15px;
-        left: 50%;
-        transform: translateX(-50%);
-    }
-
     .buttons {
         position: absolute;
         bottom: 15px;

@@ -1,5 +1,27 @@
 <template>
     <div class="top-content">
+        
+        <modal name="file-download">
+            <div class="modal-content row col-direction h-center">
+                <span class="bold align-left mt-1 ml-1">Choose a log file to download: </span>
+                <div class="col-direction mt-1">
+                    <label class="radio">
+                        <input type="radio" name="log-file" :value="'cached_kpi_' + experimentId + '.json'" checked>
+                        <span>cached_kpi_{{experimentId}}.json</span>
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="log-file" :value="'kpi_' + experimentId + '.log'" checked>
+                        <span>kpi_{{experimentId}}.log</span>
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="log-file" :value="'raw_' + experimentId + '.log'" checked>
+                        <span>raw_{{experimentId}}.log</span>
+                    </label>
+                </div>
+                <button class="modal-btn main-btn btn-small" @click="closeModal('file-download')">DOWNLOAD</button>
+            </div>
+        </modal>
+
         <div class="row" style="height: 100%">
             <div class="col-direction ml-1 mr-1 col-4" style="height: 100%;">
 
@@ -15,10 +37,12 @@
                     </div>
                 </div>
 
-                <div class="card col-direction bordered " style="width: 100%; height: 50%;">
+                <div class="card col-direction bordered relative" style="width: 100%; height: 50%;">
                     <span class="mt-1" v-for="key in Object.keys(generalData)">
                         <span class="ml-1 mr-1">{{generalDataTitles[key]}}: <span class="bold">{{generalData[key]}}</span></span>
                     </span>
+
+                    <i id="file-download" class="fas fa-file-download fa-2x clickable" @click="showModal('file-download')" v-if="experimentId !== undefined"></i>
                 </div>
 
             </div>
@@ -110,6 +134,14 @@
         },
 
         methods: {
+            showModal(name) {
+                this.$modal.show(name)
+            },
+
+            closeModal(name) {
+                this.$modal.hide(name)
+            },
+
             loadData() {
                 if (this.experimentId !== undefined) {
                     this.fetchDataFromLogs()
@@ -147,6 +179,10 @@
                         nodeData: []
                     })
                 });
+            },
+
+            showDownloadModal() {
+                this
             },
 
             appendNodeData(id, label, xVal, yVal) {
@@ -393,6 +429,12 @@
 
     .data-row {
         margin-top: 10px;
+    }
+
+    #file-download {
+        position: absolute;
+        bottom: 15px;
+        left: 15px;
     }
 </style>
 

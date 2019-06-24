@@ -73,3 +73,16 @@
 .relative {
     position: relative;
 }
+
+.modal-btn {
+    position: absolute;
+    width: 150px;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.modal-content {
+    height: 100%;
+    position: relative;
+}
