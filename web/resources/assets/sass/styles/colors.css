@@ -39,6 +39,9 @@
 .dark-gray {
 	color: #333333;
 }
+.light-gray {
+	color: #EEEEEE;
+}
 
 .gray-gradient {
 	background-image: linear-gradient(to right, #cccccc, transparent);

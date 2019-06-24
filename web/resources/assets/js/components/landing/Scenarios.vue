@@ -113,12 +113,13 @@
 
             </div>
 
-            <div class="card bordered col-7 mt-1">
+            <div class="card bordered col-7 mt-1 row-direction h-center v-center">
                 <d3-network 
                     :net-nodes="value.nodes" 
                     :net-links="value.links" 
                     :options="options" 
-                    v-if="value !== null" @node-click="selectNode"/>
+                    v-if="scenarioSelected !== -1 && testbedSelected !== -1" @node-click="selectNode"/>
+                <i class="fas fa-project-diagram fa-5x light-gray" v-else/>
             </div>
 
         </div>
