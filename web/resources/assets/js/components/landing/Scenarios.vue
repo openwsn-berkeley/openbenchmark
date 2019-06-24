@@ -2,12 +2,7 @@
     <div class="parent">
 
         <modal name="modal-progress-bar" width="90%" height="165px">
-            <!-- The Progress Bar -->
-            <div class="row pl-3 pr-3 h-center v-center col-direction">
-                <h3 class="primary pulse mb-0">Starting experiment...</h3>                    
-                <progress-bar :current-step="currentStep"></progress-bar>
-            </div>
-
+            <!-- Remains here temporarily. Will be moved later -->
             <div class="row h-center v-center col-direction mt-2" v-if="currentStep == 3">
                 <h3 class="mt-0 mb-0" style="margin-bottom: 5px">Experiment started! <span class="pulse clickable" @click.prevent="scrollContent">Monitor the progress in real time</span></h3>
                 <i class="fas fa-check-circle fa-3x primary-light"></i>
@@ -127,6 +122,11 @@
             </div>
 
         </div>
+
+        <div class="row ml-1 mt-1 mr-2 h-center v-center">
+            <progress-bar :current-step="currentStep"></progress-bar>
+        </div>
+
     </div>
 </template>
 
@@ -495,10 +495,6 @@
 
             this.$eventHub.$on("openbenchmark/1/notifications", payload => {
                 thisComponent.parseMqttEvent(payload);
-            });
-
-            this.$eventHub.$on("SHOW_MODAL", payload => {
-                this.$modal.show(payload)
             });
 
             this.$eventHub.$on("RESERVATION_SUCCESS", payload => {

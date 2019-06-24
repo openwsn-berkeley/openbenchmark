@@ -16,10 +16,6 @@
                 </li>
             </ul>
             <ul class="bottom-list">
-                <li @click="showProgressModal" v-if="progressBar">
-                    <i class="fas fa-sync fa-spin"></i>
-                    <span class="tooltip">Show progress</span>
-                </li>
                 <li @click="showDocs">
                     <i class="fas fa-book"></i>
                     <span class="tooltip">Documentation</span>
@@ -53,9 +49,6 @@
             },
             showDocs() {
                 window.location.href = "/docs";
-            },
-            showProgressModal() {
-                this.$eventHub.$emit('SHOW_MODAL', 'modal-progress-bar')
             }
         },
 

@@ -19,6 +19,20 @@
     background-color: #B2CCE5;
 }
 
+.white {
+	color: #FFFFFF;
+}
+.white-bgd {
+	background-color: #FFFFFF;
+}
+
+.transparent {
+	color: transparent;
+}
+.transparent-bgd {
+	background-color: transparent;
+}
+
 .black {
 	color: black;
 }

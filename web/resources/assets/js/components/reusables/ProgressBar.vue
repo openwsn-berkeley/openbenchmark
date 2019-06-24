@@ -39,14 +39,12 @@
     }
 
     body {
-        background: #6699CC;
         padding-top: 20px;
     }
 
     .track-progress {
         margin: 0;
         padding: 10px 10px 0 10px;
-        background: white;
         height: 80px;
     }
     .track-progress li {
