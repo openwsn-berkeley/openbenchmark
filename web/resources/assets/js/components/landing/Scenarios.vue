@@ -60,7 +60,7 @@
             </div>
         </modal>
 
-        <div class="row">
+        <div class="row" style="height: 80vh">
             <div class="relative card bordered col-5 mr-1 mt-1">
                 
                 <div class="row">
@@ -119,7 +119,7 @@
             </div>
 
             <div class="card bordered col-7 mt-1">
-                <d3-network style="height: 78%" 
+                <d3-network 
                     :net-nodes="value.nodes" 
                     :net-links="value.links" 
                     :options="options" 
@@ -674,9 +674,6 @@
 
     .net-svg {
         width: 100% !important;
+        height: 100% !important;
     }
-
-    /*.net {
-        height: 78%;
-    }*/
 </style>
