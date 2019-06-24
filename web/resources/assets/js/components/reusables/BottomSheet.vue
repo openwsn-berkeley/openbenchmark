@@ -1,5 +1,5 @@
 <template>
-	<div class="top-container" :class="{'black-overlay': !collapsed}">
+	<div id="top-container" class="top-container transition-anim" :class="{'black-overlay': !collapsed}" @click="action($event)">
 		<div id="parent" class="container transition-anim shadow" :class="{collapsed: collapsed}" :style="{height: computedHeight}" @click="action($event)">
 			<span class="top-span" draggable="true" @mousedown="startDragging($event)"></span>
 			<i id="terminal" class="fas fa-terminal" v-if="collapsed"></i>
@@ -36,10 +36,10 @@
 		},
 
 		methods: {
-			action(event, isCollapsed) {
+			action(event) {
 				if (this.collapsed)
 					this.collapsed = false
-				else if (event.target.id === "close")
+				else if (event.target.id === "close" || event.target.id === "top-container")
 					this.collapsed = true
 
 				event.stopPropagation()
