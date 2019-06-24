@@ -101,6 +101,9 @@
                         <span class="bold node-property">{{selectedNode.roleFull}}</span>
                     </div>
                 </div>
+                <div class="row card pl-1 pr-1 row-direction" v-else>
+                    <span>No node selected</span>
+                </div>
 
                 <div class="buttons row h-center">
                     <!-- Condition for enabling the start button -->
