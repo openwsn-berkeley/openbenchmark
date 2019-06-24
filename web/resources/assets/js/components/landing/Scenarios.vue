@@ -127,7 +127,7 @@
 
         </div>
 
-        <div class="row ml-1 mt-1 mr-2 h-center v-center">
+        <div class="row ml-1 mt-1 mr-2 h-center v-center" v-if="currentStep > -2">
             <progress-bar :current-step="currentStep"></progress-bar>
         </div>
 
