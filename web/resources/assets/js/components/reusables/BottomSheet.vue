@@ -1,6 +1,6 @@
 <template>
 	<div class="top-container" :class="{'black-overlay': !collapsed}">
-		<div id="parent" class="container shadow" :class="{collapsed: collapsed}" :style="{height: computedHeight}" @click="action($event)">
+		<div id="parent" class="container transition-anim shadow" :class="{collapsed: collapsed}" :style="{height: computedHeight}" @click="action($event)">
 			<span class="top-span" draggable="true" @mousedown="startDragging($event)"></span>
 			<i id="terminal" class="fas fa-terminal" v-if="collapsed"></i>
 			<i id="close" class="fas fa-times" v-if="!collapsed" @click="action($event)"></i>
@@ -14,6 +14,8 @@
 
 <script>
 	import DebugWindow from './../landing/DebugWindow.vue';
+
+	let topContainer
 
 	export default {
 		components: {
@@ -43,21 +45,29 @@
 				event.stopPropagation()
 			},
 			startDragging(event) {
+				if (topContainer.classList.contains('transition-anim')) 
+					topContainer.classList.remove('transition-anim')
+
 				document.addEventListener("mousemove", this.resize, false)
 				document.addEventListener("mouseup", this.stopDragging, false)
 			},
 			resize(event) {
-				this.height = event.clientY
+				this.height = window.innerHeight - event.clientY
 			},
 			stopDragging(event) {
 				document.removeEventListener("mousemove", this.resize, false)
+				topContainer.classList.add('transition-anim')
 			}
+		},
+
+		mounted() {
+			topContainer = document.getElementById("parent")
 		}
 	}
 </script>
 
 <style scoped>
-	.top-container {
+	.transition-anim {
 		transition: 0.3s ease;
 	}
 	.container {
@@ -65,7 +75,6 @@
 		bottom: 0;
 		right: 0;
 		width: 100vw;
-		transition: 0.3s ease;
 		z-index: 3;
 		background: white;
 		border-top: 3px #0e305d solid;
