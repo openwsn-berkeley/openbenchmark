@@ -6,19 +6,20 @@
                 <span class="bold align-left mt-1 ml-1">Choose a log file to download: </span>
                 <div class="col-direction mt-1">
                     <label class="radio">
-                        <input type="radio" name="log-file" :value="'cached_kpi_' + experimentId + '.json'" checked>
+                        <input type="radio" name="log-file" @click="markFileType('kpi-json')" :value="'cached_kpi_' + experimentId + '.json'" checked>
                         <span>cached_kpi_{{experimentId}}.json</span>
                     </label>
                     <label class="radio">
-                        <input type="radio" name="log-file" :value="'kpi_' + experimentId + '.log'" checked>
+                        <input type="radio" name="log-file" @click="markFileType('kpi')" :value="'kpi_' + experimentId + '.log'">
                         <span>kpi_{{experimentId}}.log</span>
                     </label>
                     <label class="radio">
-                        <input type="radio" name="log-file" :value="'raw_' + experimentId + '.log'" checked>
+                        <input type="radio" name="log-file" @click="markFileType('raw')" :value="'raw_' + experimentId + '.log'">
                         <span>raw_{{experimentId}}.log</span>
                     </label>
                 </div>
-                <button class="modal-btn main-btn btn-small" @click="closeModal('file-download')">DOWNLOAD</button>
+                <a id="file-download-anchor" style="display: hidden"/>
+                <button class="modal-btn main-btn btn-small" @click="downloadFile()">DOWNLOAD</button>
             </div>
         </modal>
 
@@ -91,6 +92,8 @@
             return {
                 //client: new Paho.Client("broker.mqttdashboard.com", Number(8000), "webBrowserClient"),
 
+                logType: "kpi-json",
+
                 expStartTimestamp: -1,
                 dataPerChart: 20,
 
@@ -148,6 +151,21 @@
                 }
             },
 
+            markFileType(fileType) {
+                this.logType = fileType;
+            },
+
+            downloadFile() {
+                let downloadUrl = '/api/download/' + thisComponent.experimentId + '/' + thisComponent.logType
+                let fileDownloadAnchor = document.getElementById("file-download-anchor")
+
+                fileDownloadAnchor.setAttribute('href', downloadUrl)
+
+                fileDownloadAnchor.click()
+                this.closeModal('file-download')
+                this.logType = "kpi-json"
+            },
+
             fetchDataFromLogs(experimentId) {
                 axios.get('/api/logs/data-fetch/' + this.experimentId)
                     .then(function (response) {
@@ -179,10 +197,6 @@
                         nodeData: []
                     })
                 });
-            },
-
-            showDownloadModal() {
-                this
             },
 
             appendNodeData(id, label, xVal, yVal) {
