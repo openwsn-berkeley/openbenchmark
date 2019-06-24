@@ -51,7 +51,7 @@
                 
                 <div class="row-direction v-center mt-1" style="width: 100%">
                     <file-upload-simple :allow-upload="useOpenWSNFirmware" @click.native="useOpenWSNFirmware = false"></file-upload-simple>
-                    <div class="testbed row ml-1 h-center" :class="{'testbed-selected': useOpenWSNFirmware}" @click="useOpenWSNFirmware = true">
+                    <div class="testbed row ml-1 h-center" :class="{'testbed-selected': useOpenWSNFirmware}" @click="revertToDefaultFw()">
                         <img class="logo-sm" style="height: 55px" src="images/openwsn_cropped.png">
                     </div>
                 </div>
@@ -83,8 +83,8 @@
                 <div class="row">
                     <div class="col-2 pl-1 col-direction">
                         <h4>Firmware: </h4>
-                        <span v-if="useOpenWSNFirmware">Default OpenWSN firmware</span>
-                        <span class="bold" v-else>{{firmware}}</span>
+                        <span v-if="firmware === undefined">Default OpenWSN firmware</span>
+                        <span class="bold" v-else>{{firmware.origName}}</span>
                         <span class="clickable primary-light" @click="showModal('firmware-pick')">Change</span>
                     </div>
                 </div>
@@ -187,7 +187,9 @@
                 currentStep: -2,   //If -2, process has not started yet; -1: process started, waiting for notifications
                 taskFailed: false,
 
-                firmware: ""
+                firmware: undefined
+                    //firmware: ...,
+                    //firmware_orig_name: ...
             }
         },
 
@@ -308,8 +310,8 @@
                 
                 let route = '/api/start-exp/' + scenario + '/' + testbed + '/false'
 
-                if (this.firmware && this.firmware !== "") {
-                    route += '/' + this.firmware
+                if (this.firmware !== undefined) {
+                    route += '/' + this.firmware.name
                 }
 
                 thisComponent.currentStep = -1
@@ -351,6 +353,11 @@
                     .then(function () {
                         // always executed
                     });
+            },
+
+            revertToDefaultFw() {
+                this.useOpenWSNFirmware = true
+                this.firmware = undefined
             },
 
             markNode(node, field, value) {
@@ -513,12 +520,9 @@
             });
 
             this.$eventHub.$on("FIRMWARE_UPLOADED", payload => {
-                if (payload.http_code == 200) {
-                    thisComponent.firmware = payload.message.name
-                    console.log("Firmware successfully uploaded: " + thisComponent.firmware);
-                } else {
-                    console.log("Error uploading firmware. Will revert to default OpenWSN");
-                }
+                thisComponent.firmware = payload
+                console.log(JSON.stringify(thisComponent.firmware))
+                console.log("Firmware successfully uploaded: " + thisComponent.firmware.origName);
             });
         }
     }

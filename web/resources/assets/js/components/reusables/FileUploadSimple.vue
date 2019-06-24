@@ -92,7 +92,10 @@
 
             processResponse(newFile) {
                 if (newFile.xhr && newFile.xhr.status > 0) {
-                    this.$eventHub.$emit('FIRMWARE_UPLOADED', newFile.response)
+                    this.$eventHub.$emit('FIRMWARE_UPLOADED', {
+                        "name": newFile.response.message.name,
+                        "origName": this.files[0].name
+                    })
                 } else {
                     console.log('Firmware upload failed')
                 }
