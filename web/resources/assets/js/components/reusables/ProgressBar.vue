@@ -51,9 +51,8 @@
         list-style-type: none;
         display: inline-block;
         position: relative;
-        font: 14px/14px Helvetica, sans-serif;
-        text-transform: uppercase;
         text-align: center;
+        font-weight: bold;
         color: #bbb;
         border-bottom: 4px #bbb solid;
         line-height: 3em;
@@ -85,7 +84,7 @@
         }
     }
     .track-progress li.done {
-        color: #bbb;
+        color: #777;
         font-weight: bold;
         border-bottom: 4px #6699CC solid;
     }
