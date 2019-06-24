@@ -31,7 +31,7 @@
                     <div v-bar>   
                         <div class="ml-1">            
                             <label class="radio" v-for="key in Object.keys(dataset)" @click="selectedNodeKey = key">
-                                <input type="radio" name="r" :value="key" checked>
+                                <input type="radio" name="r" :value="key">
                                 <span>{{key}}</span>
                             </label>
                         </div>
