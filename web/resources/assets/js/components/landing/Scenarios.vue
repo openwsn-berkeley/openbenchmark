@@ -672,7 +672,7 @@
         transition: fill .5s ease;
     }
 
-    .net-svg {
+    .net, .net-svg {
         width: 100% !important;
         height: 100% !important;
     }
