@@ -17,4 +17,8 @@ class LogsController extends Controller
     	return $this->log_parser->get_log_data($action, $experiment_id);
     }
 
+    function download($experiment_id, $log_type) {
+    	return $this->log_parser->download($experiment_id, $log_type);
+    }
+
 }

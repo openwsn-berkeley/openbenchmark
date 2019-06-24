@@ -35,3 +35,4 @@ Route::get('/general/{param}/{scenario?}/{testbed?}', 'ExperimentController@get_
 
 //Routes for accessing scenario logs
 Route::get('/logs/{action}/{experiment_id?}', 'LogsController@get');
+Route::get('/download/{experiment_id}/{log_type}', 'LogsController@download');

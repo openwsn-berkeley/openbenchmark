@@ -4,9 +4,14 @@ namespace App\Classes\Logs;
 
 use SuccessResponse;
 use ErrorResponse;
+use Response;
 
 
 class LogParser {
+
+	const ERRORS = [
+		"no-file" => "File does not exists"
+	];
 
 	function get_log_data($action, $experiment_id) {
 		$invalid_params = $this->_validate_params($action, $experiment_id);
@@ -16,6 +21,45 @@ class LogParser {
 
         return ErrorResponse::response(400, $invalid_params);
 	} 
+
+	function download($experiment_id, $log_type) {
+		try {
+			$prefix = [
+				"raw"      => "raw/raw_",
+				"kpi"      => "kpis/kpi_",
+				"kpi-json" => "kpis/.cache/cached_kpi_"
+			];
+
+			$suffix = [
+				"raw"      => ".log",
+				"kpi"      => ".log",
+				"kpi-json" => ".json"	
+			];
+
+			if (array_key_exists($log_type, $prefix))
+				$name_prefix = $prefix[$log_type];
+			else
+				throw new \Exception(self::ERRORS["no-file"]);
+
+			if (array_key_exists($log_type, $suffix))
+				$name_suffix = $suffix[$log_type];
+			else
+				throw new \Exception(self::ERRORS["no-file"]);
+
+			$name = "$name_prefix$experiment_id$name_suffix";
+
+			$file_path = "/home/vagrant/openbenchmark/experiment-orchestrator/kpi/$name";
+
+			$file_path_err = $this->_validate_file_path($file_path);
+			if ($file_path_err != "")
+				throw new \Exception($file_path_err);
+
+			return Response::download($file_path);
+
+		} catch (\Exception $e) {
+			return ErrorResponse::response(400, $e->getMessage());
+		}
+	}
 
 	private function _invoke_python_interface($action, $experiment_id) {
 		$python_interface_path = "/home/vagrant/openbenchmark/experiment-orchestrator/kpi/kpis/log_parser.py";
@@ -42,6 +86,12 @@ class LogParser {
 			];
 
 		return $invalid_params;
+	}
+
+	private function _validate_file_path($file_path) {
+		if (file_exists($file_path))
+			return "";
+		return self::ERRORS["no-file"];
 	}
 
 }
