@@ -110,8 +110,8 @@
                     <!-- v-if="scenarioSelected !== -1 && testbedSelected !== -1" -->
                     <!-- Condition for disabling the start button -->
                     <!-- :disabled="currentStep > -2 -->
-                    <button id="start-btn" class="main-btn btn-small btn-width-half ml-1"  @click="processStart()">Start</button>
-                    <button id="terminate-btn" class="main-btn btn-small btn-width-half btn-danger mr-1" @click="processTerminate()">Terminate</button>
+                    <button id="start-btn" class="main-btn btn-small btn-width-half ml-1"  @click="processStart()" :disabled="currentStep > -2">Start</button>
+                    <button id="terminate-btn" class="main-btn btn-small btn-width-half btn-danger mr-1" @click="processTerminate()" :disabled="currentStep === -2">Terminate</button>
                 </div>
 
             </div>
