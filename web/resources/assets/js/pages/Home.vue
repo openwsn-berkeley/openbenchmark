@@ -2,32 +2,32 @@
     <div class="parent row">
         <sidebar></sidebar>
         <div id="root" style="margin-left: 80px">
-            <div id="intro" class="section">
-                <logs-list v-observe-visibility="{
+            <div id="intro" class="section" v-observe-visibility="{
                        callback: visibilityChanged,
                        intersection: {
                            root,
                            threshold
                        }
-                }"></logs-list>
+                    }">
+                <logs-list></logs-list>
             </div>
-            <div id="scenarios" class="section">
-                <scenarios v-observe-visibility="{
+            <div id="scenarios" class="section" v-observe-visibility="{
                        callback: visibilityChanged,
                        intersection: {
                            root,
                            threshold
                        }
-                }" :experiment-id="id"></scenarios>
+                    }">
+                <scenarios :experiment-id="id"></scenarios>
             </div>
-            <div id="graphs" class="section">
-                <graphs v-if="dataFlowStarted" v-observe-visibility="{
+            <div id="graphs" class="section" v-observe-visibility="{
                        callback: visibilityChanged,
                        intersection: {
                            root,
                            threshold
                        }
-                }"></graphs>
+                    }">
+                <graphs></graphs>
             </div>
 
             <bottom-sheet></bottom-sheet>
@@ -62,7 +62,6 @@
 
         data: function () {
             return {
-                dataFlowStarted: true,
                 sidebarScroll: false,
                 root: document.getElementById('root'),
                 threshold: 0.05
@@ -70,14 +69,6 @@
         },
 
         methods: {
-            registerChannel: function() {
-                this.$socket.emit('channelRegistration', 1); //Second param should be a dynamically added id
-                console.log("Channel registered!");
-            },
-            forwardMessage: function(topic, data) {
-                this.$eventHub.$emit(topic, data);
-            },
-
             scrollContent(anchor) {
                 this.$eventHub.$emit('SCROLL', anchor);
             },
