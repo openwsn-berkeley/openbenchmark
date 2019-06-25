@@ -10,7 +10,7 @@
                     <i class="fas fa-cogs"></i>
                     <span class="tooltip">Configuration</span>
                 </li>
-                <li :class="{active: selectedId === 2}" @click="scrollContent('graphs')" v-if="graphs">
+                <li :class="{active: selectedId === 2}" @click="scrollContent('graphs')">
                     <i class="fas fa-tachometer-alt"></i>
                     <span class="tooltip">Monitoring</span>
                 </li>
@@ -32,10 +32,7 @@
     export default {
         data: function () {
             return {
-                selectedId: 0,
-
-                progressBar: false,
-                graphs: false
+                selectedId: 0
             }
         },
 
@@ -66,15 +63,6 @@
                         break;
                 }
             });
-
-            this.$eventHub.$on("SIDEBAR", payload => {
-                if (payload.element == 'progress-bar') {
-                    thisComponent.progressBar = payload.show
-                } else if (payload.element == 'graphs') {
-                    thisComponent.graphs = payload.show
-                }
-            });
-
         },
 
         created() {
