@@ -1,36 +1,73 @@
 <template>
     <div class="top-content">
+        
+        <modal name="file-download">
+            <div class="modal-content row col-direction h-center">
+                <span class="bold align-left mt-1 ml-1">Choose a log file to download: </span>
+                <div class="col-direction mt-1">
+                    <label class="radio">
+                        <input type="radio" name="log-file" @click="markFileType('kpi-json')" :value="'cached_kpi_' + experimentId + '.json'" checked>
+                        <span>cached_kpi_{{experimentId}}.json</span>
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="log-file" @click="markFileType('kpi')" :value="'kpi_' + experimentId + '.log'">
+                        <span>kpi_{{experimentId}}.log</span>
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="log-file" @click="markFileType('raw')" :value="'raw_' + experimentId + '.log'">
+                        <span>raw_{{experimentId}}.log</span>
+                    </label>
+                </div>
+                <a id="file-download-anchor" style="display: hidden"/>
+                <button class="modal-btn main-btn btn-small" @click="downloadFile()">DOWNLOAD</button>
+            </div>
+        </modal>
+
         <div class="row" style="height: 100%">
             <div class="col-direction ml-1 mr-1 col-4" style="height: 100%;">
-                <div class="node-card card mb-1" style="width: 100%; height: 50%;">
-                    <d3-network :net-nodes="value.nodes" :net-links="value.links" :options="options" @node-click="nodeClick"/>
+
+                <div class="node-card card bordered mb-1 col-direction">
+                    <span class="bold mt-1 ml-1">Nodes: </span>
+                    <div v-bar>   
+                        <div class="ml-1">            
+                            <label class="radio" v-for="key in Object.keys(dataset)" @click="selectedNodeKey = key">
+                                <input type="radio" name="r" :value="key">
+                                <span>{{key}}</span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
-                <div class="card col-direction" style="width: 100%; height: 50%;">
-                    <span class="mt-1" v-for="data in generalData">
-                        <span class="bold ml-1 mr-1">{{generalDataTitles[data.identifier]}}:</span> {{data.value}}
+
+                <div class="card col-direction bordered relative" style="width: 100%; height: 50%;">
+                    <span class="mt-1" v-for="key in Object.keys(generalData)">
+                        <span class="ml-1 mr-1">{{generalDataTitles[key]}}: <span class="bold">{{generalData[key]}}</span></span>
                     </span>
+
+                    <i id="file-download" class="fas fa-file-download fa-2x clickable" @click="showModal('file-download')" v-if="experimentId !== undefined"></i>
                 </div>
+
             </div>
-            <div class="card row ml-1 mr-1 pt-1 col-8 wrap" style="overflow-y: auto; overflow-x: hidden">
-
-                <span v-for="node in dataset">
-                    <span v-if="node.id === selectedNode.name">
-                        <span v-for="item in node.nodeData">
-                            <line-chart class="chart ml-3 mr-3"
-                                        :label="item.label"
-                                        :x-axis="item.xAxis"
-                                        :y-axis="item.yAxis"
-                                        :width="650"
-                                        :height="300"></line-chart>
+            <div class="card col-direction bordered ml-1 mr-1 pt-1 pb-1 col-8 wrap v-center h-center">
+                
+                <div v-bar v-if="selectedNodeKey !== ''">   
+                    <div>
+                        <span v-for="key in Object.keys(dataset)">
+                            <span v-if="key === selectedNodeKey">
+                                <span v-for="label in Object.keys(dataset[key])">
+                                    <line-chart class="chart ml-3 mr-3"
+                                                :label="label"
+                                                :x-axis="dataset[key][label]['timestamp']"
+                                                :y-axis="dataset[key][label]['value']"
+                                                :width="700"
+                                                :height="300"></line-chart>
+                                </span>
+                            </span>
                         </span>
-                    </span>
-                </span>
+                    </div>
+                </div>
 
-                <!--
-                <line-chart class="chart ml-3 mr-3"></line-chart>
-                <line-chart class="chart ml-3 mr-3"></line-chart>
-                <line-chart class="chart ml-3 mr-3"></line-chart>
-                <line-chart class="chart ml-3 mr-3"></line-chart>-->
+                <i class="fas fa-chart-area fa-9x light-gray" v-else/>
+
             </div>
         </div>
     </div>
@@ -41,6 +78,8 @@
     import D3Network from 'vue-d3-network';
     import Paho from 'paho-mqtt';
 
+    const axios = require('axios');
+
     let thisComponent;
 
     export default {
@@ -49,9 +88,13 @@
             D3Network
         },
 
+        props: ['experiment-id'],
+
         data: function () {
             return {
                 //client: new Paho.Client("broker.mqttdashboard.com", Number(8000), "webBrowserClient"),
+
+                logType: "kpi-json",
 
                 expStartTimestamp: -1,
                 dataPerChart: 20,
@@ -61,192 +104,133 @@
                     links: []
                 },
 
-                selectedNode : {},
+                selectedNodeKey: "",
 
-                generalData: [],
+                headerData: {},
+
+                generalData: {
+                    /* EXAMPLE ITEM: 
+                    "networkFormationTime": 1560761378.408148, 
+                    ... 
+                    */
+                },
                 generalDataTitles: {
-                    "networkFormationTime": "Network formation completed at",
-                    "syncronizationPhase" : "Synchronization completed at",
-                    "secureJoinPhase"     : "Secure join phase completed at"
+                    "networkFormationTime": "Network formation",
+                    "syncronizationPhase" : "Synchronization",
+                    "secureJoinPhase"     : "Secure join phase"
                 },
 
-                dataset: [
-                    /*{//Corresponds to a single node
-                        "id":"node-a8-106",
-                        "eui64":"05-43-32-ff-03-dc-a3-66",
-                        "isDag": 0,
-                        "nodeData":[
-                            {
-                                "label":"numRx",
-                                "xAxis":[15388500.87438082,15388500.905358542,15388500.935934938,15388500.966604061,15388500.99736588,15388501.01802762,15388501.04889744],
-                                "yAxis":[0,0,0,0,0,0,0]
-                            },
-                            {
-                                "label":"dutycycle",
-                                "xAxis":[15388500.987090621],
-                                "yAxis":[100]
-                            }
-                        ]
-                    }*/
-                ]
+                dataset: {
+                    /* EXAMPLE ITEM:
+                    "node-a8-106": {
+                        "latency": {
+                            "timestamp":[15388500.87438082,15388500.905358542,15388500.935934938,15388500.966604061,15388500.99736588,15388501.01802762,15388501.04889744],
+                            "value":[0,0.5,1,0.75,0.85,0.8,0.9]
+                        },
+                        "reliabilty": {
+                            "timestamp":[15388500.987090621],
+                            "value":[100]
+                        }
+                    },
+                    ...
+                    */
+                }
             }
         },
 
         methods: {
-            relativeTimestampParse(timestamp) {
-                //Converts relative timestamp to milliseconds or seconds since the experiment start
-                //Timestamp in units of timeslots. Each timeslot is 10ms
-                return (timestamp / 1000000).toFixed(2);
+            /*** Parse data from the logs ***/
+            showModal(name) {
+                this.$modal.show(name)
             },
 
-            createBlankDataset() {
-                //Creates a blank dataset for all the existing nodes in the 'nodes' field
-                this.value.nodes.forEach(element => {
-                    this.dataset.push({
-                        id: element.name,
-                        eui64: '',
-                        nodeData: []
+            closeModal(name) {
+                this.$modal.hide(name)
+            },
+
+            loadData() {
+                this.fetchDataFromLogs()
+            },
+
+            markFileType(fileType) {
+                this.logType = fileType;
+            },
+
+            downloadFile() {
+                let downloadUrl = '/api/download/' + thisComponent.experimentId + '/' + thisComponent.logType
+                let fileDownloadAnchor = document.getElementById("file-download-anchor")
+
+                fileDownloadAnchor.setAttribute('href', downloadUrl)
+
+                fileDownloadAnchor.click()
+                this.closeModal('file-download')
+                this.logType = "kpi-json"
+            },
+
+            fetchDataFromLogs(experimentId) {
+                axios.get('/api/logs/data-fetch/' + this.experimentId)
+                    .then(function (response) {
+                        thisComponent.headerData = response.data.message.header
+                        thisComponent.generalData = response.data.message.general_data
+                        thisComponent.dataset = response.data.message.data
+                        thisComponent.$eventHub.$emit('LOG_DATA_FETCHED', thisComponent.headerData);
                     })
-                });
-            },
-
-            appendNodeData(id, label, xVal, yVal) {
-                //Appends to 'xAxis' and 'yAxis' of a 'nodeData' (of the node with the given 'eui64') element with the corresponding label
-                //Creates new 'nodeData' element if the label does not exist
-                if (id !== undefined) {
-                    let node = this.getNodeByProperty('id', id);
-
-                    console.log("Fetching node: " + id);
-        
-                    let num = node.nodeData.length;
-                    let valueAppended = false;
-
-                    for (let i=0; i<num; i++) {
-                        if (node.nodeData[i].label === label) {
-                            node.nodeData[i].xAxis.push(xVal);
-                            node.nodeData[i].yAxis.push(yVal);
-
-                            valueAppended = true;
-
-                            if (node.nodeData[i].xAxis.length > this.dataPerChart) {
-                                node.nodeData[i].xAxis.shift();
-                                node.nodeData[i].yAxis.shift();
-                            }
-                        }
-                    }
-
-                    if (!valueAppended) {
-                        node.nodeData.push({
-                            label: label,
-                            xAxis: [xVal],
-                            yAxis: [yVal]
-                        });
-                    }
-                } else {
-                    this.updateGeneralData(label, xVal);
-                }
-            },
-
-            updateGeneralData(label, xVal) {
-                let hasElement = false;
-
-                for (let i=0; i<this.generalData.length; i++) {
-                    if (this.generalData[i]["identifier"] === label) {
-                        this.generalData[i]["value"] = xVal;
-                        hasElement = true;
-                        break;    
-                    } 
-                }
-
-                if (!hasElement && this.generalDataTitles.hasOwnProperty(label)) {
-                    this.generalData.push({
-                        "identifier": label,
-                        "value": xVal
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+                    .then(function() {
+                        
                     });
-                }
+            },
+            /*** ***/
+
+            /*** Parse data from MQTT topic ***/
+            appendNodeData(id, label, timestamp, value) {
+                if (id !== undefined) {
+                    let newObj = this.clone(this.dataset)
+
+                    if ( !(id in newObj) ) 
+                        newObj[id] = {}
+
+                    if ( !(label in newObj[id]) )
+                        newObj[id][label] = {
+                            "timestamp": [],
+                            "value"    : []
+                        }
+
+                    newObj[id][label]["timestamp"].push(timestamp)
+                    newObj[id][label]["value"].push(value)
+
+                    console.log("Dataset expanded:")
+                    console.log(JSON.stringify(newObj))
+
+                    this.dataset = newObj
+
+                } else   // General data not related to a single node
+                    this.updateGeneralData(label, timestamp);
             },
 
-            nodeClick(event, nodeObject) {
-                this.value.nodes.forEach(function(element) {
-                    if (element === nodeObject) {
-                        thisComponent.selectedNode = element;
-                        element._cssClass += " selected";
-                    } else {
-                        element._cssClass = element.defaultCssClass;
-                    }
-                });
-                nodeObject._cssClass += " selected";
-                this.selectNodeData(nodeObject);
-            },
-
-            selectNodeData(node) {
-                //Put dataset element with the given 'id' in 'selectedNode' variable (used for filling the UI with the data)
-                this.selectedNode = node;
-                console.log("Currently showing: " + JSON.stringify(this.getNodeByProperty('id', this.selectedNode)));
-            },
-
-            getNodeByProperty(property, val) {
-                //Searches the dataset for an element with the given property with the given val
-                let num = this.dataset.length;
-                let result = {};
-
-                for (let i=0; i<num; i++) {
-                    if (property === 'id' && this.dataset[i].id === val) {
-                        result = this.dataset[i];
-                    } else if (property === 'eui64' && this.dataset[i].eui64 === val) {
-                        result = this.dataset[i];
-                    }
-                }
-
-                return result;
+            updateGeneralData(label, timestamp) {
+                let newObj = this.clone(this.generalData)
+                newObj[label] = timestamp
+                this.generalData = newObj
+                console.log("General data updated:")
+                console.log(JSON.stringify(this.generalData))
             },
 
             parseLogData(obj) {
-                let id    = obj.node_id;
-                let label = obj.kpi;
-                let xVal  = obj.timestamp;
-                let yVal  = obj.value;
+                let id        = obj.node_id;
+                let label     = obj.kpi;
+                let timestamp = obj.timestamp;
+                let value     = obj.value;
 
-                console.log("Parsing data: " + label + " " + yVal + " id: " + id);
-
-                this.appendNodeData(id, label, this.timestampDiff(xVal), parseFloat(yVal));
-            },
-
-            timestampDiff(stmp) {
-                let timestamp = stmp*1000;
-                console.log("Timestamp: " + this.expStartTimestamp + "; Stmp: " + timestamp);
-                return this.getDuration(new Date(this.expStartTimestamp), new Date(timestamp)).toString();
-            },
-
-            getDuration(d1, d2) {
-                let d3 = new Date(d2 - d1);
-                let d0 = new Date(0);
-
-                return {
-                    getHours: function(){
-                        return d3.getHours() - d0.getHours();
-                    },
-                    getMinutes: function(){
-                        return d3.getMinutes() - d0.getMinutes();
-                    },
-                    getSeconds: function(){
-                        return d3.getSeconds() - d0.getSeconds();
-                    },
-                    getMilliseconds: function() {
-                        return d3.getMilliseconds() - d0.getMilliseconds();
-                    },
-                    toString: function(){
-                        return this.getMinutes() + ":" +
-                            this.getSeconds() + ":" +
-                            this.getMilliseconds();
-                    },
-                };
+                this.appendNodeData(id, label, timestamp, value);
             },
 
             clone(obj) {
-                if (null === obj || "object" !== typeof obj) return obj;
-                let copy = obj.constructor();
-                for (let attr in obj) {
+                if (null == obj || "object" != typeof obj) return obj;
+                var copy = obj.constructor();
+                for (var attr in obj) {
                     if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
                 }
                 return copy;
@@ -262,73 +246,33 @@
                     }
                 }, 1000);  
             },
-            onConnect() {
-                // Once a connection has been made, make a subscription and send a message.
-                //console.log("onConnect");
-                //this.client.subscribe("browser/event");
-                //let message = new Paho.Message("Browser connected to MQTT!");
-                //message.destinationName = "browser/message";
-                //this.client.send(message);
-            },
-            onConnectionLost(responseObject) {
-                //if (responseObject.errorCode !== 0)
-                 //   console.log("onConnectionLost: " + responseObject.errorMessage);
-            },
-            onMessageArrived(message) {
-                //console.log("onMessageArrived: " + message.payloadString);
-            },
 
             parseMqttEvent(payload) {
                 let payloadObj = JSON.parse(payload)
                 let type       = payloadObj["type"]
 
-                if (type == "kpi") {
+                if (type == "kpi") 
                     this.parseLogData(payloadObj["content"])
-                }
             }
+            /*** ***/
 
-        },
-
-        computed:{
-            options() {
-                return {
-                    force: 500,
-                    size: {w:350, h:320},
-                    nodeSize: 20,
-                    nodeLabels: true,
-                    canvas: false
-                }
-            },
-            currentData() {
-                let currentNode = this.getNodeByProperty('id', this.selectedNode.id);
-                return {
-                    id:    currentNode.id,
-                    eui64: currentNode.eui64,
-                    isDag: currentNode.isDag
-                }
-            }
         },
 
         mounted() {
-            this.subscribe();
+            // If `experimentId` doesn't exists accept data from MQTT (real-time charts)
+            // If `experimentId` exists read data from experiment logs
+            if (this.experimentId === undefined)
+                this.subscribe();
+            else
+                this.loadData();
 
-            this.$eventHub.$on("MQTT", payload => {
+            this.$eventHub.$on("openbenchmark/1/kpi", payload => {
                 thisComponent.parseMqttEvent(payload);
-            });
-
-            this.$eventHub.$on("NODES_FETCHED", payload => {
-                thisComponent.value = thisComponent.clone(payload);
-                this.createBlankDataset();
-            });
-
-            this.$eventHub.$on("LOG_MODIFICATION", payload => {
-                thisComponent.parseLogData(payload);
             });
         },
 
         created() {
             thisComponent = this;
-            this.expStartTimestamp = new Date().valueOf();
         }
     }
 
@@ -336,7 +280,7 @@
 
 <style scoped>
     .top-content {
-        height: 93vh;
+        height: 100%;
         padding: 25px;
         background-color: #eeeeee;
     }
@@ -346,65 +290,23 @@
     }
 
     .node-card {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        width: 100%; 
+        height: 50%;
     }
 
     .data-row {
         margin-top: 10px;
+    }
+
+    #file-download {
+        position: absolute;
+        bottom: 15px;
+        left: 15px;
     }
 </style>
 
 <style>
     canvas {
         position: relative;
-    }
-</style>
-
-<style>
-    @keyframes loading {
-        0% {fill: rgba(200, 200, 200, .7);}
-        50% {fill: rgba(200, 200, 200, .3);}
-        100% {fill: rgba(200, 200, 200, .7);}
-    }
-
-    .node-off {
-        stroke: rgba(100, 100, 100, .7);
-        fill: rgba(200, 200, 200, .7);
-        stroke-width: 3px;
-        transition: fill .5s ease;
-    }
-    .node-loading {
-        stroke: rgba(100, 100, 100, .7);
-        fill: rgba(200, 200, 200, .7);
-        stroke-width: 3px;
-        transition: fill .5s ease;
-        animation: loading 1s infinite;
-    }
-    .node-on {
-        stroke: rgba(66, 184, 131, 1);
-        fill: rgba(200, 200, 200, .3);
-        stroke-width: 3px;
-        transition: fill .5s ease;
-    }
-    .node-fail {
-        stroke: red;
-        fill: rgba(200, 200, 200, .3);
-        stroke-width: 3px;
-        transition: fill .5s ease;
-    }
-
-    .node-join {
-        stroke: rgba(66, 184, 131, 1);
-        fill: rgba(122,205,168, 1);
-        stroke-width: 3px;
-        transition: fill .5s ease;
-    }
-    .dag-node-join {
-        stroke: orange;
-        fill: rgba(122,205,168, 1);
-        stroke-width: 3px;
-        transition: fill .5s ease;
     }
 </style>

@@ -11,6 +11,15 @@
             'y-axis'
         ],
 
+        data: function() {
+            return {
+                titles: {
+                    "latency": "Latency",
+                    "reliability": "Reliability"
+                }
+            }
+        },
+
         methods: {
             renderLineChart() {
                 this.renderChart(
@@ -19,14 +28,34 @@
                         datasets: [
                             {
                                 label: this.label,
-                                backgroundColor: '#6699CC',
+                                borderColor: '#6699CC',
                                 data: this.yAxis
                             }
                         ]
                     },
-                    {
+                    {   
                         responsive: false,
-                        maintainAspectRatio: false
+                        maintainAspectRatio: false,
+                        title: {
+                            display: true,
+                            text: this.titles[this.label]
+                        },
+                        legend: {
+                            display: false
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }],
+                            xAxes: [{
+                                ticks: {
+                                    autoSKip: false,
+                                    stepSize: 100
+                                }
+                            }]
+                        }
                     }
                 )
             }

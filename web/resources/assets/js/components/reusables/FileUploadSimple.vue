@@ -1,11 +1,10 @@
 
 <template>
     <div class="example-simple">
-        <h4 id="example-title" class="example-title">Firmware: </h4>
-        <div class="upload ml-3">
-            <ul>
+        <div class="upload">
+            <ul v-if="files.length > 0">
                 <li v-for="(file, index) in files" :key="file.id">
-                    <span>{{file.name}}</span> -
+                    <span class="ellipsis">{{file.name}}</span> -
                     <span>{{file.size | formatSize}}</span> -
                     <span v-if="file.error">{{file.error}}</span>
                     <span v-else-if="file.success">success</span>
@@ -93,7 +92,10 @@
 
             processResponse(newFile) {
                 if (newFile.xhr && newFile.xhr.status > 0) {
-                    this.$eventHub.$emit('FIRMWARE_UPLOADED', newFile.response)
+                    this.$eventHub.$emit('FIRMWARE_UPLOADED', {
+                        "name": newFile.response.message.name,
+                        "origName": this.files[0].name
+                    })
                 } else {
                     console.log('Firmware upload failed')
                 }

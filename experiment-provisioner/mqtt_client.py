@@ -1,6 +1,7 @@
 import sys
 
 import json
+import time
 import paho.mqtt.client as mqtt
 
 
@@ -105,24 +106,23 @@ class MQTTClient:
 			sys.stdout.write("[PROV MQTT CLIENT] Message: {0}\n".format(e))
 
 	def check_data_stream(self):
-		self._subscribe("data-stream")
-
-		data_stream_started = False
+		self.data_stream_started = False
 		current_iter        = 0
-		max_iter_num        = 30
+		max_iter_num        = 15
 		iter_pause          = 5   # in seconds
 		
 		while current_iter < max_iter_num:
-			if self.data_stream_started:
-				self.push_debug_log("PROV_MQTT_CLIENT", "Data stream started")
-				break
-			else:
+			if not self.data_stream_started:
 				current_iter += 1
 				self.push_debug_log("PROV_MQTT_CLIENT", "Waiting for data stream {0}/{1}".format(current_iter, max_iter_num))
 				time.sleep(iter_pause)
+			else:
+				break
 
-		if not data_stream_started:
-			self.push_notification("data-stream-started", False)
+		self.push_debug_log("PROV_MQTT_CLIENT", "Data stream started" if self.data_stream_started else "Data stream failed to start")
+		self.push_notification("data-stream-started", self.data_stream_started)
+		return self.data_stream_started
+
 
 	def push_debug_log(self, action, log_entry):
 		self._publish("debug", {

@@ -2,86 +2,135 @@
     <div class="parent">
 
         <modal name="modal-progress-bar" width="90%" height="165px">
-            <!-- The Progress Bar -->
-            <div class="row pl-3 pr-3 h-center v-center col-direction">
-                <h3 class="primary pulse mb-0">Starting experiment...</h3>                    
-                <progress-bar :current-step="currentStep"></progress-bar>
-            </div>
-
+            <!-- Remains here temporarily. Will be moved later -->
             <div class="row h-center v-center col-direction mt-2" v-if="currentStep == 3">
                 <h3 class="mt-0 mb-0" style="margin-bottom: 5px">Experiment started! <span class="pulse clickable" @click.prevent="scrollContent">Monitor the progress in real time</span></h3>
                 <i class="fas fa-check-circle fa-3x primary-light"></i>
             </div>
         </modal>
 
-        <div class="row">
-            <div class="col-5 pr-5 pl-5">
+        <modal name="testbed-pick">
+            <div class="modal-content row col-direction h-center">
+                <span class="bold align-left mt-1 ml-1">Select a testbed: </span>
+
+                <div class="testbed mt-1" :class="{'testbed-selected': testbedSelected === index}" @click="selectTestbed(index)" v-for="(testbed, index) in testbeds">
+                    <img class="logo-sm mb-1" style="height: 55px" :src="testbedIcons[testbed.identifier]">
+                </div>
+
+                <button class="modal-btn main-btn btn-small" @click="closeModal('testbed-pick')">OK</button>
+            </div>
+        </modal>
+
+        <modal name="scenario-pick">
+            <div class="modal-content row col-direction h-center">
+                <span class="bold align-left mt-1 ml-1 mb-1">Select a scenario: </span>
+
+                <div class="scenario mb-1 ml-3" :class="{'scenario-selected': scenarioSelected === index}" @click="selectScenario(index)" v-for="(scenario, index) in scenarios">
+                    <div class="row" style="width:100%">
+                        <div class="row col-2 v-center">
+                            <i class="fas fa-2x" :class="scenarioIcons[scenario.identifier]"></i>
+                        </div>
+                        <div class="row col-10 h-center">
+                            <span class="dark-gray ml-1" :class="{'scenario-selected': scenarioSelected === index}">{{scenario.name}}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="modal-btn main-btn btn-small" @click="closeModal('scenario-pick')">OK</button>
+            </div>
+        </modal>
+
+        <modal name="firmware-pick">
+            <div class="modal-content row col-direction h-center">
+                <span class="bold align-left mt-1 ml-1 mb-1">Upload firmware (or choose the default): </span>
+                
+                <div class="row-direction v-center mt-1" style="width: 100%">
+                    <file-upload-simple :allow-upload="useOpenWSNFirmware" @click.native="useOpenWSNFirmware = false"></file-upload-simple>
+                    <div class="testbed row ml-1 h-center" :class="{'testbed-selected': useOpenWSNFirmware}" @click="revertToDefaultFw()">
+                        <img class="logo-sm" style="height: 55px" src="images/openwsn_cropped.png">
+                    </div>
+                </div>
+
+                <button class="modal-btn main-btn btn-small" @click="closeModal('firmware-pick')">OK</button>
+            </div>
+        </modal>
+
+        <div class="row" style="height: 80vh">
+            <div class="relative card bordered col-5 mr-1 mt-1">
                 
                 <div class="row">
-                    <div class="col-7">
+                    <div class="col-2 pl-1 col-direction">
                         <h4>Scenario: </h4>
-                        <div class="row col-direction">
-                            <div class="scenario row-direction" :class="{'scenario-selected': scenarioSelected === index}" @click="selectScenario(index)" v-for="(scenario, index) in scenarios">
-                                <div class="row v-center mb-1" style="width:100%">
-                                    <div class="col-2">
-                                        <i class="fas fa-2x" :class="scenarioIcons[scenario.identifier]"></i>
-                                    </div>
-                                    <div class="col-10 pl-1">
-                                        <span>{{scenario.name}}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <span v-if="scenarioSelected == -1">Choose scenario</span>
+                        <span class="bold" v-else>{{scenarios[scenarioSelected].name}}</span>
+                        <span class="clickable primary-light" @click="showModal('scenario-pick')">Change</span>
                     </div>
-                    <div class="col-4">
+                    <div class="col-2 pl-1 col-direction">
                         <h4>Testbed: </h4>
-                        <div class="row col-direction">
-                            <div class="testbed" :class="{'testbed-selected': testbedSelected === index}" @click="selectTestbed(index)" v-for="(testbed, index) in testbeds">
-                                <img class="logo-sm mb-1" style="height: 55px" :src="testbedIcons[testbed.identifier]">
-                            </div>
-                        </div>
+                        <span v-if="testbedSelected == -1">Choose testbed</span>
+                        <span class="bold" v-else>{{testbeds[testbedSelected].name}}</span>
+                        <span class="clickable primary-light" @click="showModal('testbed-pick')">Change</span>
                     </div>
                 </div>
+
+                <div class="separator gray-gradient ml-1 mt-2 mb-1"/>
 
                 <div class="row">
-                    <file-upload-simple :allow-upload="useOpenWSNFirmware" @click.native="useOpenWSNFirmware = false"></file-upload-simple>
-                    <div class="testbed" style="position: relative" :class="{'testbed-selected': useOpenWSNFirmware}" @click="useOpenWSNFirmware = true">
-                        <img class="logo-sm ml-2" style="position: absolute; bottom: 0; height: 55px" src="images/openwsn_cropped.png">
+                    <div class="col-2 pl-1 col-direction">
+                        <h4>Firmware: </h4>
+                        <span v-if="firmware === undefined">Default OpenWSN firmware</span>
+                        <span class="bold" v-else>{{firmware.origName}}</span>
+                        <span class="clickable primary-light" @click="showModal('firmware-pick')">Change</span>
                     </div>
                 </div>
 
-                <h4 class="mt-2" style="margin-bottom: 10px" v-if="selectedNode.length !== 0">Selected node: </h4>
-                <div class="row card mt-1 pt-1 pb-1 pl-1 pr-1 row-direction" v-if="selectedNode.length !== 0">
+                <div class="separator gray-gradient ml-1 mt-2 mb-1"/>
+
+                <h4 class="mt-2 mb-1 ml-1">Selected node: </h4>
+                <div class="row card pl-1 pr-1 row-direction" v-if="selectedNode.length !== 0">
                     <div class="row col-direction">
-                        <h4 class="mt-0 node-property">OpenBenchmark ID:</h4>
-                        <h4 class="mt-0 node-property">Testbed ID:</h4>
-                        <h4 class="mt-0 node-property">Transmission power:</h4>
-                        <h4 class="mt-0 node-property">Role:</h4>
+                        <span class="mt-0 node-property">OpenBenchmark ID:</span>
+                        <span class="mt-0 node-property">Testbed ID:</span>
+                        <span class="mt-0 node-property">Transmission power:</span>
+                        <span class="mt-0 node-property">Role:</span>
                     </div>
                     <div class="row col-direction pl-2">
-                        <span class="node-property">{{selectedNode.id}}</span>
-                        <span class="node-property">{{selectedNode.name}}</span>
-                        <span class="node-property">{{selectedNode.transmissionPower}}</span>
-                        <span class="node-property">{{selectedNode.roleFull}}</span>
+                        <span class="bold node-property">{{selectedNode.id}}</span>
+                        <span class="bold node-property">{{selectedNode.name}}</span>
+                        <span class="bold node-property">{{selectedNode.transmissionPower}}</span>
+                        <span class="bold node-property">{{selectedNode.roleFull}}</span>
                     </div>
+                </div>
+                <div class="row card pl-1 pr-1 row-direction" v-else>
+                    <span>No node selected</span>
+                </div>
+
+                <div class="buttons row h-center">
+                    <!-- Condition for enabling the start button -->
+                    <!-- v-if="scenarioSelected !== -1 && testbedSelected !== -1" -->
+                    <!-- Condition for disabling the start button -->
+                    <!-- :disabled="currentStep > -2 -->
+                    <button id="start-btn" class="main-btn btn-small btn-width-half ml-1"  @click="processStart()" :disabled="currentStep > -2">Start</button>
+                    <button id="terminate-btn" class="main-btn btn-small btn-width-half btn-danger mr-1" @click="processTerminate()" :disabled="currentStep === -2">Terminate</button>
                 </div>
 
             </div>
 
-            <div class="col-7">
-                <d3-network style="height: 78%" 
+            <div class="card bordered col-7 mt-1 row-direction h-center v-center">
+                <d3-network 
                     :net-nodes="value.nodes" 
                     :net-links="value.links" 
                     :options="options" 
-                    v-if="value !== null" @node-click="selectNode"/>
+                    v-if="scenarioSelected !== -1 && testbedSelected !== -1" @node-click="selectNode"/>
+                <i class="fas fa-project-diagram fa-5x light-gray" v-else/>
             </div>
 
         </div>
 
-        <div class="row h-center">
-            <button class="main-btn btn-width-half mt-1" v-if="scenarioSelected !== -1 && testbedSelected !== -1" @click="processStart()" :disabled="currentStep > -2">Start experiment</button>
-            <!--<button class="main-btn btn-width-half btn-danger mt-1" v-if="dataFlowStarted" @click="processTerminate()">Terminate experiment</button>-->
+        <div class="row ml-1 mt-1 mr-2 h-center v-center" v-if="currentStep > -2">
+            <progress-bar :current-step="currentStep"></progress-bar>
         </div>
+
     </div>
 </template>
 
@@ -142,7 +191,9 @@
                 currentStep: -2,   //If -2, process has not started yet; -1: process started, waiting for notifications
                 taskFailed: false,
 
-                firmware: ""
+                firmware: undefined
+                    //firmware: ...,
+                    //firmware_orig_name: ...
             }
         },
 
@@ -158,6 +209,14 @@
         },
 
         methods: {
+            showModal(name) {
+                this.$modal.show(name)
+            },
+
+            closeModal(name) {
+                this.$modal.hide(name)
+            },
+
             fetch(param) {
                 axios.get('/api/general/' + param)
                     .then(function (response) {
@@ -255,8 +314,8 @@
                 
                 let route = '/api/start-exp/' + scenario + '/' + testbed + '/false'
 
-                if (this.firmware && this.firmware !== "") {
-                    route += '/' + this.firmware
+                if (this.firmware !== undefined) {
+                    route += '/' + this.firmware.name
                 }
 
                 thisComponent.currentStep = -1
@@ -298,6 +357,11 @@
                     .then(function () {
                         // always executed
                     });
+            },
+
+            revertToDefaultFw() {
+                this.useOpenWSNFirmware = true
+                this.firmware = undefined
             },
 
             markNode(node, field, value) {
@@ -376,8 +440,8 @@
                 let nodeSize;
                 let force;
 
-                nodeSize = 35;
-                force = 1500;
+                nodeSize = 30;
+                force = 800;
 
                 return {
                     force: force,
@@ -433,12 +497,8 @@
 
             this.subscribe();
 
-            this.$eventHub.$on("MQTT", payload => {
+            this.$eventHub.$on("openbenchmark/1/notifications", payload => {
                 thisComponent.parseMqttEvent(payload);
-            });
-
-            this.$eventHub.$on("SHOW_MODAL", payload => {
-                this.$modal.show(payload)
             });
 
             this.$eventHub.$on("RESERVATION_SUCCESS", payload => {
@@ -460,12 +520,9 @@
             });
 
             this.$eventHub.$on("FIRMWARE_UPLOADED", payload => {
-                if (payload.http_code == 200) {
-                    thisComponent.firmware = payload.message.name
-                    console.log("Firmware successfully uploaded: " + thisComponent.firmware);
-                } else {
-                    console.log("Error uploading firmware. Will revert to default OpenWSN");
-                }
+                thisComponent.firmware = payload
+                console.log(JSON.stringify(thisComponent.firmware))
+                console.log("Firmware successfully uploaded: " + thisComponent.firmware.origName);
             });
         }
     }
@@ -479,12 +536,13 @@
         height: 100vh;
         padding-left: 25px;
         padding-right: 25px;
+        background-color: #eeeeee;
     }
 
     .scenario {
+        width: 50%;
         color: rgba(200, 200, 200, .7);
         cursor: pointer;
-        flex: 1;
         transition: 0.3s ease;
     }
     .scenario > span {
@@ -500,6 +558,18 @@
     }
     .testbed:not(.testbed-selected) {
         filter: grayscale(100%) opacity(0.3);
+    }
+
+    .buttons {
+        position: absolute;
+        bottom: 15px;
+        width: 100%
+    }
+    #start-btn {
+        margin-right: 7px;
+    }
+    #terminate-btn {
+        margin-left: 7px;
     }
 
     .node-property {
@@ -602,7 +672,8 @@
         transition: fill .5s ease;
     }
 
-    /*.net {
-        height: 78%;
-    }*/
+    .net, .net-svg {
+        width: 100% !important;
+        height: 100% !important;
+    }
 </style>

@@ -210,6 +210,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'CommandHandler' => App\Classes\ExperimentController\CommandHandler::class,
         'ConfigParser' => App\Classes\ExperimentController\ConfigParser::class,
+        'ErrorResponse' => App\Classes\ErrorResponse::class,
+        'SuccessResponse' => App\Classes\SuccessResponse::class,
         'Helpers' => App\Classes\Helpers::class
     ],
 

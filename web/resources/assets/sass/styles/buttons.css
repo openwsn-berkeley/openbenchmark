@@ -14,7 +14,7 @@
     height: 35px;
     min-width: 150px;
 }
-.main-btn:hover {
+.main-btn:hover:not([disabled]) {
     background-color: #6699CC;
 }
 .main-btn:disabled {
@@ -28,8 +28,12 @@
     width: 50%;
 }
 .btn-danger {
-    background-color: red;
+    background-color: #E7424F;
 }
-.btn-danger:hover {
-    background-color: red;
+.btn-danger:hover:not([disabled]) {
+    background-color: #E7424F;
+}
+
+.clickable {
+    cursor: pointer;
 }

@@ -23,11 +23,17 @@ class Controller(object):
 	SCENARIO_CONFIG = os.path.join(os.path.dirname(__file__), "..", "scenario-config")
 	DEFAULT_FIRMWARE = '03oos_openwsn_prog'
 
+
 	def __init__(self):
 		self.configParser = ConfigParser.RawConfigParser()   
 		self.configParser.read(self.CONFIG_FILE)
 
 	def add_parser_args(self, parser):
+		self.default_fws = {
+			"iotlab": "03oos_openwsn_prog_iotlab",
+			"wilab" : "03oos_openwsn_prog_wilab.ihex"
+		}
+
 		parser.add_argument('--user-id',   # User ID is tied to the OpenBenchmark account
 	        dest       = 'user_id',
 	        default    = 0,
@@ -53,7 +59,7 @@ class Controller(object):
 		)
 		parser.add_argument('--firmware', 
 	        dest       = 'firmware',
-                required   = False,
+          required   = False,
 	        action     = 'store',
 		)
 		parser.add_argument('--scenario', 
@@ -302,11 +308,11 @@ def main():
 
 	testbed  = TESTBEDS[testbed](user_id, scenario, action)
 
-    # Default firmware is "openwsn" with testbed name suffix
+  # Default firmware is "openwsn" with testbed name suffix
 	if args['firmware'] is None:
-		firmware = os.path.join(os.path.dirname(__file__), 'firmware', controller.DEFAULT_FIRMWARE + '.' + args['testbed'])
+    firmware = os.path.join(os.path.dirname(__file__), 'firmware', controller.DEFAULT_FIRMWARE + '.' + args['testbed'])
 	else:
-		firmware = args['firmware']
+    firmware = args['firmware']
 
 	if action == 'reserve':
             print 'Reserving nodes'

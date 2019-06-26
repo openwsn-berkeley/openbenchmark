@@ -2,27 +2,35 @@
     <div class="parent row">
         <sidebar></sidebar>
         <div id="root" style="margin-left: 80px">
-            <intro id="intro" v-observe-visibility="{
-                   callback: visibilityChanged,
-                   intersection: {
-                       root,
-                       threshold
-                   }
-            }"></intro>
-            <scenarios id="scenarios"  v-observe-visibility="{
-                   callback: visibilityChanged,
-                   intersection: {
-                       root,
-                       threshold
-                   }
-            }" :experiment-id="id"></scenarios>
-            <graphs id="graphs"  v-if="dataFlowStarted" v-observe-visibility="{
-                   callback: visibilityChanged,
-                   intersection: {
-                       root,
-                       threshold
-                   }
-            }"></graphs>
+            <div id="intro" class="section" v-observe-visibility="{
+                       callback: visibilityChanged,
+                       intersection: {
+                           root,
+                           threshold
+                       }
+                    }">
+                <logs-list></logs-list>
+            </div>
+            <div id="scenarios" class="section" v-observe-visibility="{
+                       callback: visibilityChanged,
+                       intersection: {
+                           root,
+                           threshold
+                       }
+                    }">
+                <scenarios :experiment-id="id"></scenarios>
+            </div>
+            <div id="graphs" class="section" v-observe-visibility="{
+                       callback: visibilityChanged,
+                       intersection: {
+                           root,
+                           threshold
+                       }
+                    }">
+                <graphs></graphs>
+            </div>
+
+            <bottom-sheet></bottom-sheet>
         </div>
     </div>
 </template>
@@ -30,9 +38,11 @@
 <script>
     import ExampleComponent from './../components/ExampleComponent.vue'
     import Intro from './../components/landing/Intro.vue'
+    import LogsList from './../components/landing/LogsList.vue'
     import Scenarios from './../components/landing/Scenarios.vue'
     import Graphs from './../components/landing/Graphs.vue'
     import Sidebar from './../components/reusables/Sidebar.vue'
+    import BottomSheet from './../components/reusables/BottomSheet.vue'
 
     let thisComponent;
     let socketConnected = false;
@@ -43,14 +53,15 @@
         components: {
             ExampleComponent,
             Intro,
+            LogsList,
             Scenarios,
             Graphs,
-            Sidebar
+            Sidebar,
+            BottomSheet
         },
 
         data: function () {
             return {
-                dataFlowStarted: true,
                 sidebarScroll: false,
                 root: document.getElementById('root'),
                 threshold: 0.05
@@ -58,14 +69,6 @@
         },
 
         methods: {
-            registerChannel: function() {
-                this.$socket.emit('channelRegistration', 1); //Second param should be a dynamically added id
-                console.log("Channel registered!");
-            },
-            forwardMessage: function(topic, data) {
-                this.$eventHub.$emit(topic, data);
-            },
-
             scrollContent(anchor) {
                 this.$eventHub.$emit('SCROLL', anchor);
             },
@@ -110,5 +113,13 @@
 <style scoped>
     .parent {
         position: relative;
+    }
+
+    #root {
+        width: 100%;
+    }
+
+    .section {
+        height: 100vh;
     }
 </style>

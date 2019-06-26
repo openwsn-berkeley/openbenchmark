@@ -145,8 +145,8 @@ class IoTLABReservation(Reservation):
 
     def terminate_experiment(self):
         self.ssh_command_exec('iotlab-experiment stop')
-        print('Terminating experiment...')
-        self.mqtt_client.push_debug_log('EXP_TERMINATE', '')
+        print('Terminating the experiment...')
+        self.mqtt_client.push_debug_log('EXP_TERMINATE', 'Terminating the experiment...')
 
         python_proc_kill = "sudo kill $(ps aux | grep '[p]ython' | awk '{print $2}')"
         delete_logs = "rm ~/soda/openvisualizer/openvisualizer/build/runui/*.log; rm ~/soda/openvisualizer/openvisualizer/build/runui/*.log.*;"
@@ -176,10 +176,14 @@ class WilabReservation(Reservation):
                                 stderr=subprocess.PIPE, stdout=subprocess.PIPE)
 
         for line in iter(pipe.stdout.readline, b''):
-            print(">>> " + line.rstrip())
+            output = line.rstrip()
+            print(">>> " + output)
+            self.mqtt_client.push_debug_log('WILAB_PROVISIONING', output)
 
         for line in iter(pipe.stderr.readline, b''):
-            print(">>> " + line.rstrip())
+            output = line.rstrip()
+            print(">>> " + output)
+            self.mqtt_client.push_debug_log('WILAB_PROVISIONING', output)
 
     def _start_display(self):
         pipe = subprocess.Popen(['xrandr', '-d', ':99'], stdin=subprocess.PIPE, stderr=subprocess.PIPE,
@@ -193,10 +197,18 @@ class WilabReservation(Reservation):
 
     def reserve_experiment(self):
         self.run_yml_action(action="run")
+        if self.check_experiment():
+            print("w-iLab.t provisioning successful")
+            self.mqtt_client.push_notification("provisioned", True)
+        else:
+            print("w-iLab.t provisioning failed")
+            self.mqtt_client.push_notification("provisioned", False)
 
     def check_experiment(self):
-        # TO-DO
-        pass
+        return self.mqtt_client.check_data_stream()
 
     def terminate_experiment(self):
+        print('Terminating the experiment...')
+        self.mqtt_client.push_debug_log('EXP_TERMINATE', 'Terminating the experiment...')
         self.run_yml_action(action="delete")
+        self.mqtt_client.push_notification("terminated", True)

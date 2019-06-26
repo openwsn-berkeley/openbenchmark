@@ -18,3 +18,31 @@
 .primary-light-bgd {
     background-color: #B2CCE5;
 }
+
+.white {
+	color: #FFFFFF;
+}
+.white-bgd {
+	background-color: #FFFFFF;
+}
+
+.transparent {
+	color: transparent;
+}
+.transparent-bgd {
+	background-color: transparent;
+}
+
+.black {
+	color: black;
+}
+.dark-gray {
+	color: #333333;
+}
+.light-gray {
+	color: #EEEEEE;
+}
+
+.gray-gradient {
+	background-image: linear-gradient(to right, #cccccc, transparent);
+}

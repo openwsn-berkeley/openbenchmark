@@ -8,7 +8,8 @@ export default class MQTTClient {
 		// User ID is temporarily hardcoded to 1
 		this.subTopics = [
 			"openbenchmark/1/notifications", 
-			"openbenchmark/1/kpi"
+			"openbenchmark/1/kpi",
+			"openbenchmark/1/debug"
 		]
 
 		eventHub = vueEventHub
@@ -36,7 +37,8 @@ export default class MQTTClient {
 	        console.log("onConnectionLost: " + responseObject.errorMessage)
 	}
 	onMessageArrived(message) {
-	    eventHub.$emit('MQTT', message.payloadString)
+	    //eventHub.$emit('MQTT', message.payloadString)
+	    eventHub.$emit(message.destinationName, message.payloadString)
 	}
 
 

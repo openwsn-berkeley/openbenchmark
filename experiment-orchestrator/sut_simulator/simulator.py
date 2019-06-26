@@ -76,7 +76,7 @@ class Simulator(object):
         self.sut_command_payload = {
             "api_version"  : "0.0.1",
             "token"        : "123",
-            "date"         : "Sun Dec 2 14:41:13 UTC 2018",
+            "date"         : time.strftime("%a %b %-d %-H:%M:%S %Z %Y", time.gmtime(time.time())),
             "firmware"     : "OpenWSN-42a4007db7",
             "testbed"      : self.testbed,
             "scenario"     : self.scenario
@@ -127,10 +127,9 @@ class Simulator(object):
     def publish(self, topic, payload):
         self.client.publish(self.pub_topics[topic], json.dumps(payload))
 
-    def _generate_sut_event_payload(self, event=None):
-        # If event is not specified choose at random
-        if event == None:    
-            event = [Events.packetSent, Events.packetReceived][random.randint(0, 1)]
+    def _generate_sut_event_payload(self, event, payload_obj=None):
+        #if event == None:    
+        #    event = [Events.packetSent, Events.packetReceived][random.randint(0, 1)]
 
         sut_event_payload = {
             "event"    : event,
@@ -142,21 +141,20 @@ class Simulator(object):
 
         elif event in [Events.packetSent, Events.packetReceived]:
             if event == Events.packetSent:
-                token = [random.randint(0, 255) for i in range(15)]
-                if  random.randint(1, 10) % 3 != 0:   # Simulate packet drop with probability of 0.3
-                    self.sent.append(token)
+                if random.randint(1, 10) % 3 != 0:   # Simulate packet drop with probability of 0.3
+                    self.sent.append(payload_obj)
                 else:
                     sys.stdout.write("[SUT SIMULATOR] Dropping packet...")
 
             elif event == Events.packetReceived:
-                rand_position = random.randint(0, len(self.sent)-1) if len(self.sent) > 0 else -1
-                token = self.sent[rand_position] if rand_position > -1 else []
+                rand_position = random.randint(0, len(self.sent)-1)
+                payload_obj = self.sent[rand_position]
                 if rand_position > -1:
                     del self.sent[rand_position]
 
-            sut_event_payload["packetToken"] = token
-            sut_event_payload["source"]      = "00-12-4b-00-14-b5-b6-10"
-            sut_event_payload["destination"] = "00-12-4b-00-14-b5-b6-11"
+            sut_event_payload["packetToken"] = payload_obj["token"]
+            sut_event_payload["source"]      = payload_obj["source"]
+            sut_event_payload["destination"] = payload_obj["destination"]
             sut_event_payload["hopLimit"]    = 255
 
         print "[SUT SIMULATOR] {0} event generated".format(event)
@@ -209,9 +207,14 @@ class Simulator(object):
                     'success': True    # if random.randint(0, 9) != 0 else False
                 })
             
-            self.publish('performanceData', json.dumps(self._generate_sut_event_payload()))
+            self.publish('performanceData', json.dumps(self._generate_sut_event_payload(Events.packetSent, payload_obj)))
+            
+            # Randomly chooses if a packetReceived event should be triggered (0.3 prob)
+            if random.randint(1, 10) % 3 != 0 and len(self.sent) > 0:
+                self.publish('performanceData', json.dumps(self._generate_sut_event_payload(Events.packetReceived, payload_obj)))
+
         except Exception, e:
-            print "[SUT SIMULATOR] Exception: " + str(e)
+            print "[SUT SIMULATOR] Exception on sendPacket: " + str(e)
 
     def _on_configureTransmitPower(self, payload):
         try:
@@ -221,7 +224,7 @@ class Simulator(object):
                     'success': True    # if random.randint(0, 9) != 0 else False
                 })
         except Exception, e:
-            print "[SUT SIMULATOR] Exception: " + str(e)
+            print "[SUT SIMULATOR] Exception on configureTransmitPower: " + str(e)
 
     def _on_triggerNetworkFormation(self, payload):
         try:
@@ -231,6 +234,6 @@ class Simulator(object):
                     'success': True    # if random.randint(0, 9) != 0 else False
                 })
             
-            self.publish('performanceData', json.dumps(self._generate_sut_event_payload('networkFormationCompleted')))
+            self.publish('performanceData', json.dumps(self._generate_sut_event_payload(Events.networkFormationCompleted)))
         except Exception, e:
-            print "[SUT SIMULATOR] Exception: " + str(e)
+            print "[SUT SIMULATOR] Exception on triggerNetworkFormation: " + str(e)
