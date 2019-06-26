@@ -111,6 +111,7 @@ class IoTLABReservation(Reservation):
                 if len(nodes) > 0:
                     OTBoxStartup(self.user, self.domain, 'iotlab', self.get_reserved_nodes(), self.broker, self.mqtt_client).start()
                 else:
+                    self.mqtt_client.push_debug_log('RESERVATION_FAIL', 'Experiment startup failed')
                     print('Experiment startup failed')
 
     def check_experiment(self, loop=False):
@@ -183,7 +184,7 @@ class WilabReservation(Reservation):
         for line in iter(pipe.stderr.readline, b''):
             output = line.rstrip()
             print(">>> " + output)
-            self.mqtt_client.push_debug_log('WILAB_PROVISIONING', output)
+            self.mqtt_client.push_debug_log('WILAB_PROVISIONING [ERROR]', output)
 
     def _start_display(self):
         pipe = subprocess.Popen(['xrandr', '-d', ':99'], stdin=subprocess.PIPE, stderr=subprocess.PIPE,
