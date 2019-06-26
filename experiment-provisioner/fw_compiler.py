@@ -70,3 +70,14 @@ class FWCompiler:
 		letters = string.ascii_lowercase
 		suffix  = ''.join(random.choice(letters) for i in range(10))
 		return "{0}_{1}_{2}".format(self.repo_name, self.branch, suffix)
+
+def main():
+	FWCompiler(
+		repo_url = 'https://github.com/malishav/openwsn-fw.git',
+		branch   = 'develop_FW-808',
+		testbed  = 'iotlab',
+		user_id  = 1
+	).compile()
+
+if __name__ == '__main__':
+	main()
