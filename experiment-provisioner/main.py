@@ -35,38 +35,38 @@ class Controller(object):
 		}
 
 		parser.add_argument('--user-id',   # User ID is tied to the OpenBenchmark account
-	        dest       = 'user_id',
-	        default    = 0,
-                required   = False,
-	        action     = 'store'
-	        )
+			dest       = 'user_id',
+			default    = 0,
+			required   = False,
+			action     = 'store'
+		)
 		parser.add_argument('--simulator', 
-	        dest       = 'simulator',
-	        default    = False,
-	        action     = 'store_true'
-	        )
+			dest       = 'simulator',
+			default    = False,
+			action     = 'store_true'
+		)
 		parser.add_argument('--action', 
-	        dest       = 'action',
-	        choices    = ['check', 'reserve', 'terminate', 'flash', 'ov-start'],
-	        required   = True,
-	        action     = 'store'
+			dest       = 'action',
+			choices    = ['check', 'reserve', 'terminate', 'flash', 'ov-start'],
+			required   = True,
+			action     = 'store'
 		)
 		parser.add_argument('--testbed', 
-	        dest       = 'testbed',
-	        choices    = ['iotlab', 'wilab'],
-	        default    = 'iotlab',
-	        action     = 'store'
+			dest       = 'testbed',
+			choices    = ['iotlab', 'wilab'],
+			default    = 'iotlab',
+			action     = 'store'
 		)
 		parser.add_argument('--firmware', 
-	        dest       = 'firmware',
-          required   = False,
-	        action     = 'store',
+			dest       = 'firmware',
+			required   = False,
+			action     = 'store',
 		)
 		parser.add_argument('--scenario', 
-	        dest       = 'scenario',
-	        choices    = ['demo-scenario', 'building-automation', 'home-automation', 'industrial-monitoring'],
-	        default    = 'demo-scenario',
-	        action     = 'store'
+			dest       = 'scenario',
+			choices    = ['demo-scenario', 'building-automation', 'home-automation', 'industrial-monitoring'],
+			default    = 'demo-scenario',
+			action     = 'store'
 		)
 
 	def get_args(self):
@@ -308,28 +308,28 @@ def main():
 
 	testbed  = TESTBEDS[testbed](user_id, scenario, action)
 
-  # Default firmware is "openwsn" with testbed name suffix
+	# Default firmware is "openwsn" with testbed name suffix
 	if args['firmware'] is None:
-    firmware = os.path.join(os.path.dirname(__file__), 'firmware', controller.DEFAULT_FIRMWARE + '.' + args['testbed'])
+		firmware = os.path.join(os.path.dirname(__file__), 'firmware', controller.DEFAULT_FIRMWARE + '.' + args['testbed'])
 	else:
-    firmware = args['firmware']
+		firmware = args['firmware']
 
 	if action == 'reserve':
-            print 'Reserving nodes'
-            testbed.reservation.reserve_experiment()
+		print 'Reserving nodes'
+		testbed.reservation.reserve_experiment()
 	elif action == 'check':
-            print 'Checking experiment'
-            testbed.reservation.check_experiment()
+		print 'Checking experiment'
+		testbed.reservation.check_experiment()
 	elif action == 'terminate':
-            print 'Terminating experiment'
-            testbed.reservation.terminate_experiment()
+		print 'Terminating experiment'
+		testbed.reservation.terminate_experiment()
 	elif action == 'flash':
-            assert firmware is not None
-            print 'Flashing firmware: {0}'.format(firmware)
-	    OTBoxFlash(user_id, firmware, testbed.BROKER, args['testbed']).flash()
+		assert firmware is not None
+		print 'Flashing firmware: {0}'.format(firmware)
+		OTBoxFlash(user_id, firmware, testbed.BROKER, args['testbed']).flash()
 	elif action == 'ov-start':
-            print 'Starting OV'
-            OVStartup(user_id, scenario, args['testbed'], testbed.BROKER, simulator).start()
+		print 'Starting OV'
+		OVStartup(user_id, scenario, args['testbed'], testbed.BROKER, simulator).start()
 
 if __name__ == '__main__':
 	main()
