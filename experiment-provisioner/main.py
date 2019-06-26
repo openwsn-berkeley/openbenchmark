@@ -62,6 +62,11 @@ class Controller(object):
 			required   = False,
 			action     = 'store',
 		)
+		parser.add_argument('--branch', 
+			dest       = 'branch',
+			required   = False,
+			action     = 'store',
+		)
 		parser.add_argument('--scenario', 
 			dest       = 'scenario',
 			choices    = ['demo-scenario', 'building-automation', 'home-automation', 'industrial-monitoring'],
@@ -80,6 +85,7 @@ class Controller(object):
 			'action'    : args.action,
 			'testbed'   : args.testbed,
 			'firmware'  : args.firmware,
+			'branch'    : args.branch,
 			'scenario'  : args.scenario
 		}
 
