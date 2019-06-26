@@ -15,6 +15,7 @@ from reservation import WilabReservation
 
 from otbox_flash import OTBoxFlash
 from ov_startup import OVStartup
+from fw_compiler import FWCompiler
 
 
 class Controller(object):
@@ -301,6 +302,7 @@ TESTBEDS = {
 	"wilab": Wilab
 }
 
+
 def main():
 	controller = Controller()
 
@@ -312,13 +314,16 @@ def main():
 	testbed   = args['testbed']
 	scenario  = args['scenario']
 
+	firmware  = args['firmware']
+	branch    = args['branch']
+
 	testbed  = TESTBEDS[testbed](user_id, scenario, action)
 
 	# Default firmware is "openwsn" with testbed name suffix
-	if args['firmware'] is None:
+	if firmware is None:
 		firmware = os.path.join(os.path.dirname(__file__), 'firmware', controller.DEFAULT_FIRMWARE + '.' + args['testbed'])
-	else:
-		firmware = args['firmware']
+	elif branch is not None:
+		firmware = FWCompiler(firmware, branch, testbed, user_id).compile()
 
 	if action == 'reserve':
 		print 'Reserving nodes'
