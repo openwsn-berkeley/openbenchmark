@@ -19,14 +19,14 @@ from ov_startup import OVStartup
 
 class Controller(object):
 
-	CONFIG_FILE = 'conf.txt'
+	CONFIG_FILE = os.path.join(os.path.dirname(__file__), "..", "conf.txt")
 	SCENARIO_CONFIG = os.path.join(os.path.dirname(__file__), "..", "scenario-config")
+	DEFAULT_FIRMWARE = '03oos_openwsn_prog'
 
 
 	def __init__(self):
 		self.configParser = ConfigParser.RawConfigParser()   
-		self.configFilePath = os.path.join(os.path.dirname(__file__), self.CONFIG_FILE)
-		self.configParser.read(self.configFilePath)
+		self.configParser.read(self.CONFIG_FILE)
 
 	def add_parser_args(self, parser):
 		self.default_fws = {
@@ -36,17 +36,18 @@ class Controller(object):
 
 		parser.add_argument('--user-id',   # User ID is tied to the OpenBenchmark account
 	        dest       = 'user_id',
-	        required   = True,
+	        default    = 0,
+                required   = False,
 	        action     = 'store'
-	    )
+	        )
 		parser.add_argument('--simulator', 
 	        dest       = 'simulator',
 	        default    = False,
 	        action     = 'store_true'
-	    )
+	        )
 		parser.add_argument('--action', 
 	        dest       = 'action',
-	        choices    = ['check', 'reserve', 'terminate', 'otbox-flash', 'ov-start'],
+	        choices    = ['check', 'reserve', 'terminate', 'flash', 'ov-start'],
 	        required   = True,
 	        action     = 'store'
 		)
@@ -58,7 +59,8 @@ class Controller(object):
 		)
 		parser.add_argument('--firmware', 
 	        dest       = 'firmware',
-	        action     = 'store'
+          required   = False,
+	        action     = 'store',
 		)
 		parser.add_argument('--scenario', 
 	        dest       = 'scenario',
@@ -88,10 +90,10 @@ class Controller(object):
 
 class IoTLAB(Controller):
 
-	def __init__(self, user_id, scenario):
+	def __init__(self, user_id, scenario, action):
 		super(IoTLAB, self).__init__()
 
-		self.CONFIG_SECTION = 'iotlab-config'
+		self.CONFIG_SECTION = 'iotlab'
 		self.scenario = scenario
 
 		self.USERNAME = os.environ["user"] if "user" in os.environ else self.configParser.get(self.CONFIG_SECTION, 'user')
@@ -101,7 +103,6 @@ class IoTLAB(Controller):
 		self.EXP_DURATION = 30 # Duration in minutes
 		self.NODES = self._get_nodes()
 
-		self.FIRMWARE = os.path.join(os.path.dirname(__file__), 'firmware')
 		self.BROKER = self.configParser.get(self.CONFIG_SECTION, 'broker')
 
 		self.add_files_from_env()
@@ -131,10 +132,10 @@ class IoTLAB(Controller):
 
 class Wilab(Controller):
 
-	def __init__(self, user_id, scenario):
+	def __init__(self, user_id, scenario, action):
 		super(Wilab, self).__init__()
 
-		self.CONFIG_SECTION = 'wilab-config'
+		self.CONFIG_SECTION = 'wilab'
 		self.scenario = scenario
 
 		# Checks if the following files' content has been set as env variables content
@@ -151,14 +152,16 @@ class Wilab(Controller):
 		self.RUN      = 'start_experiment.sh'  # Script for starting the experiment
 		self.DISPLAY  = 'start_display.sh'     # Script for starting a fake display
 
-		self.FIRMWARE = os.path.join(os.path.dirname(__file__), 'firmware')
-		self.BROKER = self.configParser.get(self.CONFIG_SECTION, 'broker')
+		self.BROKER   = self.configParser.get(self.CONFIG_SECTION, 'broker')
+		self.PASSWORD = self.configParser.get(self.CONFIG_SECTION, 'password')
 
 		self.EXP_DURATION = 30
 
 		self._rspec_update()
 		self._set_broker()
-		self._update_yml_files()
+
+		if action == 'reserve':
+			self._update_yml_files()
 
 		self.reservation = WilabReservation(user_id, self.JFED_DIR, self.RUN, self.DELETE, self.DISPLAY)
 
@@ -252,23 +255,27 @@ class Wilab(Controller):
 			f.write(content)
 
 	def _update_yml_files(self):
-		start_exp_yml = os.path.join(self.JFED_DIR, "start_experiment.yml")
-		stop_exp_yml  = os.path.join(self.JFED_DIR, "stop_experiment.yml")
+		start_exp_yml_temp = os.path.join(self.JFED_DIR, "start_experiment_temp.yml")
+		stop_exp_yml_temp  = os.path.join(self.JFED_DIR, "stop_experiment_temp.yml")
+		start_exp_yml      = os.path.join(self.JFED_DIR, "start_experiment.yml")
+		stop_exp_yml       = os.path.join(self.JFED_DIR, "stop_experiment.yml")
 
 		slice_name = "bench{0}".format(self._get_random_string())
 		yml_conf = None
 
-		with open(start_exp_yml, 'r') as f:
+		with open(start_exp_yml_temp, 'r') as f:
 			yml_conf = yaml.load(f, Loader=yaml.FullLoader)
 			yml_conf['experiment']['slice']['sliceName'] = slice_name
 			yml_conf['experiment']['slice']['expireTimeMin'] = 30
+			yml_conf['user']['password'] = self.PASSWORD
 
 		with open(start_exp_yml, 'w') as f:
 			yaml.dump(yml_conf, f)
 
-		with open(stop_exp_yml, 'r') as f:
+		with open(stop_exp_yml_temp, 'r') as f:
 			yml_conf = yaml.load(f, Loader=yaml.FullLoader)
 			yml_conf['slice']['sliceName'] = slice_name
+			yml_conf['user']['password'] = self.PASSWORD
 
 		with open(stop_exp_yml, 'w') as f:
 			yaml.dump(yml_conf, f)
@@ -299,30 +306,30 @@ def main():
 	testbed   = args['testbed']
 	scenario  = args['scenario']
 
-	testbed  = TESTBEDS[testbed](user_id, scenario)
+	testbed  = TESTBEDS[testbed](user_id, scenario, action)
 
-	default_fw = controller.default_fws[args['testbed']]
-	fw = default_fw if (args['firmware'] is None) else args['firmware']
-	firmware = '{0}/{1}'.format(testbed.FIRMWARE, fw)
+  # Default firmware is "openwsn" with testbed name suffix
+	if args['firmware'] is None:
+    firmware = os.path.join(os.path.dirname(__file__), 'firmware', controller.DEFAULT_FIRMWARE + '.' + args['testbed'])
+	else:
+    firmware = args['firmware']
 
-	print 'Script started'
-	
 	if action == 'reserve':
-		print 'Reserving nodes'
-		testbed.reservation.reserve_experiment()
+            print 'Reserving nodes'
+            testbed.reservation.reserve_experiment()
 	elif action == 'check':
-		print 'Checking experiment'
-		testbed.reservation.check_experiment()
+            print 'Checking experiment'
+            testbed.reservation.check_experiment()
 	elif action == 'terminate':
-		print 'Terminating experiment'
-		testbed.reservation.terminate_experiment()
-	elif action == 'otbox-flash':
-		print 'Flashing OTBox'
-		OTBoxFlash(user_id, firmware, testbed.BROKER, args['testbed']).flash()
+            print 'Terminating experiment'
+            testbed.reservation.terminate_experiment()
+	elif action == 'flash':
+            assert firmware is not None
+            print 'Flashing firmware: {0}'.format(firmware)
+	    OTBoxFlash(user_id, firmware, testbed.BROKER, args['testbed']).flash()
 	elif action == 'ov-start':
-		print 'Starting OV'
-		OVStartup(user_id, scenario, args['testbed'], testbed.BROKER, simulator).start()
-
+            print 'Starting OV'
+            OVStartup(user_id, scenario, args['testbed'], testbed.BROKER, simulator).start()
 
 if __name__ == '__main__':
 	main()
