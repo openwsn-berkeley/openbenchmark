@@ -29,6 +29,11 @@ class Controller(object):
 		self.configParser = ConfigParser.RawConfigParser()   
 		self.configParser.read(self.CONFIG_FILE)
 
+		self.OV_REPO     = self.configParser.get('dependencies', 'ov-repo')
+		self.OV_BRANCH   = self.configParser.get('dependencies', 'ov-branch')
+		self.COAP_REPO   = self.configParser.get('dependencies', 'coap-repo')
+		self.COAP_BRANCH = self.configParser.get('dependencies', 'coap-branch')
+
 	def add_parser_args(self, parser):
 		self.default_fws = {
 			"iotlab": "03oos_openwsn_prog_iotlab",
@@ -340,7 +345,17 @@ def main():
 		OTBoxFlash(user_id, firmware, testbed.BROKER, args['testbed']).flash()
 	elif action == 'ov-start':
 		print 'Starting OV'
-		OVStartup(user_id, scenario, args['testbed'], testbed.BROKER, simulator).start()
+		OVStartup(
+			user_id, 
+			scenario, 
+			args['testbed'], 
+			testbed.BROKER, 
+			simulator, 
+			testbed.OV_REPO, 
+			testbed.OV_BRANCH, 
+			testbed.COAP_REPO,
+			testbed.COAP_BRANCH
+		).start()
 
 if __name__ == '__main__':
 	main()
