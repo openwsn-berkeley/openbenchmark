@@ -49,4 +49,4 @@ class OVStartup:
 		print "[OV STARTUP] Starting OpenVisualizer"
 		self.mqtt_client.push_debug_log('OV_STARTUP', "Starting OpenVisualizer")
 
-		subprocess.Popen(['sudo', 'scons', 'runweb', '--port=8080', '--benchmark={0}'.format(self.scenario), '--testbed={0}'.format(self.testbed), '--mqttBroker={0}'.format(self.broker)], cwd=ov_dir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+		subprocess.Popen(['scons', 'runweb', '--port=8080', '--benchmark={0}'.format(self.scenario), '--testbed={0}'.format(self.testbed), '--mqtt-broker-address={0}'.format(self.broker), '--opentun-null'], cwd=ov_dir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
