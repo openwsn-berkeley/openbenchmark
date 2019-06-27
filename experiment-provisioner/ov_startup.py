@@ -72,6 +72,7 @@ class OVStartup:
 		subprocess.Popen(coap_del_dir, shell=True)
 
 	def _clone_dependencies(self):
+		self._print_log('Cloning dependencies...')
 		self._run_cmd('ov-clone')
 		self._run_cmd('coap-clone')
 
