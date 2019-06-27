@@ -29,7 +29,7 @@ class OVStartup:
 		if self.simulator:
 			self._start_orchestrator()
 		else:
-			self._clone_dependencies()
+			self._load_dependencies()
 
 			thread_orch = threading.Thread(target=self._start_ov)
 			thread_orch.start()
