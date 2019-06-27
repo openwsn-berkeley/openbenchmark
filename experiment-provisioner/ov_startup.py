@@ -66,10 +66,8 @@ class OVStartup:
 
 	def _delete_dependencies(self):
 		self._print_log('Removing dependencies...')
-		ov_del_dir = "rm -rf {0}".format(ov_dir)
-		coap_del_dir = "rm -rf {0}".format(coap_dir)
-		subprocess.Popen(ov_del_dir, shell=True)
-		subprocess.Popen(coap_del_dir, shell=True)
+		self._run_cmd('ov-delete')
+		self._run_cmd('coap-delete')
 
 	def _clone_dependencies(self):
 		self._print_log('Cloning dependencies...')
@@ -77,16 +75,12 @@ class OVStartup:
 		self._run_cmd('coap-clone')
 
 	def _run_cmd(self, cmd):
-		repos = {
-			"ov-clone"  : self.ov_repo
-			"coap-clone": self.coap_repo
-		}
-		branches = {
-			"ov-clone"  : self.ov_branch
-			"coap-clone": self.coap_branch
-		}
-
-		cmd = ['git', 'clone', '-b', branches[cmd], '--single-branch', repos[cmd]]
+		cmds = {
+			"ov-clone"   : ['git', 'clone', '-b', self.ov_branch, '--single-branch', self.ov_repo],
+			"coap-clone" : ['git', 'clone', '-b', self.coap_branch, '--single-branch', self.coap_repo],
+			"ov-delete"  : ['sudo', 'rm', '-rf', ov_dir], 
+			"coap-delete": ['sudo', 'rm', '-rf', coap_dir]
+		}	
 
 		pipe = subprocess.Popen(cmds[cmd], cwd=openwsn_dir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
 		
