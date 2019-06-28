@@ -176,5 +176,5 @@ class KPIProcessing:
 				'eui64'    : event_obj['source'],
 				'node_id'  : Utils.eui64_to_id[event_obj['source']],
 				'timestamp': event_obj['timestamp'],
-				'value'    : event_obj['dutyCycle']
+				'value'    : float(event_obj['dutyCycle'].strip('%'))
 			}) 
