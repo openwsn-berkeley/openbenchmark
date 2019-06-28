@@ -45,7 +45,7 @@ class TimeoutBuffer():
 
 	def find(self, packet_token):
 		token = ''.join(str(elem) for elem in packet_token)
-		if token != '' and self.buffer[token] != None:
+		if token != '' and token in self.buffer and self.buffer[token] != None:
 			packet = self.buffer[token]
 			self.buffer[token] = None
 			return packet
