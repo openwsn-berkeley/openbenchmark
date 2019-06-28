@@ -30,7 +30,12 @@ class KPIProcessing:
 		self.queue            = self.condition_object.exp_event_queue
 		self.queue_pck_drop   = self.condition_object.packet_drop_queue
 
-		self.buffer           = TimeoutBuffer(timeout=60)   # in seconds
+		# Buffer_1 - for buffering `packetSent` events
+		# Buffer_2 - for buffering `packetReceived` events
+		# Buffer_2 does not expire because packetReceived events should get their packetSent events eventually
+		self.buffer_1         = TimeoutBuffer(timeout=60, expire=True)   # in seconds
+		self.buffer_2         = TimeoutBuffer(timeout=60, expire=False)  # in seconds
+
 		self.packet_memory    = {'sent': {}, 'dropped': {}}   # { "sent": {"node_id": {"dest_node_id": `Int`}, "dropped": {...} }
 
 		self.event_to_method  = {
