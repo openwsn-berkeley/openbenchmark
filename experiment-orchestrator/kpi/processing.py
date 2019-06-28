@@ -136,13 +136,25 @@ class KPIProcessing:
 
 
 	def _packet_sent(self, payload):
-		self.buffer.put(payload)
-		self._increment('sent', payload['node_id'], payload['dest_node_id'])
+		# Check buffer_2 and calculate KPI if present. Otherwise, put in buffer_1
+		origin_packet = self.buffer_2.find(payload['packetToken'])
+		
+		if origin_packet != None:
+			self._log_latency(payload, origin_packet)
+			self._log_reliability(payload)
+		else:	
+			self.buffer_1.put(payload)
+			self._increment('sent', payload['node_id'], payload['dest_node_id'])
 
 	def _packet_received(self, payload):
-		origin_packet = self.buffer.find(payload['packetToken'])
-		self._log_latency(payload, origin_packet)
-		self._log_reliability(payload)
+		# Check buffer_1 and calculate KPI if present. Otherwise, put in buffer_2
+		origin_packet = self.buffer_1.find(payload['packetToken'])
+
+		if origin_packet != None:
+			self._log_latency(payload, origin_packet)
+			self._log_reliability(payload)
+		else:
+			self.buffer_2.put(payload)
 			
 	def _networkFormationTime(self, event_obj):
 		print str(event_obj)
