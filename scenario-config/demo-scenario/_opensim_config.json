@@ -1,0 +1,14 @@
+{
+    "openbenchmark00": {
+        "node_id": "emulated1", 
+        "transmission_power_dbm": 0
+    }, 
+    "openbenchmark01": {
+        "node_id": "emulated2", 
+        "transmission_power_dbm": 0
+    }, 
+    "openbenchmark02": {
+        "node_id": "emulated3", 
+        "transmission_power_dbm": 0
+    }
+}
