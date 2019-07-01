@@ -95,6 +95,16 @@ class Controller(object):
 			'scenario'  : args.scenario
 		}
 
+	def _get_duration(self, scenario):
+		config_file = os.path.join(self.SCENARIO_CONFIG, scenario, "_config.json")
+		duration_min = -1
+
+		with open(config_file, 'r') as f:
+			config_obj = json.load(f)
+			duration_min = config_obj['duration_min']
+
+		return duration_min
+
 	@abstractmethod
 	def add_files_from_env(self):
 		pass
@@ -112,8 +122,8 @@ class IoTLAB(Controller):
 		self.PRIVATE_SSH = os.environ["private_ssh"] if "private_ssh" in os.environ else ""
 		self.HOSTNAME = 'saclay.iot-lab.info'
 
-		self.EXP_DURATION = 30 # Duration in minutes
 		self.NODES = self._get_nodes()
+		self.EXP_DURATION = self._get_duration(self.scenario) + 10
 
 		self.BROKER = self.configParser.get(self.CONFIG_SECTION, 'broker')
 
@@ -142,6 +152,7 @@ class IoTLAB(Controller):
 			return nodes_str.rstrip("+")
 
 
+
 class Wilab(Controller):
 
 	def __init__(self, user_id, scenario, action):
@@ -167,7 +178,7 @@ class Wilab(Controller):
 		self.BROKER   = self.configParser.get(self.CONFIG_SECTION, 'broker')
 		self.PASSWORD = self.configParser.get(self.CONFIG_SECTION, 'password')
 
-		self.EXP_DURATION = 30
+		self.EXP_DURATION = self._get_duration(self.scenario) + 10
 
 		self._rspec_update()
 		self._set_broker()
