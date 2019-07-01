@@ -89,7 +89,7 @@ class Main():
 	    )
 		parser.add_argument('--testbed', 
 	        dest       = 'testbed',
-	        choices    = ['iotlab', 'wilab'],
+	        choices    = ['iotlab', 'wilab', 'opensim'],
 	        default    = 'iotlab',
 	        action     = 'store'
 		)
