@@ -17,6 +17,8 @@ from otbox_flash import OTBoxFlash
 from ov_startup import OVStartup
 from fw_compiler import FWCompiler
 
+from mqtt_client import MQTTClient
+
 
 class Controller(object):
 
@@ -105,6 +107,10 @@ class Controller(object):
 
 		return duration_min
 
+	def print_log(self, message):
+		self.mqtt_client.push_debug_log("[PROVISIONER]", message)
+		print("[PROVISIONER] {0}".format(message))
+
 	@abstractmethod
 	def add_files_from_env(self):
 		pass
@@ -129,6 +135,9 @@ class IoTLAB(Controller):
 
 		self.add_files_from_env()
 		self.reservation = IoTLABReservation(user_id, self.USERNAME, self.HOSTNAME, self.BROKER, self.EXP_DURATION, self.NODES)
+
+		self.mqtt_client = MQTTClient.create('iotlab', user_id)
+
 
 	def add_files_from_env(self):
 		if self.PRIVATE_SSH != "":
@@ -187,6 +196,8 @@ class Wilab(Controller):
 			self._update_yml_files()
 
 		self.reservation = WilabReservation(user_id, self.JFED_DIR, self.RUN, self.DELETE, self.DISPLAY)
+		self.mqtt_client = MQTTClient.create('iotlab', user_id)
+
 
 	def add_files_from_env(self):
 		if self.CERTIFICATE_B64 != "":
@@ -342,20 +353,20 @@ def main():
 		firmware = FWCompiler(firmware, branch, testbed, user_id).compile()
 
 	if action == 'reserve':
-		print 'Reserving nodes'
+		testbed.print_log('Reserving nodes...')
 		testbed.reservation.reserve_experiment()
 	elif action == 'check':
-		print 'Checking experiment'
+		testbed.print_log('Experiment checking...')
 		testbed.reservation.check_experiment()
 	elif action == 'terminate':
-		print 'Terminating experiment'
+		testbed.print_log('Terminating the experiment...')
 		testbed.reservation.terminate_experiment()
 	elif action == 'flash':
 		assert firmware is not None
-		print 'Flashing firmware: {0}'.format(firmware)
+		testbed.print_log('Flashing firmware: {0}'.format(firmware))
 		OTBoxFlash(user_id, firmware, testbed.BROKER, args['testbed']).flash()
 	elif action == 'ov-start':
-		print 'Starting OV'
+		testbed.print_log('Starting SUT...')
 		OVStartup(
 			user_id, 
 			scenario, 
@@ -370,4 +381,3 @@ def main():
 
 if __name__ == '__main__':
 	main()
-
