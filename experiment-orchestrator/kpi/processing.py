@@ -107,7 +107,7 @@ class KPIProcessing:
 	def _log_latency(self, payload, origin_packet):
 		# Log latency only if packet received before timeout
 		if origin_packet != None:
-			latency = payload['timestamp'] - origin_packet['timestamp']
+			latency = abs(payload['timestamp'] - origin_packet['timestamp'])
 			
 			self.logger.log('kpi', {
 					'kpi'         : 'latency',
