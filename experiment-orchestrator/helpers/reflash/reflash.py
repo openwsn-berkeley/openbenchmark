@@ -62,6 +62,13 @@ class Reflash(object):
 	def _get_unused_nodes(self):
 		pass
 
+class OpenSimReflash(Reflash):
+	def __init__(self, scenario):
+		super(OpenSimReflash, self).__init__(scenario)
+		self.testbed = "opensim"
+
+	def _get_unused_nodes(self):
+		return []
 
 class IotlabReflash(Reflash):
 	def __init__(self, scenario):
