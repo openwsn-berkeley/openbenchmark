@@ -64,6 +64,7 @@ class NetworkPrep:
 				raise Exception("Failed to trigger network formation. Exiting...")
 				self.mqtt_client.push_notification("network-configured", False)
 
+			self.mqtt_client.push_debug_log("[NETWORK PREP]", "Network formation triggered successfully", False)
 			sys.stdout.write("{0}[NETWORK PREP] {1}\n{2}".format(
 				colorama.Fore.GREEN,
 				"Network formation triggered successfully", 
@@ -71,6 +72,7 @@ class NetworkPrep:
 			))
 		
 		except Exception, e:
+			self.mqtt_client.push_debug_log("[NETWORK PREP]", "Exception - {0}".format(str(e)), False)
 			sys.stdout.write("{0}[NETWORK PREP] {1}\n{2}".format(
 				colorama.Fore.RED,
 				str(e), 

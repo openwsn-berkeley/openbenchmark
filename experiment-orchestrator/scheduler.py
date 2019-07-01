@@ -77,7 +77,7 @@ class Scheduler:
 	def _print_schedule(self):
 		schedule_len = len(self.schedule)
 
-		print "[SCHEDULER] Starting schedule:"
+		self.mqtt_client.push_debug_log("[SCHEDULER]", "Starting schedule:")
 		for i in range(0, schedule_len):
 			print "{0} at {1}: from {2} to {3}".format(
 				self.schedule[i]["node"].node_id, 
@@ -91,6 +91,7 @@ class Scheduler:
 
 	def _start_schedule(self):
 		schedule_len = self._print_schedule()
+		self.mqtt_client.push_debug_log("[SCHEDULER]", "Starting scheduler in {0} seconds...\n".format(self.scheduler_delay), False)
 		sys.stdout.write("[SCHEDULER] Starting scheduler in {0} seconds...\n".format(self.scheduler_delay))
 		time.sleep(self.scheduler_delay)
 
@@ -115,7 +116,9 @@ class Scheduler:
 				})
 
 			if sleep_interval == -1:
+				self.mqtt_client.push_debug_log("[SCHEDULER]", "Currently on: {0}/{1}. Last event\n".format(i+1, schedule_len), False)
 				sys.stdout.write("[SCHEDULER] Currently on: {0}/{1}. Last event\n".format(i+1, schedule_len))
 			else:
+				self.mqtt_client.push_debug_log("[SCHEDULER]", "Currently on: {0}/{1}. Last event\n".format(i+1, schedule_len), False)
 				sys.stdout.write("[SCHEDULER] Currently on: {0}/{1}. Next event in {2} seconds\n".format(i+1, schedule_len, sleep_interval))
 				time.sleep(sleep_interval)

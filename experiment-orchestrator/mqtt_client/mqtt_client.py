@@ -212,3 +212,11 @@ class MQTTClient:
 			"type": "raw",
 			"content": payload
 		})
+
+	def push_debug_log(self, action, log_entry, console_print = True):
+		self.publish("debug", {
+			"action": action,
+			"log_entry": log_entry
+		})
+		if console_print:
+			print("{0} {1}".format(action, message))

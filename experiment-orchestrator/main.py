@@ -25,24 +25,24 @@ class Main():
 
 		colorama.init()
 
+		print "[MAIN] Starting MQTT client"
+		self.mqtt_client = MQTTClient.create()
+
 		if self.simulator:
-			print "[MAIN] Starting simulator"
+			self.mqtt_client.push_debug_log("[ORCHESTRATOR]", 'Starting simulator')
 			thread = threading.Thread(target=self._start_simulator)
 			thread.daemon = True
 			thread.start()
 
-		print "[MAIN] Starting MQTT client"
-		self.mqtt_client = MQTTClient.create()
-
 		self.co = ConditionObject.create()
-		print "[MAIN] Acquiring lock..."
+		self.mqtt_client.push_debug_log("[ORCHESTRATOR]", 'Acquiring lock...')
 		self.co.start_benchmark_cv.acquire()
 		self.co.start_benchmark_cv.wait()
 		self.co.start_benchmark_cv.release()
-		print "[MAIN] Lock released on `startBenchmark` command"
+		self.mqtt_client.push_debug_log("[ORCHESTRATOR]", 'Lock released on `startBenchmark` command')
 		self.sut_command_payload = self.co.sut_command_payload
 
-		print self.sut_command_payload
+		self.mqtt_client.push_debug_log("[ORCHESTRATOR]", self.sut_command_payload)
 
 		# give SUT some time subscribe to the topics before firing
 		time.sleep(5)
@@ -53,7 +53,7 @@ class Main():
 		thread.start()
 
 		time_padding = 0.1 if self.simulator else Utils.scenario.main_config['nf_time_padding_min']
-		print "[MAIN] Scheduler will start in {0} minutes...".format(time_padding)
+		self.mqtt_client.push_debug_log("[ORCHESTRATOR]", "Scheduler will start in {0} minutes...".format(time_padding))
 
 		self.mqtt_client.push_notification("network-configured", True)
 
@@ -72,6 +72,7 @@ class Main():
 
 		if self.simulator and (self.testbed == None or self.scenario == None):
 			parser.error('--simulator requires both --testbed and --scenario')
+			self.mqtt_client.push_debug_log("[ORCHESTRATOR]", "Error: --simulator requires both --testbed and --scenario")
 
 		Utils.user_id = args.user_id
 
