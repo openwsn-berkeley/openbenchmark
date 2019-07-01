@@ -52,7 +52,8 @@ class MQTTClient:
 			"triggerNetworkFormation": "openbenchmark/experimentId/{0}/command/triggerNetworkFormation".format(self.experiment_id),
 			"notifications": "openbenchmark/{0}/notifications".format(Utils.user_id),
 			"kpi": "openbenchmark/{0}/kpi".format(Utils.user_id),
-			"raw": "openbenchmark/{0}/raw".format(Utils.user_id)
+			"raw": "openbenchmark/{0}/raw".format(Utils.user_id),
+			"debug": "openbenchmark/{0}/debug".format(Utils.user_id)
 		}
 		self.epe_sub_topics = {  # Experiment Performance Events
 			"performanceData": "openbenchmark/experimentId/{0}/nodeId/+/performanceData".format(self.experiment_id)
@@ -219,4 +220,4 @@ class MQTTClient:
 			"log_entry": log_entry
 		})
 		if console_print:
-			print("{0} {1}".format(action, message))
+			print("{0} {1}".format(action, log_entry))
