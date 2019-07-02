@@ -15,7 +15,8 @@
             return {
                 titles: {
                     "latency": "Latency",
-                    "reliability": "Reliability"
+                    "reliability": "Reliability",
+                    "radioDutyCycle": "Duty Cycle"
                 }
             }
         },

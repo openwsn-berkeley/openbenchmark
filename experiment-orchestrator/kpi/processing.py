@@ -30,7 +30,12 @@ class KPIProcessing:
 		self.queue            = self.condition_object.exp_event_queue
 		self.queue_pck_drop   = self.condition_object.packet_drop_queue
 
-		self.buffer           = TimeoutBuffer(timeout=60)   # in seconds
+		# Buffer_1 - for buffering `packetSent` events
+		# Buffer_2 - for buffering `packetReceived` events
+		# Buffer_2 does not expire because packetReceived events should get their packetSent events eventually
+		self.buffer_1         = TimeoutBuffer(timeout=60, expire=True)   # in seconds
+		self.buffer_2         = TimeoutBuffer(timeout=60, expire=False)  # in seconds
+
 		self.packet_memory    = {'sent': {}, 'dropped': {}}   # { "sent": {"node_id": {"dest_node_id": `Int`}, "dropped": {...} }
 
 		self.event_to_method  = {
@@ -102,7 +107,7 @@ class KPIProcessing:
 	def _log_latency(self, payload, origin_packet):
 		# Log latency only if packet received before timeout
 		if origin_packet != None:
-			latency = payload['timestamp'] - origin_packet['timestamp']
+			latency = abs(payload['timestamp'] - origin_packet['timestamp'])
 			
 			self.logger.log('kpi', {
 					'kpi'         : 'latency',
@@ -131,13 +136,25 @@ class KPIProcessing:
 
 
 	def _packet_sent(self, payload):
-		self.buffer.put(payload)
-		self._increment('sent', payload['node_id'], payload['dest_node_id'])
+		# Check buffer_2 and calculate KPI if present. Otherwise, put in buffer_1
+		origin_packet = self.buffer_2.find(payload['packetToken'])
+		
+		if origin_packet != None:
+			self._log_latency(payload, origin_packet)
+			self._log_reliability(payload)
+		else:	
+			self.buffer_1.put(payload)
+			self._increment('sent', payload['node_id'], payload['dest_node_id'])
 
 	def _packet_received(self, payload):
-		origin_packet = self.buffer.find(payload['packetToken'])
-		self._log_latency(payload, origin_packet)
-		self._log_reliability(payload)
+		# Check buffer_1 and calculate KPI if present. Otherwise, put in buffer_2
+		origin_packet = self.buffer_1.find(payload['packetToken'])
+
+		if origin_packet != None:
+			self._log_latency(payload, origin_packet)
+			self._log_reliability(payload)
+		else:
+			self.buffer_2.put(payload)
 			
 	def _networkFormationTime(self, event_obj):
 		print str(event_obj)
@@ -176,5 +193,5 @@ class KPIProcessing:
 				'eui64'    : event_obj['source'],
 				'node_id'  : Utils.eui64_to_id[event_obj['source']],
 				'timestamp': event_obj['timestamp'],
-				'value'    : event_obj['dutyCycle']
+				'value'    : float(event_obj['dutyCycle'].strip('%'))
 			}) 

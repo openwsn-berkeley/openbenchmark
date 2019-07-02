@@ -5,3 +5,9 @@ broker = broker.mqttdashboard.com
 [wilab]
 broker = broker.mqttdashboard.com
 password = YOUR_PASSWORD
+
+[dependencies]
+ov-repo = https://github.com/malishav/openvisualizer.git
+ov-branch = OV-7
+coap-repo = https://github.com/malishav/coap.git
+coap-branch = develop_COAP-44

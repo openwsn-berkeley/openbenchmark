@@ -8,10 +8,11 @@ from mqtt_client._condition_object import ConditionObject
 
 class TimeoutBuffer():
 
-	def __init__(self, timeout):
+	def __init__(self, timeout, expire=True):
 		self.timeout  = timeout
 		self.buffer   = {}
 		self.lock     = threading.Lock()
+		self.expire   = expire
 
 		self.condition_object = ConditionObject.create()
 		self.cv_packet_drop   = self.condition_object.packet_drop_cv
@@ -39,11 +40,12 @@ class TimeoutBuffer():
 		with self.lock:
 			token = ''.join(str(elem) for elem in item['packetToken'])
 			self.buffer[token] = item
-			threading.Timer(self.timeout, self._expire, [token]).start()
+			if self.expire:
+				threading.Timer(self.timeout, self._expire, [token]).start()
 
 	def find(self, packet_token):
 		token = ''.join(str(elem) for elem in packet_token)
-		if token != '' and self.buffer[token] != None:
+		if token != '' and token in self.buffer and self.buffer[token] != None:
 			packet = self.buffer[token]
 			self.buffer[token] = None
 			return packet

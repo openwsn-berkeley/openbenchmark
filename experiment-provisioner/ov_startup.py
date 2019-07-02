@@ -4,17 +4,23 @@ import time
 import threading
 from mqtt_client import MQTTClient
 
-ov_dir   = os.path.join(os.path.dirname(__file__), "..", "..", "openwsn", "openvisualizer")
-orch_dir = os.path.join(os.path.dirname(__file__), "..", "experiment-orchestrator")
+openwsn_dir = os.path.join(os.path.dirname(__file__), "..", "..", "openwsn")
+ov_dir      = os.path.join(openwsn_dir, "openvisualizer")
+coap_dir    = os.path.join(openwsn_dir, "coap")
+orch_dir    = os.path.join(os.path.dirname(__file__), "..", "experiment-orchestrator")
 
 class OVStartup:
 
-	def __init__(self, user_id, scenario, testbed, broker, simulator):
-		self.testbed   = testbed
-		self.scenario  = scenario
-		self.broker    = broker
-		self.simulator = simulator
-		self.user_id   = user_id
+	def __init__(self, user_id, scenario, testbed, broker, simulator, ov_repo, ov_branch, coap_repo, coap_branch):
+		self.testbed     = testbed
+		self.scenario    = scenario
+		self.broker      = broker
+		self.simulator   = simulator
+		self.user_id     = user_id
+		self.ov_repo     = ov_repo
+		self.ov_branch   = ov_branch
+		self.coap_repo   = coap_repo
+		self.coap_branch = coap_branch
 
 		self.mqtt_client = MQTTClient.create(self.testbed, self.user_id)
 
@@ -23,6 +29,8 @@ class OVStartup:
 		if self.simulator:
 			self._start_orchestrator()
 		else:
+			self._load_dependencies()
+
 			thread_orch = threading.Thread(target=self._start_ov)
 			thread_orch.start()
 		
@@ -48,5 +56,42 @@ class OVStartup:
 	def _start_ov(self):
 		print "[OV STARTUP] Starting OpenVisualizer"
 		self.mqtt_client.push_debug_log('OV_STARTUP', "Starting OpenVisualizer")
-
 		subprocess.Popen(['scons', 'runweb', '--port=8080', '--benchmark={0}'.format(self.scenario), '--testbed={0}'.format(self.testbed), '--mqtt-broker-address={0}'.format(self.broker), '--opentun-null'], cwd=ov_dir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+
+
+	# Clone dependencies
+	def _load_dependencies(self):
+		self._delete_dependencies()
+		self._clone_dependencies()
+
+	def _delete_dependencies(self):
+		self._print_log('Removing dependencies...')
+		self._run_cmd('ov-delete')
+		self._run_cmd('coap-delete')
+
+	def _clone_dependencies(self):
+		self._print_log('Cloning dependencies...')
+		self._run_cmd('ov-clone')
+		self._run_cmd('coap-clone')
+
+	def _run_cmd(self, cmd):
+		cmds = {
+			"ov-clone"   : ['git', 'clone', '-b', self.ov_branch, '--single-branch', self.ov_repo],
+			"coap-clone" : ['git', 'clone', '-b', self.coap_branch, '--single-branch', self.coap_repo],
+			"ov-delete"  : ['sudo', 'rm', '-rf', ov_dir], 
+			"coap-delete": ['sudo', 'rm', '-rf', coap_dir]
+		}	
+
+		pipe = subprocess.Popen(cmds[cmd], cwd=openwsn_dir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+		
+		for line in iter(pipe.stdout.readline, b''):
+			output = line.rstrip()
+			self._print_log(output)
+			
+		for line in iter(pipe.stderr.readline, b''):
+			output = line.rstrip()
+			self._print_log(output)
+
+	def _print_log(self, message):
+		self.mqtt_client.push_debug_log("[OV_STARTUP]", message)
+		print("[OV_STARTUP] {0}".format(message))

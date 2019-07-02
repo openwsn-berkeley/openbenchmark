@@ -15,6 +15,9 @@ from reservation import WilabReservation
 
 from otbox_flash import OTBoxFlash
 from ov_startup import OVStartup
+from fw_compiler import FWCompiler
+
+from mqtt_client import MQTTClient
 
 
 class Controller(object):
@@ -27,6 +30,11 @@ class Controller(object):
 	def __init__(self):
 		self.configParser = ConfigParser.RawConfigParser()   
 		self.configParser.read(self.CONFIG_FILE)
+
+		self.OV_REPO     = self.configParser.get('dependencies', 'ov-repo')
+		self.OV_BRANCH   = self.configParser.get('dependencies', 'ov-branch')
+		self.COAP_REPO   = self.configParser.get('dependencies', 'coap-repo')
+		self.COAP_BRANCH = self.configParser.get('dependencies', 'coap-branch')
 
 	def add_parser_args(self, parser):
 		self.default_fws = {
@@ -62,6 +70,11 @@ class Controller(object):
 			required   = False,
 			action     = 'store',
 		)
+		parser.add_argument('--branch', 
+			dest       = 'branch',
+			required   = False,
+			action     = 'store',
+		)
 		parser.add_argument('--scenario', 
 			dest       = 'scenario',
 			choices    = ['demo-scenario', 'building-automation', 'home-automation', 'industrial-monitoring'],
@@ -80,8 +93,23 @@ class Controller(object):
 			'action'    : args.action,
 			'testbed'   : args.testbed,
 			'firmware'  : args.firmware,
+			'branch'    : args.branch,
 			'scenario'  : args.scenario
 		}
+
+	def _get_duration(self, scenario):
+		config_file = os.path.join(self.SCENARIO_CONFIG, scenario, "_config.json")
+		duration_min = -1
+
+		with open(config_file, 'r') as f:
+			config_obj = json.load(f)
+			duration_min = config_obj['duration_min']
+
+		return duration_min
+
+	def print_log(self, message):
+		self.mqtt_client.push_debug_log("[PROVISIONER]", message)
+		print("[PROVISIONER] {0}".format(message))
 
 	@abstractmethod
 	def add_files_from_env(self):
@@ -100,13 +128,16 @@ class IoTLAB(Controller):
 		self.PRIVATE_SSH = os.environ["private_ssh"] if "private_ssh" in os.environ else ""
 		self.HOSTNAME = 'saclay.iot-lab.info'
 
-		self.EXP_DURATION = 30 # Duration in minutes
 		self.NODES = self._get_nodes()
+		self.EXP_DURATION = self._get_duration(self.scenario) + 10
 
 		self.BROKER = self.configParser.get(self.CONFIG_SECTION, 'broker')
 
 		self.add_files_from_env()
 		self.reservation = IoTLABReservation(user_id, self.USERNAME, self.HOSTNAME, self.BROKER, self.EXP_DURATION, self.NODES)
+
+		self.mqtt_client = MQTTClient.create('iotlab', user_id)
+
 
 	def add_files_from_env(self):
 		if self.PRIVATE_SSH != "":
@@ -128,6 +159,7 @@ class IoTLAB(Controller):
 				nodes_str += config_obj[generic_id]["node_id"].split("-")[2] + "+"
 
 			return nodes_str.rstrip("+")
+
 
 
 class Wilab(Controller):
@@ -155,7 +187,7 @@ class Wilab(Controller):
 		self.BROKER   = self.configParser.get(self.CONFIG_SECTION, 'broker')
 		self.PASSWORD = self.configParser.get(self.CONFIG_SECTION, 'password')
 
-		self.EXP_DURATION = 30
+		self.EXP_DURATION = self._get_duration(self.scenario) + 10
 
 		self._rspec_update()
 		self._set_broker()
@@ -164,6 +196,8 @@ class Wilab(Controller):
 			self._update_yml_files()
 
 		self.reservation = WilabReservation(user_id, self.JFED_DIR, self.RUN, self.DELETE, self.DISPLAY)
+		self.mqtt_client = MQTTClient.create('iotlab', user_id)
+
 
 	def add_files_from_env(self):
 		if self.CERTIFICATE_B64 != "":
@@ -295,6 +329,7 @@ TESTBEDS = {
 	"wilab": Wilab
 }
 
+
 def main():
 	controller = Controller()
 
@@ -306,31 +341,43 @@ def main():
 	testbed   = args['testbed']
 	scenario  = args['scenario']
 
+	firmware  = args['firmware']
+	branch    = args['branch']
+
 	testbed  = TESTBEDS[testbed](user_id, scenario, action)
 
 	# Default firmware is "openwsn" with testbed name suffix
-	if args['firmware'] is None:
+	if firmware is None:
 		firmware = os.path.join(os.path.dirname(__file__), 'firmware', controller.DEFAULT_FIRMWARE + '.' + args['testbed'])
-	else:
-		firmware = args['firmware']
+	elif branch is not None:
+		firmware = FWCompiler(firmware, branch, testbed, user_id).compile()
 
 	if action == 'reserve':
-		print 'Reserving nodes'
+		testbed.print_log('Reserving nodes...')
 		testbed.reservation.reserve_experiment()
 	elif action == 'check':
-		print 'Checking experiment'
+		testbed.print_log('Experiment checking...')
 		testbed.reservation.check_experiment()
 	elif action == 'terminate':
-		print 'Terminating experiment'
+		testbed.print_log('Terminating the experiment...')
 		testbed.reservation.terminate_experiment()
 	elif action == 'flash':
 		assert firmware is not None
-		print 'Flashing firmware: {0}'.format(firmware)
+		testbed.print_log('Flashing firmware: {0}'.format(firmware))
 		OTBoxFlash(user_id, firmware, testbed.BROKER, args['testbed']).flash()
 	elif action == 'ov-start':
-		print 'Starting OV'
-		OVStartup(user_id, scenario, args['testbed'], testbed.BROKER, simulator).start()
+		testbed.print_log('Starting SUT...')
+		OVStartup(
+			user_id, 
+			scenario, 
+			args['testbed'], 
+			testbed.BROKER, 
+			simulator, 
+			testbed.OV_REPO, 
+			testbed.OV_BRANCH, 
+			testbed.COAP_REPO,
+			testbed.COAP_BRANCH
+		).start()
 
 if __name__ == '__main__':
 	main()
-
