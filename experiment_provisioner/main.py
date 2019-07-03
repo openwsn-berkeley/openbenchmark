@@ -270,54 +270,42 @@ TESTBEDS = {
 }
 
 
-def main():
-	controller = Controller()
+class Main():
 
-	args = controller.get_args()
+	def __init__(self, user_id, simulator, action, testbed, scenario, firmware, branch):
+		controller = Controller()
 
-	user_id   = args['user_id']
-	simulator = args['simulator']
-	action    = args['action']
-	testbed   = args['testbed']
-	scenario  = args['scenario']
+		testbedCtl  = TESTBEDS[testbed](user_id, scenario, action)
 
-	firmware  = args['firmware']
-	branch    = args['branch']
+		# Default firmware is "openwsn" with testbed name suffix
+		if firmware is None:
+			firmware = os.path.join(os.path.dirname(__file__), 'firmware', controller.DEFAULT_FIRMWARE + '.' + testbed)
+		elif branch is not None:
+			firmware = FWCompiler(firmware, branch, testbed, user_id).compile()
 
-	testbed  = TESTBEDS[testbed](user_id, scenario, action)
-
-	# Default firmware is "openwsn" with testbed name suffix
-	if firmware is None:
-		firmware = os.path.join(os.path.dirname(__file__), 'firmware', controller.DEFAULT_FIRMWARE + '.' + args['testbed'])
-	elif branch is not None:
-		firmware = FWCompiler(firmware, branch, testbed, user_id).compile()
-
-	if action == 'reserve':
-		testbed.print_log('Reserving nodes...')
-		testbed.reservation.reserve_experiment()
-	elif action == 'check':
-		testbed.print_log('Experiment checking...')
-		testbed.reservation.check_experiment()
-	elif action == 'terminate':
-		testbed.print_log('Terminating the experiment...')
-		testbed.reservation.terminate_experiment()
-	elif action == 'flash':
-		assert firmware is not None
-		testbed.print_log('Flashing firmware: {0}'.format(firmware))
-		OTBoxFlash(user_id, firmware, testbed.BROKER, args['testbed']).flash()
-	elif action == 'ov-start':
-		testbed.print_log('Starting SUT...')
-		OVStartup(
-			user_id, 
-			scenario, 
-			args['testbed'], 
-			testbed.BROKER, 
-			simulator, 
-			testbed.OV_REPO, 
-			testbed.OV_BRANCH, 
-			testbed.COAP_REPO,
-			testbed.COAP_BRANCH
-		).start()
-
-if __name__ == '__main__':
-	main()
+		if action == 'reserve':
+			testbedCtl.print_log('Reserving nodes...')
+			testbedCtl.reservation.reserve_experiment()
+		elif action == 'check':
+			testbedCtl.print_log('Experiment checking...')
+			testbedCtl.reservation.check_experiment()
+		elif action == 'terminate':
+			testbedCtl.print_log('Terminating the experiment...')
+			testbedCtl.reservation.terminate_experiment()
+		elif action == 'flash':
+			assert firmware is not None
+			testbedCtl.print_log('Flashing firmware: {0}'.format(firmware))
+			OTBoxFlash(user_id, firmware, testbedCtl.BROKER, testbed).flash()
+		elif action == 'ov-start':
+			testbedCtl.print_log('Starting SUT...')
+			OVStartup(
+				user_id, 
+				scenario, 
+				testbed, 
+				testbedCtl.BROKER, 
+				simulator, 
+				testbedCtl.OV_REPO, 
+				testbedCtl.OV_BRANCH, 
+				testbedCtl.COAP_REPO,
+				testbedCtl.COAP_BRANCH
+			).start()
