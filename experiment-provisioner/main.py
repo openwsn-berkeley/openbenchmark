@@ -35,6 +35,8 @@ class Controller(object):
 		self.OV_BRANCH   = self.configParser.get('dependencies', 'ov-branch')
 		self.COAP_REPO   = self.configParser.get('dependencies', 'coap-repo')
 		self.COAP_BRANCH = self.configParser.get('dependencies', 'coap-branch')
+		self.OTB_REPO    = self.configParser.get('dependencies', 'otb-repo')
+		self.OTB_TAG     = self.configParser.get('dependencies', 'otb-tag')
 
 	def add_parser_args(self, parser):
 		self.default_fws = {
@@ -134,7 +136,7 @@ class IoTLAB(Controller):
 		self.BROKER = self.configParser.get(self.CONFIG_SECTION, 'broker')
 
 		self.add_files_from_env()
-		self.reservation = IoTLABReservation(user_id, self.USERNAME, self.HOSTNAME, self.BROKER, self.EXP_DURATION, self.NODES)
+		self.reservation = IoTLABReservation(user_id, self.USERNAME, self.HOSTNAME, self.BROKER, self.OTB_REPO, self.OTB_TAG, self.EXP_DURATION, self.NODES)
 
 		self.mqtt_client = MQTTClient.create('iotlab', user_id)
 

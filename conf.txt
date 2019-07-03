@@ -11,3 +11,5 @@ ov-repo = https://github.com/malishav/openvisualizer.git
 ov-branch = OV-7
 coap-repo = https://github.com/malishav/coap.git
 coap-branch = develop_COAP-44
+otb-repo = https://github.com/openwsn-berkeley/opentestbed.git
+otb-tag = REL-1.2.3

@@ -26,7 +26,7 @@ class OTBoxStartup:
 
     timer = 0  # used for measuring the amount of time between status messages
 
-    def __init__(self, user, domain, testbed, nodes, broker, mqtt_client):
+    def __init__(self, user, domain, testbed, nodes, broker, mqtt_client, otb_repo, otb_tag):
         warnings.simplefilter(
             action='ignore',
             category=CryptographyDeprecationWarning
@@ -37,6 +37,9 @@ class OTBoxStartup:
         self.testbed     = testbed
         self.broker      = broker
         self.mqtt_client = mqtt_client
+
+        self.otb_repo  = otb_repo
+        self.otb_tag   = otb_tag
 
         self.client = paramiko.SSHClient()
         self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -56,7 +59,7 @@ class OTBoxStartup:
 
         # Fetch the latest version of opentestbed software in the shared A8 director of the SSH frontend
         self.ssh_command_exec(
-            'cd A8; rm -rf opentestbed; git clone https://github.com/bozidars27/opentestbed.git; cd opentestbed; git checkout origin/opentestbed-extension;')
+            'cd A8; rm -rf opentestbed; git clone {0}; cd opentestbed; git fetch --tags; git checkout {1};'.format(self.otb_repo, self.otb_tag))
 
     def ssh_connect(self):
         self.client.connect(self.domain, username=self.user)
