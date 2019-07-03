@@ -112,7 +112,7 @@ class IoTLABReservation(Reservation):
                 nodes = self.get_reserved_nodes()
 
                 if len(nodes) > 0:
-                    OTBoxStartup(self.user, self.domain, 'iotlab', self.get_reserved_nodes(), self.broker, self.mqtt_client).start()
+                    OTBoxStartup(self.user, self.domain, 'iotlab', self.get_reserved_nodes(), self.broker, self.mqtt_client, self.otb_repo, self.otb_tag).start()
                 else:
                     self.mqtt_client.push_debug_log('RESERVATION_FAIL', 'Experiment startup failed')
                     print('Experiment startup failed')

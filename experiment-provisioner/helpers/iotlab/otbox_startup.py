@@ -26,7 +26,7 @@ class OTBoxStartup:
 
     timer = 0  # used for measuring the amount of time between status messages
 
-    def __init__(self, user, domain, testbed, nodes, broker, mqtt_client):
+    def __init__(self, user, domain, testbed, nodes, broker, mqtt_client, otb_repo, otb_tag):
         warnings.simplefilter(
             action='ignore',
             category=CryptographyDeprecationWarning
@@ -37,6 +37,9 @@ class OTBoxStartup:
         self.testbed     = testbed
         self.broker      = broker
         self.mqtt_client = mqtt_client
+
+        self.otb_repo  = otb_repo
+        self.otb_tag   = otb_tag
 
         self.client = paramiko.SSHClient()
         self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
