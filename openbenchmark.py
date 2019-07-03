@@ -1,5 +1,5 @@
 import argparse
-
+from experiment_provisioner.main import Main as ExpProvisioner
 
 class OpenBenchmark:
 
@@ -81,15 +81,7 @@ def main():
 	firmware  = args['firmware']
 	branch    = args['branch']
 
-	print "All taken args:"
-	print user_id
-	print simulator
-	print action
-	print testbed
-	print scenario
-	print firmware
-	print branch
-
+	ExpProvisioner(user_id, simulator, action, testbed, scenario, firmware, branch)
 
 if __name__ == '__main__':
 	main()
