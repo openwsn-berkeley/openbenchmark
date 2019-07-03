@@ -67,7 +67,7 @@ Vagrant.configure("2") do |config|
     dos2unix ./openbenchmark/bootstrap.sh
     dos2unix ./openbenchmark/bootstrap_webdev.sh
     dos2unix ./openbenchmark/bootstrap_jfed.sh
-    dos2unix ./openbenchmark/experiment-provisioner/helpers/wilab/jfed_cli/*.sh
+    dos2unix ./openbenchmark/experiment_provisioner/helpers/wilab/jfed_cli/*.sh
   SHELL
 
 end

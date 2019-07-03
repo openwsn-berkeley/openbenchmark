@@ -7,7 +7,7 @@ use App\Classes\SuccessResponse;
 
 class CommandHandler {
 
-    const PROVISIONER_MAIN = 'python /home/vagrant/openbenchmark/experiment-provisioner/main.py';
+    const PROVISIONER_MAIN = 'python /home/vagrant/openbenchmark/experiment_provisioner/main.py';
     const OV_GUARD_TIME    = 20; //A guard time in seconds for the nodes to start sending serial data before running OV
 
 

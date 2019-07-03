@@ -7,7 +7,7 @@ set -e
 set -o xtrace
 
 OPENBENCHMARK_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
-JFED_DIR=$OPENBENCHMARK_DIR/experiment-provisioner/helpers/wilab/jfed_cli
+JFED_DIR=$OPENBENCHMARK_DIR/experiment_provisioner/helpers/wilab/jfed_cli
 JVM_DIR="/usr/lib/jvm"
 
 if [ ! -d $JVM_DIR ]; then

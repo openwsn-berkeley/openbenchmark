@@ -12,8 +12,8 @@ before_script:
   - bash bootstrap_webdev.sh
 
 script:
-  - pytest ./experiment-provisioner/test/test.py -s
+  - pytest ./experiment_provisioner/test/test.py -s
   - cd docs; make html
 
 after_script:
-  - cd ../experiment-provisioner; python main.py --action=terminate
+  - cd ../experiment_provisioner; python main.py --action=terminate

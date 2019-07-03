@@ -48,7 +48,7 @@ class LogParser {
 
 			$name = "$name_prefix$experiment_id$name_suffix";
 
-			$file_path = "/home/vagrant/openbenchmark/experiment-orchestrator/kpi/$name";
+			$file_path = "/home/vagrant/openbenchmark/experiment_orchestrator/kpi/$name";
 
 			$file_path_err = $this->_validate_file_path($file_path);
 			if ($file_path_err != "")
@@ -62,7 +62,7 @@ class LogParser {
 	}
 
 	private function _invoke_python_interface($action, $experiment_id) {
-		$python_interface_path = "/home/vagrant/openbenchmark/experiment-orchestrator/kpi/kpis/log_parser.py";
+		$python_interface_path = "/home/vagrant/openbenchmark/experiment_orchestrator/kpi/kpis/log_parser.py";
 
 		$command = "python $python_interface_path --action=$action";
 		$command .= $action == 'data-fetch' ? " --experiment-id=$experiment_id" : "";

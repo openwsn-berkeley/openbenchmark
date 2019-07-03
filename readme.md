@@ -42,14 +42,14 @@ vagrant ssh
 ./openbenchmark/bootstrap_webdev.sh -mysql
 ```
 
-4. Write your IoT-LAB username into the experiment configuration file: `~/openbenchmark/experiment-provisioner/conf.txt`
+4. Write your IoT-LAB username into the experiment configuration file: `~/openbenchmark/experiment_provisioner/conf.txt`
 ```
 [iotlab-config]
 user = YOUR_USER_NAME
 broker = broker.mqttdashboard.com
 ```
 
-5. To start the GUI, open a web browser and go to `127.0.0.1:8081`. To start an experiment from the console, SSH into the server and refer to the documentation given with the OpenBenchmark platform: `http://127.0.0.1:8081/docs/#experiment-provisioner`
+5. To start the GUI, open a web browser and go to `127.0.0.1:8081`. To start an experiment from the console, SSH into the server and refer to the documentation given with the OpenBenchmark platform: `http://127.0.0.1:8081/docs/#experiment_provisioner`
 
 
 ## Development

@@ -14,7 +14,7 @@ use Exception;
 class ExperimentController extends Controller
 {
 
-    const FILE_DESTINATION = "/home/vagrant/openbenchmark/experiment-provisioner/firmware";
+    const FILE_DESTINATION = "/home/vagrant/openbenchmark/experiment_provisioner/firmware";
 
     function __construct() {
         $this->config_parser   = new ConfigParser();
