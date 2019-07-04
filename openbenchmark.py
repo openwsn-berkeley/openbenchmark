@@ -7,11 +7,6 @@ class OpenBenchmark:
 		pass
 
 	def add_parser_args(self, parser):
-		self.default_fws = {
-			"iotlab": "03oos_openwsn_prog_iotlab",
-			"wilab" : "03oos_openwsn_prog_wilab.ihex"
-		}
-
 		parser.add_argument('--user-id',   # User ID is tied to the OpenBenchmark account
 			dest       = 'user_id',
 			default    = 0,
