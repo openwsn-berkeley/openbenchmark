@@ -7,7 +7,7 @@ from mqtt_client import MQTTClient
 openwsn_dir = os.path.join(os.path.dirname(__file__), "..", "..", "openwsn")
 ov_dir      = os.path.join(openwsn_dir, "openvisualizer")
 coap_dir    = os.path.join(openwsn_dir, "coap")
-orch_dir    = os.path.join(os.path.dirname(__file__), "..", "experiment-orchestrator")
+orch_dir    = os.path.join(os.path.dirname(__file__), "..", "experiment_orchestrator")
 
 class OVStartup:
 
