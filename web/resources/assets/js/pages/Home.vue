@@ -20,15 +20,6 @@
                     }">
                 <scenarios :experiment-id="id"></scenarios>
             </div>
-            <div id="graphs" class="section" v-observe-visibility="{
-                       callback: visibilityChanged,
-                       intersection: {
-                           root,
-                           threshold
-                       }
-                    }">
-                <graphs></graphs>
-            </div>
 
             <bottom-sheet></bottom-sheet>
         </div>
