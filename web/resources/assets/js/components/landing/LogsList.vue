@@ -66,7 +66,7 @@
                 jsObject.forEach((el) => {
                     newObj.push({
                         "id"      : el.experiment_id,
-                        "date"    : el.date,
+                        "date"    : this.convertDate(el.date),
                         "firmware": el.firmware,
                         "scenario": scenarios[el.scenario],
                         "testbed" : testbeds[el.testbed]
@@ -74,6 +74,21 @@
                 })
 
                 return newObj
+            },
+
+            convertDate(date) {
+                let datetime = new Date(Date.parse(date))
+                let options = {
+                    weekday: 'short', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric', 
+                    hour: '2-digit', 
+                    minute: '2-digit', 
+                    second: '2-digit'
+                }
+
+                return datetime.toString().split("(")[0]
             }
         },
 
