@@ -1140,7 +1140,7 @@ Response:
 
 # Experiment Provisioner
 
-Experiment Provisioner is a part of the Python core which communicates with the testbed, provisions the resources, and triggers the Experiment Orchestrator and SUT. All the calls of the RESTful API (which are used by the GUI as well), infact, trigger one of the actions of the Experiment Provisioner. Experiment Provisioner may be started manually from the console, by invoking the entry point Python script in its directory (`python ~/openbenchmark/experiment-provisioner/main.py`) with the following parameters:
+Experiment Provisioner is a part of the Python core which communicates with the testbed, provisions the resources, and triggers the Experiment Orchestrator and SUT. All the calls of the RESTful API (which are used by the GUI as well), infact, trigger one of the actions of the Experiment Provisioner. Experiment Provisioner may be started manually from the console, by invoking the entry point Python script in its directory (`python ~/openbenchmark/experiment_provisioner/main.py`) with the following parameters:
 
 Parameter name    | Type    | Choices                                                                    | Required  | Default  
 ----------------- | --------| ---------------------------------------------------------------------------| ----------| --------

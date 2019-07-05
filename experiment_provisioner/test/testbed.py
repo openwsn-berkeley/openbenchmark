@@ -12,14 +12,14 @@ class Testbed():
 
 	EXP_CHECK_PAUSE           = 10     # pause between exp initialization and check
 	OV_START_PAUSE            = 20     # pause before starting OV
-	mainDir                   = os.path.join(os.path.dirname(__file__), "..")
+	mainDir                   = os.path.join(os.path.dirname(__file__), "..", "..")
 
 	# Main method
 	def run_action(self, action):
 		self.delay(action)
 
 		if (action != 'ov-start'):
-			pipe = subprocess.Popen(['python', 'main.py', '--action={0}'.format(action), '--user-id=1'], cwd=self.mainDir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+			pipe = subprocess.Popen(['python', 'openbenchmark.py', '--action={0}'.format(action), '--user-id=1'], cwd=self.mainDir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
 			res = pipe.communicate()
 
 			return_code = pipe.returncode
@@ -30,7 +30,7 @@ class Testbed():
 			return self.output_check(action, return_code = pipe.returncode, stdout = stdout, stderr = stderr)
 
 		else: 
-			subprocess.Popen(['python', 'main.py', '--action={0}'.format(action), '--user-id=1 &'], cwd=self.mainDir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+			subprocess.Popen(['python', 'openbenchmark.py', '--action={0}'.format(action), '--user-id=1 &'], cwd=self.mainDir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
 			return self.output_check(action, return_code = 0)
 
 

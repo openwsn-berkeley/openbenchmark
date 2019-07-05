@@ -1,4 +1,4 @@
-# experiment-provisioner
+# experiment_provisioner
 paramiko
 watchdog
 paho-mqtt
@@ -6,7 +6,7 @@ argparse
 pytest
 lxml
 
-# experiment-orchestrator
+# experiment_orchestrator
 numpy
 
 # docs
