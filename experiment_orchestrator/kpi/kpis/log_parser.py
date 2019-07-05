@@ -1,6 +1,8 @@
 import os
 import json
 import argparse
+import time
+import datetime
 
 
 class LogParser:
@@ -54,7 +56,13 @@ class LogParser:
 						"scenario"      : header["scenario"]
 					})
 		
-		return json.dumps({"data": data})
+		return json.dumps({
+			"data": sorted(data, key=lambda k: self._date_to_timestamp(k['date']), reverse = True)
+		})
+		
+	def _date_to_timestamp(self, date):
+		return time.mktime(datetime.datetime.strptime(date, "%a %b %d %H:%M:%S %Z %Y").timetuple())
+
 
 	def _fetch_log_data(self):
 		log_file = os.path.join(os.path.dirname(__file__), ".cache", "cached_kpi_{0}.json".format(self.experiment_id))
