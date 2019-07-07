@@ -89,7 +89,27 @@
                 }
 
                 return datetime.toString().split("(")[0]
+            },
+
+            /*** MQTT Configuration ***/
+            subscribe() {
+                let interval = setInterval( function() {
+                    if (thisComponent.$mqttClient.subscribe() !== "") {
+                        console.log("Retrying subscription in 1s...") 
+                    } else {
+                        clearInterval(interval)
+                    }
+                }, 1000);  
+            },
+
+            parseMqttEvent(payload) {
+                let payloadObj = JSON.parse(payload)
+                let type       = payloadObj["type"]
+
+                if (type == "kpi") 
+                    this.parseLogData(payloadObj["content"])
             }
+            /*** ***/
         },
 
         created() {
