@@ -19,6 +19,7 @@ class MQTTClient:
 	def __init__(self, testbed, user_id):
 		self.user_id          = user_id
 		self.testbed          = testbed
+		self.qos              = 2
 		self.broker           = 'broker.mqttdashboard.com' # Utils.broker
 
 		self.experiment_id    = 'Notif'
@@ -54,13 +55,13 @@ class MQTTClient:
 	def _subscribe(self):
 		for key in self.sub_topics:
 			sys.stdout.write("[PROV MQTT CLIENT] Subscribing to: {0}\n".format(self.sub_topics[key]))
-			self.client.subscribe(self.sub_topics[key])
+			self.client.subscribe(self.sub_topics[key], self.qos)
 
 	def _publish(self, topic, payload, custom=False):
 		if not custom:
-			self.client.publish(self.pub_topics[topic], json.dumps(payload))
+			self.client.publish(self.pub_topics[topic], json.dumps(payload), self.qos)
 		else:
-			self.client.publish(topic, json.dumps(payload))
+			self.client.publish(topic, json.dumps(payload), self.qos)
 
 
 	##### MQTT client listeners #####
