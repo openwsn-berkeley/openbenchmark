@@ -20,7 +20,7 @@ class OpenBenchmark:
 		)
 		parser.add_argument('--action', 
 			dest       = 'action',
-			choices    = ['check', 'reserve', 'terminate', 'flash', 'ov-start'],
+			choices    = ['check', 'reserve', 'terminate', 'flash', 'sut-start', 'ov', 'orchestrator'],
 			required   = True,
 			action     = 'store'
 		)
