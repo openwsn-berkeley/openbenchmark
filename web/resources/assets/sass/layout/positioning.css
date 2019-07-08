@@ -33,7 +33,7 @@
     align-self: flex-end;
 }
 
-.col .col-1 {
+.col, .col-1 {
     flex: 1;
 }
 .col-2 {
