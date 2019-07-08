@@ -1,77 +1,47 @@
 import Paho from 'paho-mqtt';
 
-let eventHub = null
-
 export default class MQTTClient {
 
-	constructor(hostname, port, vueEventHub) {
-		// User ID is temporarily hardcoded to 1
-		this.subTopics = [
-			"openbenchmark/1/notifications", 
-			"openbenchmark/1/experimentId/+/kpi",
-			"openbenchmark/1/debug"
-		]
+	constructor(hostname, port, eventHub) {
 
-		eventHub = vueEventHub
+		let client = new Paho.Client(
+			'broker.mqttdashboard.com', 
+			Number(8000), 
+			"obWebClient" + Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5)
+		)
 
-		this.client = new Paho.Client(hostname, Number(port), "webBrowserClient")
-		this.configurePaho()
-	}
+		let subOptions = {qos: 2}
 
-	configurePaho() {
-		console.log("Configuring Paho...");
+		client.onConnectionLost = onConnectionLost
+		client.onMessageArrived = onMessageArrived
 
-        // Set callback handlers
-        this.client.onConnectionLost = this.onConnectionLost;
-        this.client.onMessageArrived = this.onMessageArrived;
+		client.connect({onSuccess:onConnect})
 
-        // Connect to the client
-        this.client.connect({onSuccess: this.onConnect});
-    }
-
-    onConnect() {
-	    console.log("Connected to broker!");
-	}
-	onConnectionLost(responseObject) {
-	    if (responseObject.errorCode !== 0)
-	        console.log("onConnectionLost: " + responseObject.errorMessage)
-	}
-	onMessageArrived(message) {
-	    //eventHub.$emit('MQTT', message.payloadString)
-	    eventHub.$emit(message.destinationName, message.payloadString)
-	}
-
-
-	publish(topic, payload) {
-		if (!this.client.isConnected())
-			return "MQTT Client not connected"
-
-		try {
-			let message = new Paho.Message(payload)
-		    message.destinationName = topic
-		    this.client.send(message)
-		} catch (err) {
-			return err
+		function subscribe() {
+			client.subscribe("openbenchmark/1/notifications", subOptions)
+			client.subscribe("openbenchmark/userId/1/experimentId/+/kpi", subOptions)
+			client.subscribe("openbenchmark/1/debug", subOptions)
+			client.subscribe("openbenchmark/1/headerLogged", subOptions)
+			client.subscribe("openbenchmark/1/testtopic", subOptions)
 		}
 
-	    return ""
-	}
+		/// Listeners ///
+		function onConnect() {
+			console.log("onConnect")
+			subscribe()
+			client.send("openbenchmark/1/testtopic", "Hello world!", 2)
+		}
 
-	subscribe() {
-		if (!this.client.isConnected())
-			"MQTT Client not connected"
-			
-		try {
-			for (let i = 0; i < this.subTopics.length; i++) {
-				this.client.subscribe(this.subTopics[i])
-				console.log("Subscribed to: " + this.subTopics[i])
+		function onConnectionLost(responseObject) {
+			if (responseObject.errorCode !== 0) {
+				console.log("onConnectionLost: " + responseObject.errorMessage)
 			}
-		
-		} catch (err) {
-			return err
 		}
 
-		return ""
+		function onMessageArrived(message) {
+	  		console.log("onMessageArrived: " + message.payloadString)
+	  		eventHub.$emit(message.destinationName, message.payloadString)
+		}
 	}
 
 }
