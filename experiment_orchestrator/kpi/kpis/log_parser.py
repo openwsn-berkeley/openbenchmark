@@ -53,7 +53,8 @@ class LogParser:
 						"experiment_id" : header["experiment_id"],
 						"firmware"      : header["firmware"],
 						"testbed"       : header["testbed"],
-						"scenario"      : header["scenario"]
+						"scenario"      : header["scenario"],
+						"active"        : False
 					})
 		
 		return json.dumps({
