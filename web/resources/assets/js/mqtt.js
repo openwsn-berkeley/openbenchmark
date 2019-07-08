@@ -8,7 +8,7 @@ export default class MQTTClient {
 		// User ID is temporarily hardcoded to 1
 		this.subTopics = [
 			"openbenchmark/1/notifications", 
-			"openbenchmark/1/kpi",
+			"openbenchmark/1/experimentId/+/kpi",
 			"openbenchmark/1/debug"
 		]
 
