@@ -495,8 +495,6 @@
             this.fetch('scenarios');
             this.fetch('testbeds');
 
-            this.subscribe();
-
             this.$eventHub.$on("openbenchmark/1/notifications", payload => {
                 thisComponent.parseMqttEvent(payload);
             });

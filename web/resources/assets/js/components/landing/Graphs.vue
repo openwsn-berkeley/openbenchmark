@@ -259,12 +259,7 @@
         },
 
         mounted() {
-            // If `experimentId` doesn't exists accept data from MQTT (real-time charts)
-            // If `experimentId` exists read data from experiment logs
-            if (this.experimentId === undefined)
-                this.subscribe();
-            else
-                this.loadData();
+            this.loadData();
 
             this.$eventHub.$on("openbenchmark/1/kpi", payload => {
                 thisComponent.parseMqttEvent(payload);
