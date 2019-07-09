@@ -7,11 +7,11 @@ use App\Classes\SuccessResponse;
 
 class CommandHandler {
 
-    const PROVISIONER_MAIN = 'python /home/vagrant/openbenchmark/experiment_provisioner/main.py';
+    const PROVISIONER_MAIN = 'python /home/vagrant/openbenchmark/openbenchmark.py';
     const OV_GUARD_TIME    = 20; //A guard time in seconds for the nodes to start sending serial data before running OV
 
 
-    function reserve_nodes($user_id, $scenario, $testbed, $async=true) {
+    function reserve($user_id, $scenario, $testbed, $async=true) {
         $action = "reserve";
         $cmd = self::PROVISIONER_MAIN . " --user-id=$user_id --action=$action --scenario=$scenario --testbed=$testbed > /dev/null";
 
@@ -23,7 +23,7 @@ class CommandHandler {
         return SuccessResponse::response(200, $this->get_response_messages($action, $user_id));
     }
 
-    function flash_firmware($user_id, $firmware, $async=true) {
+    function flash($user_id, $firmware, $async=true) {
         $action = "flash";
         $cmd = self::PROVISIONER_MAIN . " --user-id=$user_id --action=$action";
         
@@ -40,9 +40,9 @@ class CommandHandler {
         return SuccessResponse::response(200, $this->get_response_messages($action, $user_id));
     }
 
-    function start_ov($user_id, $scenario, $testbed, $simulator, $async=true) {
-        $action = "ov-start";
-        $cmd = self::PROVISIONER_MAIN . " --user-id=$user_id --action=ov-start --scenario=$scenario --testbed=$testbed";
+    function sut_start($user_id, $scenario, $testbed, $simulator, $async=true) {
+        $action = "sut-start";
+        $cmd = self::PROVISIONER_MAIN . " --user-id=$user_id --action=$action --scenario=$scenario --testbed=$testbed";
 
         if ($simulator)
             $cmd .= " --simulator";
@@ -57,7 +57,7 @@ class CommandHandler {
         return SuccessResponse::response(200, $this->get_response_messages($action, $user_id));
     }
 
-    function exp_terminate($user_id) {
+    function terminate($user_id) {
         $action = "terminate";
         $cmd = self::PROVISIONER_MAIN . " --user-id=$user_id --action=$action > /dev/null &";
         shell_exec($cmd);

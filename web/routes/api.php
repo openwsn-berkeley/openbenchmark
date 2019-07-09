@@ -25,10 +25,10 @@ Route::post('/store', 'ExperimentController@store_experiment');
 Route::get('/experiment/{id}', 'ExperimentController@get_experiment');
 
 //Individual routes for every action
-Route::get('/reserve-nodes/{scenario}/{testbed}', 'ExperimentController@reserve_nodes');
-Route::get('/flash-firmware/{firmware?}', 'ExperimentController@flash_firmware');
-Route::get('/start-ov/{scenario}/{testbed}/{simulator?}', 'ExperimentController@start_ov');
-Route::get('/exp-terminate', 'ExperimentController@exp_terminate');
+Route::get('/reserve/{scenario}/{testbed}', 'ExperimentController@reserve');
+Route::get('/flash/{firmware?}', 'ExperimentController@flash');
+Route::get('/sut-start/{scenario}/{testbed}/{simulator?}', 'ExperimentController@sut_start');
+Route::get('/terminate', 'ExperimentController@terminate');
 
 //Scenario data retreival routes
 Route::get('/general/{param}/{scenario?}/{testbed?}', 'ExperimentController@get_config_data');
