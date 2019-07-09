@@ -236,17 +236,7 @@
                 return copy;
             },
 
-            /*** MQTT Configuration ***/
-            subscribe() {
-                let interval = setInterval( function() {
-                    if (thisComponent.$mqttClient.subscribe() !== "") {
-                        console.log("Retrying subscription in 1s...") 
-                    } else {
-                        clearInterval(interval)
-                    }
-                }, 1000);  
-            },
-
+            /// MQTT
             parseMqttEvent(payload) {
                 let payloadObj = JSON.parse(payload)
                 let type       = payloadObj["type"]
@@ -254,7 +244,6 @@
                 if (type == "kpi") 
                     this.parseLogData(payloadObj["content"])
             }
-            /*** ***/
 
         },
 
