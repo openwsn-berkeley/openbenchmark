@@ -25,6 +25,19 @@ export default class MQTTClient {
 			client.subscribe("openbenchmark/1/testtopic", subOptions)
 		}
 
+		function sendEvent(topic, payload) {
+			eventHub.$emit(topic, payload)
+
+			// If the message has arrived on the KPI topic, notify the experiment id which the KPI has arrived for
+			// This is used for updating experiment logs list  
+			let topicSegments = topic.split('/')
+			if (topicSegments[topicSegments.length - 1] == 'kpi') {
+				let eventTopic = "openbenchmark/newKpi"
+				let eventPayload = topicSegments[4]
+				eventHub.$emit(eventTopic, eventPayload) 
+			}
+		}
+
 		/// Listeners ///
 		function onConnect() {
 			console.log("onConnect")
@@ -40,7 +53,7 @@ export default class MQTTClient {
 
 		function onMessageArrived(message) {
 	  		console.log("onMessageArrived: " + message.payloadString)
-	  		eventHub.$emit(message.destinationName, message.payloadString)
+	  		sendEvent(message.destinationName, message.payloadString)
 		}
 	}
 

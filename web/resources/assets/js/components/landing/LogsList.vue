@@ -98,7 +98,7 @@
                 return datetime.toString().split("(")[0]
             },
 
-            /*** MQTT Configuration ***/
+            /// MQTT
             subscribe() {
                 let interval = setInterval( function() {
                     if (thisComponent.$mqttClient.subscribe() !== "") {
@@ -120,8 +120,20 @@
                     testbed: payloadObj.testbed,
                     active: true
                 }))
+            },
+
+            notifyExperimentActive(experimentId) {
+                let newArr = []
+
+                this.outputs.forEach(el => {
+                    if (el.id === experimentId)
+                        el.active = true
+
+                    newArr.push(el)
+                })
+
+                this.outputs = newArr
             }
-            /*** ***/
         },
 
         created() {
@@ -133,6 +145,10 @@
 
             this.$eventHub.$on("openbenchmark/1/headerLogged", payload => {
                 thisComponent.parseMqttEvent(payload);
+            });
+
+            this.$eventHub.$on("openbenchmark/newKpi", payload => {
+                thisComponent.notifyExperimentActive(payload);
             });
         }
     }
