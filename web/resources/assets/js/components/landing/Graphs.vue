@@ -261,7 +261,7 @@
         mounted() {
             this.loadData();
 
-            this.$eventHub.$on("openbenchmark/1/kpi", payload => {
+            this.$eventHub.$on("openbenchmark/userId/1/experimentId/" + this.experimentId + "/kpi", payload => {
                 thisComponent.parseMqttEvent(payload);
             });
         },
