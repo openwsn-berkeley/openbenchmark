@@ -42,14 +42,50 @@ vagrant ssh
 ./openbenchmark/bootstrap_webdev.sh -mysql
 ```
 
-4. Write your IoT-LAB username into the experiment configuration file: `~/openbenchmark/experiment_provisioner/conf.txt`
+5. Write your IoT-LAB username into the experiment configuration file: `~/openbenchmark/experiment_provisioner/conf.txt`
 ```
 [iotlab-config]
 user = YOUR_USER_NAME
 broker = broker.mqttdashboard.com
 ```
 
-5. To start the GUI, open a web browser and go to `127.0.0.1:8081`. To start an experiment from the console, SSH into the server and refer to the documentation given with the OpenBenchmark platform: `http://127.0.0.1:8081/docs/#experiment_provisioner`
+6. To start the GUI, open a web browser and go to `127.0.0.1:8081`. Alternatively, you can start an experiment from the console.
+
+
+## Starting an experiment via console
+
+Workflow:
+
+1. Resource provisioning:
+```
+python openbenchmark.py --action=reserve --scenario=YOUR_SCENARIO --testbed=YOUR_TESTBED
+```
+
+2. Firmware flashing:
+```
+python openbenchmark.py --action=flash --firmware=YOUR_FIRMWARE/REPO_URL --testbed=YOUR_TESTBED [--branch=REPO_BRANCH]
+```
+If `--firmware` is not specified, Provisioner will assume the default OpenWSN firmware
+If parameter `--branch` is specified along with `--firmware`, Provisioner will treat the value of `--firmware` parameter as a URL of a Git repository, clone the repository, compile the source code and flash that firmware onto the nodes of the selected testbed
+ 
+3. SUT start:
+```
+python openbenchmark.py --action=sut-start --scenario=YOUR_SCENARIO --testbed=YOUR_TESTBED
+```
+
+Additional actions:
+
+- Independent Orchestrator startup:
+```
+python openbenchmark.py --action=orchestrator
+```
+
+- Independent OpenVisualizer startup:
+```
+python openbenchmark.py --action=ov --scenario=YOUR_SCENARIO --testbed=YOUR_TESTBED
+```
+
+If `--scenario` and `--testbed` parameters are not provided they will assume the default value of `demo-scenario` and `iotlab`, respectively
 
 
 ## Development
