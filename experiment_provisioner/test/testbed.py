@@ -18,7 +18,7 @@ class Testbed():
 	def run_action(self, action):
 		self.delay(action)
 
-		if (action != 'ov-start'):
+		if (action != 'sut-start'):
 			pipe = subprocess.Popen(['python', 'openbenchmark.py', '--action={0}'.format(action), '--user-id=1'], cwd=self.mainDir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
 			res = pipe.communicate()
 
@@ -36,7 +36,7 @@ class Testbed():
 
 
 	def delay(self, action):
-		if action == 'ov-start':
+		if action == 'sut-start':
 			time.sleep(self.OV_START_PAUSE)
 		elif action == 'check':
 			time.sleep(self.EXP_CHECK_PAUSE)
@@ -47,7 +47,7 @@ class Testbed():
 			return self.reserve(return_code, stdout, stderr)
 		elif action == 'flash':
 			return self.flash(return_code, stdout, stderr)
-		elif action == 'ov-start':
+		elif action == 'sut-start':
 			return self.ov_start(return_code, stdout, stderr)
 		elif action == 'check':
 			return self.exp_check(return_code, stdout, stderr)
@@ -85,5 +85,5 @@ class IoTLAB(Testbed):
 		return return_code == 0 and stderr == '' and mqttTest.check_data()
 
 	def ov_start(self, return_code, stdout, stderr):
-		mqttTest = MQTTTest('iotlab', 'ov-start')
+		mqttTest = MQTTTest('iotlab', 'sut-start')
 		return return_code == 0 and stderr == '' and mqttTest.check_data()

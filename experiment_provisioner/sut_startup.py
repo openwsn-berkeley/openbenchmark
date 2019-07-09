@@ -9,13 +9,15 @@ ov_dir      = os.path.join(openwsn_dir, "openvisualizer")
 coap_dir    = os.path.join(openwsn_dir, "coap")
 orch_dir    = os.path.join(os.path.dirname(__file__), "..", "experiment_orchestrator")
 
-class OVStartup:
+class SUTStartup:
 
-	def __init__(self, user_id, scenario, testbed, broker, simulator, ov_repo, ov_branch, coap_repo, coap_branch):
+	def __init__(self, user_id, scenario, testbed, broker, simulator, orch_only, ov_only, ov_repo, ov_branch, coap_repo, coap_branch):
 		self.testbed     = testbed
 		self.scenario    = scenario
 		self.broker      = broker
 		self.simulator   = simulator
+		self.orch_only   = orch_only
+		self.ov_only     = ov_only
 		self.user_id     = user_id
 		self.ov_repo     = ov_repo
 		self.ov_branch   = ov_branch
@@ -26,8 +28,10 @@ class OVStartup:
 
 
 	def start(self):
-		if self.simulator:
+		if self.simulator or self.orch_only:
 			self._start_orchestrator()
+		elif self.ov_only:
+			self._start_ov(False)
 		else:
 			self._load_dependencies()
 
@@ -40,9 +44,9 @@ class OVStartup:
 		self.mqtt_client.check_data_stream()
 
 	def _start_orchestrator(self):
-		message = "[OV STARTUP] Starting orchestrator" if not self.simulator else "[OV STARTUP] Starting SUT simulator"
+		message = "[SUT_STARTUP] Starting orchestrator" if not self.simulator else "[SUT_STARTUP] Starting SUT simulator"
 		print message 
-		self.mqtt_client.push_debug_log('OV_STARTUP', message)
+		self.mqtt_client.push_debug_log('SUT_STARTUP', message)
 
 		if self.simulator:
 			pipe = subprocess.Popen(['python', 'main.py', '--simulator', '--testbed={0}'.format(self.testbed), '--scenario={0}'.format(self.scenario), '--user-id={0}'.format(self.user_id)], cwd=orch_dir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
@@ -53,10 +57,14 @@ class OVStartup:
 			print(">>> " + line.rstrip())
 
 
-	def _start_ov(self):
-		print "[OV STARTUP] Starting OpenVisualizer"
-		self.mqtt_client.push_debug_log('OV_STARTUP', "Starting OpenVisualizer")
-		subprocess.Popen(['scons', 'runweb', '--port=8080', '--benchmark={0}'.format(self.scenario), '--testbed={0}'.format(self.testbed), '--mqtt-broker-address={0}'.format(self.broker), '--opentun-null'], cwd=ov_dir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+	def _start_ov(self, async = True):
+		print "[SUT_STARTUP] Starting OpenVisualizer"
+		self.mqtt_client.push_debug_log('SUT_STARTUP', "Starting OpenVisualizer")
+		pipe = subprocess.Popen(['scons', 'runweb', '--port=8080', '--benchmark={0}'.format(self.scenario), '--testbed={0}'.format(self.testbed), '--mqtt-broker-address={0}'.format(self.broker), '--opentun-null'], cwd=ov_dir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+
+		if not async:
+			for line in iter(pipe.stdout.readline, b''):
+				print(">>> " + line.rstrip())
 
 
 	# Clone dependencies
@@ -93,5 +101,5 @@ class OVStartup:
 			self._print_log(output)
 
 	def _print_log(self, message):
-		self.mqtt_client.push_debug_log("[OV_STARTUP]", message)
-		print("[OV_STARTUP] {0}".format(message))
+		self.mqtt_client.push_debug_log("[SUT_STARTUP]", message)
+		print("[SUT_STARTUP] {0}".format(message))

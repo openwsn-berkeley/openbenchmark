@@ -20,7 +20,7 @@ class OpenBenchmark:
 		)
 		parser.add_argument('--action', 
 			dest       = 'action',
-			choices    = ['check', 'reserve', 'terminate', 'flash', 'ov-start'],
+			choices    = ['check', 'reserve', 'terminate', 'flash', 'sut-start', 'ov', 'orchestrator'],
 			required   = True,
 			action     = 'store'
 		)
@@ -52,6 +52,8 @@ class OpenBenchmark:
 		self.add_parser_args(parser)
 		args = parser.parse_args()
 
+		self._validate(args, parser)
+
 		return {
 			'user_id'   : args.user_id,
 			'simulator' : args.simulator,
@@ -61,6 +63,10 @@ class OpenBenchmark:
 			'branch'    : args.branch,
 			'scenario'  : args.scenario
 		}
+
+	def _validate(self, args, parser):
+		if args.action != 'sut-start' and args.simulator:
+			parser.error('--simulator is only a valid parameter for --action=sut-start')
 
 
 def main():

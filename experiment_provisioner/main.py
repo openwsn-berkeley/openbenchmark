@@ -13,7 +13,7 @@ from reservation import IoTLABReservation
 from reservation import WilabReservation
 
 from otbox_flash import OTBoxFlash
-from ov_startup import OVStartup
+from sut_startup import SUTStartup
 from fw_compiler import FWCompiler
 
 from mqtt_client import MQTTClient
@@ -296,14 +296,16 @@ class Main():
 			assert firmware is not None
 			testbedCtl.print_log('Flashing firmware: {0}'.format(firmware))
 			OTBoxFlash(user_id, firmware, testbedCtl.BROKER, testbed).flash()
-		elif action == 'ov-start':
+		elif action == 'sut-start' or action == 'orchestrator' or action == 'ov':
 			testbedCtl.print_log('Starting SUT...')
-			OVStartup(
+			SUTStartup(
 				user_id, 
 				scenario, 
 				testbed, 
 				testbedCtl.BROKER, 
-				simulator, 
+				simulator,
+				action == 'orchestrator',
+				action == 'ov', 
 				testbedCtl.OV_REPO, 
 				testbedCtl.OV_BRANCH, 
 				testbedCtl.COAP_REPO,

@@ -23,4 +23,4 @@ def test_firmware_flash():
 	assert general_test('flash')
 
 def test_ov_start():
-	assert general_test('ov-start')
+	assert general_test('sut-start')

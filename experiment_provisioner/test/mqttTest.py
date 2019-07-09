@@ -14,9 +14,9 @@ class MQTTTest:
 		self.client.on_message = self.on_message
 
 		self.pauses = {
-			"reserve":      5,
-			"flash": 50,
-			"ov-start":   180 
+			"reserve"  :   5,
+			"flash"    :  50,
+			"sut-start": 180 
 		}
 
 		self.pause = self.pauses[self.test_type] if self.test_type in self.pauses else 5
@@ -30,8 +30,8 @@ class MQTTTest:
 		if self.test_type in ['reserve', 'flash']:
 			self.client.subscribe('{0}/deviceType/mote/deviceId/+/notif/frommoteserialbytes'.format(self.testbed))
 			print "[TEST] flash subscribing..."
-		elif self.test_type == 'ov-start':
-			print "[TEST] ov-start subscribing..."
+		elif self.test_type == 'sut-start':
+			print "[TEST] sut-start subscribing..."
 			self.client.subscribe('openbenchmark/command/startBenchmark')
 
 	def on_message(self, client, userdata, message):
