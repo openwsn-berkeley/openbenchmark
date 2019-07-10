@@ -77,7 +77,7 @@ class Simulator(object):
         self.sut_command_payload = {
             "api_version"  : "0.0.1",
             "token"        : "123",
-            "date"         : time.strftime("%a %b %-d %-H:%M:%S %Z %Y", time.gmtime(time.time())),
+            "date"         : time.strftime("%a, %d %b %Y %H:%M:%S %z", time.gmtime(time.time())),
             "firmware"     : "OpenWSN-42a4007db7",
             "testbed"      : self.testbed,
             "scenario"     : self.scenario

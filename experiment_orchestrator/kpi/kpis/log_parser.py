@@ -62,7 +62,9 @@ class LogParser:
 		})
 		
 	def _date_to_timestamp(self, date):
-		return time.mktime(datetime.datetime.strptime(date, "%a %b %d %H:%M:%S %Z %Y").timetuple())
+		date = date.split(" ")[:-1]
+		date = " ".join(date)
+		return time.mktime(datetime.datetime.strptime(date, "%a, %d %b %Y %H:%M:%S").timetuple())
 
 
 	def _fetch_log_data(self):
