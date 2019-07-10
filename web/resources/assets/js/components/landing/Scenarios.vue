@@ -410,8 +410,7 @@
                 let success = payloadObj["content"]["success"]
 
                 if (type == "notification" && success) {
-                    this.currentStep = this.workflowSteps.indexOf(step)
-
+                    this.currentStep = (step !== "terminated") ? this.workflowSteps.indexOf(step) : -2
                 } else if (type == "notification" && !success) {
                     this.currentStep = -2
                     this.taskFailed = true
