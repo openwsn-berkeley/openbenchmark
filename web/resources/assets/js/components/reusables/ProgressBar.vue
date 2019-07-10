@@ -11,7 +11,7 @@
             </li>
             <li :class="{done: currentStep >= 2, 'in-progress': currentStep == 1, todo: currentStep < 2}">
                 <em>3</em>
-                <span>Configuring network</span>
+                <span>Network Formation</span>
             </li>
             <li :class="{done: currentStep >= 3, 'in-progress': currentStep == 2, todo: currentStep < 3}">
                 <em>4</em>
