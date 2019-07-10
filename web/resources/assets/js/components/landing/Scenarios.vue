@@ -345,7 +345,7 @@
                     })
             },
             processTerminate() {
-                axios.get('/api/exp-terminate')
+                axios.get('/api/terminate')
                     .then(function (response) {
                         // handle success
                         console.log(response);
