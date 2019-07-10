@@ -7,8 +7,8 @@
                 <button id="ok-btn" class="main-btn btn-small btn-width-half ml-1" @click="dialog.action">{{dialog.buttons[0]}}</button>
                 <button id="cancel-btn" class="main-btn btn-small btn-width-half btn-danger mr-1" @click="closeModal('alert-dialog')">{{dialog.buttons[1]}}</button>
             </div>
-            <div class="buttons row h-center" v-if="dialog.buttons.length === 1">
-                <button id="ok-btn" class="main-btn btn-small ml-1" @click="closeModal('alert-dialog')">{{dialog.buttons[0]}}</button>
+            <div class="buttons row v-center" v-if="dialog.buttons.length === 1">
+                <button id="ok-btn" class="main-btn btn-small" @click="closeModal('alert-dialog')">{{dialog.buttons[0]}}</button>
             </div>
         </modal>
 
@@ -231,6 +231,11 @@
                         "title": "Are you sure you want to terminate the experiment?", 
                         "buttons": ["YES", "NO"],
                         "action": this.processTerminate
+                    },
+                    "missing-params": {
+                        "title": "You must select a testbed and a scenario",
+                        "buttons": ["OK"],
+                        "action": undefined
                     }
                 }
                 this.dialog = dialogs[key]
@@ -336,40 +341,44 @@
             },
 
             processStart() {
-                let scenario = this.scenarios[this.scenarioSelected].identifier
-                let testbed  = this.testbeds[this.testbedSelected].identifier
-                
-                let route = '/api/start/' + scenario + '/' + testbed + '/false'
+                if (this.scenarioSelected === -1 || this.testbedSelected === -1) {
+                    this.showDialog('missing-params')
+                } else {
+                    let scenario = this.scenarios[this.scenarioSelected].identifier
+                    let testbed  = this.testbeds[this.testbedSelected].identifier
+                    
+                    let route = '/api/start/' + scenario + '/' + testbed + '/false'
 
-                if (this.firmware !== undefined) {
-                    route += '/' + this.firmware.name
+                    if (this.firmware !== undefined) {
+                        route += '/' + this.firmware.name
+                    }
+
+                    this.currentStep = -1
+
+                    axios.get(route) 
+                        .then(function (response) {
+                            // handle success
+                            console.log(response)
+                        })
+                        .catch(function (error) {
+                            // handle error
+                            console.log(error)
+                            thisComponent.currentStep = -2
+                        })
+
+                    axios.post('/api/store', {
+                            scenario         : scenario,
+                            testbed          : testbed
+                        }) 
+                        .then(function (response) {
+                            // handle success
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            // handle error
+                            console.log(error);
+                        })
                 }
-
-                thisComponent.currentStep = -1
-
-                axios.get(route) 
-                    .then(function (response) {
-                        // handle success
-                        console.log(response)
-                    })
-                    .catch(function (error) {
-                        // handle error
-                        console.log(error)
-                        thisComponent.currentStep = -2
-                    })
-
-                axios.post('/api/store', {
-                        scenario         : scenario,
-                        testbed          : testbed
-                    }) 
-                    .then(function (response) {
-                        // handle success
-                        console.log(response);
-                    })
-                    .catch(function (error) {
-                        // handle error
-                        console.log(error);
-                    })
             },
             processTerminate() {
                 axios.get('/api/terminate')
