@@ -9,46 +9,13 @@
 </template>
 
 <script>
-	let thisComponent;
-
 	export default {
+		props: ["outputs"],
+
 		data: function() {
 			return {
-				outputs: [
-					// Item example {tag: "TAG", message: "Message of the debug output", time: "15:02:15"}
-				]
+				
 			}
-		},
-
-		methods: {
-			parseMqttEvent(payload) {
-				try {
-					let payloadObj = JSON.parse(payload)
-	                
-					let tag = payloadObj["action"]
-					let logEntry = payloadObj["log_entry"]
-					let time = new Date().getCurrentDate();
-
-					this.outputs.push({
-						"tag": tag,
-						"message": logEntry,
-						"time": time
-					})
-
-				} catch (exception) {
-					console.log(exception)
-				}
-			},
-		},
-
-		created() {
-			thisComponent = this
-		},
-
-		mounted() {
-			this.$eventHub.$on("openbenchmark/1/debug", payload => {
-				thisComponent.parseMqttEvent(payload);
-			});
 		}
 	}
 
