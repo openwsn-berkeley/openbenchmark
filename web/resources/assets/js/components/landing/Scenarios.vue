@@ -2,14 +2,19 @@
     <div class="parent">
 
         <modal name="alert-dialog" width="400px" height="170px">
-            <h3 class="dialog-title bold">{{dialog.title}}</h3>
-            <div class="buttons row h-center" v-if="dialog.buttons.length === 2">
-                <button id="ok-btn" class="main-btn btn-small btn-width-half ml-1" @click="dialog.action">{{dialog.buttons[0]}}</button>
-                <button id="cancel-btn" class="main-btn btn-small btn-width-half btn-danger mr-1" @click="closeModal('alert-dialog')">{{dialog.buttons[1]}}</button>
+            <div class="dialog-loader row h-center v-center" v-if="dialogLoader">
+                <i class="fas fa-circle-notch fa-3x fa-spin"></i>
             </div>
-            <div class="buttons row v-center" v-if="dialog.buttons.length === 1">
-                <button id="ok-btn" class="main-btn btn-small" @click="closeModal('alert-dialog')">{{dialog.buttons[0]}}</button>
-            </div>
+            <span class="dialog-content" :class="{'dialog-content-disabled': dialogLoader}">
+                <h3 class="dialog-title bold">{{dialog.title}}</h3>
+                <div class="buttons row h-center" v-if="dialog.buttons.length === 2">
+                    <button id="ok-btn" class="main-btn btn-small btn-width-half ml-1" @click="dialog.action" :disabled="dialogLoader">{{dialog.buttons[0]}}</button>
+                    <button id="cancel-btn" class="main-btn btn-small btn-width-half btn-danger mr-1" @click="closeModal('alert-dialog')" :disabled="dialogLoader">{{dialog.buttons[1]}}</button>
+                </div>
+                <div class="buttons row v-center" v-if="dialog.buttons.length === 1">
+                    <button class="main-btn btn-small" @click="closeModal('alert-dialog')" :disabled="dialogLoader">{{dialog.buttons[0]}}</button>
+                </div>
+            </span>
         </modal>
 
         <modal name="modal-progress-bar" width="90%" height="165px">
@@ -167,6 +172,7 @@
                     "title": "",
                     "buttons": []
                 },
+                dialogLoader: false,
 
                 scenarios: [],
                 scenarioSelected: -1,
@@ -230,7 +236,7 @@
                     "termination": {
                         "title": "Are you sure you want to terminate the experiment?", 
                         "buttons": ["YES", "NO"],
-                        "action": this.processTerminate
+                        "action": this.processTerminateDialogAction
                     },
                     "missing-params": {
                         "title": "You must select a testbed and a scenario",
@@ -391,10 +397,13 @@
                         console.log("Error: " + error);
                     })
                     .then(function () {
-                        // always executed
+                        // executes always
                     });
+            },
 
-                this.closeModal('alert-dialog')
+            processTerminateDialogAction() {
+                this.dialogLoader = true
+                this.processTerminate()
             },
 
             revertToDefaultFw() {
@@ -449,6 +458,11 @@
 
                 if (type == "notification" && success) {
                     this.currentStep = (step !== "terminated") ? this.workflowSteps.indexOf(step) : -2
+
+                    if (step === "terminated") {
+                        thisComponent.dialogLoader = false
+                        thisComponent.closeModal('alert-dialog')
+                    }
                 } else if (type == "notification" && !success) {
                     this.currentStep = -2
                     this.taskFailed = true
@@ -601,6 +615,18 @@
         transform: translateX(-50%);
         width: 70%;
         text-align: center;
+    }
+    .dialog-loader {
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.7);
+        color: #1f6fb2;
+    }
+    .dialog-content {
+
+    }
+    .dialog-content-disabled {
+        opacity: 0.3
     }
 
     .node-property {
