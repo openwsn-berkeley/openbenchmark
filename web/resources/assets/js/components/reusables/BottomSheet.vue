@@ -4,7 +4,7 @@
 			<span class="top-span" draggable="true" @mousedown="startDragging($event)"></span>
 			<i id="terminal" class="fas fa-terminal" v-if="collapsed"></i>
 			<i id="close" class="fas fa-times" v-if="!collapsed" @click="action($event)"></i>
-			<span class="dialog-title" v-if="!collapsed">Debug output: </span>
+			<span class="dialog-title bold" v-if="!collapsed">Debug output: </span>
 			<div class="dialog-content">
 				<debug-window class="debug-window" v-if="!collapsed" :outputs="outputs"></debug-window>
 			</div>
