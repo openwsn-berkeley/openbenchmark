@@ -1,6 +1,17 @@
 <template>
     <div class="parent">
 
+        <modal name="alert-dialog" width="400px" height="170px">
+            <h3 class="dialog-title bold">{{dialog.title}}</h3>
+            <div class="buttons row h-center" v-if="dialog.buttons.length === 2">
+                <button id="ok-btn" class="main-btn btn-small btn-width-half ml-1" @click="dialog.action">{{dialog.buttons[0]}}</button>
+                <button id="cancel-btn" class="main-btn btn-small btn-width-half btn-danger mr-1" @click="closeModal('alert-dialog')">{{dialog.buttons[1]}}</button>
+            </div>
+            <div class="buttons row h-center" v-if="dialog.buttons.length === 1">
+                <button id="ok-btn" class="main-btn btn-small ml-1" @click="closeModal('alert-dialog')">{{dialog.buttons[0]}}</button>
+            </div>
+        </modal>
+
         <modal name="modal-progress-bar" width="90%" height="165px">
             <!-- Remains here temporarily. Will be moved later -->
             <div class="row h-center v-center col-direction mt-2" v-if="currentStep == 3">
@@ -111,7 +122,7 @@
                     <!-- Condition for disabling the start button -->
                     <!-- :disabled="currentStep > -2 -->
                     <button id="start-btn" class="main-btn btn-small btn-width-half ml-1"  @click="processStart()" :disabled="currentStep > -2">Start</button>
-                    <button id="terminate-btn" class="main-btn btn-small btn-width-half btn-danger mr-1" @click="processTerminate()" :disabled="currentStep === -2">Terminate</button>
+                    <button id="terminate-btn" class="main-btn btn-small btn-width-half btn-danger mr-1" @click="showDialog('termination')" :disabled="currentStep === -2">Terminate</button>
                 </div>
 
             </div>
@@ -152,6 +163,11 @@
 
         data: function () {
             return {
+                dialog: {
+                    "title": "",
+                    "buttons": []
+                },
+
                 scenarios: [],
                 scenarioSelected: -1,
                 scenarioIcons: {
@@ -209,10 +225,21 @@
         },
 
         methods: {
+            showDialog(key) {
+                let dialogs = {
+                    "termination": {
+                        "title": "Are you sure you want to terminate the experiment?", 
+                        "buttons": ["YES", "NO"],
+                        "action": this.processTerminate
+                    }
+                }
+                this.dialog = dialogs[key]
+                this.showModal('alert-dialog')
+            },
+
             showModal(name) {
                 this.$modal.show(name)
             },
-
             closeModal(name) {
                 this.$modal.hide(name)
             },
@@ -357,6 +384,8 @@
                     .then(function () {
                         // always executed
                     });
+
+                this.closeModal('alert-dialog')
             },
 
             revertToDefaultFw() {
@@ -549,11 +578,20 @@
         bottom: 15px;
         width: 100%
     }
-    #start-btn {
+    #start-btn, #ok-btn {
         margin-right: 7px;
     }
-    #terminate-btn {
+    #terminate-btn, #cancel-btn {
         margin-left: 7px;
+    }
+
+    .dialog-title {
+        position: absolute;
+        top: 15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 70%;
+        text-align: center;
     }
 
     .node-property {
