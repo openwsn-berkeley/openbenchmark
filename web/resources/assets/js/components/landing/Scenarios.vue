@@ -417,7 +417,7 @@
                     }
 
                 } else if (type == "notification" && !success) {
-                    this.currentStep = -1
+                    this.currentStep = -2
                     this.taskFailed = true
                 }
 
