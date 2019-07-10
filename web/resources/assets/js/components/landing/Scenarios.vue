@@ -411,10 +411,6 @@
 
                 if (type == "notification" && success) {
                     this.currentStep = this.workflowSteps.indexOf(step)
-                    if (this.currentStep == 3) {
-                        this.sidebarUpdate("progress-bar", false)
-                        this.sidebarUpdate("graphs", true)
-                    }
 
                 } else if (type == "notification" && !success) {
                     this.currentStep = -2
@@ -423,15 +419,6 @@
 
                 console.log(this.currentStep);
             },
-
-
-            /*** Sidebar manipulation ***/
-            sidebarUpdate(element, show) {
-                thisComponent.$eventHub.$emit('SIDEBAR', {
-                    'element': element,
-                    'show': show
-                });
-            }
 
         },
 
