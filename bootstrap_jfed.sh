@@ -47,7 +47,7 @@ rm -rf jfed_cli
 
 # Opentestbed ESPEC clone
 if [ ! -d "opentestbed" ]; then
-	git clone -b espec --single-branch https://github.com/twalcari/opentestbed.git
+	git clone -b espec --single-branch https://github.com/malishav/opentestbed.git
 fi
 
 # jFed proxy configuration
