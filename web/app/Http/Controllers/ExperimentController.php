@@ -27,12 +27,9 @@ class ExperimentController extends Controller
     }
 
     function start($scenario, $testbed, $simulator=false, $firmware=null) {
-        $this->cmd_handler->reserve_nodes($this->user_id, $scenario, $testbed, false);
-        $this->cmd_handler->flash_firmware($this->user_id, $firmware, false);
-
-        sleep($this->cmd_handler::OV_GUARD_TIME); //A guard time to wait for the nodes to start sending serial data before running OV
-        
-        $this->cmd_handler->start_ov($this->user_id, $scenario, $testbed, ($simulator == "true"), false);
+        $this->cmd_handler->reserve($this->user_id, $scenario, $testbed, false);
+        $this->cmd_handler->flash($this->user_id, $firmware, false);
+        $this->cmd_handler->sut_start($this->user_id, $scenario, $testbed, ($simulator == "true"), true);
     }
 
     function upload(Request $request) {
