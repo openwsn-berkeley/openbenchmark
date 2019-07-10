@@ -17,7 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/start-exp/{scenario}/{testbed}/{simulator?}/{firmware?}', 'ExperimentController@start');
+Route::get('/start/{scenario}/{testbed}/{simulator?}/{firmware?}', 'ExperimentController@start');
 Route::post('/firmware-upload', 'ExperimentController@upload');
 
 //Storing and getting the information for an experiment

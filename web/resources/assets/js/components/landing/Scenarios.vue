@@ -312,7 +312,7 @@
                 let scenario = this.scenarios[this.scenarioSelected].identifier
                 let testbed  = this.testbeds[this.testbedSelected].identifier
                 
-                let route = '/api/start-exp/' + scenario + '/' + testbed + '/false'
+                let route = '/api/start/' + scenario + '/' + testbed + '/false'
 
                 if (this.firmware !== undefined) {
                     route += '/' + this.firmware.name
