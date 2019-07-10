@@ -210,12 +210,30 @@
                     "orchestration-started"
                 ],
 
+                onEventActions: {
+                    "provisioned": this.flash,
+                    "flashed": this.sutStart,
+                    "network-configured": undefined,
+                    "orchestration-started": undefined
+                },
+
                 currentStep: -2,   //If -2, process has not started yet; -1: process started, waiting for notifications
                 taskFailed: false,
 
                 firmware: undefined
                     //firmware: ...,
                     //firmware_orig_name: ...
+            }
+        },
+
+        computed: {
+            onEventActions: function () {
+                return {
+                    "provisioned": this.flash,
+                    "flashed": this.sutStart,
+                    "network-configured": undefined,
+                    "orchestration-started": undefined
+                }
             }
         },
 
@@ -339,27 +357,12 @@
                 if (this.scenarioSelected === -1 || this.testbedSelected === -1) {
                     this.showDialog('missing-params')
                 } else {
-                    let scenario = this.scenarios[this.scenarioSelected].identifier
-                    let testbed  = this.testbeds[this.testbedSelected].identifier
-                    
-                    let route = '/api/start/' + scenario + '/' + testbed + '/false'
-
-                    if (this.firmware !== undefined) {
-                        route += '/' + this.firmware.name
-                    }
-
                     this.currentStep = -1
 
-                    axios.get(route) 
-                        .then(function (response) {
-                            // handle success
-                            console.log(response)
-                        })
-                        .catch(function (error) {
-                            // handle error
-                            console.log(error)
-                            thisComponent.currentStep = -2
-                        })
+                    this.reserve()
+
+                    let scenario = this.scenarios[this.scenarioSelected].identifier
+                    let testbed  = this.testbeds[this.testbedSelected].identifier
 
                     axios.post('/api/store', {
                             scenario         : scenario,
@@ -375,6 +378,59 @@
                         })
                 }
             },
+            reserve() {
+                let scenario = this.scenarios[this.scenarioSelected].identifier
+                let testbed  = this.testbeds[this.testbedSelected].identifier
+
+                let route = '/api/reserve/' + scenario + '/' + testbed
+
+                axios.get(route) 
+                    .then(function (response) {
+                        console.log(response)
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        console.log(error)
+                        thisComponent.currentStep = -2
+                    })
+            },
+            flash() {
+                let testbed  = this.testbeds[this.testbedSelected].identifier
+
+                let route = '/api/flash'
+
+                if (this.firmware !== undefined) {
+                    route += '/' + this.firmware.name
+                }
+
+                axios.get(route) 
+                    .then(function (response) {
+                        console.log(response)
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        console.log(error)
+                        thisComponent.currentStep = -2
+                    })
+            },
+            sutStart() {
+                let scenario = this.scenarios[this.scenarioSelected].identifier
+                let testbed  = this.testbeds[this.testbedSelected].identifier
+
+                let route = '/api/sut-start/' + scenario + '/' + testbed
+
+                axios.get(route) 
+                    .then(function (response) {
+                        console.log(response)
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        console.log(error)
+                        thisComponent.currentStep = -2
+                    })
+            },
+
+
             processTerminate() {
                 axios.get('/api/terminate')
                     .then(function (response) {
@@ -389,7 +445,6 @@
                         // executes always
                     });
             },
-
             processTerminateDialogAction() {
                 this.dialogLoader = true
                 this.processTerminate()
@@ -451,7 +506,11 @@
                     if (step === "terminated") {
                         thisComponent.dialogLoader = false
                         thisComponent.closeModal('alert-dialog')
+                    } else if (thisComponent.onEventActions[step] !== undefined) {
+                        console.log("CALLING NEXT STEP")
+                        thisComponent.onEventActions[step].call()
                     }
+
                 } else if (type == "notification" && !success) {
                     this.currentStep = -2
                     this.taskFailed = true
