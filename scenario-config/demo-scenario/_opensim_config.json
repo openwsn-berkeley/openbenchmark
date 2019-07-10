@@ -1,14 +1,46 @@
 {
     "openbenchmark00": {
-        "node_id": "emulated1", 
+        "node_id": "emulated1",
         "transmission_power_dbm": 0
     }, 
     "openbenchmark01": {
-        "node_id": "emulated2", 
+        "node_id": "emulated2",
         "transmission_power_dbm": 0
     }, 
     "openbenchmark02": {
-        "node_id": "emulated3", 
+        "node_id": "emulated3",
+        "transmission_power_dbm": 0
+    }, 
+    "openbenchmark03": {
+        "node_id": "emulated4",
+        "transmission_power_dbm": 0
+    }, 
+    "openbenchmark04": {
+        "node_id": "emulated5",
+        "transmission_power_dbm": 0
+    }, 
+    "openbenchmark05": {
+        "node_id": "emulated6",
+        "transmission_power_dbm": 0
+    }, 
+    "openbenchmark06": {
+        "node_id": "emulated7",
+        "transmission_power_dbm": 0
+    }, 
+    "openbenchmark07": {
+        "node_id": "emulated8",
+        "transmission_power_dbm": 0
+    }, 
+    "openbenchmark08": {
+        "node_id": "emulated9",
+        "transmission_power_dbm": 0
+    }, 
+    "openbenchmark09": {
+        "node_id": "emulated10",
+        "transmission_power_dbm": 0
+    }, 
+    "openbenchmark10": {
+        "node_id": "emulated11",
         "transmission_power_dbm": 0
     }
 }
