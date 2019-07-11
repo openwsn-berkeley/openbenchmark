@@ -10,10 +10,6 @@
                     <i class="fas fa-cogs"></i>
                     <span class="tooltip">Configuration</span>
                 </li>
-                <li :class="{active: selectedId === 2}" @click="scrollContent('graphs')">
-                    <i class="fas fa-tachometer-alt"></i>
-                    <span class="tooltip">Monitoring</span>
-                </li>
             </ul>
             <ul class="bottom-list">
                 <li @click="showDocs">

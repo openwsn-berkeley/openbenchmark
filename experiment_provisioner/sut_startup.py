@@ -35,7 +35,7 @@ class SUTStartup:
 		else:
 			self._load_dependencies()
 
-			thread_orch = threading.Thread(target=self._start_ov)
+			thread_orch = threading.Thread(target=self._start_ov, args=[False])
 			thread_orch.start()
 		
 			self._start_orchestrator()
@@ -55,16 +55,18 @@ class SUTStartup:
 
 		for line in iter(pipe.stdout.readline, b''):
 			print(">>> " + line.rstrip())
+			self.mqtt_client.push_debug_log('ORCHESTRATOR', line.rstrip())
 
 
 	def _start_ov(self, async = True):
 		print "[SUT_STARTUP] Starting OpenVisualizer"
 		self.mqtt_client.push_debug_log('SUT_STARTUP', "Starting OpenVisualizer")
-		pipe = subprocess.Popen(['scons', 'runweb', '--port=8080', '--benchmark={0}'.format(self.scenario), '--testbed={0}'.format(self.testbed), '--mqtt-broker-address={0}'.format(self.broker), '--opentun-null'], cwd=ov_dir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+		pipe = subprocess.Popen(['sudo', 'scons', 'runweb', '--port=8080', '--benchmark={0}'.format(self.scenario), '--testbed={0}'.format(self.testbed), '--mqtt-broker-address={0}'.format(self.broker), '--opentun-null'], cwd=ov_dir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
 
 		if not async:
 			for line in iter(pipe.stdout.readline, b''):
 				print(">>> " + line.rstrip())
+				self.mqtt_client.push_debug_log('OPENVISUALIZER', line.rstrip())
 
 
 	# Clone dependencies

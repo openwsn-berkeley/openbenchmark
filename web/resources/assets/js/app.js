@@ -18,6 +18,7 @@ Vue.prototype.$mqttClient = new MQTTClient('broker.mqttdashboard.com', 8000, Vue
 Vue.component('arrow', require('./components/reusables/Arrow.vue').default);
 Vue.component('multiselect', require('vue-multiselect').default);
 Vue.component('progress-bar', require('./components/reusables/ProgressBar.vue').default);
+Vue.component('bottom-sheet', require('./components/reusables/BottomSheet.vue').default);
 
 Vue.use(Vuebar);
 

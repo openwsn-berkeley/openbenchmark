@@ -39,6 +39,7 @@ class Simulator(object):
         self.broker             = Utils.broker
         self.testbed            = testbed
         self.scenario           = scenario
+        self.qos                = 2
         self.co                 = ConditionObject.create()
 
         self.bench_init_timeout = 3    #[s]
@@ -76,7 +77,7 @@ class Simulator(object):
         self.sut_command_payload = {
             "api_version"  : "0.0.1",
             "token"        : "123",
-            "date"         : time.strftime("%a %b %-d %-H:%M:%S %Z %Y", time.gmtime(time.time())),
+            "date"         : time.strftime("%a, %d %b %Y %H:%M:%S %z", time.gmtime(time.time())),
             "firmware"     : "OpenWSN-42a4007db7",
             "testbed"      : self.testbed,
             "scenario"     : self.scenario
@@ -122,10 +123,10 @@ class Simulator(object):
     def subscribe(self):
     	for key in self.sub_topics:
             sys.stdout.write("[SUT SIMULATOR] Subscribing to: {0}\n".format(self.sub_topics[key]))
-            self.client.subscribe(self.sub_topics[key])
+            self.client.subscribe(self.sub_topics[key], self.qos)
 
     def publish(self, topic, payload):
-        self.client.publish(self.pub_topics[topic], json.dumps(payload))
+        self.client.publish(self.pub_topics[topic], json.dumps(payload), self.qos)
 
     def _generate_sut_event_payload(self, event, payload_obj=None):
         #if event == None:    

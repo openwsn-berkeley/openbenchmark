@@ -236,17 +236,7 @@
                 return copy;
             },
 
-            /*** MQTT Configuration ***/
-            subscribe() {
-                let interval = setInterval( function() {
-                    if (thisComponent.$mqttClient.subscribe() !== "") {
-                        console.log("Retrying subscription in 1s...") 
-                    } else {
-                        clearInterval(interval)
-                    }
-                }, 1000);  
-            },
-
+            /// MQTT
             parseMqttEvent(payload) {
                 let payloadObj = JSON.parse(payload)
                 let type       = payloadObj["type"]
@@ -254,19 +244,13 @@
                 if (type == "kpi") 
                     this.parseLogData(payloadObj["content"])
             }
-            /*** ***/
 
         },
 
         mounted() {
-            // If `experimentId` doesn't exists accept data from MQTT (real-time charts)
-            // If `experimentId` exists read data from experiment logs
-            if (this.experimentId === undefined)
-                this.subscribe();
-            else
-                this.loadData();
+            this.loadData();
 
-            this.$eventHub.$on("openbenchmark/1/kpi", payload => {
+            this.$eventHub.$on("openbenchmark/userId/1/experimentId/" + this.experimentId + "/kpi", payload => {
                 thisComponent.parseMqttEvent(payload);
             });
         },

@@ -4,9 +4,9 @@
 			<span class="top-span" draggable="true" @mousedown="startDragging($event)"></span>
 			<i id="terminal" class="fas fa-terminal" v-if="collapsed"></i>
 			<i id="close" class="fas fa-times" v-if="!collapsed" @click="action($event)"></i>
-			<span class="dialog-title" v-if="!collapsed">Debug output: </span>
+			<span class="dialog-title bold" v-if="!collapsed">Debug output: </span>
 			<div class="dialog-content">
-				<debug-window class="debug-window" v-if="!collapsed"></debug-window>
+				<debug-window class="debug-window" v-if="!collapsed" :outputs="outputs"></debug-window>
 			</div>
 		</div>
 	</div>
@@ -16,6 +16,7 @@
 	import DebugWindow from './../landing/DebugWindow.vue';
 
 	let topContainer
+	let thisComponent
 
 	export default {
 		components: {
@@ -25,7 +26,10 @@
 		data: function() {
 			return {
 				collapsed: true,
-				height: 350
+				height: 350,
+				outputs: [
+					// Item example {tag: "TAG", message: "Message of the debug output", time: "15:02:15"}
+				]
 			}
 		},
 
@@ -57,11 +61,38 @@
 			stopDragging(event) {
 				document.removeEventListener("mousemove", this.resize, false)
 				topContainer.classList.add('transition-anim')
+			},
+
+			parseMqttEvent(payload) {
+				try {
+					let payloadObj = JSON.parse(payload)
+	                
+					let tag = payloadObj["action"]
+					let logEntry = payloadObj["log_entry"]
+					let time = new Date().getCurrentDate();
+
+					this.outputs.unshift({
+						"tag": tag,
+						"message": logEntry,
+						"time": time
+					})
+
+				} catch (exception) {
+					console.log(exception)
+				}
 			}
+		},
+
+		created() {
+			thisComponent = this
 		},
 
 		mounted() {
 			topContainer = document.getElementById("parent")
+
+			this.$eventHub.$on("openbenchmark/1/debug", payload => {
+				thisComponent.parseMqttEvent(payload);
+			});
 		}
 	}
 </script>

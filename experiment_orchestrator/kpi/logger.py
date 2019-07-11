@@ -82,6 +82,14 @@ class Logger:
 				self.scenario
 			)
 
+		headerObj = {
+			"date"         : self.date,
+			"experiment_id": self.experiment_id,
+			"testbed"      : self.testbed,
+			"firmware"     : self.firmware,
+			"scenario"     : self.scenario
+		}
+
 		with open(self.logs['kpi'], 'a') as f:
 			f.write(header)
 			f.write("\n--------------------------------------\n")
@@ -91,13 +99,7 @@ class Logger:
 			f.write("\n--------------------------------------\n")
 
 		json_form = {
-			"header": {
-				"date"         : self.date,
-				"experiment_id": self.experiment_id,
-				"testbed"      : self.testbed,
-				"firmware"     : self.firmware,
-				"scenario"     : self.scenario
-			},
+			"header": headerObj,
 			"general_data": {
 
 			},
@@ -108,6 +110,8 @@ class Logger:
 
 		with open(self.logs['kpi_cache'], 'a') as f:
 			f.write(json.dumps(json_form))
+
+		self.mqtt_client.notify_header_logged(headerObj)
 
 
 	def cache_kpi(self, payload):

@@ -33,6 +33,7 @@ class MQTTClient:
 	def __init__(self):
 		self.broker           = Utils.broker
 		self.condition_object = ConditionObject.create()
+		self.qos              = 2
 
 		self.experiment_id    = Utils.experiment_id
 
@@ -51,9 +52,10 @@ class MQTTClient:
 			"configureTransmitPower": "openbenchmark/experimentId/{0}/command/configureTransmitPower".format(self.experiment_id),
 			"triggerNetworkFormation": "openbenchmark/experimentId/{0}/command/triggerNetworkFormation".format(self.experiment_id),
 			"notifications": "openbenchmark/{0}/notifications".format(Utils.user_id),
-			"kpi": "openbenchmark/{0}/kpi".format(Utils.user_id),
-			"raw": "openbenchmark/{0}/raw".format(Utils.user_id),
-			"debug": "openbenchmark/{0}/debug".format(Utils.user_id)
+			"kpi": "openbenchmark/userId/{0}/experimentId/{1}/kpi".format(Utils.user_id, self.experiment_id),
+			"raw": "openbenchmark/userId/{0}/experimentId/{1}/raw".format(Utils.user_id, self.experiment_id),
+			"debug": "openbenchmark/{0}/debug".format(Utils.user_id),
+			"headerLogged": "openbenchmark/{0}/headerLogged".format(Utils.user_id)
 		}
 		self.epe_sub_topics = {  # Experiment Performance Events
 			"performanceData": "openbenchmark/experimentId/{0}/nodeId/+/performanceData".format(self.experiment_id)
@@ -80,16 +82,16 @@ class MQTTClient:
 	def subscribe(self):
 		for key in self.sub_topics:
 			sys.stdout.write("[MQTT CLIENT] Subscribing to: {0}\n".format(self.sub_topics[key]))
-			self.client.subscribe(self.sub_topics[key])
+			self.client.subscribe(self.sub_topics[key], self.qos)
 		for key in self.epe_sub_topics:
 			sys.stdout.write("[MQTT CLIENT] Subscribing to: {0}\n".format(self.epe_sub_topics[key]))
-			self.client.subscribe(self.epe_sub_topics[key])
+			self.client.subscribe(self.epe_sub_topics[key], self.qos)
 
 	def publish(self, topic, payload, custom=False):
 		if not custom:
-			self.client.publish(self.pub_topics[topic], json.dumps(payload))
+			self.client.publish(self.pub_topics[topic], json.dumps(payload), self.qos)
 		else:
-			self.client.publish(topic, json.dumps(payload))
+			self.client.publish(topic, json.dumps(payload), self.qos)
 
 
 	##### MQTT client listeners #####
@@ -221,3 +223,6 @@ class MQTTClient:
 		})
 		if console_print:
 			print("{0} {1}".format(action, log_entry))
+
+	def notify_header_logged(self, payload):
+		self.publish("headerLogged", payload)

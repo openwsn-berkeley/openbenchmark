@@ -1,17 +1,23 @@
 <template>
     <div class="parent col-direction pl-1 pr-1">
         <span id="exp-history" class="ml-2 mb-1 mt-1 bold">Experiment history:</span>
-        <div class="row gray table-header">
-            <span class="log-row col-2">Experiment ID</span>
-            <span class="log-row col-3 bold">Date</span>
-            <span class="log-row col-3 bold">Testbed</span>
-            <span class="log-row col-3 bold">Scenario</span>
+        <div class="row log-row gray table-header">
+            <span class="active-ind-col"></span>
+            <span class="col-2">Experiment ID</span>
+            <span class="col-3 bold">Date</span>
+            <span class="col-3 bold">Testbed</span>
+            <span class="col-3 bold">Scenario</span>
+            <span class="active-ind-col"></span>
         </div>
-        <div class="row hoverable" :class="{gray: ind%2===0}" v-for="(item, ind) in outputs" @click="showDetails(item.id)">
-            <span class="log-row col-2">{{item.id}}</span>
-            <span class="log-row col-3 bold">{{item.date}}</span>
-            <span class="log-row col-3 bold">{{item.testbed}}</span>
-            <span class="log-row col-3 bold">{{item.scenario}}</span>
+        <div class="row log-row hoverable" :class="{gray: ind%2===0}" v-for="(item, ind) in outputs" @click="showDetails(item.id)">
+            <span class="row active-ind-col v-center h-center"><span class="active-ind" v-if="item.active"></span></span>
+            <span class="col-2">{{item.id}}</span>
+            <span class="col-3 bold">{{item.date}}</span>
+            <span class="col-3 bold">{{item.testbed}}</span>
+            <span class="col-3 bold">{{item.scenario}}</span>
+            <span class="row active-ind-col v-center h-center danger" @click="showDialog($event, 'termination')">
+                <i class="fas fa-times" v-if="item.active"></i>
+            </span>
         </div>
     </div>
 </template>
@@ -25,7 +31,7 @@
         data: function() {
             return {
                 outputs: [
-                    // Item example {id: "659xv", date: "17.06.2019 10:47:05", testbed: "IoT-LAB", scenario: "Demo scenario"}
+                    // Item example {id: "659xv", date: "17.06.2019 10:47:05", testbed: "IoT-LAB", scenario: "Demo scenario", active: false}
                 ],
             }
         },
@@ -33,6 +39,14 @@
         methods: {
             showDetails(id) {
                 this.$router.push('details/' + id)
+            },
+
+            showDialog(event, key) {
+                event.stopPropagation()
+                this.$eventHub.$emit('SHOW_DIALOG', key)
+            },
+            closeDialog(key) {
+                this.$eventHub.$emit('CLOSE_DIALOG', key)
             },
 
             fetchLogs() {
@@ -48,9 +62,17 @@
                     });
             },
 
-            sanitize(jsObject) {
-                let newObj = []
+            sanitize(jsArr) {
+                let newArr = []
 
+                jsArr.forEach((el) => {
+                    newArr.push(this.sanitizeObj(el))
+                })
+
+                return newArr
+            },
+
+            sanitizeObj(jsObj) {
                 let scenarios = {
                     "demo-scenario"        : "Demo Scenario",
                     "home-automation"      : "Home Automation",
@@ -63,17 +85,14 @@
                     "wilab" : "w-iLab.t"
                 }
 
-                jsObject.forEach((el) => {
-                    newObj.push({
-                        "id"      : el.experiment_id,
-                        "date"    : this.convertDate(el.date),
-                        "firmware": el.firmware,
-                        "scenario": scenarios[el.scenario],
-                        "testbed" : testbeds[el.testbed]
-                    })
-                })
-
-                return newObj
+                return {
+                    "id"      : jsObj.experiment_id,
+                    "date"    : this.convertDate(jsObj.date),
+                    "firmware": jsObj.firmware,
+                    "scenario": scenarios[jsObj.scenario],
+                    "testbed" : testbeds[jsObj.testbed],
+                    "active"  : jsObj.active
+                }
             },
 
             convertDate(date) {
@@ -89,6 +108,52 @@
                 }
 
                 return datetime.toString().split("(")[0]
+            },
+
+            processTerminate() {
+                axios.get('/api/terminate')
+                    .then(function (response) {
+                        // handle success
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        console.log("Error: " + error);
+                    })
+                    .then(function () {
+                        // executes always
+                    });
+            },
+            processTerminateDialogAction() {
+                this.dialogLoader = true
+                this.processTerminate()
+            },
+
+            /// MQTT
+            parseMqttEvent(payload) {
+                let payloadObj = JSON.parse(payload)
+                console.log(payloadObj.experiment_id)
+                this.outputs.unshift(this.sanitizeObj({
+                    experiment_id: payloadObj.experiment_id, 
+                    date: payloadObj.date, 
+                    firmware: payloadObj.firmware,
+                    scenario: payloadObj.scenario,
+                    testbed: payloadObj.testbed,
+                    active: true
+                }))
+            },
+
+            notifyExperimentActive(experimentId) {
+                let newArr = []
+
+                this.outputs.forEach(el => {
+                    if (el.id === experimentId)
+                        el.active = true
+
+                    newArr.push(el)
+                })
+
+                this.outputs = newArr
             }
         },
 
@@ -98,6 +163,18 @@
 
         mounted() {
             this.fetchLogs()
+
+            this.$eventHub.$on("openbenchmark/1/headerLogged", payload => {
+                thisComponent.parseMqttEvent(payload);
+            });
+
+            this.$eventHub.$on("openbenchmark/newKpi", payload => {
+                thisComponent.notifyExperimentActive(payload);
+            });
+
+            this.$eventHub.$on("DIALOG_TERMINATION", payload => {
+                thisComponent.fetchLogs();
+            });
         }
     }
 </script>
@@ -121,11 +198,23 @@
     .log-row {
         padding-top: 10px;
         padding-bottom: 10px;
-        padding-left: 33px;
         cursor: pointer;
     }
 
     .gray {
         background-color: #fafafa;
     }
+
+    .active-ind {
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        border-radius: 10px;
+        background-color: #32CD32
+    }
+    .active-ind-col {
+        width: 45px;
+        padding: 0;
+    }
+
 </style>

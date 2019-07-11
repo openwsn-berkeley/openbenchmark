@@ -1,14 +1,6 @@
 <template>
     <div class="parent">
 
-        <modal name="modal-progress-bar" width="90%" height="165px">
-            <!-- Remains here temporarily. Will be moved later -->
-            <div class="row h-center v-center col-direction mt-2" v-if="currentStep == 3">
-                <h3 class="mt-0 mb-0" style="margin-bottom: 5px">Experiment started! <span class="pulse clickable" @click.prevent="scrollContent">Monitor the progress in real time</span></h3>
-                <i class="fas fa-check-circle fa-3x primary-light"></i>
-            </div>
-        </modal>
-
         <modal name="testbed-pick">
             <div class="modal-content row col-direction h-center">
                 <span class="bold align-left mt-1 ml-1">Select a testbed: </span>
@@ -111,7 +103,7 @@
                     <!-- Condition for disabling the start button -->
                     <!-- :disabled="currentStep > -2 -->
                     <button id="start-btn" class="main-btn btn-small btn-width-half ml-1"  @click="processStart()" :disabled="currentStep > -2">Start</button>
-                    <button id="terminate-btn" class="main-btn btn-small btn-width-half btn-danger mr-1" @click="processTerminate()" :disabled="currentStep === -2">Terminate</button>
+                    <button id="terminate-btn" class="main-btn btn-small btn-width-half btn-danger mr-1" @click="showDialog('termination')" :disabled="currentStep === -2">Terminate</button>
                 </div>
 
             </div>
@@ -152,6 +144,12 @@
 
         data: function () {
             return {
+                dialog: {
+                    "title": "",
+                    "buttons": []
+                },
+                dialogLoader: false,
+
                 scenarios: [],
                 scenarioSelected: -1,
                 scenarioIcons: {
@@ -188,6 +186,13 @@
                     "orchestration-started"
                 ],
 
+                onEventActions: {
+                    "provisioned": this.flash,
+                    "flashed": this.sutStart,
+                    "network-configured": undefined,
+                    "orchestration-started": undefined
+                },
+
                 currentStep: -2,   //If -2, process has not started yet; -1: process started, waiting for notifications
                 taskFailed: false,
 
@@ -197,22 +202,28 @@
             }
         },
 
-        watch: {
-            currentStep: function (newQuestion, oldQuestion) {
-                if (thisComponent.currentStep == -1) {
-                    thisComponent.sidebarUpdate("progress-bar", true);
-                } else if (thisComponent.currentStep == 3) {
-                    thisComponent.sidebarUpdate("progress-bar", false);
-                    thisComponent.sidebarUpdate("graphs", true);
+        computed: {
+            onEventActions: function () {
+                return {
+                    "provisioned": this.flash,
+                    "flashed": this.sutStart,
+                    "network-configured": undefined,
+                    "orchestration-started": undefined
                 }
             }
         },
 
         methods: {
+            showDialog(key) {
+                this.$eventHub.$emit('SHOW_DIALOG', key)
+            },
+            closeDialog(key) {
+                this.$eventHub.$emit('CLOSE_DIALOG', key)
+            },
+
             showModal(name) {
                 this.$modal.show(name)
             },
-
             closeModal(name) {
                 this.$modal.hide(name)
             },
@@ -309,20 +320,38 @@
             },
 
             processStart() {
+                if (this.scenarioSelected === -1 || this.testbedSelected === -1) {
+                    this.showDialog('missing-params')
+                } else {
+                    this.currentStep = -1
+
+                    this.reserve()
+
+                    let scenario = this.scenarios[this.scenarioSelected].identifier
+                    let testbed  = this.testbeds[this.testbedSelected].identifier
+
+                    axios.post('/api/store', {
+                            scenario         : scenario,
+                            testbed          : testbed
+                        }) 
+                        .then(function (response) {
+                            // handle success
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            // handle error
+                            console.log(error);
+                        })
+                }
+            },
+            reserve() {
                 let scenario = this.scenarios[this.scenarioSelected].identifier
                 let testbed  = this.testbeds[this.testbedSelected].identifier
-                
-                let route = '/api/start-exp/' + scenario + '/' + testbed + '/false'
 
-                if (this.firmware !== undefined) {
-                    route += '/' + this.firmware.name
-                }
-
-                thisComponent.currentStep = -1
+                let route = '/api/reserve/' + scenario + '/' + testbed
 
                 axios.get(route) 
                     .then(function (response) {
-                        // handle success
                         console.log(response)
                     })
                     .catch(function (error) {
@@ -330,33 +359,41 @@
                         console.log(error)
                         thisComponent.currentStep = -2
                     })
+            },
+            flash() {
+                let testbed  = this.testbeds[this.testbedSelected].identifier
 
-                axios.post('/api/store', {
-                        scenario         : scenario,
-                        testbed          : testbed
-                    }) 
+                let route = '/api/flash'
+
+                if (this.firmware !== undefined) {
+                    route += '/' + this.firmware.name
+                }
+
+                axios.get(route) 
                     .then(function (response) {
-                        // handle success
-                        console.log(response);
+                        console.log(response)
                     })
                     .catch(function (error) {
                         // handle error
-                        console.log(error);
+                        console.log(error)
+                        thisComponent.currentStep = -2
                     })
             },
-            processTerminate() {
-                axios.get('/api/exp-terminate')
+            sutStart() {
+                let scenario = this.scenarios[this.scenarioSelected].identifier
+                let testbed  = this.testbeds[this.testbedSelected].identifier
+
+                let route = '/api/sut-start/' + scenario + '/' + testbed
+
+                axios.get(route) 
                     .then(function (response) {
-                        // handle success
-                        console.log(response);
+                        console.log(response)
                     })
                     .catch(function (error) {
                         // handle error
-                        console.log("Error: " + error);
+                        console.log(error)
+                        thisComponent.currentStep = -2
                     })
-                    .then(function () {
-                        // always executed
-                    });
             },
 
             revertToDefaultFw() {
@@ -393,16 +430,6 @@
             },
 
             /*** MQTT Configuration ***/
-            subscribe() {
-                let interval = setInterval( function() {
-                    if (thisComponent.$mqttClient.subscribe() !== "") {
-                        console.log("Retrying subscription in 1s...") 
-                    } else {
-                        clearInterval(interval)
-                    }
-                }, 1000);  
-            },
-
             parseMqttEvent(payload) {
                 let payloadObj = JSON.parse(payload)
                 let type    = payloadObj["type"]
@@ -410,28 +437,22 @@
                 let success = payloadObj["content"]["success"]
 
                 if (type == "notification" && success) {
-                    this.currentStep = this.workflowSteps.indexOf(step)
-                    if (this.currentStep == 3) {
-                        this.sidebarUpdate("progress-bar", false)
-                        this.sidebarUpdate("graphs", true)
+                    this.currentStep = (step !== "terminated") ? this.workflowSteps.indexOf(step) : -2
+
+                    if (step === "terminated") {
+                        thisComponent.closeDialog('termination')
+                    } else if (thisComponent.onEventActions[step] !== undefined) {
+                        console.log("CALLING NEXT STEP")
+                        thisComponent.onEventActions[step].call()
                     }
 
                 } else if (type == "notification" && !success) {
-                    this.currentStep = -1
+                    this.currentStep = -2
                     this.taskFailed = true
                 }
 
                 console.log(this.currentStep);
             },
-
-
-            /*** Sidebar manipulation ***/
-            sidebarUpdate(element, show) {
-                thisComponent.$eventHub.$emit('SIDEBAR', {
-                    'element': element,
-                    'show': show
-                });
-            }
 
         },
 
@@ -450,40 +471,6 @@
                     nodeLabels: true,
                     canvas: false
                 }
-            },
-
-            allBooted() {
-                let nodes = this.value['nodes'];
-                let numOfBooted = 0;
-
-                nodes.forEach(element => {
-                    if (element['booted'])
-                        numOfBooted++;
-                });
-
-                return numOfBooted === nodes.length;
-            },
-            bootFailed() { //Currently not used
-                let nodes = this.value['nodes'];
-                let hasFailed = false;
-
-                nodes.forEach(element => {
-                    if (element['failed'])
-                        hasFailed = true;
-                });
-
-                return hasFailed;
-            },
-            allActive() {
-                let nodes = this.value['nodes'];
-                let numOfActive = 0;
-
-                nodes.forEach(element => {
-                    if (element['active'])
-                        numOfActive++;
-                });
-
-                return numOfActive === nodes.length;
             }
         },
 
@@ -495,28 +482,8 @@
             this.fetch('scenarios');
             this.fetch('testbeds');
 
-            this.subscribe();
-
             this.$eventHub.$on("openbenchmark/1/notifications", payload => {
                 thisComponent.parseMqttEvent(payload);
-            });
-
-            this.$eventHub.$on("RESERVATION_SUCCESS", payload => {
-                thisComponent.nodesReserved = true
-            });
-
-            this.$eventHub.$on("NODE_BOOTED", payload => {
-                thisComponent.markNode(payload, 'booted', true);
-            });
-            this.$eventHub.$on("BOOT_FAIL", payload => {
-                thisComponent.markNode(payload, 'failed', true);
-            });
-
-            this.$eventHub.$on("NODE_ACTIVE", payload => {
-                thisComponent.markNode(payload, 'active', true);
-            });
-            this.$eventHub.$on("NODE_ACTIVE_FAILED", payload => {
-                thisComponent.markNode(payload, 'failed', true);
             });
 
             this.$eventHub.$on("FIRMWARE_UPLOADED", payload => {
@@ -565,11 +532,32 @@
         bottom: 15px;
         width: 100%
     }
-    #start-btn {
+    #start-btn, #ok-btn {
         margin-right: 7px;
     }
-    #terminate-btn {
+    #terminate-btn, #cancel-btn {
         margin-left: 7px;
+    }
+
+    .dialog-title {
+        position: absolute;
+        top: 15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 70%;
+        text-align: center;
+    }
+    .dialog-loader {
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.7);
+        color: #1f6fb2;
+    }
+    .dialog-content {
+
+    }
+    .dialog-content-disabled {
+        opacity: 0.3
     }
 
     .node-property {
@@ -626,51 +614,6 @@
         fill: rgb(129, 155, 179);
     }
     /****/
-
-    .node-off {
-        stroke: rgba(100, 100, 100, .7);
-        fill: rgba(200, 200, 200, .7);
-        stroke-width: 3px;
-        transition: fill .5s ease;
-    }
-    .node-loading {
-        stroke: rgba(100, 100, 100, .7);
-        fill: rgba(200, 200, 200, .7);
-        stroke-width: 3px;
-        transition: fill .5s ease;
-        animation: loading 1s infinite;
-    }
-    .node-booted {
-        stroke: rgba(102, 153, 204, 1);
-        fill: rgba(200, 200, 200, .3);
-        stroke-width: 3px;
-        transition: fill .5s ease;
-    }
-    .node-on {
-        stroke: rgba(66, 184, 131, 1);
-        fill: rgba(200, 200, 200, .3);
-        stroke-width: 3px;
-        transition: fill .5s ease;
-    }
-    .node-fail {
-        stroke: red;
-        fill: rgba(200, 200, 200, .3);
-        stroke-width: 3px;
-        transition: fill .5s ease;
-    }
-
-    .node-join {
-        stroke: rgba(66, 184, 131, 1);
-        fill: rgba(122,205,168, 1);
-        stroke-width: 3px;
-        transition: fill .5s ease;
-    }
-    .dag-node-join {
-        stroke: orange;
-        fill: rgba(122,205,168, 1);
-        stroke-width: 3px;
-        transition: fill .5s ease;
-    }
 
     .net, .net-svg {
         width: 100% !important;

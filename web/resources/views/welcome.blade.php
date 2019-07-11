@@ -74,6 +74,7 @@
 
         <div id="app">
             <router-view></router-view>
+            <bottom-sheet></bottom-sheet>
         </div>
 
         <!--<div class="flex-center position-ref full-height">
