@@ -1,14 +1,6 @@
 <template>
     <div class="parent">
 
-        <modal name="modal-progress-bar" width="90%" height="165px">
-            <!-- Remains here temporarily. Will be moved later -->
-            <div class="row h-center v-center col-direction mt-2" v-if="currentStep == 3">
-                <h3 class="mt-0 mb-0" style="margin-bottom: 5px">Experiment started! <span class="pulse clickable" @click.prevent="scrollContent">Monitor the progress in real time</span></h3>
-                <i class="fas fa-check-circle fa-3x primary-light"></i>
-            </div>
-        </modal>
-
         <modal name="testbed-pick">
             <div class="modal-content row col-direction h-center">
                 <span class="bold align-left mt-1 ml-1">Select a testbed: </span>
@@ -438,16 +430,6 @@
             },
 
             /*** MQTT Configuration ***/
-            subscribe() {
-                let interval = setInterval( function() {
-                    if (thisComponent.$mqttClient.subscribe() !== "") {
-                        console.log("Retrying subscription in 1s...") 
-                    } else {
-                        clearInterval(interval)
-                    }
-                }, 1000);  
-            },
-
             parseMqttEvent(payload) {
                 let payloadObj = JSON.parse(payload)
                 let type    = payloadObj["type"]
@@ -489,40 +471,6 @@
                     nodeLabels: true,
                     canvas: false
                 }
-            },
-
-            allBooted() {
-                let nodes = this.value['nodes'];
-                let numOfBooted = 0;
-
-                nodes.forEach(element => {
-                    if (element['booted'])
-                        numOfBooted++;
-                });
-
-                return numOfBooted === nodes.length;
-            },
-            bootFailed() { //Currently not used
-                let nodes = this.value['nodes'];
-                let hasFailed = false;
-
-                nodes.forEach(element => {
-                    if (element['failed'])
-                        hasFailed = true;
-                });
-
-                return hasFailed;
-            },
-            allActive() {
-                let nodes = this.value['nodes'];
-                let numOfActive = 0;
-
-                nodes.forEach(element => {
-                    if (element['active'])
-                        numOfActive++;
-                });
-
-                return numOfActive === nodes.length;
             }
         },
 
@@ -536,24 +484,6 @@
 
             this.$eventHub.$on("openbenchmark/1/notifications", payload => {
                 thisComponent.parseMqttEvent(payload);
-            });
-
-            this.$eventHub.$on("RESERVATION_SUCCESS", payload => {
-                thisComponent.nodesReserved = true
-            });
-
-            this.$eventHub.$on("NODE_BOOTED", payload => {
-                thisComponent.markNode(payload, 'booted', true);
-            });
-            this.$eventHub.$on("BOOT_FAIL", payload => {
-                thisComponent.markNode(payload, 'failed', true);
-            });
-
-            this.$eventHub.$on("NODE_ACTIVE", payload => {
-                thisComponent.markNode(payload, 'active', true);
-            });
-            this.$eventHub.$on("NODE_ACTIVE_FAILED", payload => {
-                thisComponent.markNode(payload, 'failed', true);
             });
 
             this.$eventHub.$on("FIRMWARE_UPLOADED", payload => {
@@ -684,51 +614,6 @@
         fill: rgb(129, 155, 179);
     }
     /****/
-
-    .node-off {
-        stroke: rgba(100, 100, 100, .7);
-        fill: rgba(200, 200, 200, .7);
-        stroke-width: 3px;
-        transition: fill .5s ease;
-    }
-    .node-loading {
-        stroke: rgba(100, 100, 100, .7);
-        fill: rgba(200, 200, 200, .7);
-        stroke-width: 3px;
-        transition: fill .5s ease;
-        animation: loading 1s infinite;
-    }
-    .node-booted {
-        stroke: rgba(102, 153, 204, 1);
-        fill: rgba(200, 200, 200, .3);
-        stroke-width: 3px;
-        transition: fill .5s ease;
-    }
-    .node-on {
-        stroke: rgba(66, 184, 131, 1);
-        fill: rgba(200, 200, 200, .3);
-        stroke-width: 3px;
-        transition: fill .5s ease;
-    }
-    .node-fail {
-        stroke: red;
-        fill: rgba(200, 200, 200, .3);
-        stroke-width: 3px;
-        transition: fill .5s ease;
-    }
-
-    .node-join {
-        stroke: rgba(66, 184, 131, 1);
-        fill: rgba(122,205,168, 1);
-        stroke-width: 3px;
-        transition: fill .5s ease;
-    }
-    .dag-node-join {
-        stroke: orange;
-        fill: rgba(122,205,168, 1);
-        stroke-width: 3px;
-        transition: fill .5s ease;
-    }
 
     .net, .net-svg {
         width: 100% !important;
