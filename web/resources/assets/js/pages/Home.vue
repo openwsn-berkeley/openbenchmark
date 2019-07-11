@@ -20,8 +20,6 @@
                     }">
                 <scenarios :experiment-id="id"></scenarios>
             </div>
-
-            <bottom-sheet></bottom-sheet>
         </div>
     </div>
 </template>
@@ -33,7 +31,6 @@
     import Scenarios from './../components/landing/Scenarios.vue'
     import Graphs from './../components/landing/Graphs.vue'
     import Sidebar from './../components/reusables/Sidebar.vue'
-    import BottomSheet from './../components/reusables/BottomSheet.vue'
 
     let thisComponent;
     let socketConnected = false;
@@ -47,8 +44,7 @@
             LogsList,
             Scenarios,
             Graphs,
-            Sidebar,
-            BottomSheet
+            Sidebar
         },
 
         data: function () {
