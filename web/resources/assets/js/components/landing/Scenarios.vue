@@ -1,22 +1,6 @@
 <template>
     <div class="parent">
 
-        <modal name="alert-dialog" width="400px" height="170px">
-            <div class="dialog-loader row h-center v-center" v-if="dialogLoader">
-                <i class="fas fa-circle-notch fa-3x fa-spin"></i>
-            </div>
-            <span class="dialog-content" :class="{'dialog-content-disabled': dialogLoader}">
-                <h3 class="dialog-title bold">{{dialog.title}}</h3>
-                <div class="buttons row h-center" v-if="dialog.buttons.length === 2">
-                    <button id="ok-btn" class="main-btn btn-small btn-width-half ml-1" @click="dialog.action" :disabled="dialogLoader">{{dialog.buttons[0]}}</button>
-                    <button id="cancel-btn" class="main-btn btn-small btn-width-half btn-danger mr-1" @click="closeModal('alert-dialog')" :disabled="dialogLoader">{{dialog.buttons[1]}}</button>
-                </div>
-                <div class="buttons row v-center" v-if="dialog.buttons.length === 1">
-                    <button class="main-btn btn-small" @click="closeModal('alert-dialog')" :disabled="dialogLoader">{{dialog.buttons[0]}}</button>
-                </div>
-            </span>
-        </modal>
-
         <modal name="modal-progress-bar" width="90%" height="165px">
             <!-- Remains here temporarily. Will be moved later -->
             <div class="row h-center v-center col-direction mt-2" v-if="currentStep == 3">
@@ -239,20 +223,10 @@
 
         methods: {
             showDialog(key) {
-                let dialogs = {
-                    "termination": {
-                        "title": "Are you sure you want to terminate the experiment?", 
-                        "buttons": ["YES", "NO"],
-                        "action": this.processTerminateDialogAction
-                    },
-                    "missing-params": {
-                        "title": "You must select a testbed and a scenario",
-                        "buttons": ["OK"],
-                        "action": undefined
-                    }
-                }
-                this.dialog = dialogs[key]
-                this.showModal('alert-dialog')
+                this.$eventHub.$emit('SHOW_DIALOG', key)
+            },
+            closeDialog(key) {
+                this.$eventHub.$emit('CLOSE_DIALOG', key)
             },
 
             showModal(name) {
@@ -430,26 +404,6 @@
                     })
             },
 
-
-            processTerminate() {
-                axios.get('/api/terminate')
-                    .then(function (response) {
-                        // handle success
-                        console.log(response);
-                    })
-                    .catch(function (error) {
-                        // handle error
-                        console.log("Error: " + error);
-                    })
-                    .then(function () {
-                        // executes always
-                    });
-            },
-            processTerminateDialogAction() {
-                this.dialogLoader = true
-                this.processTerminate()
-            },
-
             revertToDefaultFw() {
                 this.useOpenWSNFirmware = true
                 this.firmware = undefined
@@ -504,8 +458,7 @@
                     this.currentStep = (step !== "terminated") ? this.workflowSteps.indexOf(step) : -2
 
                     if (step === "terminated") {
-                        thisComponent.dialogLoader = false
-                        thisComponent.closeModal('alert-dialog')
+                        thisComponent.closeDialog('termination')
                     } else if (thisComponent.onEventActions[step] !== undefined) {
                         console.log("CALLING NEXT STEP")
                         thisComponent.onEventActions[step].call()

@@ -7,6 +7,7 @@
             <span class="col-3 bold">Date</span>
             <span class="col-3 bold">Testbed</span>
             <span class="col-3 bold">Scenario</span>
+            <span class="active-ind-col"></span>
         </div>
         <div class="row log-row hoverable" :class="{gray: ind%2===0}" v-for="(item, ind) in outputs" @click="showDetails(item.id)">
             <span class="row active-ind-col v-center h-center"><span class="active-ind" v-if="item.active"></span></span>
@@ -14,6 +15,9 @@
             <span class="col-3 bold">{{item.date}}</span>
             <span class="col-3 bold">{{item.testbed}}</span>
             <span class="col-3 bold">{{item.scenario}}</span>
+            <span class="row active-ind-col v-center h-center danger" @click="showDialog($event, 'termination')">
+                <i class="fas fa-times" v-if="item.active"></i>
+            </span>
         </div>
     </div>
 </template>
@@ -35,6 +39,14 @@
         methods: {
             showDetails(id) {
                 this.$router.push('details/' + id)
+            },
+
+            showDialog(event, key) {
+                event.stopPropagation()
+                this.$eventHub.$emit('SHOW_DIALOG', key)
+            },
+            closeDialog(key) {
+                this.$eventHub.$emit('CLOSE_DIALOG', key)
             },
 
             fetchLogs() {
@@ -98,6 +110,25 @@
                 return datetime.toString().split("(")[0]
             },
 
+            processTerminate() {
+                axios.get('/api/terminate')
+                    .then(function (response) {
+                        // handle success
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        console.log("Error: " + error);
+                    })
+                    .then(function () {
+                        // executes always
+                    });
+            },
+            processTerminateDialogAction() {
+                this.dialogLoader = true
+                this.processTerminate()
+            },
+
             /// MQTT
             subscribe() {
                 let interval = setInterval( function() {
@@ -150,6 +181,10 @@
             this.$eventHub.$on("openbenchmark/newKpi", payload => {
                 thisComponent.notifyExperimentActive(payload);
             });
+
+            this.$eventHub.$on("DIALOG_TERMINATION", payload => {
+                thisComponent.fetchLogs();
+            });
         }
     }
 </script>
@@ -191,4 +226,5 @@
         width: 45px;
         padding: 0;
     }
+
 </style>

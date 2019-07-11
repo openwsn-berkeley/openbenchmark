@@ -46,3 +46,10 @@
 .gray-gradient {
 	background-image: linear-gradient(to right, #cccccc, transparent);
 }
+
+.danger {
+	color: #E7424F;
+}
+.bgd-danger {
+	background-color: #E7424F;
+}
