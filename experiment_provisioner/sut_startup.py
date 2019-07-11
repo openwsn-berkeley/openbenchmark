@@ -35,7 +35,7 @@ class SUTStartup:
 		else:
 			self._load_dependencies()
 
-			thread_orch = threading.Thread(target=self._start_ov)
+			thread_orch = threading.Thread(target=self._start_ov, args=[False])
 			thread_orch.start()
 		
 			self._start_orchestrator()
@@ -55,6 +55,7 @@ class SUTStartup:
 
 		for line in iter(pipe.stdout.readline, b''):
 			print(">>> " + line.rstrip())
+			self.mqtt_client.push_debug_log('ORCHESTRATOR', line.rstrip())
 
 
 	def _start_ov(self, async = True):
@@ -65,6 +66,7 @@ class SUTStartup:
 		if not async:
 			for line in iter(pipe.stdout.readline, b''):
 				print(">>> " + line.rstrip())
+				self.mqtt_client.push_debug_log('OPENVISUALIZER', line.rstrip())
 
 
 	# Clone dependencies
