@@ -16,7 +16,10 @@
                 titles: {
                     "latency": "Latency",
                     "reliability": "Reliability",
-                    "radioDutyCycle": "Duty Cycle"
+                    "radioDutyCycle": "Duty Cycle",
+                    "syncronizationPhase": "Synchronization",
+                    "secureJoinPhase": "Secure join phase",
+                    "networkFormationTime": "Network formation time"
                 }
             }
         },

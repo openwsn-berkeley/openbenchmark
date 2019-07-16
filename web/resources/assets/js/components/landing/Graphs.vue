@@ -115,9 +115,7 @@
                     */
                 },
                 generalDataTitles: {
-                    "networkFormationTime": "Network formation",
-                    "syncronizationPhase" : "Synchronization",
-                    "secureJoinPhase"     : "Secure join phase"
+                    
                 },
 
                 dataset: {
