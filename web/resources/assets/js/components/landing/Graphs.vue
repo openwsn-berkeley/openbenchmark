@@ -38,9 +38,9 @@
                     </div>
                 </div>
 
-                <div class="card col-direction bordered relative" style="width: 100%; height: 50%;">
-                    <span class="mt-1" v-for="key in Object.keys(lastData)">
-                        <span class="ml-1 mr-1">{{lastDataTitles[key]}}: <span class="bold">{{lastData[key]}}</span></span>
+                <div class="card col-direction bordered relative pt-1" style="width: 100%; height: 50%;">
+                    <span class="col-direction" v-for="nodeId in Object.keys(lastData)" v-if="nodeId === selectedNodeKey">
+                        <span class="ml-1 mr-1 mb-1" v-for="key in Object.keys(lastData[nodeId])">{{lastDataTitles[key]}}: <span class="bold">{{lastData[nodeId][key]}}</span></span>
                     </span>
 
                     <i id="file-download" class="fas fa-file-download fa-2x clickable" @click="showModal('file-download')" v-if="experimentId !== undefined"></i>
