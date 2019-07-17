@@ -286,7 +286,7 @@ class Main():
 
 		# Default firmware is "openwsn" with testbed name suffix
 		if firmware is None:
-			firmware = os.path.join(os.path.dirname(__file__), 'firmware', controller.DEFAULT_FIRMWARE + '.' + testbed)
+			firmware = os.path.join(os.path.dirname(__file__), 'firmware', controller.DEFAULT_FIRMWARE + '_' + testbed + '.ihex')
 		elif branch is not None:
 			firmware = FWCompiler(firmware, branch, testbed, user_id).compile()
 
