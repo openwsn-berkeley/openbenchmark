@@ -50,7 +50,6 @@ class MQTTClient:
 		self.client.on_subscribe  = self._on_subscribe
 		self.client.on_message    = self._on_message
 		self.successful_subs      = 0
-		
 
 	def _subscribe(self):
 		for key in self.sub_topics:
@@ -89,7 +88,7 @@ class MQTTClient:
 		self.data_stream_started = True
 
 
-	##### Public methodss #####
+	##### Public methods #####
 	def push_notification(self, step_identifier, success):
 		try:
 			if step_identifier not in ['provisioned', 'flashed', 'data-stream-started', 'terminated']:
@@ -130,3 +129,7 @@ class MQTTClient:
 				"action": action,
 				"log_entry": log_entry
 			})
+
+	def clear_state(self):
+		self.client.loop_stop()
+		self.client.disconnect()

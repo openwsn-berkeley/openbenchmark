@@ -29,7 +29,7 @@ class Reservation:
 
 class IoTLABReservation(Reservation):
     CMD_ERROR = "cmd_error"
-    SSH_RETRY_TIME = 120
+    SSH_RETRY_TIME = 240
     RETRY_PAUSE = 10
 
     def __init__(self, user_id, user, domain, broker, otb_repo, otb_tag, duration=None, nodes=None):
@@ -100,7 +100,8 @@ class IoTLABReservation(Reservation):
 
     def reserve_experiment(self):
         if self.check_experiment():
-            print('Experiment already exists')
+            print('Resources already reserved. Moving on...')
+            self.mqtt_client.push_debug_log('NODE_RESERVATION', 'Resources already reserved. Moving on...')
         else:
             output = self.ssh_command_exec(
                 'iotlab-experiment submit -n a8_exp -d ' + str(self.duration) + ' -l ' + self.nodes)

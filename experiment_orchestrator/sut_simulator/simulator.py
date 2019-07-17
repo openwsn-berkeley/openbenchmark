@@ -140,6 +140,9 @@ class Simulator(object):
         if event == Events.radioDutyCycleMeasurement:
             sut_event_payload["dutyCycle"] = random.uniform(0, 1)
 
+        elif event == Events.networkFormationCompleted:
+            sut_event_payload["source"] = '00-12-4b-00-14-b5-b6-10'   # First node chosen as DAG root
+
         elif event in [Events.packetSent, Events.packetReceived]:
             if event == Events.packetSent:
                 if random.randint(1, 10) % 3 != 0:   # Simulate packet drop with probability of 0.3

@@ -158,8 +158,11 @@ class KPIProcessing:
 			
 	def _networkFormationTime(self, event_obj):
 		print str(event_obj)
+		print json.dumps(Utils.eui64_to_id)
 		self.logger.log('kpi', {
 				'kpi'      : 'networkFormationTime',
+				'node_id'  : Utils.eui64_to_id[event_obj['source']],
+				'eui64'    : event_obj['source'],
 				'timestamp': event_obj['timestamp'],
 				'value'    : 1
 			})
@@ -167,6 +170,8 @@ class KPIProcessing:
 	def _synchronizationPhase(self, event_obj):
 		self.logger.log('kpi', {
 				'kpi'      : 'syncronizationPhase',
+				'node_id'  : Utils.eui64_to_id[event_obj['source']],
+				'eui64'    : event_obj['source'],
 				'timestamp': event_obj['timestamp'],
 				'value'    : 1
 			})
@@ -174,6 +179,8 @@ class KPIProcessing:
 	def _secureJoinPhase(self, event_obj):
 		self.logger.log('kpi', {
 				'kpi'      : 'secureJoinPhase',
+				'node_id'  : Utils.eui64_to_id[event_obj['source']],
+				'eui64'    : event_obj['source'],
 				'timestamp': event_obj['timestamp'],
 				'value'    : 1
 			})

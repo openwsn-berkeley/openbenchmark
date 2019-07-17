@@ -6,6 +6,7 @@ import yaml
 import string
 import random
 import subprocess
+import atexit
 
 from lxml import etree
 from abc import abstractmethod
@@ -24,7 +25,6 @@ class Controller(object):
 	CONFIG_FILE = os.path.join(os.path.dirname(__file__), "..", "conf.txt")
 	SCENARIO_CONFIG = os.path.join(os.path.dirname(__file__), "..", "scenario-config")
 	DEFAULT_FIRMWARE = '03oos_openwsn_prog'
-
 
 	def __init__(self):
 		self.configParser = ConfigParser.RawConfigParser()   
@@ -56,6 +56,7 @@ class Controller(object):
 		pass
 
 
+
 class IoTLAB(Controller):
 
 	def __init__(self, user_id, scenario, action):
@@ -77,7 +78,7 @@ class IoTLAB(Controller):
 		self.reservation = IoTLABReservation(user_id, self.USERNAME, self.HOSTNAME, self.BROKER, self.OTB_REPO, self.OTB_TAG, self.EXP_DURATION, self.NODES)
 
 		self.mqtt_client = MQTTClient.create('iotlab', user_id)
-
+		atexit.register(self._stop_mqtt)
 
 	def add_files_from_env(self):
 		if self.PRIVATE_SSH != "":
@@ -99,6 +100,9 @@ class IoTLAB(Controller):
 				nodes_str += config_obj[generic_id]["node_id"].split("-")[2] + "+"
 
 			return nodes_str.rstrip("+")
+
+	def _stop_mqtt(self):
+		self.mqtt_client.clear_state()
 
 
 
@@ -137,7 +141,7 @@ class Wilab(Controller):
 
 		self.reservation = WilabReservation(user_id, self.JFED_DIR, self.RUN, self.DELETE, self.DISPLAY)
 		self.mqtt_client = MQTTClient.create('iotlab', user_id)
-
+		atexit.register(self._stop_mqtt)
 
 	def add_files_from_env(self):
 		if self.CERTIFICATE_B64 != "":
@@ -261,6 +265,9 @@ class Wilab(Controller):
 	def _get_random_string(self, string_length = 5):
 		letters = string.ascii_uppercase
 		return ''.join(random.choice(letters) for i in range(string_length))
+
+	def _stop_mqtt(self):
+		self.mqtt_client.clear_state()
 
 
 

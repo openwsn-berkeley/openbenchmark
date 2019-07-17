@@ -38,9 +38,9 @@
                     </div>
                 </div>
 
-                <div class="card col-direction bordered relative" style="width: 100%; height: 50%;">
-                    <span class="mt-1" v-for="key in Object.keys(generalData)">
-                        <span class="ml-1 mr-1">{{generalDataTitles[key]}}: <span class="bold">{{generalData[key]}}</span></span>
+                <div class="card col-direction bordered relative pt-1" style="width: 100%; height: 50%;">
+                    <span class="col-direction" v-for="nodeId in Object.keys(lastData)" v-if="nodeId === selectedNodeKey">
+                        <span class="ml-1 mr-1 mb-1" v-for="key in Object.keys(lastData[nodeId])">{{lastDataTitles[key]}}: <span class="bold">{{lastData[nodeId][key]}}</span></span>
                     </span>
 
                     <i id="file-download" class="fas fa-file-download fa-2x clickable" @click="showModal('file-download')" v-if="experimentId !== undefined"></i>
@@ -108,16 +108,19 @@
 
                 headerData: {},
 
-                generalData: {
+                lastData: {
                     /* EXAMPLE ITEM: 
-                    "networkFormationTime": 1560761378.408148, 
+                    "node-a8-106": {
+                        "syncronizationPhase": 1560761378.408148, 
+                        ...
+                    }
                     ... 
                     */
                 },
-                generalDataTitles: {
-                    "networkFormationTime": "Network formation",
-                    "syncronizationPhase" : "Synchronization",
-                    "secureJoinPhase"     : "Secure join phase"
+                lastDataTitles: {
+                    "syncronizationPhase": "Last synchronization",
+                    "secureJoinPhase": "Last secure join",
+                    "networkFormationTime": "Network formation time"
                 },
 
                 dataset: {
@@ -135,6 +138,25 @@
                     ...
                     */
                 }
+            }
+        },
+
+        watch: {
+            dataset: function(val) {
+                let newLastData = {}
+
+                Object.keys(this.dataset).forEach(nodeId => {
+                    newLastData[nodeId] = {}
+                    Object.keys(this.lastDataTitles).forEach(key => {
+                        if (this.dataset[nodeId] !== undefined && this.dataset[nodeId][key] !== undefined) {
+                            let timestampVals = this.dataset[nodeId][key]["timestamp"]
+                            newLastData[nodeId][key] = timestampVals[timestampVals.length - 1]
+                        }
+                    })
+                })
+
+                console.log(JSON.stringify(newLastData))
+                this.lastData = newLastData
             }
         },
 
@@ -171,7 +193,6 @@
                 axios.get('/api/logs/data-fetch/' + this.experimentId)
                     .then(function (response) {
                         thisComponent.headerData = response.data.message.header
-                        thisComponent.generalData = response.data.message.general_data
                         thisComponent.dataset = response.data.message.data
                         thisComponent.$eventHub.$emit('LOG_DATA_FETCHED', thisComponent.headerData);
                     })
@@ -206,16 +227,7 @@
 
                     this.dataset = newObj
 
-                } else   // General data not related to a single node
-                    this.updateGeneralData(label, timestamp);
-            },
-
-            updateGeneralData(label, timestamp) {
-                let newObj = this.clone(this.generalData)
-                newObj[label] = timestamp
-                this.generalData = newObj
-                console.log("General data updated:")
-                console.log(JSON.stringify(this.generalData))
+                }
             },
 
             parseLogData(obj) {
