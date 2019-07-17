@@ -29,7 +29,7 @@ class Reservation:
 
 class IoTLABReservation(Reservation):
     CMD_ERROR = "cmd_error"
-    SSH_RETRY_TIME = 120
+    SSH_RETRY_TIME = 240
     RETRY_PAUSE = 10
 
     def __init__(self, user_id, user, domain, broker, otb_repo, otb_tag, duration=None, nodes=None):
