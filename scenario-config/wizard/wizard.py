@@ -40,10 +40,10 @@ class Wizard:
 		}
 
 		self.nf_time_padding_min = {
-			Identifiers.dm: 5,
-			Identifiers.ba: 5,
-			Identifiers.ha: 5,
-			Identifiers.im: 5,
+			Identifiers.dm: 10,
+			Identifiers.ba: 10,
+			Identifiers.ha: 10,
+			Identifiers.im: 10,
 		}
 
 		self.info       = {}   # fields: identifier, duration_min, number_of_nodes, 

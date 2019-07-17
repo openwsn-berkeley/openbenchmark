@@ -1,167 +1,126 @@
 {
     "openbenchmark00": {
-        "node_id": "emulated1", 
-        "transmission_power_dbm": -2
+        "node_id": "emulated1",
+        "transmission_power_dbm": 0
     }, 
     "openbenchmark01": {
-        "node_id": "emulated2", 
-        "transmission_power_dbm": -2
+        "node_id": "emulated2",
+        "transmission_power_dbm": 0
     }, 
     "openbenchmark02": {
-        "node_id": "emulated3", 
-        "transmission_power_dbm": -2
+        "node_id": "emulated3",
+        "transmission_power_dbm": 0
     }, 
     "openbenchmark03": {
-        "node_id": "emulated4", 
-        "transmission_power_dbm": -2
+        "node_id": "emulated4",
+        "transmission_power_dbm": 0
     }, 
     "openbenchmark04": {
-        "node_id": "emulated5", 
-        "transmission_power_dbm": -2
+        "node_id": "emulated5",
+        "transmission_power_dbm": 0
     }, 
     "openbenchmark05": {
-        "node_id": "emulated6", 
-        "transmission_power_dbm": -2
+        "node_id": "emulated6",
+        "transmission_power_dbm": 0
     }, 
     "openbenchmark06": {
-        "node_id": "emulated7", 
-        "transmission_power_dbm": -2
+        "node_id": "emulated7",
+        "transmission_power_dbm": 0
     }, 
     "openbenchmark07": {
-        "node_id": "emulated8", 
-        "transmission_power_dbm": -2
+        "node_id": "emulated8",
+        "transmission_power_dbm": 0
     }, 
     "openbenchmark08": {
-        "node_id": "emulated9", 
-        "transmission_power_dbm": -2
+        "node_id": "emulated9",
+        "transmission_power_dbm": 0
     }, 
     "openbenchmark09": {
-        "node_id": "emulated10", 
-        "transmission_power_dbm": -2
+        "node_id": "emulated10",
+        "transmission_power_dbm": 0
     }, 
     "openbenchmark10": {
-        "node_id": "emulated11", 
-        "transmission_power_dbm": -2
+        "node_id": "emulated11",
+        "transmission_power_dbm": 0
     }, 
     "openbenchmark11": {
-        "node_id": "emulated12", 
-        "transmission_power_dbm": -2
+        "node_id": "emulated12",
+        "transmission_power_dbm": 0
     }, 
     "openbenchmark12": {
-        "node_id": "emulated13", 
-        "transmission_power_dbm": -2
+        "node_id": "emulated13",
+        "transmission_power_dbm": 0
     }, 
     "openbenchmark13": {
-        "node_id": "emulated14", 
-        "transmission_power_dbm": -2
+        "node_id": "emulated14",
+        "transmission_power_dbm": 0
     }, 
     "openbenchmark14": {
-        "node_id": "emulated15", 
-        "transmission_power_dbm": -2
+        "node_id": "emulated15",
+        "transmission_power_dbm": 0
     }, 
     "openbenchmark15": {
-        "node_id": "emulated16", 
-        "transmission_power_dbm": -2
+        "node_id": "emulated16",
+        "transmission_power_dbm": 0
     }, 
     "openbenchmark16": {
-        "node_id": "emulated17", 
-        "transmission_power_dbm": -2
+        "node_id": "emulated17",
+        "transmission_power_dbm": 0
     }, 
     "openbenchmark17": {
-        "node_id": "emulated18", 
-        "transmission_power_dbm": -2
+        "node_id": "emulated18",
+        "transmission_power_dbm": 0
     }, 
     "openbenchmark18": {
-        "node_id": "emulated19", 
-        "transmission_power_dbm": -2
+        "node_id": "emulated19",
+        "transmission_power_dbm": 0
     }, 
     "openbenchmark19": {
-        "node_id": "emulated20", 
-        "transmission_power_dbm": -2
+        "node_id": "emulated20",
+        "transmission_power_dbm": 0
     }, 
     "openbenchmark20": {
-        "node_id": "emulated21", 
-        "transmission_power_dbm": -2
+        "node_id": "emulated21",
+        "transmission_power_dbm": 0
     }, 
     "openbenchmark21": {
-        "node_id": "emulated22", 
-        "transmission_power_dbm": -2
+        "node_id": "emulated22",
+        "transmission_power_dbm": 0
     }, 
     "openbenchmark22": {
-        "node_id": "emulated23", 
-        "transmission_power_dbm": -2
+        "node_id": "emulated23",
+        "transmission_power_dbm": 0
     }, 
     "openbenchmark23": {
-        "node_id": "emulated24", 
-        "transmission_power_dbm": -2
+        "node_id": "emulated24",
+        "transmission_power_dbm": 0
     }, 
     "openbenchmark24": {
-        "node_id": "emulated25", 
-        "transmission_power_dbm": -2
+        "node_id": "emulated25",
+        "transmission_power_dbm": 0
     }, 
     "openbenchmark25": {
-        "node_id": "emulated26", 
+        "node_id": "emulated26",
         "transmission_power_dbm": 0
     }, 
     "openbenchmark26": {
-        "node_id": "emulated27", 
+        "node_id": "emulated27",
         "transmission_power_dbm": 0
     }, 
     "openbenchmark27": {
-        "node_id": "emulated28", 
+        "node_id": "emulated28",
         "transmission_power_dbm": 0
     }, 
     "openbenchmark28": {
-        "node_id": "emulated29", 
+        "node_id": "emulated29",
         "transmission_power_dbm": 0
     }, 
     "openbenchmark29": {
-        "node_id": "emulated30", 
+        "node_id": "emulated30",
         "transmission_power_dbm": 0
     }, 
     "openbenchmark30": {
-        "node_id": "emulated31", 
+        "node_id": "emulated31",
         "transmission_power_dbm": 0
-    }, 
-    "openbenchmark31": {
-        "node_id": "emulated32", 
-        "transmission_power_dbm": 0
-    }, 
-    "openbenchmark32": {
-        "node_id": "emulated33", 
-        "transmission_power_dbm": -2
-    }, 
-    "openbenchmark33": {
-        "node_id": "emulated34", 
-        "transmission_power_dbm": -2
-    }, 
-    "openbenchmark34": {
-        "node_id": "emulated35", 
-        "transmission_power_dbm": -2
-    }, 
-    "openbenchmark35": {
-        "node_id": "emulated36", 
-        "transmission_power_dbm": -2
-    }, 
-    "openbenchmark36": {
-        "node_id": "emulated37", 
-        "transmission_power_dbm": -2
-    }, 
-    "openbenchmark37": {
-        "node_id": "emulated38", 
-        "transmission_power_dbm": -2
-    }, 
-    "openbenchmark38": {
-        "node_id": "emulated39", 
-        "transmission_power_dbm": -2
-    }, 
-    "openbenchmark39": {
-        "node_id": "emulated40", 
-        "transmission_power_dbm": -2
-    }, 
-    "openbenchmark40": {
-        "node_id": "emulated41", 
-        "transmission_power_dbm": -2
     }
 }
-
