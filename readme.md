@@ -42,7 +42,7 @@ vagrant ssh
 ./openbenchmark/bootstrap_webdev.sh -mysql
 ```
 
-5. Write your IoT-LAB username into the experiment configuration file: `~/openbenchmark/experiment_provisioner/conf.txt`
+5. Write your IoT-LAB username into the experiment configuration file: `~/openbenchmark/conf.txt`
 ```
 [iotlab-config]
 user = YOUR_USER_NAME
