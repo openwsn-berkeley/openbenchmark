@@ -139,7 +139,19 @@ class Logger:
 			else:
 				kpi       = payload["kpi"]
 				timestamp = payload["timestamp"]
-				json_obj["general_data"][kpi] = timestamp
+				value     = payload["value"]
+
+				if kpi[-3:] == "ASN":
+					json_obj["general_data"][kpi] = payload["value"]
+				else:
+					if kpi not in json_obj["general_data"]:
+						json_obj["general_data"][kpi] = {}
+						json_obj["general_data"][kpi]["timestamp"] = []
+						json_obj["general_data"][kpi]["value"] = []
+
+					json_obj["general_data"][kpi]["timestamp"].append(timestamp)
+					json_obj["general_data"][kpi]["value"].append(value)
+
 
 			with open(self.logs['kpi_cache'], 'w') as f:
 					f.write(json.dumps(json_obj))
