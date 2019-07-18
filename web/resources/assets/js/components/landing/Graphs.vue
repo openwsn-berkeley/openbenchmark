@@ -114,6 +114,7 @@
 
                 headerData: {},
 
+                /// Node specific
                 lastData: {
                     /* EXAMPLE ITEM: 
                     "node-a8-106": {
@@ -126,9 +127,8 @@
                 lastDataTitles: {
                     "syncronizationPhase": "Last synchronization",
                     "secureJoinPhase": "Last secure join",
-                    "networkFormationTime": "Network formation time"
+                    "networkFormationTime": "Network formation time",
                 },
-
                 dataset: {
                     /* EXAMPLE ITEM:
                     "node-a8-106": {
@@ -142,6 +142,29 @@
                         }
                     },
                     ...
+                    */
+                },
+
+                /// Network related
+                singleData: {
+                    /* EXAMPLE ITEM:
+                    avgSecureJoinedASN: 5598.88
+                    */
+                },
+                singleDataTitles: {
+                    "avgSecureJoinedASN"   : "Average Secure Joined ASN",
+                    "firstSecureJoinedASN" : "First Secure Joined ASN",
+                    "lastSecureJoinedASN"  : "Last Secure Joined ASN",
+                    "avgSynchronizedASN"   : "Average Synchronized ASN",
+                    "firstSynchronizedASN" : "First Synchronized ASN",
+                    "lastSynchronizedASN"  : "Last Synchronized ASN"
+                },
+                networkDataset: {
+                    /*EXAMPLE ITEM:
+                    "numberOfSecureJoined": {
+                        "timestamp": [...],
+                        "value": [...]
+                    }
                     */
                 }
             }
@@ -200,6 +223,7 @@
                     .then(function (response) {
                         thisComponent.headerData = response.data.message.header
                         thisComponent.dataset = response.data.message.data
+                        thisComponent.extractNetworkRelated(response.data.message.general_data)
                         thisComponent.$eventHub.$emit('LOG_DATA_FETCHED', thisComponent.headerData);
                     })
                     .catch(function (error) {
@@ -209,6 +233,17 @@
                         
                     });
             },
+
+            extractNetworkRelated(generalData) {
+                Object.keys(generalData).forEach(key => {
+                    if (typeof generalData[key] === "object")
+                        thisComponent.networkDataset[key] = generalData[key]
+                    else
+                        thisComponent.singleData[key] = generalData[key]
+                })
+            },
+
+
             /*** ***/
 
             /*** Parse data from MQTT topic ***/
@@ -232,7 +267,6 @@
                     console.log(JSON.stringify(newObj))
 
                     this.dataset = newObj
-
                 }
             },
 
