@@ -43,6 +43,7 @@ class KPIProcessing:
 			"packetReceived"           : self._packet_received,
 			"networkFormationCompleted": self._networkFormationTime,
 			"synchronizationCompleted" : self._synchronizationPhase,
+			"desynchronized"           : self._desynchronized,
 			"secureJoinCompleted"      : self._secureJoinPhase,
 			"bandwidthAssigned"        : self._bandwidthAssignment,
 			"radioDutyCycleMeasurement": self._radioDutyCycle,
@@ -205,6 +206,14 @@ class KPIProcessing:
 				'kpi'      : 'avgSynchronizedASN',
 				'timestamp': event_obj['timestamp']
 				'value'    : round(float(self.sync_asn_sum) / float(self.num_of_synced), 2)
+			})
+
+	def _desynchronized(self, event_obj):
+		self.num_of_synced -= 1
+		self.logger.log('kpi', {
+				'kpi'      : 'numOfSynchronized',
+				'timestamp': event_obj['timestamp']
+				'value'    : self.num_of_synced
 			})
 
 	def _secureJoinPhase(self, event_obj):
