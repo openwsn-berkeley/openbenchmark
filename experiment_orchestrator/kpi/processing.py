@@ -43,11 +43,18 @@ class KPIProcessing:
 			"packetReceived"           : self._packet_received,
 			"networkFormationCompleted": self._networkFormationTime,
 			"synchronizationCompleted" : self._synchronizationPhase,
+			"desynchronized"           : self._desynchronized,
 			"secureJoinCompleted"      : self._secureJoinPhase,
 			"bandwidthAssigned"        : self._bandwidthAssignment,
 			"radioDutyCycleMeasurement": self._radioDutyCycle,
 			"clockDriftMeasurement"    : None
 		}
+
+		# Used for network related KPIs
+		self.num_of_synced        = 0
+		self.num_of_secure_joined = 0
+		self.sync_asn_sum         = 0
+		self.secure_join_asn_sum  = 0      
 
 
 	def start(self):   # Should be started upon startBenchmark command
@@ -92,6 +99,10 @@ class KPIProcessing:
 			self.packet_memory[inc_type][node_id] = {
 				dest_node_id: 0
 			}
+
+		if dest_node_id not in self.packet_memory[inc_type][node_id]:
+			self.packet_memory[inc_type][node_id][dest_node_id] = 0
+				
 		self.packet_memory[inc_type][node_id][dest_node_id] += 1
 
 	def _get_num(self, num_type, node_id, dest_node_id):
@@ -176,6 +187,39 @@ class KPIProcessing:
 				'value'    : 1
 			})
 
+		if self.num_of_synced == 0:
+			self.logger.log('kpi', {
+				'kpi'      : 'firstSynchronizedASN',
+				'timestamp': event_obj['timestamp'],
+				'value'    : event_obj['timestamp']
+			})
+
+		self.num_of_synced += 1
+		self.sync_asn_sum  += event_obj['timestamp']
+		self.logger.log('kpi', {
+				'kpi'      : 'numOfSynchronized',
+				'timestamp': event_obj['timestamp'],
+				'value'    : self.num_of_synced
+			})
+		self.logger.log('kpi', {
+				'kpi'      : 'lastSynchronizedASN',
+				'timestamp': event_obj['timestamp'],
+				'value'    : event_obj['timestamp']
+			})
+		self.logger.log('kpi', {
+				'kpi'      : 'avgSynchronizedASN',
+				'timestamp': event_obj['timestamp'],
+				'value'    : round(float(self.sync_asn_sum) / float(self.num_of_synced), 2)
+			})
+
+	def _desynchronized(self, event_obj):
+		self.num_of_synced -= 1
+		self.logger.log('kpi', {
+				'kpi'      : 'numOfSynchronized',
+				'timestamp': event_obj['timestamp'],
+				'value'    : self.num_of_synced
+			})
+
 	def _secureJoinPhase(self, event_obj):
 		self.logger.log('kpi', {
 				'kpi'      : 'secureJoinPhase',
@@ -183,6 +227,31 @@ class KPIProcessing:
 				'eui64'    : event_obj['source'],
 				'timestamp': event_obj['timestamp'],
 				'value'    : 1
+			})
+
+		if self.num_of_secure_joined == 0:
+			self.logger.log('kpi', {
+				'kpi'      : 'firstSecureJoinedASN',
+				'timestamp': event_obj['timestamp'],
+				'value'    : event_obj['timestamp']
+			})
+
+		self.num_of_secure_joined += 1
+		self.secure_join_asn_sum  += event_obj['timestamp']
+		self.logger.log('kpi', {
+				'kpi'      : 'numOfSecureJoined',
+				'timestamp': event_obj['timestamp'],
+				'value'    : self.num_of_secure_joined
+			})
+		self.logger.log('kpi', {
+				'kpi'      : 'lastSecureJoinedASN',
+				'timestamp': event_obj['timestamp'],
+				'value'    : event_obj['timestamp']
+			})
+		self.logger.log('kpi', {
+				'kpi'      : 'avgSecureJoinedASN',
+				'timestamp': event_obj['timestamp'],
+				'value'    : round(float(self.secure_join_asn_sum) / float(self.num_of_secure_joined), 2)
 			})
 
 	def _bandwidthAssignment(self, event_obj):
