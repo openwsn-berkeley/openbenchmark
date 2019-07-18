@@ -19,7 +19,9 @@
                     "radioDutyCycle": "Duty Cycle",
                     "syncronizationPhase": "Synchronization",
                     "secureJoinPhase": "Secure join phase",
-                    "networkFormationTime": "Network formation time"
+                    "networkFormationTime": "Network formation time",
+                    "numOfSynchronized": "Number of synchronized",
+                    "numOfSecureJoined": "Number of secure joined"
                 }
             }
         },
