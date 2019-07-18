@@ -99,6 +99,10 @@ class KPIProcessing:
 			self.packet_memory[inc_type][node_id] = {
 				dest_node_id: 0
 			}
+
+		if dest_node_id not in self.packet_memory[inc_type][node_id]:
+			self.packet_memory[inc_type][node_id][dest_node_id] = 0
+				
 		self.packet_memory[inc_type][node_id][dest_node_id] += 1
 
 	def _get_num(self, num_type, node_id, dest_node_id):
@@ -186,7 +190,7 @@ class KPIProcessing:
 		if self.num_of_synced == 0:
 			self.logger.log('kpi', {
 				'kpi'      : 'firstSynchronizedASN',
-				'timestamp': event_obj['timestamp']
+				'timestamp': event_obj['timestamp'],
 				'value'    : event_obj['timestamp']
 			})
 
@@ -194,17 +198,17 @@ class KPIProcessing:
 		self.sync_asn_sum  += event_obj['timestamp']
 		self.logger.log('kpi', {
 				'kpi'      : 'numOfSynchronized',
-				'timestamp': event_obj['timestamp']
+				'timestamp': event_obj['timestamp'],
 				'value'    : self.num_of_synced
 			})
 		self.logger.log('kpi', {
 				'kpi'      : 'lastSynchronizedASN',
-				'timestamp': event_obj['timestamp']
+				'timestamp': event_obj['timestamp'],
 				'value'    : event_obj['timestamp']
 			})
 		self.logger.log('kpi', {
 				'kpi'      : 'avgSynchronizedASN',
-				'timestamp': event_obj['timestamp']
+				'timestamp': event_obj['timestamp'],
 				'value'    : round(float(self.sync_asn_sum) / float(self.num_of_synced), 2)
 			})
 
@@ -212,7 +216,7 @@ class KPIProcessing:
 		self.num_of_synced -= 1
 		self.logger.log('kpi', {
 				'kpi'      : 'numOfSynchronized',
-				'timestamp': event_obj['timestamp']
+				'timestamp': event_obj['timestamp'],
 				'value'    : self.num_of_synced
 			})
 
@@ -228,7 +232,7 @@ class KPIProcessing:
 		if self.num_of_secure_joined == 0:
 			self.logger.log('kpi', {
 				'kpi'      : 'firstSecureJoinedASN',
-				'timestamp': event_obj['timestamp']
+				'timestamp': event_obj['timestamp'],
 				'value'    : event_obj['timestamp']
 			})
 
@@ -236,17 +240,17 @@ class KPIProcessing:
 		self.secure_join_asn_sum  += event_obj['timestamp']
 		self.logger.log('kpi', {
 				'kpi'      : 'numOfSecureJoined',
-				'timestamp': event_obj['timestamp']
+				'timestamp': event_obj['timestamp'],
 				'value'    : self.num_of_secure_joined
 			})
 		self.logger.log('kpi', {
 				'kpi'      : 'lastSecureJoinedASN',
-				'timestamp': event_obj['timestamp']
+				'timestamp': event_obj['timestamp'],
 				'value'    : event_obj['timestamp']
 			})
 		self.logger.log('kpi', {
 				'kpi'      : 'avgSecureJoinedASN',
-				'timestamp': event_obj['timestamp']
+				'timestamp': event_obj['timestamp'],
 				'value'    : round(float(self.secure_join_asn_sum) / float(self.num_of_secure_joined), 2)
 			})
 
