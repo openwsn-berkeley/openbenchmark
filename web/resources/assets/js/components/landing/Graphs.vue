@@ -28,7 +28,7 @@
 
                 <div class="node-card card bordered mb-1 col-direction">
                     <div class="ml-1">            
-                        <label class="radio" @click="selectedNodeKey = key">
+                        <label class="radio" @click="selectedNodeKey = 'network'">
                             <input type="radio" name="r" value="Network related KPIs">
                             <span>Network related KPIs</span>
                         </label>
@@ -45,8 +45,15 @@
                 </div>
 
                 <div class="card col-direction bordered relative pt-1" style="width: 100%; height: 50%;">
-                    <span class="col-direction" v-for="nodeId in Object.keys(lastData)" v-if="nodeId === selectedNodeKey">
-                        <span class="ml-1 mr-1 mb-1" v-for="key in Object.keys(lastData[nodeId])">{{lastDataTitles[key]}}: <span class="bold">{{lastData[nodeId][key]}}</span></span>
+                    <span v-if="selectedNodeKey !== 'network'">
+                        <span class="col-direction" v-for="nodeId in Object.keys(lastData)" v-if="nodeId === selectedNodeKey">
+                            <span class="ml-1 mr-1" style="margin-bottom: 10px" v-for="key in Object.keys(lastData[nodeId])">{{lastDataTitles[key]}}: <span class="bold">{{lastData[nodeId][key]}}</span></span>
+                        </span>
+                    </span>
+                    <span v-else>
+                        <span class="col-direction">
+                            <span class="ml-1 mr-1" style="margin-bottom: 10px" v-for="key in Object.keys(singleData)">{{singleDataTitles[key]}}: <span class="bold">{{singleData[key]}}</span></span>
+                        </span>
                     </span>
 
                     <i id="file-download" class="fas fa-file-download fa-2x clickable" @click="showModal('file-download')" v-if="experimentId !== undefined"></i>
@@ -57,7 +64,7 @@
                 
                 <div v-bar v-if="selectedNodeKey !== ''">   
                     <div>
-                        <span v-for="key in Object.keys(dataset)">
+                        <span v-for="key in Object.keys(dataset)" v-if="selectedNodeKey !== 'network'">
                             <span v-if="key === selectedNodeKey">
                                 <span v-for="label in Object.keys(dataset[key])">
                                     <line-chart class="chart ml-3 mr-3"
@@ -68,6 +75,14 @@
                                                 :height="300"></line-chart>
                                 </span>
                             </span>
+                        </span>
+                        <span v-for="label in Object.keys(networkDataset)" v-if="selectedNodeKey === 'network'">
+                            <line-chart class="chart ml-3 mr-3"
+                                        :label="label"
+                                        :x-axis="networkDataset[label]['timestamp']"
+                                        :y-axis="networkDataset[label]['value']"
+                                        :width="700"
+                                        :height="300"></line-chart>
                         </span>
                     </div>
                 </div>
@@ -161,7 +176,7 @@
                 },
                 networkDataset: {
                     /*EXAMPLE ITEM:
-                    "numberOfSecureJoined": {
+                    "numOfSecureJoined": {
                         "timestamp": [...],
                         "value": [...]
                     }
@@ -186,6 +201,10 @@
 
                 console.log(JSON.stringify(newLastData))
                 this.lastData = newLastData
+            },
+
+            selectedNodeKey: function(val) {
+                console.log(val)
             }
         },
 
