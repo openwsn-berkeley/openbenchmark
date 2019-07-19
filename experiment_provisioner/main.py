@@ -199,7 +199,7 @@ class Wilab(Controller):
 	def _rspec_node(self, sensor_id, nuc_id):
 		node = etree.Element(
 			"node", 
-			client_id="sensor{0}".format(sensor_id),
+			client_id="{0}".format(nuc_id),
 			exclusive="true",
 			component_manager_id="urn:publicid:IDN+wilab1.ilabt.iminds.be+authority+cm",
 			component_id="urn:publicid:IDN+wilab1.ilabt.iminds.be+node+{0}".format(nuc_id)
