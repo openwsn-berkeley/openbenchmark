@@ -1,6 +1,7 @@
 import paho.mqtt.client as mqtt
 import base64
 import json
+import time
 
 from mqtt_client import MQTTClient
 
@@ -16,6 +17,8 @@ class OTBoxFlash:
 		self.mqtt_client       = MQTTClient.create(testbed, user_id)
 		self.client            = mqtt.Client(CLIENT)
 		self.client.on_connect = self.on_connect
+
+		self.time_padding      = 10  # [s]
 
 	def on_connect(self, client, userdata, flags, rc):
 		print "Connected to broker: {0}".format(self.broker)
@@ -36,6 +39,11 @@ class OTBoxFlash:
 				print("Sending {0} firmware to motes".format(self.firmware_path))
 				self.mqtt_client.push_debug_log('FW_FLASHING', "Sending {0} firmware to motes".format(self.firmware_path))
 				self.client.publish('{0}/deviceType/mote/deviceId/all/cmd/program'.format(self.testbed), json.dumps(payload))
+
+				print("[FW_FLASHING] Waiting {0} seconds...".format(self.time_padding))
+				self.mqtt_client.push_debug_log('FW_FLASHING', "Waiting {0} seconds...".format(self.time_padding))
+				time.sleep(self.time_padding)
+
 				self.mqtt_client.push_notification("flashed", True)
 
 		except Exception, e:
