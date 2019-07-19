@@ -6,3 +6,4 @@
 /.vagrant
 /docs/build
 ssh.EXE.stackdump
+/scenario-config/_general_data.json

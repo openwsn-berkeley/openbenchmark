@@ -42,7 +42,8 @@ Vagrant.configure("2") do |config|
 		'web/node_modules', 
 		'docs/build', 
 		'web/public/js/app.js', 
-		'web/resources/assets/css/app.css'
+		'web/resources/assets/css/app.css',
+    'scenario-config/_general_data.json'
 	],
 	rsync__args: ['--verbose', '--archive', '-z', '--copy-links']
   
