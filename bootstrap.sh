@@ -66,9 +66,12 @@ git checkout $TAG_OV
 # Install OpenBenchmark requirements; OpenBenchmark scripts do not run with sudo
 pip install -r $OPENBENCHMARK_DIR/requirements.txt --user
 
+# Compile scenario configuration
+cd $OPENBENCHMARK_DIR/scenario-config
+python interface.py --generate-json
+
 ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
 echo "==================================="
 echo "Please publish the following SSH key on any server where automated SSH is requested"
 cat ~/.ssh/id_rsa.pub
 echo "==================================="
-
