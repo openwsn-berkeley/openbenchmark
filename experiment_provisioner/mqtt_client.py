@@ -35,7 +35,8 @@ class MQTTClient:
 		}
 		self.pub_topics = {
 			"notifications": "openbenchmark/{0}/notifications".format(self.user_id),
-			"debug": "openbenchmark/{0}/debug".format(self.user_id)
+			"debug": "openbenchmark/{0}/debug".format(self.user_id),
+			"flash": "{0}/deviceType/mote/deviceId/all/cmd/program".format(self.testbed)
 		}
 
 		self.data_stream_started = False
@@ -139,3 +140,6 @@ class MQTTClient:
 	def clear_state(self):
 		self.client.loop_stop()
 		self.client.disconnect()
+
+	def flash(self, payload):
+		self._publish("flash", payload)
