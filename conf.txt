@@ -1,9 +1,10 @@
-[iotlab]
-user = openbenc
+[general]
 broker = broker.mqttdashboard.com
 
+[iotlab]
+user = openbenc
+
 [wilab]
-broker = broker.mqttdashboard.com
 password = YOUR_PASSWORD
 
 [dependencies]
