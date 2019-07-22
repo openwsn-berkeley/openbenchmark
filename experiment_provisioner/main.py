@@ -37,8 +37,6 @@ class Controller(object):
 		self.OTB_REPO    = self.configParser.get('dependencies', 'otb-repo')
 		self.OTB_TAG     = self.configParser.get('dependencies', 'otb-tag')
 
-		self.BROKER      = self.configParser.get('general', 'broker')
-
 	def _get_duration(self, scenario):
 		config_file = os.path.join(self.SCENARIO_CONFIG, scenario, "_config.json")
 		duration_min = -1
@@ -75,7 +73,7 @@ class IoTLAB(Controller):
 		self.EXP_DURATION = self._get_duration(self.scenario) + 10
 
 		self.add_files_from_env()
-		self.reservation = IoTLABReservation(user_id, self.USERNAME, self.HOSTNAME, self.BROKER, self.OTB_REPO, self.OTB_TAG, self.EXP_DURATION, self.NODES)
+		self.reservation = IoTLABReservation(user_id, self.USERNAME, self.HOSTNAME, self.OTB_REPO, self.OTB_TAG, self.EXP_DURATION, self.NODES)
 
 		self.mqtt_client = MQTTClient.create('iotlab', user_id)
 		atexit.register(self._stop_mqtt)
@@ -226,7 +224,7 @@ class Wilab(Controller):
 
 	def _set_broker(self):
 		otbox_conf_file = os.path.join(self.JFED_DIR, "opentestbed", "deployment", "sensor", "sensor-supervisord.conf.j2")
-		content = "[program:otbox]\ncommand     = /usr/local/bin/opentestbed -v\nenvironment = OTB_TESTBED='wilab', OTB_BROKER='{0}'\nautostart   = true\nautorestart = true\ndirectory = /tmp".format(self.BROKER)
+		content = "[program:otbox]\ncommand     = /usr/local/bin/opentestbed -v\nenvironment = OTB_TESTBED='wilab', OTB_BROKER='{0}'\nautostart   = true\nautorestart = true\ndirectory = /tmp".format(self.mqtt_client.broker)
 
 		with open(otbox_conf_file, 'w') as f:
 			f.write(content)
@@ -301,14 +299,13 @@ class Main():
 		elif action == 'flash':
 			assert firmware is not None
 			testbedCtl.print_log('Flashing firmware: {0}'.format(firmware))
-			OTBoxFlash(user_id, firmware, testbedCtl.BROKER, testbed).flash()
+			OTBoxFlash(user_id, firmware, testbed).flash()
 		elif action == 'sut-start' or action == 'orchestrator' or action == 'ov':
 			testbedCtl.print_log('Starting SUT...')
 			SUTStartup(
 				user_id, 
 				scenario, 
 				testbed, 
-				testbedCtl.BROKER, 
 				simulator,
 				action == 'orchestrator',
 				action == 'ov', 

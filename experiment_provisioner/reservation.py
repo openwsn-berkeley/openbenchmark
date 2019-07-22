@@ -32,7 +32,7 @@ class IoTLABReservation(Reservation):
     SSH_RETRY_TIME = 240
     RETRY_PAUSE = 10
 
-    def __init__(self, user_id, user, domain, broker, otb_repo, otb_tag, duration=None, nodes=None):
+    def __init__(self, user_id, user, domain, otb_repo, otb_tag, duration=None, nodes=None):
         warnings.simplefilter(
             action='ignore',
             category=CryptographyDeprecationWarning
@@ -44,7 +44,6 @@ class IoTLABReservation(Reservation):
         self.domain   = domain
         self.duration = duration
         self.nodes    = nodes
-        self.broker   = broker
 
         self.otb_repo = otb_repo
         self.otb_tag  = otb_tag
@@ -113,7 +112,7 @@ class IoTLABReservation(Reservation):
                 nodes = self.get_reserved_nodes()
 
                 if len(nodes) > 0:
-                    OTBoxStartup(self.user, self.domain, 'iotlab', self.get_reserved_nodes(), self.broker, self.mqtt_client, self.otb_repo, self.otb_tag).start()
+                    OTBoxStartup(self.user, self.domain, 'iotlab', self.get_reserved_nodes(), self.mqtt_client, self.otb_repo, self.otb_tag).start()
                 else:
                     self.mqtt_client.push_debug_log('RESERVATION_FAIL', 'Experiment startup failed')
                     print('Experiment startup failed')
