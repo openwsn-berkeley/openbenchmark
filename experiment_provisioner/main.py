@@ -77,7 +77,7 @@ class IoTLAB(Controller):
 		self.add_files_from_env()
 		self.reservation = IoTLABReservation(user_id, self.USERNAME, self.HOSTNAME, self.BROKER, self.OTB_REPO, self.OTB_TAG, self.EXP_DURATION, self.NODES)
 
-		self.mqtt_client = MQTTClient.create(self.BROKER, 'iotlab', user_id)
+		self.mqtt_client = MQTTClient.create('iotlab', user_id)
 		atexit.register(self._stop_mqtt)
 
 	def add_files_from_env(self):
@@ -139,7 +139,7 @@ class Wilab(Controller):
 			self._update_yml_files()
 
 		self.reservation = WilabReservation(user_id, self.JFED_DIR, self.RUN, self.DELETE, self.DISPLAY)
-		self.mqtt_client = MQTTClient.create(self.BROKER, 'wilab', user_id)
+		self.mqtt_client = MQTTClient.create('wilab', user_id)
 		atexit.register(self._stop_mqtt)
 
 	def add_files_from_env(self):
