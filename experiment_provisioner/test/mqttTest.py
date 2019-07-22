@@ -1,3 +1,5 @@
+import ConfigParser
+import os
 import paho.mqtt.client as mqtt
 import time
 
@@ -12,6 +14,12 @@ class MQTTTest:
 		self.client  		   = mqtt.Client(self.CLIENT) 
 		self.client.on_connect = self.on_connect
 		self.client.on_message = self.on_message
+
+		self.CONFIG_FILE  = os.path.join(os.path.dirname(__file__), "..", "..", "conf.txt")
+		self.configParser = ConfigParser.RawConfigParser()   
+		self.configParser.read(self.CONFIG_FILE)
+
+		self.broker       = self.configParser.get('general', 'broker')
 
 		self.pauses = {
 			"reserve"  :   5,
