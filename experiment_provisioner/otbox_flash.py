@@ -11,7 +11,6 @@ class OTBoxFlash:
 
 	def __init__(self, user_id, firmware_path, testbed):
 		self.firmware_path     = firmware_path
-		self.broker            = broker
 		self.testbed           = testbed
 
 		self.mqtt_client       = MQTTClient.create(testbed, user_id)
