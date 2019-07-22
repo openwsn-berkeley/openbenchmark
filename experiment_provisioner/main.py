@@ -37,6 +37,8 @@ class Controller(object):
 		self.OTB_REPO    = self.configParser.get('dependencies', 'otb-repo')
 		self.OTB_TAG     = self.configParser.get('dependencies', 'otb-tag')
 
+		self.BROKER      = self.configParser.get('general', 'broker')
+
 	def _get_duration(self, scenario):
 		config_file = os.path.join(self.SCENARIO_CONFIG, scenario, "_config.json")
 		duration_min = -1
@@ -72,12 +74,10 @@ class IoTLAB(Controller):
 		self.NODES = self._get_nodes()
 		self.EXP_DURATION = self._get_duration(self.scenario) + 10
 
-		self.BROKER = self.configParser.get(self.CONFIG_SECTION, 'broker')
-
 		self.add_files_from_env()
 		self.reservation = IoTLABReservation(user_id, self.USERNAME, self.HOSTNAME, self.BROKER, self.OTB_REPO, self.OTB_TAG, self.EXP_DURATION, self.NODES)
 
-		self.mqtt_client = MQTTClient.create('iotlab', user_id)
+		self.mqtt_client = MQTTClient.create(self.BROKER, 'iotlab', user_id)
 		atexit.register(self._stop_mqtt)
 
 	def add_files_from_env(self):
@@ -128,7 +128,6 @@ class Wilab(Controller):
 		self.RUN      = 'start_experiment.sh'  # Script for starting the experiment
 		self.DISPLAY  = 'start_display.sh'     # Script for starting a fake display
 
-		self.BROKER   = self.configParser.get(self.CONFIG_SECTION, 'broker')
 		self.PASSWORD = self.configParser.get(self.CONFIG_SECTION, 'password')
 
 		self.EXP_DURATION = self._get_duration(self.scenario) + 10
@@ -140,7 +139,7 @@ class Wilab(Controller):
 			self._update_yml_files()
 
 		self.reservation = WilabReservation(user_id, self.JFED_DIR, self.RUN, self.DELETE, self.DISPLAY)
-		self.mqtt_client = MQTTClient.create('iotlab', user_id)
+		self.mqtt_client = MQTTClient.create(self.BROKER, 'wilab', user_id)
 		atexit.register(self._stop_mqtt)
 
 	def add_files_from_env(self):

@@ -10,17 +10,17 @@ class MQTTClient:
 	_instance = None
 
 	@staticmethod
-	def create(testbed, user_id):
+	def create(broker, testbed, user_id):
 		if MQTTClient._instance == None:
-			MQTTClient._instance = MQTTClient(testbed, user_id)
+			MQTTClient._instance = MQTTClient(broker, testbed, user_id)
 		return MQTTClient._instance
 
 
-	def __init__(self, testbed, user_id):
+	def __init__(self, broker, testbed, user_id):
 		self.user_id          = user_id
 		self.testbed          = testbed
 		self.qos              = 2
-		self.broker           = 'broker.mqttdashboard.com' # Utils.broker
+		self.broker           = broker
 
 		self.experiment_id    = 'Notif'
 

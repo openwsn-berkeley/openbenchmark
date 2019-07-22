@@ -24,7 +24,7 @@ class MQTTClient:
 	_instance = None
 
 	@staticmethod
-	def create():
+	def create(broker):
 		if MQTTClient._instance == None:
 			MQTTClient._instance = MQTTClient()
 		return MQTTClient._instance
