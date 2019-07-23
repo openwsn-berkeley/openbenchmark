@@ -11,10 +11,9 @@ orch_dir    = os.path.join(os.path.dirname(__file__), "..", "experiment_orchestr
 
 class SUTStartup:
 
-	def __init__(self, user_id, scenario, testbed, broker, simulator, orch_only, ov_only, ov_repo, ov_branch, coap_repo, coap_branch):
+	def __init__(self, user_id, scenario, testbed, simulator, orch_only, ov_only, ov_repo, ov_branch, coap_repo, coap_branch):
 		self.testbed     = testbed
 		self.scenario    = scenario
-		self.broker      = broker
 		self.simulator   = simulator
 		self.orch_only   = orch_only
 		self.ov_only     = ov_only
@@ -61,7 +60,7 @@ class SUTStartup:
 	def _start_ov(self, async = True):
 		print "[SUT_STARTUP] Starting OpenVisualizer"
 		self.mqtt_client.push_debug_log('SUT_STARTUP', "Starting OpenVisualizer")
-		pipe = subprocess.Popen(['sudo', 'scons', 'runweb', '--port=8080', '--benchmark={0}'.format(self.scenario), '--testbed={0}'.format(self.testbed), '--mqtt-broker-address={0}'.format(self.broker), '--opentun-null'], cwd=ov_dir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+		pipe = subprocess.Popen(['sudo', 'scons', 'runweb', '--port=8080', '--benchmark={0}'.format(self.scenario), '--testbed={0}'.format(self.testbed), '--mqtt-broker-address={0}'.format(self.mqtt_client.broker), '--opentun-null'], cwd=ov_dir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
 
 		if not async:
 			for line in iter(pipe.stdout.readline, b''):

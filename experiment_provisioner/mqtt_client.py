@@ -1,4 +1,6 @@
+import ConfigParser
 import sys
+import os
 
 import json
 import time
@@ -17,10 +19,15 @@ class MQTTClient:
 
 
 	def __init__(self, testbed, user_id):
+		self.CONFIG_FILE = os.path.join(os.path.dirname(__file__), "..", "conf.txt")
+
+		self.configParser = ConfigParser.RawConfigParser()   
+		self.configParser.read(self.CONFIG_FILE)
+
 		self.user_id          = user_id
 		self.testbed          = testbed
 		self.qos              = 2
-		self.broker           = 'broker.mqttdashboard.com' # Utils.broker
+		self.broker           = self.configParser.get('general', 'broker')
 
 		self.experiment_id    = 'Notif'
 
@@ -29,7 +36,8 @@ class MQTTClient:
 		}
 		self.pub_topics = {
 			"notifications": "openbenchmark/{0}/notifications".format(self.user_id),
-			"debug": "openbenchmark/{0}/debug".format(self.user_id)
+			"debug": "openbenchmark/{0}/debug".format(self.user_id),
+			"flash": "{0}/deviceType/mote/deviceId/all/cmd/program".format(self.testbed)
 		}
 
 		self.data_stream_started = False
@@ -133,3 +141,6 @@ class MQTTClient:
 	def clear_state(self):
 		self.client.loop_stop()
 		self.client.disconnect()
+
+	def flash(self, payload):
+		self._publish("flash", payload)

@@ -26,7 +26,7 @@ class OTBoxStartup:
 
     timer = 0  # used for measuring the amount of time between status messages
 
-    def __init__(self, user, domain, testbed, nodes, broker, mqtt_client, otb_repo, otb_tag):
+    def __init__(self, user, domain, testbed, nodes, mqtt_client, otb_repo, otb_tag):
         warnings.simplefilter(
             action='ignore',
             category=CryptographyDeprecationWarning
@@ -35,7 +35,6 @@ class OTBoxStartup:
         self.user        = user
         self.domain      = domain
         self.testbed     = testbed
-        self.broker      = broker
         self.mqtt_client = mqtt_client
 
         self.otb_repo  = otb_repo
@@ -126,9 +125,9 @@ class OTBoxStartup:
         try:
             for ind, node in enumerate(self.booted_nodes):
                 node_name = 'node-' + node.split('.')[0]
-                print("Starting otbox.py on " + node_name + ", with " + self.broker + "...")
+                print("Starting otbox.py on " + node_name + ", with " + self.mqtt_client.broker + "...")
                 self.ssh_command_exec(
-                    'ssh -o "StrictHostKeyChecking no" root@' + node_name + ' "source /etc/profile; cd A8; cd opentestbed; pip install requests; killall python; python otbox.py --testbed=iotlab --broker=' + self.broker + ' >& otbox-' + node_name + '.log &"')
+                    'ssh -o "StrictHostKeyChecking no" root@' + node_name + ' "source /etc/profile; cd A8; cd opentestbed; pip install requests; killall python; python otbox.py --testbed=iotlab --broker=' + self.mqtt_client.broker + ' >& otbox-' + node_name + '.log &"')
                 self.active_nodes.append(node)
                 print("Node active: {0}".format(node_name))
                 self.mqtt_client.push_debug_log('NODE_ACTIVE', node_name)

@@ -1,3 +1,5 @@
+import ConfigParser
+import os
 import sys
 sys.path.append("..")
 
@@ -31,7 +33,12 @@ class MQTTClient:
 
 
 	def __init__(self):
-		self.broker           = Utils.broker
+		self.CONFIG_FILE = os.path.join(os.path.dirname(__file__), "..", "..", "conf.txt")
+
+		self.configParser = ConfigParser.RawConfigParser()   
+		self.configParser.read(self.CONFIG_FILE)
+		
+		self.broker           = self.configParser.get('general', 'broker')
 		self.condition_object = ConditionObject.create()
 		self.qos              = 2
 
