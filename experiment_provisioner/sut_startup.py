@@ -10,7 +10,7 @@ ov_dir      = os.path.join(openwsn_dir, "openvisualizer")
 coap_dir    = os.path.join(openwsn_dir, "coap")
 ob_dir      = os.path.join(os.path.dirname(__file__), "..")
 orch_dir    = os.path.join(os.path.dirname(__file__), "..", "experiment_orchestrator")
-sc_conf_dir = os.path.join(ov_dir, "scenario-config")
+sc_conf_dir = os.path.join(ob_dir, "scenario-config")
 
 class SUTStartup:
 
