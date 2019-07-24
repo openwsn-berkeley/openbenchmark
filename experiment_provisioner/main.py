@@ -271,7 +271,8 @@ class Wilab(Controller):
 
 TESTBEDS = {
 	"iotlab": IoTLAB,
-	"wilab": Wilab
+	"wilab": Wilab,
+	"opensim": Controller
 }
 
 
