@@ -26,10 +26,14 @@ class FWCompiler:
 	def compile(self):
 		self._clone_branch()
 		self._compile_fw()
-		fw_name = self._move_fw()
-		self._delete_repo()
 
-		return fw_name
+		if testbed != 'opensim':
+			fw_name = self._move_fw()
+			self._delete_repo()
+
+			return fw_name
+
+		return ''
 
 
 	def _clone_branch(self):
