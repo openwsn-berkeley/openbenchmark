@@ -325,6 +325,10 @@ class Main():
 			testbedCtl.print_log('Flashing firmware: {0}'.format(firmware))
 			OTBoxFlash(user_id, firmware, testbed).flash()
 		elif action == 'sut-start' or action == 'orchestrator' or action == 'ov':
+			if isinstance(testbedCtl, OpenSim): 
+				testbedCtl.print_log('Compiling firmware from Git repository...')
+				testbedCtl.compile(firmware, branch)
+
 			testbedCtl.print_log('Starting SUT...')
 			SUTStartup(
 				user_id, 
