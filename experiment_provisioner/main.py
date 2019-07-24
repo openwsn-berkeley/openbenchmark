@@ -269,10 +269,32 @@ class Wilab(Controller):
 
 
 
+class OpenSim(Controller):
+	def __init__(self, user_id, scenario, action):
+		super(OpenSim, self).__init__()
+
+		self.testbed = "opensim"
+		self.user_id = user_id
+		
+		self.DEFAULT_FW_REPO   = 'https://github.com/malishav/openwsn-fw.git'
+		self.DEFAULT_FW_BRANCH = 'develop_FW-808'
+
+		self.mqtt_client = MQTTClient.create(self.testbed, user_id)
+
+	def _set_git_params(self, firmware, branch):
+		self.firmware = self.DEFAULT_FW_REPO if branch is None else firmware
+		self.branch   = self.DEFAULT_FW_BRANCH if branch is None else branch
+
+	def compile(self, firmware, branch):
+		self._set_git_params(firmware, branch)
+		FWCompiler(self.firmware, self.branch, self.testbed, self.user_id).compile()
+
+
+
 TESTBEDS = {
 	"iotlab": IoTLAB,
 	"wilab": Wilab,
-	"opensim": Controller
+	"opensim": OpenSim
 }
 
 
