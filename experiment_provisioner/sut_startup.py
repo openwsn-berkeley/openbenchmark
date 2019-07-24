@@ -2,12 +2,15 @@ import subprocess
 import os
 import time
 import threading
+import json
 from mqtt_client import MQTTClient
 
 openwsn_dir = os.path.join(os.path.dirname(__file__), "..", "..", "openwsn")
 ov_dir      = os.path.join(openwsn_dir, "openvisualizer")
 coap_dir    = os.path.join(openwsn_dir, "coap")
+ob_dir      = os.path.join(os.path.dirname(__file__), "..")
 orch_dir    = os.path.join(os.path.dirname(__file__), "..", "experiment_orchestrator")
+sc_conf_dir = os.path.join(ov_dir, "scenario-config")
 
 class SUTStartup:
 
@@ -72,6 +75,12 @@ class SUTStartup:
 			for line in iter(pipe.stdout.readline, b''):
 				print(">>> " + line.rstrip())
 				self.mqtt_client.push_debug_log('OPENVISUALIZER', line.rstrip())
+
+	def _get_node_num(self):
+		scenario_config_json = os.path.join(sc_conf_dir, self.scenario, '_config.json')
+		with open(scenario_config_json, 'r') as f:
+			config_obj = json.loads(f.read())
+			return config_obj['number_of_nodes']
 
 	def _start_open_sim(self, async):
 		print "[SUT_STARTUP] Starting OpenSim"
