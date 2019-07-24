@@ -19,7 +19,8 @@ class FWCompiler:
 
 		self.board_names = {
 			"iotlab" : "iot-lab_A8-M3",
-			"wilab"  : "remote" 
+			"wilab"  : "remote",
+			"opensim": "python" 
 		}
 		self.fw_dir      = os.path.join(os.path.dirname(__file__), "firmware") 
 
@@ -27,7 +28,7 @@ class FWCompiler:
 		self._clone_branch()
 		self._compile_fw()
 
-		if testbed != 'opensim':
+		if self.testbed != 'opensim':
 			fw_name = self._move_fw()
 			self._delete_repo()
 
