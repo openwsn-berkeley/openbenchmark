@@ -58,9 +58,25 @@ class SUTStartup:
 
 
 	def _start_ov(self, async = True):
+		if self.testbed == 'opensim':
+			self._start_open_sim(async)
+		else:
+			self._start_ov_regular(async)
+
+	def _start_ov_regular(self, async):
 		print "[SUT_STARTUP] Starting OpenVisualizer"
 		self.mqtt_client.push_debug_log('SUT_STARTUP', "Starting OpenVisualizer")
 		pipe = subprocess.Popen(['sudo', 'scons', 'runweb', '--port=8080', '--benchmark={0}'.format(self.scenario), '--testbed={0}'.format(self.testbed), '--mqtt-broker-address={0}'.format(self.mqtt_client.broker), '--opentun-null'], cwd=ov_dir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+
+		if not async:
+			for line in iter(pipe.stdout.readline, b''):
+				print(">>> " + line.rstrip())
+				self.mqtt_client.push_debug_log('OPENVISUALIZER', line.rstrip())
+
+	def _start_open_sim(self, async):
+		print "[SUT_STARTUP] Starting OpenSim"
+		self.mqtt_client.push_debug_log('SUT_STARTUP', "Starting OpenSim")
+		pipe = subprocess.Popen(['sudo', 'scons', 'runweb', '--sim', '--simCount={0}'.format(self._get_node_num()), '--port=8080', '--benchmark={0}'.format(self.scenario), '--mqtt-broker-address={0}'.format(self.mqtt_client.broker), '--opentun-null'], cwd=ov_dir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
 
 		if not async:
 			for line in iter(pipe.stdout.readline, b''):
