@@ -163,7 +163,8 @@
                 testbedSelected: -1,
                 testbedIcons: {
                     "iotlab": "https://www.iot-lab.info/wp-content/themes/alienship-1.2.5-child/templates/parts/fit-iotlab3.png",
-                    "wilab": "images/w-ilabt.png"
+                    "wilab": "images/w-ilabt.png",
+                    "opensim": "images/opensim.png"
                 },
             
                 useOpenWSNFirmware: true,
