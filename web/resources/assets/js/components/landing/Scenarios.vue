@@ -1,13 +1,15 @@
 <template>
     <div class="parent">
 
-        <modal name="testbed-pick">
+        <modal name="testbed-pick" height="250">
             <div class="modal-content row col-direction h-center">
                 <span class="bold align-left mt-1 ml-1">Select a testbed: </span>
 
-                <div class="testbed mt-1" :class="{'testbed-selected': testbedSelected === index}" @click="selectTestbed(index)" v-for="(testbed, index) in testbeds">
-                    <img class="logo-sm mb-1" style="height: 55px" :src="testbedIcons[testbed.identifier]">
-                </div>
+                <span class="row row-direction mt-3">
+                    <div class="testbed ml-1" :class="{'testbed-selected': testbedSelected === index}" @click="selectTestbed(index)" v-for="(testbed, index) in testbeds">
+                        <img class="logo-sm mb-1" style="height: 55px" :src="testbedIcons[testbed.identifier]">
+                    </div>
+                </span>
 
                 <button class="modal-btn main-btn btn-small" @click="closeModal('testbed-pick')">OK</button>
             </div>
