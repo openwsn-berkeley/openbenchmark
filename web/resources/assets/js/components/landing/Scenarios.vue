@@ -164,7 +164,7 @@
                 testbeds: [],
                 testbedSelected: -1,
                 testbedIcons: {
-                    "iotlab": "https://www.iot-lab.info/wp-content/themes/alienship-1.2.5-child/templates/parts/fit-iotlab3.png",
+                    "iotlab": "images/iotlab.png",
                     "wilab": "images/w-ilabt.png",
                     "opensim": "images/opensim.png"
                 },
