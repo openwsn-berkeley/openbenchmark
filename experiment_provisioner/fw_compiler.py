@@ -13,12 +13,14 @@ class FWCompiler:
 	DEFAULT_FW_BRANCH = 'develop_FW-808'
 
 	def __init__(self, testbed, user_id, repo_url=DEFAULT_FW_REPO, branch=DEFAULT_FW_BRANCH):
+		self.openwsn_dir = os.path.join(os.path.dirname(__file__), '..', '..', 'openwsn')
+
 		self.repo_url    = repo_url
 		self.branch      = branch
 		self.repo_name   = self._get_repo_name()
 		self.testbed     = testbed
 		self.user_id     = user_id  
-		self.local_repo  = os.path.join(os.path.dirname(__file__), self.repo_name)
+		self.local_repo  = os.path.join(self.openwsn_dir, self.repo_name)
 		self.mqtt_client = MQTTClient.create(testbed, user_id)
 
 		self.board_names = {
@@ -42,6 +44,8 @@ class FWCompiler:
 
 
 	def _clone_branch(self):
+		self._print_log('Removing possibly existing repos...')
+		self._delete_repo()
 		self._print_log('Cloning the branch...')
 		self._run_cmd('clone')
 
@@ -83,7 +87,7 @@ class FWCompiler:
 		}
 
 		cwds = {
-			"clone"   : os.path.dirname(os.path.abspath(__file__)),
+			"clone"   : self.openwsn_dir,
 			"compile" : self.local_repo
 		}
 
@@ -114,10 +118,10 @@ class FWCompiler:
 
 def main():
 	FWCompiler(
+		testbed  = 'opensim',
+		user_id  = 1,
 		repo_url = 'https://github.com/malishav/openwsn-fw.git',
-		branch   = 'develop_FW-808',
-		testbed  = 'iotlab',
-		user_id  = 1
+		branch   = 'develop_FW-808'
 	).compile()
 
 if __name__ == '__main__':
