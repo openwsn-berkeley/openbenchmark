@@ -8,7 +8,10 @@ from mqtt_client import MQTTClient
 
 class FWCompiler:
 
-	def __init__(self, repo_url, branch, testbed, user_id):
+	DEFAULT_FW_REPO   = 'https://github.com/malishav/openwsn-fw.git'
+	DEFAULT_FW_BRANCH = 'develop_FW-808'
+
+	def __init__(self, testbed, user_id, repo_url=DEFAULT_FW_REPO, branch=DEFAULT_FW_BRANCH):
 		self.repo_url    = repo_url
 		self.branch      = branch
 		self.repo_name   = self._get_repo_name()

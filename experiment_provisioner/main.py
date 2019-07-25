@@ -275,19 +275,8 @@ class OpenSim(Controller):
 
 		self.testbed = "opensim"
 		self.user_id = user_id
-		
-		self.DEFAULT_FW_REPO   = 'https://github.com/malishav/openwsn-fw.git'
-		self.DEFAULT_FW_BRANCH = 'develop_FW-808'
 
 		self.mqtt_client = MQTTClient.create(self.testbed, user_id)
-
-	def _set_git_params(self, firmware, branch):
-		self.firmware = self.DEFAULT_FW_REPO if branch is None else firmware
-		self.branch   = self.DEFAULT_FW_BRANCH if branch is None else branch
-
-	def compile(self, firmware, branch):
-		self._set_git_params(firmware, branch)
-		FWCompiler(self.firmware, self.branch, self.testbed, self.user_id).compile()
 
 
 
@@ -306,10 +295,14 @@ class Main():
 		testbedCtl  = TESTBEDS[testbed](user_id, scenario, action)
 
 		# Default firmware is "openwsn" with testbed name suffix
-		if firmware is None:
-			firmware = os.path.join(os.path.dirname(__file__), 'firmware', controller.DEFAULT_FIRMWARE + '_' + testbed + '.ihex')
-		elif branch is not None:
-			firmware = FWCompiler(firmware, branch, testbed, user_id).compile()
+		if testbed != 'opensim':
+			if firmware is None:
+				firmware = os.path.join(os.path.dirname(__file__), 'firmware', controller.DEFAULT_FIRMWARE + '_' + testbed + '.ihex')
+			elif branch is not None:
+				firmware = FWCompiler(testbed, user_id, firmware, branch).compile()
+		else:
+			if firmware is None:
+				firmware = FWCompiler(testbed, user_id).compile()
 
 		if action == 'reserve':
 			testbedCtl.print_log('Reserving nodes...')
@@ -325,10 +318,6 @@ class Main():
 			testbedCtl.print_log('Flashing firmware: {0}'.format(firmware))
 			OTBoxFlash(user_id, firmware, testbed).flash()
 		elif action == 'sut-start' or action == 'orchestrator' or action == 'ov':
-			if isinstance(testbedCtl, OpenSim): 
-				testbedCtl.print_log('Compiling firmware from Git repository...')
-				testbedCtl.compile(firmware, branch)
-
 			testbedCtl.print_log('Starting SUT...')
 			SUTStartup(
 				user_id, 
