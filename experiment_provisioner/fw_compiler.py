@@ -2,6 +2,7 @@ import os
 import subprocess
 import random
 import string
+import shutil
 
 from mqtt_client import MQTTClient
 
@@ -72,8 +73,7 @@ class FWCompiler:
 
 	def _delete_repo(self):
 		self._print_log('Removing the cloned repo...')
-		del_dir = "rm -rf {0}".format( os.path.join(os.path.dirname(__file__), self.repo_name) )
-		subprocess.Popen(del_dir, shell=True)
+		shutil.rmtree(self.local_repo)
 
 
 	def _run_cmd(self, cmd):
