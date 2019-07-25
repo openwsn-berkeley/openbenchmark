@@ -28,6 +28,11 @@ class FWCompiler:
 			"wilab"  : "remote",
 			"opensim": "python" 
 		}
+		self.toolchains = {
+			"iotlab" : "armgcc",
+			"wilab"  : "armgcc",
+			"opensim": "gcc"
+		}
 		self.fw_dir      = os.path.join(os.path.dirname(__file__), "firmware") 
 
 	def compile(self):
@@ -57,7 +62,7 @@ class FWCompiler:
 		self._print_log('Renaming and moving firmware...')
 		fw_name = self._generate_random_fw_name()
 		
-		compiled_fw_path = os.path.join(self.local_repo, 'build', '{0}_armgcc'.format(self.board_names[self.testbed]), 'projects', 'common', '03oos_openwsn_prog')
+		compiled_fw_path = os.path.join(self.local_repo, 'build', '{0}_{1}'.format(self.board_names[self.testbed], self.toolchains[self.testbed]), 'projects', 'common', '03oos_openwsn_prog')
 		move_to_location = os.path.join(self.fw_dir, fw_name)
 
 		print self.fw_dir
@@ -83,7 +88,7 @@ class FWCompiler:
 	def _run_cmd(self, cmd):
 		cmds = {
 			"clone"   : ['git', 'clone', '-b', self.branch, '--single-branch', self.repo_url],
-			"compile" : ['scons', 'board={0}'.format(self.board_names[self.testbed]), 'toolchain=armgcc', 'apps=cbenchmark', 'oos_openwsn']
+			"compile" : ['scons', 'board={0}'.format(self.board_names[self.testbed]), 'toolchain={0}'.format(self.toolchains[self.testbed]), 'apps=cbenchmark', 'oos_openwsn']
 		}
 
 		cwds = {
