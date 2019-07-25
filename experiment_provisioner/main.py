@@ -109,6 +109,8 @@ class Wilab(Controller):
 	def __init__(self, user_id, scenario, action):
 		super(Wilab, self).__init__()
 
+		self.mqtt_client = MQTTClient.create('wilab', user_id)
+
 		self.CONFIG_SECTION = 'wilab'
 		self.scenario = scenario
 
@@ -137,7 +139,6 @@ class Wilab(Controller):
 			self._update_yml_files()
 
 		self.reservation = WilabReservation(user_id, self.JFED_DIR, self.RUN, self.DELETE, self.DISPLAY)
-		self.mqtt_client = MQTTClient.create('wilab', user_id)
 		atexit.register(self._stop_mqtt)
 
 	def add_files_from_env(self):
