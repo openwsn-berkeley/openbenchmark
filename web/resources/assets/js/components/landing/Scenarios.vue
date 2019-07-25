@@ -34,16 +34,32 @@
             </div>
         </modal>
 
-        <modal name="firmware-pick">
+        <modal name="firmware-pick" height="350">
             <div class="modal-content row col-direction h-center">
-                <span class="bold align-left mt-1 ml-1 mb-1">Upload firmware (or choose the default): </span>
+                <span class="bold align-left mt-1 ml-1 mb-1">How would you like to provide the firmware?</span>
+
+                <span class="row col-direction">
+                    <label class="radio" v-for="(option, key) in provideFirmwareOptions" @click="selectedFirmwareOption = key">
+                        <input type="radio" name="r" :value="key" :checked="key === selectedFirmwareOption">
+                        <span>{{option}}</span>
+                    </label>
+                </span>
+
+                <span class="bold align-left mt-1 ml-1 mb-1">{{provideFirmwareOptions[selectedFirmwareOption]}}</span>
                 
-                <div class="row-direction v-center mt-1" style="width: 100%">
-                    <file-upload-simple :allow-upload="useOpenWSNFirmware" @click.native="useOpenWSNFirmware = false"></file-upload-simple>
-                    <div class="testbed row ml-1 h-center" :class="{'testbed-selected': useOpenWSNFirmware}" @click="revertToDefaultFw()">
-                        <img class="logo-sm" style="height: 55px" src="images/openwsn_cropped.png">
+                <span v-if="selectedFirmwareOption === 'upload'">
+                    <div class="row-direction v-center mt-1" style="width: 100%">
+                        <file-upload-simple :allow-upload="useOpenWSNFirmware" @click.native="useOpenWSNFirmware = false"></file-upload-simple>
+                        <div class="testbed row ml-1 h-center" :class="{'testbed-selected': useOpenWSNFirmware}" @click="revertToDefaultFw()">
+                            <img class="logo-sm" style="height: 55px" src="images/openwsn_cropped.png">
+                        </div>
                     </div>
-                </div>
+                </span>
+
+                <span class="row col-direction" v-if="selectedFirmwareOption === 'repo'">
+                    <input class="input-field" type="text" placeholder="Git Repo URL" style="margin-bottom: 10px" v-model="firmwareRepoUrl"/>
+                    <input class="input-field" type="text" placeholder="Branch" v-model="firmwareRepoBranch"/>
+                </span>
 
                 <button class="modal-btn main-btn btn-small" @click="closeModal('firmware-pick')">OK</button>
             </div>
@@ -72,8 +88,20 @@
                 <div class="row">
                     <div class="col-2 pl-1 col-direction">
                         <h4>Firmware: </h4>
-                        <span v-if="firmware === undefined">Default OpenWSN firmware</span>
-                        <span class="bold" v-else>{{firmware.origName}}</span>
+                        <span v-if="selectedFirmwareOption === 'upload'">
+                            <span class="bold" v-if="firmware === undefined">Default OpenWSN firmware</span>
+                            <span class="bold" v-else>{{firmware.origName}}</span>
+                        </span>
+                        <span v-else-if="selectedFirmwareOption === 'repo'">
+                            <span class="bold" v-if="firmwareRepoUrl != ''">{{firmwareRepoUrl}} </span>
+                            <span class="bold" v-else>Official OpenWSN Repo </span>
+                            <span v-if="firmwareRepoUrl != '' && firmwareRepoBranch != ''">
+                                [Branch: <span class="bold">{{firmwareRepoBranch}}</span>]
+                            </span>
+                        </span>
+                        <span v-else>
+                            Choose testbed
+                        </span>
                         <span class="clickable primary-light" @click="showModal('firmware-pick')">Change</span>
                     </div>
                 </div>
@@ -199,9 +227,16 @@
                 currentStep: -2,   //If -2, process has not started yet; -1: process started, waiting for notifications
                 taskFailed: false,
 
-                firmware: undefined
+                firmware: undefined,
                     //firmware: ...,
                     //firmware_orig_name: ...
+                firmwareRepoUrl: "",
+                firmwareRepoBranch: "",
+                provideFirmwareOptions: {
+                    "upload": "Upload firmware or select default",
+                    "repo": "Specify firmware repo URL and branch"
+                },
+                selectedFirmwareOption: 'upload'
             }
         },
 
@@ -568,6 +603,10 @@
 
     .node-property {
         margin-bottom: 5px;
+    }
+
+    .input-field {
+        width: 250px;
     }
 </style>
 
