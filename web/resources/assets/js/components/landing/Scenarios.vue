@@ -325,6 +325,9 @@
             processStart() {
                 if (this.scenarioSelected === -1 || this.testbedSelected === -1) {
                     this.showDialog('missing-params')
+                } else if (this.testbeds[this.testbedSelected].identifier === 'opensim') {
+                    this.currentStep = 1                
+                    this.sutStart()
                 } else {
                     this.currentStep = -1
 
