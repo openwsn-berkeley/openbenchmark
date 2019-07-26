@@ -270,6 +270,78 @@ Once the bandwidth with the default (preferred) parent is assigned, the node can
 
 <!-- ====================================================================== -->
 
+# KPI Logs
+
+OpenBenchmark stores two types of KPI log files: unformatted files, which accurately correspond to the experiment performance events, sent by the SUT, and formatted log files, which contain the same data as the data stored in the `.log` files, only neatly organized in a JSON structure, making them easier to parse, show on GUI or further process by a third party.
+
+## Unformatted logs
+
+Each line of an unformatted log file matches the SUT event according to which it was calculated. The names of the log files follow `kpi_EXPID.log` pattern, where EXPID is the ID of the experiment which the KPIs were calculated for. The header of the file contains the general information about the experiment. The following lines are a snippet of an unformatted KPI log file content:
+
+```
+...
+{"eui64": "05-43-32-ff-03-da-b4-54", "kpi": "radioDutyCycle", "node_id": "node-a8-117", "value": 0.65, "timestamp": 26005}
+{"eui64": "05-43-32-ff-03-d2-a2-53", "kpi": "syncronizationPhase", "node_id": "node-a8-121", "value": 1, "timestamp": 26260}
+{"kpi": "numOfSynchronized", "value": 10, "timestamp": 26260}
+{"kpi": "lastSynchronizedASN", "value": 26260, "timestamp": 26260}
+{"kpi": "avgSynchronizedASN", "value": 11565.1, "timestamp": 26260}
+{"eui64": "05-43-32-ff-03-d2-a2-53", "kpi": "secureJoinPhase", "node_id": "node-a8-121", "value": 1, "timestamp": 26720}
+{"kpi": "numOfSecureJoined", "value": 9, "timestamp": 26720}
+{"kpi": "lastSecureJoinedASN", "value": 26720, "timestamp": 26720}
+{"kpi": "avgSecureJoinedASN", "value": 13151.0, "timestamp": 26720}
+{"eui64": "05-43-32-ff-03-d8-a8-67", "kpi": "radioDutyCycle", "node_id": "node-a8-119", "value": 100.0, "timestamp": 28261}
+...
+```
+
+## Formatted logs
+
+The formatted logs contain the calculated KPIs organized in a JSON structure, which is a more convinient format for data reading. Furthermore, this structure matches the format that the graphs on the GUI expect, so it removes the need for any data processing on the frontend. The names of the log files follow `cached_kpi_EXPID.json` pattern, where EXPID is the ID of the experiment which the KPIs were calculated for. The structure of the files looks as follows:
+
+```
+{
+  "header": {
+    "date": "Mon, 22 Jul 2019 18:07:23 +0000",
+    "experiment_id": "7cifr",
+    "firmware": "openwsn-REL-1.0.0-187-g52dff99",
+    "testbed": "iotlab",
+    "scenario": "demo-scenario"
+  },
+  "general_data": {
+    "avgSecureJoinedASN": 13151.0,
+    "numOfSynchronized": {
+      "timestamp": [
+        915,
+        1515,
+        4545,
+        ...
+      ],
+      "value": [
+        1,
+        2,
+        3,
+        ...
+      ]
+    },
+    ...
+  },
+  "data": {
+    "node-a8-121": {
+      "radioDutyCycle": {
+        "timestamp": [...],
+        "value": [...]
+      },
+      ...
+    },
+    ...
+  }
+}
+
+```
+
+The JSON is divided into three objects: `header`, which contains general information about the experiment, `general_data`, which contains KPIs that refer to the entire network, and `data`, which contains node specific KPIs
+
+<!-- ====================================================================== -->
+
 # OpenBenchmark Architecture
 
 <figure>
