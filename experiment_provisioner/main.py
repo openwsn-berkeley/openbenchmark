@@ -12,6 +12,7 @@ from lxml import etree
 from abc import abstractmethod
 from reservation import IoTLABReservation
 from reservation import WilabReservation
+from reservation import OpenSimReservation
 
 from otbox_flash import OTBoxFlash
 from sut_startup import SUTStartup
@@ -277,6 +278,7 @@ class OpenSim(Controller):
 		self.user_id = user_id
 
 		self.mqtt_client = MQTTClient.create(self.testbed, user_id)
+		self.reservation = OpenSimReservation(user_id)
 
 
 
