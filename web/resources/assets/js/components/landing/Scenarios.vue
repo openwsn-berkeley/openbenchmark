@@ -408,6 +408,9 @@
 
                 if (this.firmware !== undefined) {
                     route += '/' + this.firmware.name
+                } else if (this.firmwareRepoUrl !== "") {
+                    route += '/' + this.firmwareRepoUrl
+                    route += '/' + (this.firmwareRepoBranch !== "") ? this.firmwareRepoBranch : "master"
                 }
 
                 axios.get(route) 
