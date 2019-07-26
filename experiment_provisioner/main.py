@@ -307,21 +307,30 @@ class Main():
 
 		testbedCtl  = TESTBEDS[testbed](user_id, scenario, action)
 
-
 		if action == 'reserve':
 			testbedCtl.print_log('Reserving nodes...')
 			testbedCtl.reservation.reserve_experiment()
+
 		elif action == 'check':
 			testbedCtl.print_log('Experiment checking...')
 			testbedCtl.reservation.check_experiment()
+
 		elif action == 'terminate':
 			testbedCtl.print_log('Terminating the experiment...')
 			testbedCtl.reservation.terminate_experiment()
+
 		elif action == 'flash':
+			firmware = compile(controller, user_id, testbed, firmware, branch)
+
 			assert firmware is not None
+
 			testbedCtl.print_log('Flashing firmware: {0}'.format(firmware))
 			OTBoxFlash(user_id, firmware, testbed).flash()
+
 		elif action == 'sut-start' or action == 'orchestrator' or action == 'ov':
+			if testbed == 'opensim':
+				compile(controller, user_id, testbed, firmware, branch)
+
 			testbedCtl.print_log('Starting SUT...')
 			SUTStartup(
 				user_id, 
