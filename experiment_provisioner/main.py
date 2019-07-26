@@ -289,6 +289,17 @@ TESTBEDS = {
 }
 
 
+def compile(controller, user_id, testbed, firmware, branch):
+	# Default firmware is "openwsn" with testbed name suffix
+	if testbed != 'opensim':
+		if firmware is None:
+			return os.path.join(os.path.dirname(__file__), 'firmware', controller.DEFAULT_FIRMWARE + '_' + testbed + '.ihex')
+		elif branch is not None:
+			return FWCompiler(testbed, user_id, firmware, branch).compile()
+	else:
+		if firmware is None:
+			return FWCompiler(testbed, user_id).compile()
+
 class Main():
 
 	def __init__(self, user_id, simulator, action, testbed, scenario, firmware, branch):
@@ -296,15 +307,6 @@ class Main():
 
 		testbedCtl  = TESTBEDS[testbed](user_id, scenario, action)
 
-		# Default firmware is "openwsn" with testbed name suffix
-		if testbed != 'opensim':
-			if firmware is None:
-				firmware = os.path.join(os.path.dirname(__file__), 'firmware', controller.DEFAULT_FIRMWARE + '_' + testbed + '.ihex')
-			elif branch is not None:
-				firmware = FWCompiler(testbed, user_id, firmware, branch).compile()
-		else:
-			if firmware is None:
-				firmware = FWCompiler(testbed, user_id).compile()
 
 		if action == 'reserve':
 			testbedCtl.print_log('Reserving nodes...')
