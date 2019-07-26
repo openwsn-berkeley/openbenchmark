@@ -68,8 +68,8 @@ class OpenBenchmark:
 		if args.action != 'sut-start' and args.simulator:
 			parser.error('--simulator is only a valid parameter for --action=sut-start')
 
-		if args.testbed == 'opensim' and args.action not in ['sut-start', 'ov', 'orchestrator']:
-			parser.error('OpenSim testbed simulator supports only `sut-start`, `ov`, and `orchestrator` actions')
+		if args.testbed == 'opensim' and args.action not in ['sut-start', 'ov', 'orchestrator', 'terminate']:
+			parser.error('OpenSim testbed simulator supports only `sut-start`, `ov`, `orchestrator`, and `terminate` actions')
 
 
 def main():
