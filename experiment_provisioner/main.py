@@ -289,11 +289,11 @@ TESTBEDS = {
 }
 
 
-def compile(controller, user_id, testbed, firmware, branch):
+def compileFW(controller, user_id, testbed, firmware, branch):
 	# Default firmware is "openwsn" with testbed name suffix
 	if testbed != 'opensim':
 		if firmware is None:
-			return os.path.join(os.path.dirname(__file__), 'firmware', controller.DEFAULT_FIRMWARE + '_' + testbed + '.ihex')
+			return controller.DEFAULT_FIRMWARE + '_' + testbed + '.ihex'
 		elif branch is not None:
 			return FWCompiler(testbed, user_id, firmware, branch).compile()
 	else:
@@ -320,7 +320,7 @@ class Main():
 			testbedCtl.reservation.terminate_experiment()
 
 		elif action == 'flash':
-			firmware = compile(controller, user_id, testbed, firmware, branch)
+			firmware = compileFW(controller, user_id, testbed, firmware, branch)
 
 			assert firmware is not None
 
@@ -329,7 +329,7 @@ class Main():
 
 		elif action == 'sut-start' or action == 'orchestrator' or action == 'ov':
 			if testbed == 'opensim':
-				compile(controller, user_id, testbed, firmware, branch)
+				compileFW(controller, user_id, testbed, firmware, branch)
 
 			testbedCtl.print_log('Starting SUT...')
 			SUTStartup(

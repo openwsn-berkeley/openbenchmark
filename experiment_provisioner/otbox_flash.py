@@ -1,4 +1,4 @@
-import paho.mqtt.client as mqtt
+import os
 import base64
 import json
 import time
@@ -9,8 +9,8 @@ CLIENT = 'exp-auto'
 
 class OTBoxFlash:
 
-	def __init__(self, user_id, firmware_path, testbed):
-		self.firmware_path     = firmware_path
+	def __init__(self, user_id, firmware, testbed):
+		self.firmware_path     = os.path.join(os.path.dirname(__file__), 'firmware', firmware)
 		self.testbed           = testbed
 
 		self.mqtt_client       = MQTTClient.create(testbed, user_id)
