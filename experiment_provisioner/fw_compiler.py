@@ -49,7 +49,6 @@ class FWCompiler:
 
 
 	def _clone_branch(self):
-		self._print_log('Removing possibly existing repos...')
 		self._delete_repo()
 		self._print_log('Cloning the branch...')
 		self._run_cmd('clone')
@@ -81,8 +80,9 @@ class FWCompiler:
 		return fw_name
 
 	def _delete_repo(self):
-		self._print_log('Removing the cloned repo...')
-		shutil.rmtree(self.local_repo)
+		if os.path.isdir(self.local_repo):
+			self._print_log('Removing the cloned repo...')
+			shutil.rmtree(self.local_repo)
 
 
 	def _run_cmd(self, cmd):
