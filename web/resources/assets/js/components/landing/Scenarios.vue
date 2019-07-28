@@ -407,10 +407,10 @@
                 let route = '/api/flash'
 
                 if (this.firmware !== undefined) {
-                    route += '/' + this.firmware.name
+                    route += '/' + btoa(this.firmware.name)
                 } else if (this.firmwareRepoUrl !== "") {
-                    route += '/' + this.firmwareRepoUrl
-                    route += '/' + (this.firmwareRepoBranch !== "") ? this.firmwareRepoBranch : "master"
+                    route += '/' + btoa(this.firmwareRepoUrl)
+                    route += (this.firmwareRepoBranch !== "") ? '/' + this.firmwareRepoBranch : "/develop"
                 }
 
                 axios.get(route) 

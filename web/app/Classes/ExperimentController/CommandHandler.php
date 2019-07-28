@@ -25,8 +25,10 @@ class CommandHandler {
         $action = "flash";
         $cmd = self::PROVISIONER_MAIN . " --user-id=$user_id --action=$action";
         
-        if ($firmware != null)
+        if ($firmware != null) {
+            $firmware = base64_decode($firmware);
             $cmd .= " --firmware=$firmware";
+        }
 
         if ($branch != null)
             $cmd .= " --branch=$branch";
