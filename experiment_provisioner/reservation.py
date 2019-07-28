@@ -101,6 +101,7 @@ class IoTLABReservation(Reservation):
         if self.check_experiment():
             print('Resources already reserved. Moving on...')
             self.mqtt_client.push_debug_log('NODE_RESERVATION', 'Resources already reserved. Moving on...')
+            self.mqtt_client.push_notification("provisioned", True)
         else:
             output = self.ssh_command_exec(
                 'iotlab-experiment submit -n a8_exp -d ' + str(self.duration) + ' -l ' + self.nodes)
