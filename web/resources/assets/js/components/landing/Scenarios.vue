@@ -35,17 +35,17 @@
         </modal>
 
         <modal name="firmware-pick" height="350">
-            <div class="modal-content row col-direction h-center">
+            <div class="modal-content row col-direction h-center" v-if="testbedSelected !== -1">
                 <span class="bold align-left mt-1 ml-1 mb-1">How would you like to provide the firmware?</span>
 
                 <span class="row col-direction">
-                    <label class="radio" v-for="(option, key) in provideFirmwareOptions" @click="selectedFirmwareOption = key">
+                    <label class="radio" v-for="(option, key) in provideFirmwareOptions[testbeds[testbedSelected].identifier]" @click="selectedFirmwareOption = key">
                         <input type="radio" name="r" :value="key" :checked="key === selectedFirmwareOption">
                         <span>{{option}}</span>
                     </label>
                 </span>
 
-                <span class="bold align-left mt-1 ml-1 mb-1">{{provideFirmwareOptions[selectedFirmwareOption]}}</span>
+                <span class="bold align-left mt-1 ml-1 mb-1">{{provideFirmwareOptions[testbeds[testbedSelected].identifier][selectedFirmwareOption]}}</span>
                 
                 <span v-if="selectedFirmwareOption === 'upload'">
                     <div class="row-direction v-center mt-1" style="width: 100%">
@@ -62,6 +62,9 @@
                 </span>
 
                 <button class="modal-btn main-btn btn-small" @click="closeModal('firmware-pick')">OK</button>
+            </div>
+            <div class="modal-content row col-direction h-center v-center" v-else>
+                <h3>Please select a testbed first</h3>
             </div>
         </modal>
 
@@ -233,8 +236,17 @@
                 firmwareRepoUrl: "",
                 firmwareRepoBranch: "",
                 provideFirmwareOptions: {
-                    "upload": "Upload firmware or select default",
-                    "repo": "Specify firmware repo URL and branch"
+                    "iotlab": {
+                        "upload": "Upload firmware or select default",
+                        "repo": "Specify firmware repo URL and branch"    
+                    },
+                    "wilab": {
+                        "upload": "Upload firmware or select default",
+                        "repo": "Specify firmware repo URL and branch"    
+                    },
+                    "opensim": {
+                        "repo": "Specify firmware repo URL and branch"    
+                    }
                 },
                 selectedFirmwareOption: 'upload'
             }
@@ -249,6 +261,12 @@
                     "orchestration-started": undefined
                 }
             }
+        },
+
+        watch: {
+            testbedSelected: function(val) {
+                this.selectedFirmwareOption = this.testbeds[val].identifier === 'opensim' ? 'repo' : 'upload'
+            },
         },
 
         methods: {
