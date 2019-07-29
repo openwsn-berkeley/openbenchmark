@@ -328,9 +328,6 @@ class Main():
 			OTBoxFlash(user_id, firmware, testbed).flash()
 
 		elif action == 'sut-start' or action == 'orchestrator' or action == 'ov':
-			if testbed == 'opensim':
-				compileFW(controller, user_id, testbed, firmware, branch)
-
 			testbedCtl.print_log('Starting SUT...')
 			SUTStartup(
 				user_id, 
