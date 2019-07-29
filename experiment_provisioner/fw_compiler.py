@@ -38,6 +38,7 @@ class FWCompiler:
 	def compile(self):
 		self._clone_branch()
 		self._compile_fw()
+		self._change_ownership()
 
 		if self.testbed != 'opensim':
 			fw_name = self._move_fw()
@@ -124,6 +125,18 @@ class FWCompiler:
 	def _print_log(self, message):
 		self.mqtt_client.push_debug_log("[FW_COMPILATION]", message)
 		print("[FW_COMPILATION] {0}".format(message))
+
+	def _change_ownership(self):
+		cmd = 'sudo chown -R "$(whoami)":"$(whoami)" build'
+		pipe = subprocess.Popen(cmd, cwd=self.local_repo, shell=True, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+
+		for line in iter(pipe.stdout.readline, b''):
+			output = line.rstrip()
+			self._print_log(output)
+			
+		for line in iter(pipe.stderr.readline, b''):
+			output = line.rstrip()
+			self._print_log(output)
 
 
 def main():
