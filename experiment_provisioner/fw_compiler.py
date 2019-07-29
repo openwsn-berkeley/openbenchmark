@@ -41,8 +41,6 @@ class FWCompiler:
 
 		if self.testbed != 'opensim':
 			fw_name = self._move_fw()
-			self._delete_repo()
-
 			return fw_name
 
 		return ''
