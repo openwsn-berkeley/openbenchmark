@@ -88,7 +88,11 @@ class FWCompiler:
 	def _run_cmd(self, cmd):
 		cmds = {
 			"clone"   : ['git', 'clone', '-b', self.branch, '--single-branch', self.repo_url],
-			"compile" : ['scons', 'board={0}'.format(self.board_names[self.testbed]), 'toolchain={0}'.format(self.toolchains[self.testbed]), 'apps=cbenchmark', 'oos_openwsn']
+			"compile" : {
+				"iotlab" : ['scons', 'board=iot-lab_A8-M3', 'toolchain=armgcc', 'apps=cbenchmark', 'oos_openwsn'],
+				"wilab"  : ['scons', 'board=remote', 'toolchain=armgcc', 'apps=cbenchmark', 'oos_openwsn'],
+				"opensim": ['scons', 'board=python', 'toolchain=gcc', 'oos_openwsn']
+			}
 		}
 
 		cwds = {
@@ -96,7 +100,10 @@ class FWCompiler:
 			"compile" : self.local_repo
 		}
 
-		pipe = subprocess.Popen(cmds[cmd], cwd=cwds[cmd], stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+		chosenCmd = cmds[cmd][self.testbed] if cmd == 'compile' else cmds[cmd]
+		chosenCwd = cwds[cmd]
+
+		pipe = subprocess.Popen(chosenCmd, cwd=chosenCwd, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
 		
 		for line in iter(pipe.stdout.readline, b''):
 			output = line.rstrip()
@@ -123,7 +130,7 @@ class FWCompiler:
 
 def main():
 	FWCompiler(
-		testbed  = 'opensim',
+		testbed  = 'iotlab',
 		user_id  = 1,
 		repo_url = 'https://github.com/malishav/openwsn-fw.git',
 		branch   = 'develop_FW-808'
