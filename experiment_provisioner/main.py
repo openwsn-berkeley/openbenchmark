@@ -296,9 +296,13 @@ def compileFW(controller, user_id, testbed, firmware, branch):
 			return controller.DEFAULT_FIRMWARE + '_' + testbed + '.ihex'
 		elif branch is not None:
 			return FWCompiler(testbed, user_id, firmware, branch).compile()
+		else:
+			return firmware
 	else:
 		if firmware is None:
 			return FWCompiler(testbed, user_id).compile()
+		else:
+			return FWCompiler(testbed, user_id, firmware, branch).compile()
 
 class Main():
 
