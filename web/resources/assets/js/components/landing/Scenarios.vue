@@ -422,7 +422,7 @@
             flash() {
                 let testbed  = this.testbeds[this.testbedSelected].identifier
 
-                let route = '/api/flash'
+                let route = '/api/flash/' + testbed
 
                 if (this.firmware !== undefined) {
                     route += '/' + btoa(this.firmware.name)
