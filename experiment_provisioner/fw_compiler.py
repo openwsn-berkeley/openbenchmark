@@ -87,9 +87,9 @@ class FWCompiler:
 		cmds = {
 			"clone"   : ['git', 'clone', '-b', self.branch, '--single-branch', self.repo_url],
 			"compile" : {
-				"iotlab" : ['scons', 'board=iot-lab_A8-M3', 'toolchain=armgcc', 'apps=cbenchmark', 'oos_openwsn'],
-				"wilab"  : ['scons', 'board=remote', 'toolchain=armgcc', 'apps=cbenchmark', 'oos_openwsn'],
-				"opensim": ['scons', 'board=python', 'toolchain=gcc', 'oos_openwsn']
+				"iotlab" : ['sudo', 'scons', 'board=iot-lab_A8-M3', 'toolchain=armgcc', 'apps=cbenchmark', 'oos_openwsn'],
+				"wilab"  : ['sudo', 'scons', 'board=remote', 'toolchain=armgcc', 'apps=cbenchmark', 'oos_openwsn'],
+				"opensim": ['sudo', 'scons', 'board=python', 'toolchain=gcc', 'oos_openwsn']
 			}
 		}
 
