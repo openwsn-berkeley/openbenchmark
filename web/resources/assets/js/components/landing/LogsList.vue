@@ -81,8 +81,9 @@
                 }
 
                 let testbeds = {
-                    "iotlab": "IoT-LAB",
-                    "wilab" : "w-iLab.t"
+                    "iotlab"  : "IoT-LAB",
+                    "wilab"   : "w-iLab.t",
+                    "opensim" : "OpenSim"
                 }
 
                 return {
