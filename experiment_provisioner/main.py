@@ -280,6 +280,12 @@ class OpenSim(Controller):
 		self.mqtt_client = MQTTClient.create(self.testbed, user_id)
 		self.reservation = OpenSimReservation(user_id)
 
+		atexit.register(self._stop_mqtt)
+
+	
+	def _stop_mqtt(self):
+		self.mqtt_client.clear_state()
+
 
 
 TESTBEDS = {
@@ -328,7 +334,9 @@ class Main():
 
 			assert firmware is not None
 
-			testbedCtl.print_log('Flashing firmware: {0}'.format(firmware))
+			if firmware != '':
+				testbedCtl.print_log('Flashing firmware: {0}'.format(firmware))
+
 			OTBoxFlash(user_id, firmware, testbed).flash()
 
 		elif action == 'sut-start' or action == 'orchestrator' or action == 'ov':
