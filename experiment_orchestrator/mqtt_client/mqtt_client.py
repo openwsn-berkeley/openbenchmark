@@ -107,8 +107,11 @@ class MQTTClient:
 		self.subscribe()
 
 	def _on_disconnect(self, client, userdata, rc):
-		sys.stdout.write("[MQTT CLIENT] Disconnecting from the broker...\n")
-		self.client.loop_stop()
+		if rc == 0:
+			sys.stdout.write("[MQTT CLIENT] Disconnecting from the broker...\n")
+			self.client.loop_stop()
+		else:
+			sys.stdout.write("[MQTT CLIENT] Connection lost. Attempting to reconnect...\n")
 
 	def _on_subscribe(self, client, obj, mid, granted_qos):
 		self.successful_subs += 1

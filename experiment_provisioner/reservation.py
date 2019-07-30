@@ -101,6 +101,7 @@ class IoTLABReservation(Reservation):
         if self.check_experiment():
             print('Resources already reserved. Moving on...')
             self.mqtt_client.push_debug_log('NODE_RESERVATION', 'Resources already reserved. Moving on...')
+            self.mqtt_client.push_notification("provisioned", True)
         else:
             output = self.ssh_command_exec(
                 'iotlab-experiment submit -n a8_exp -d ' + str(self.duration) + ' -l ' + self.nodes)
@@ -215,4 +216,29 @@ class WilabReservation(Reservation):
         print('Terminating the experiment...')
         self.mqtt_client.push_debug_log('EXP_TERMINATE', 'Terminating the experiment...')
         self.run_yml_action(action="delete")
+        self.mqtt_client.push_notification("terminated", True)
+
+
+class OpenSimReservation(Reservation):
+
+    def __init__(self, user_id):
+        self.mqtt_client = MQTTClient.create("opensim", user_id)
+
+    def reserve_experiment(self):
+        pass
+
+    def check_experiment(self):
+        pass
+
+    def terminate_experiment(self):
+        print('Terminating the experiment...')
+        self.mqtt_client.push_debug_log('EXP_TERMINATE', 'Terminating the experiment...')
+        
+        python_proc_kill = "sudo kill $(ps aux | grep '[p]ython' | awk '{print $2}')"
+        delete_logs = "rm ~/soda/openvisualizer/openvisualizer/build/runui/*.log; rm ~/soda/openvisualizer/openvisualizer/build/runui/*.log.*;"
+        
+        subprocess.Popen(python_proc_kill, shell=True)
+        time.sleep(3)
+        subprocess.Popen(delete_logs, shell=True)
+
         self.mqtt_client.push_notification("terminated", True)

@@ -26,7 +26,7 @@ class OpenBenchmark:
 		)
 		parser.add_argument('--testbed', 
 			dest       = 'testbed',
-			choices    = ['iotlab', 'wilab'],
+			choices    = ['iotlab', 'wilab', 'opensim'],
 			default    = 'iotlab',
 			action     = 'store'
 		)
@@ -67,6 +67,9 @@ class OpenBenchmark:
 	def _validate(self, args, parser):
 		if args.action != 'sut-start' and args.simulator:
 			parser.error('--simulator is only a valid parameter for --action=sut-start')
+
+		if args.testbed == 'opensim' and args.action not in ['flash', 'sut-start', 'ov', 'orchestrator', 'terminate']:
+			parser.error('OpenSim testbed simulator supports only `sut-start`, `ov`, `orchestrator`, and `terminate` actions')
 
 
 def main():

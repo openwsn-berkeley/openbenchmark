@@ -11,40 +11,45 @@ class Interface:
 			"demo-scenario": {
 				"full_title": "Demo scenario",
 				"config": {
-					"main"  : os.path.join(os.path.dirname(__file__), "demo-scenario", "_config.json"),
-					"iotlab": os.path.join(os.path.dirname(__file__), "demo-scenario", "_iotlab_config.json"),
-					"wilab" : os.path.join(os.path.dirname(__file__), "demo-scenario", "_wilab_config.json")
+					"main"    : os.path.join(os.path.dirname(__file__), "demo-scenario", "_config.json"),
+					"iotlab"  : os.path.join(os.path.dirname(__file__), "demo-scenario", "_iotlab_config.json"),
+					"wilab"   : os.path.join(os.path.dirname(__file__), "demo-scenario", "_wilab_config.json"),
+					"opensim" : os.path.join(os.path.dirname(__file__), "demo-scenario", "_opensim_config.json")
 				}
 			},
 			"building-automation": {
 				"full_title": "Building automation",
 				"config": {
-					"main"  : os.path.join(os.path.dirname(__file__), "building-automation", "_config.json"),
-					"iotlab": os.path.join(os.path.dirname(__file__), "building-automation", "_iotlab_config.json"),
-					"wilab" : os.path.join(os.path.dirname(__file__), "building-automation","_wilab_config.json")
+					"main"    : os.path.join(os.path.dirname(__file__), "building-automation", "_config.json"),
+					"iotlab"  : os.path.join(os.path.dirname(__file__), "building-automation", "_iotlab_config.json"),
+					"wilab"   : os.path.join(os.path.dirname(__file__), "building-automation", "_wilab_config.json"),
+					"opensim" : os.path.join(os.path.dirname(__file__), "building-automation", "_opensim_config.json")
 				}
 			},
 			"home-automation": {
 				"full_title": "Home automation",
 				"config": {
-					"main"  : os.path.join(os.path.dirname(__file__), "home-automation", "_config.json"),
-					"iotlab": os.path.join(os.path.dirname(__file__), "home-automation", "_iotlab_config.json"),
-					"wilab" : os.path.join(os.path.dirname(__file__), "home-automation","_wilab_config.json")
+					"main"    : os.path.join(os.path.dirname(__file__), "home-automation", "_config.json"),
+					"iotlab"  : os.path.join(os.path.dirname(__file__), "home-automation", "_iotlab_config.json"),
+					"wilab"   : os.path.join(os.path.dirname(__file__), "home-automation", "_wilab_config.json"),
+					"opensim" : os.path.join(os.path.dirname(__file__), "home-automation", "_opensim_config.json")
 				}
 			},
 			"industrial-monitoring": {
 				"full_title": "Industrial monitoring",
 				"config": {
-					"main"  : os.path.join(os.path.dirname(__file__), "industrial-monitoring", "_config.json"),
-					"iotlab": os.path.join(os.path.dirname(__file__), "industrial-monitoring", "_iotlab_config.json"),
-					"wilab" : os.path.join(os.path.dirname(__file__), "industrial-monitoring","_wilab_config.json")
+					"main"    : os.path.join(os.path.dirname(__file__), "industrial-monitoring", "_config.json"),
+					"iotlab"  : os.path.join(os.path.dirname(__file__), "industrial-monitoring", "_iotlab_config.json"),
+					"wilab"   : os.path.join(os.path.dirname(__file__), "industrial-monitoring", "_wilab_config.json"),
+					"opensim" : os.path.join(os.path.dirname(__file__), "industrial-monitoring", "_opensim_config.json")
 				}
 			},
 		}
 
 		self.testbeds = {
-			"iotlab": "IoT-LAB",
-			"wilab" : "w-iLab.t" 
+			"iotlab"  : "IoT-LAB",
+			"wilab"   : "w-iLab.t",
+			"opensim" : "OpenSim" 
 		}
 
 		args = self._get_args()

@@ -2,12 +2,15 @@ import subprocess
 import os
 import time
 import threading
+import json
 from mqtt_client import MQTTClient
 
 openwsn_dir = os.path.join(os.path.dirname(__file__), "..", "..", "openwsn")
 ov_dir      = os.path.join(openwsn_dir, "openvisualizer")
 coap_dir    = os.path.join(openwsn_dir, "coap")
+ob_dir      = os.path.join(os.path.dirname(__file__), "..")
 orch_dir    = os.path.join(os.path.dirname(__file__), "..", "experiment_orchestrator")
+sc_conf_dir = os.path.join(ob_dir, "scenario-config")
 
 class SUTStartup:
 
@@ -58,9 +61,31 @@ class SUTStartup:
 
 
 	def _start_ov(self, async = True):
+		if self.testbed == 'opensim':
+			self._start_open_sim(async)
+		else:
+			self._start_ov_regular(async)
+
+	def _start_ov_regular(self, async):
 		print "[SUT_STARTUP] Starting OpenVisualizer"
 		self.mqtt_client.push_debug_log('SUT_STARTUP', "Starting OpenVisualizer")
 		pipe = subprocess.Popen(['sudo', 'scons', 'runweb', '--port=8080', '--benchmark={0}'.format(self.scenario), '--testbed={0}'.format(self.testbed), '--mqtt-broker-address={0}'.format(self.mqtt_client.broker), '--opentun-null'], cwd=ov_dir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+
+		if not async:
+			for line in iter(pipe.stdout.readline, b''):
+				print(">>> " + line.rstrip())
+				self.mqtt_client.push_debug_log('OPENVISUALIZER', line.rstrip())
+
+	def _get_node_num(self):
+		scenario_config_json = os.path.join(sc_conf_dir, self.scenario, '_config.json')
+		with open(scenario_config_json, 'r') as f:
+			config_obj = json.loads(f.read())
+			return config_obj['number_of_nodes']
+
+	def _start_open_sim(self, async):
+		print "[SUT_STARTUP] Starting OpenSim"
+		self.mqtt_client.push_debug_log('SUT_STARTUP', "Starting OpenSim")
+		pipe = subprocess.Popen(['sudo', 'scons', 'runweb', '--sim', '--simCount={0}'.format(self._get_node_num()), '--port=8080', '--benchmark={0}'.format(self.scenario), '--mqtt-broker-address={0}'.format(self.mqtt_client.broker), '--opentun-null'], cwd=ov_dir, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
 
 		if not async:
 			for line in iter(pipe.stdout.readline, b''):

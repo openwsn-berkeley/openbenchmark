@@ -36,8 +36,9 @@
                 headerData: {},
 
                 testbeds: {
-                    "iotlab": "IoT-LAB",
-                    "wilab": "w-iLab.t"
+                    "iotlab" : "IoT-LAB",
+                    "wilab"  : "w-iLab.t",
+                    "opensim": "OpenSim"
                 },
                 scenarios: {
                     "demo-scenario": "Demo Scenario",

@@ -26,7 +26,7 @@ Route::get('/experiment/{id}', 'ExperimentController@get_experiment');
 
 //Individual routes for every action
 Route::get('/reserve/{scenario}/{testbed}', 'ExperimentController@reserve');
-Route::get('/flash/{firmware?}', 'ExperimentController@flash');
+Route::get('/flash/{testbed}/{firmware?}/{branch?}', 'ExperimentController@flash');
 Route::get('/sut-start/{scenario}/{testbed}/{simulator?}', 'ExperimentController@sut_start');
 Route::get('/terminate', 'ExperimentController@terminate');
 

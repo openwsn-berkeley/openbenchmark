@@ -59,8 +59,8 @@ class ExperimentController extends Controller
         return $this->cmd_handler->reserve($this->user_id, $scenario, $testbed);
     }
 
-    function flash($firmware=null) {
-        return $this->cmd_handler->flash($this->user_id, $firmware);
+    function flash($testbed, $firmware=null, $branch=null) {
+        return $this->cmd_handler->flash($this->user_id, $testbed, $firmware, $branch);
     }
 
     function sut_start($scenario, $testbed, $simulator=false) {

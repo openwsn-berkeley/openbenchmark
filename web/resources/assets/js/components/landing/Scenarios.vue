@@ -1,13 +1,15 @@
 <template>
     <div class="parent">
 
-        <modal name="testbed-pick">
+        <modal name="testbed-pick" height="250">
             <div class="modal-content row col-direction h-center">
                 <span class="bold align-left mt-1 ml-1">Select a testbed: </span>
 
-                <div class="testbed mt-1" :class="{'testbed-selected': testbedSelected === index}" @click="selectTestbed(index)" v-for="(testbed, index) in testbeds">
-                    <img class="logo-sm mb-1" style="height: 55px" :src="testbedIcons[testbed.identifier]">
-                </div>
+                <span class="row row-direction mt-3">
+                    <div class="testbed ml-1" :class="{'testbed-selected': testbedSelected === index}" @click="selectTestbed(index)" v-for="(testbed, index) in testbeds">
+                        <img class="logo-sm mb-1" style="height: 55px" :src="testbedIcons[testbed.identifier]">
+                    </div>
+                </span>
 
                 <button class="modal-btn main-btn btn-small" @click="closeModal('testbed-pick')">OK</button>
             </div>
@@ -32,18 +34,37 @@
             </div>
         </modal>
 
-        <modal name="firmware-pick">
-            <div class="modal-content row col-direction h-center">
-                <span class="bold align-left mt-1 ml-1 mb-1">Upload firmware (or choose the default): </span>
+        <modal name="firmware-pick" height="350">
+            <div class="modal-content row col-direction h-center" v-if="testbedSelected !== -1">
+                <span class="bold align-left mt-1 ml-1 mb-1">How would you like to provide the firmware?</span>
+
+                <span class="row col-direction">
+                    <label class="radio" v-for="(option, key) in provideFirmwareOptions[testbeds[testbedSelected].identifier]" @click="selectedFirmwareOption = key">
+                        <input type="radio" name="r" :value="key" :checked="key === selectedFirmwareOption">
+                        <span>{{option}}</span>
+                    </label>
+                </span>
+
+                <span class="bold align-left mt-1 ml-1 mb-1">{{provideFirmwareOptions[testbeds[testbedSelected].identifier][selectedFirmwareOption]}}</span>
                 
-                <div class="row-direction v-center mt-1" style="width: 100%">
-                    <file-upload-simple :allow-upload="useOpenWSNFirmware" @click.native="useOpenWSNFirmware = false"></file-upload-simple>
-                    <div class="testbed row ml-1 h-center" :class="{'testbed-selected': useOpenWSNFirmware}" @click="revertToDefaultFw()">
-                        <img class="logo-sm" style="height: 55px" src="images/openwsn_cropped.png">
+                <span v-if="selectedFirmwareOption === 'upload'">
+                    <div class="row-direction v-center mt-1" style="width: 100%">
+                        <file-upload-simple :allow-upload="useOpenWSNFirmware" @click.native="useOpenWSNFirmware = false"></file-upload-simple>
+                        <div class="testbed row ml-1 h-center" :class="{'testbed-selected': useOpenWSNFirmware}" @click="revertToDefaultFw()">
+                            <img class="logo-sm" style="height: 55px" src="images/openwsn_cropped.png">
+                        </div>
                     </div>
-                </div>
+                </span>
+
+                <span class="row col-direction" v-if="selectedFirmwareOption === 'repo'">
+                    <input class="input-field" type="text" placeholder="Git Repo URL" style="margin-bottom: 10px" v-model="firmwareRepoUrl"/>
+                    <input class="input-field" type="text" placeholder="Branch" v-model="firmwareRepoBranch"/>
+                </span>
 
                 <button class="modal-btn main-btn btn-small" @click="closeModal('firmware-pick')">OK</button>
+            </div>
+            <div class="modal-content row col-direction h-center v-center" v-else>
+                <h3>Please select a testbed first</h3>
             </div>
         </modal>
 
@@ -70,8 +91,20 @@
                 <div class="row">
                     <div class="col-2 pl-1 col-direction">
                         <h4>Firmware: </h4>
-                        <span v-if="firmware === undefined">Default OpenWSN firmware</span>
-                        <span class="bold" v-else>{{firmware.origName}}</span>
+                        <span v-if="selectedFirmwareOption === 'upload'">
+                            <span class="bold" v-if="firmware === undefined">Default OpenWSN firmware</span>
+                            <span class="bold" v-else>{{firmware.origName}}</span>
+                        </span>
+                        <span v-else-if="selectedFirmwareOption === 'repo'">
+                            <span class="bold" v-if="firmwareRepoUrl != ''">{{firmwareRepoUrl}} </span>
+                            <span class="bold" v-else>Official OpenWSN Repo </span>
+                            <span v-if="firmwareRepoUrl != '' && firmwareRepoBranch != ''">
+                                [Branch: <span class="bold">{{firmwareRepoBranch}}</span>]
+                            </span>
+                        </span>
+                        <span v-else>
+                            Choose testbed
+                        </span>
                         <span class="clickable primary-light" @click="showModal('firmware-pick')">Change</span>
                     </div>
                 </div>
@@ -162,8 +195,9 @@
                 testbeds: [],
                 testbedSelected: -1,
                 testbedIcons: {
-                    "iotlab": "https://www.iot-lab.info/wp-content/themes/alienship-1.2.5-child/templates/parts/fit-iotlab3.png",
-                    "wilab": "images/w-ilabt.png"
+                    "iotlab": "images/iotlab.png",
+                    "wilab": "images/w-ilabt.png",
+                    "opensim": "images/opensim.png"
                 },
             
                 useOpenWSNFirmware: true,
@@ -196,9 +230,25 @@
                 currentStep: -2,   //If -2, process has not started yet; -1: process started, waiting for notifications
                 taskFailed: false,
 
-                firmware: undefined
+                firmware: undefined,
                     //firmware: ...,
                     //firmware_orig_name: ...
+                firmwareRepoUrl: "",
+                firmwareRepoBranch: "",
+                provideFirmwareOptions: {
+                    "iotlab": {
+                        "upload": "Upload firmware or select default",
+                        "repo": "Specify firmware repo URL and branch"    
+                    },
+                    "wilab": {
+                        "upload": "Upload firmware or select default",
+                        "repo": "Specify firmware repo URL and branch"    
+                    },
+                    "opensim": {
+                        "repo": "Specify firmware repo URL and branch"    
+                    }
+                },
+                selectedFirmwareOption: 'upload'
             }
         },
 
@@ -211,6 +261,12 @@
                     "orchestration-started": undefined
                 }
             }
+        },
+
+        watch: {
+            testbedSelected: function(val) {
+                this.selectedFirmwareOption = this.testbeds[val].identifier === 'opensim' ? 'repo' : 'upload'
+            },
         },
 
         methods: {
@@ -322,6 +378,9 @@
             processStart() {
                 if (this.scenarioSelected === -1 || this.testbedSelected === -1) {
                     this.showDialog('missing-params')
+                } else if (this.testbeds[this.testbedSelected].identifier === 'opensim') {
+                    this.currentStep = 0                
+                    this.flash()
                 } else {
                     this.currentStep = -1
 
@@ -363,10 +422,13 @@
             flash() {
                 let testbed  = this.testbeds[this.testbedSelected].identifier
 
-                let route = '/api/flash'
+                let route = '/api/flash/' + testbed
 
                 if (this.firmware !== undefined) {
-                    route += '/' + this.firmware.name
+                    route += '/' + btoa(this.firmware.name)
+                } else if (this.firmwareRepoUrl !== "") {
+                    route += '/' + btoa(this.firmwareRepoUrl)
+                    route += (this.firmwareRepoBranch !== "") ? '/' + this.firmwareRepoBranch : "/develop"
                 }
 
                 axios.get(route) 
@@ -562,6 +624,10 @@
 
     .node-property {
         margin-bottom: 5px;
+    }
+
+    .input-field {
+        width: 300px;
     }
 </style>
 

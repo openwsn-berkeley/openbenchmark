@@ -12,6 +12,7 @@ from lxml import etree
 from abc import abstractmethod
 from reservation import IoTLABReservation
 from reservation import WilabReservation
+from reservation import OpenSimReservation
 
 from otbox_flash import OTBoxFlash
 from sut_startup import SUTStartup
@@ -269,11 +270,45 @@ class Wilab(Controller):
 
 
 
+class OpenSim(Controller):
+	def __init__(self, user_id, scenario, action):
+		super(OpenSim, self).__init__()
+
+		self.testbed = "opensim"
+		self.user_id = user_id
+
+		self.mqtt_client = MQTTClient.create(self.testbed, user_id)
+		self.reservation = OpenSimReservation(user_id)
+
+		atexit.register(self._stop_mqtt)
+
+	
+	def _stop_mqtt(self):
+		self.mqtt_client.clear_state()
+
+
+
 TESTBEDS = {
 	"iotlab": IoTLAB,
-	"wilab": Wilab
+	"wilab": Wilab,
+	"opensim": OpenSim
 }
 
+
+def compileFW(controller, user_id, testbed, firmware, branch):
+	# Default firmware is "openwsn" with testbed name suffix
+	if testbed != 'opensim':
+		if firmware is None:
+			return controller.DEFAULT_FIRMWARE + '_' + testbed + '.ihex'
+		elif branch is not None:
+			return FWCompiler(testbed, user_id, firmware, branch).compile()
+		else:
+			return firmware
+	else:
+		if firmware is None:
+			return FWCompiler(testbed, user_id).compile()
+		else:
+			return FWCompiler(testbed, user_id, firmware, branch).compile()
 
 class Main():
 
@@ -282,25 +317,28 @@ class Main():
 
 		testbedCtl  = TESTBEDS[testbed](user_id, scenario, action)
 
-		# Default firmware is "openwsn" with testbed name suffix
-		if firmware is None:
-			firmware = os.path.join(os.path.dirname(__file__), 'firmware', controller.DEFAULT_FIRMWARE + '_' + testbed + '.ihex')
-		elif branch is not None:
-			firmware = FWCompiler(firmware, branch, testbed, user_id).compile()
-
 		if action == 'reserve':
 			testbedCtl.print_log('Reserving nodes...')
 			testbedCtl.reservation.reserve_experiment()
+
 		elif action == 'check':
 			testbedCtl.print_log('Experiment checking...')
 			testbedCtl.reservation.check_experiment()
+
 		elif action == 'terminate':
 			testbedCtl.print_log('Terminating the experiment...')
 			testbedCtl.reservation.terminate_experiment()
+
 		elif action == 'flash':
+			firmware = compileFW(controller, user_id, testbed, firmware, branch)
+
 			assert firmware is not None
-			testbedCtl.print_log('Flashing firmware: {0}'.format(firmware))
+
+			if firmware != '':
+				testbedCtl.print_log('Flashing firmware: {0}'.format(firmware))
+
 			OTBoxFlash(user_id, firmware, testbed).flash()
+
 		elif action == 'sut-start' or action == 'orchestrator' or action == 'ov':
 			testbedCtl.print_log('Starting SUT...')
 			SUTStartup(

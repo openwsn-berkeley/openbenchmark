@@ -21,18 +21,23 @@ class CommandHandler {
         return $this->_exec_action($action, $cmd, $user_id);
     }
 
-    function flash($user_id, $firmware, $async=true) {
+    function flash($user_id, $testbed, $firmware, $branch, $async=true) {
         $action = "flash";
-        $cmd = self::PROVISIONER_MAIN . " --user-id=$user_id --action=$action";
+        $cmd = self::PROVISIONER_MAIN . " --user-id=$user_id --action=$action --testbed=$testbed";
         
-        if ($firmware != null)
+        if ($firmware != null) {
+            $firmware = base64_decode($firmware);
             $cmd .= " --firmware=$firmware";
+        }
+
+        if ($branch != null)
+            $cmd .= " --branch=$branch";
 
         $cmd .= " > /dev/null";
 
         if ($async)
             $cmd .= " &";
-
+        
         return $this->_exec_action($action, $cmd, $user_id);
     }
 

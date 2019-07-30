@@ -2,37 +2,56 @@ import os
 import subprocess
 import random
 import string
+import shutil
 
 from mqtt_client import MQTTClient
 
 
 class FWCompiler:
 
-	def __init__(self, repo_url, branch, testbed, user_id):
+	DEFAULT_FW_REPO   = 'https://github.com/malishav/openwsn-fw.git'
+	DEFAULT_FW_BRANCH = 'develop_FW-808'
+
+	def __init__(self, testbed, user_id, repo_url=DEFAULT_FW_REPO, branch=DEFAULT_FW_BRANCH):
+		self.openwsn_dir = os.path.join(os.path.dirname(__file__), '..', '..', 'openwsn')
+
 		self.repo_url    = repo_url
 		self.branch      = branch
 		self.repo_name   = self._get_repo_name()
 		self.testbed     = testbed
 		self.user_id     = user_id  
-		self.local_repo  = os.path.join(os.path.dirname(__file__), self.repo_name)
+		self.local_repo  = os.path.join(self.openwsn_dir, self.repo_name)
 		self.mqtt_client = MQTTClient.create(testbed, user_id)
 
 		self.board_names = {
 			"iotlab" : "iot-lab_A8-M3",
-			"wilab"  : "remote" 
+			"wilab"  : "remote",
+			"opensim": "python" 
+		}
+		self.toolchains = {
+			"iotlab" : "armgcc",
+			"wilab"  : "armgcc",
+			"opensim": "gcc"
 		}
 		self.fw_dir      = os.path.join(os.path.dirname(__file__), "firmware") 
 
 	def compile(self):
 		self._clone_branch()
 		self._compile_fw()
-		fw_name = self._move_fw()
-		self._delete_repo()
+		self._change_ownership()
 
-		return fw_name
+		if self.testbed != 'opensim':
+			fw_name = self._move_fw()
+			return fw_name
+
+		return ''
 
 
 	def _clone_branch(self):
+		# Added another `-change_ownership` call to prevent a script failure in case the previous run had been interrupted
+		# and the ownership hadn't changed
+		self._change_ownership() 
+		self._delete_repo()
 		self._print_log('Cloning the branch...')
 		self._run_cmd('clone')
 
@@ -44,7 +63,7 @@ class FWCompiler:
 		self._print_log('Renaming and moving firmware...')
 		fw_name = self._generate_random_fw_name()
 		
-		compiled_fw_path = os.path.join(self.local_repo, 'build', '{0}_armgcc'.format(self.board_names[self.testbed]), 'projects', 'common', '03oos_openwsn_prog')
+		compiled_fw_path = os.path.join(self.local_repo, 'build', '{0}_{1}'.format(self.board_names[self.testbed], self.toolchains[self.testbed]), 'projects', 'common', '03oos_openwsn_prog')
 		move_to_location = os.path.join(self.fw_dir, fw_name)
 
 		print self.fw_dir
@@ -63,23 +82,30 @@ class FWCompiler:
 		return fw_name
 
 	def _delete_repo(self):
-		self._print_log('Removing the cloned repo...')
-		del_dir = "rm -rf {0}".format( os.path.join(os.path.dirname(__file__), self.repo_name) )
-		subprocess.Popen(del_dir, shell=True)
+		if os.path.isdir(self.local_repo):
+			self._print_log('Removing the cloned repo...')
+			shutil.rmtree(self.local_repo)
 
 
 	def _run_cmd(self, cmd):
 		cmds = {
 			"clone"   : ['git', 'clone', '-b', self.branch, '--single-branch', self.repo_url],
-			"compile" : ['scons', 'board={0}'.format(self.board_names[self.testbed]), 'toolchain=armgcc', 'apps=cbenchmark', 'oos_openwsn']
+			"compile" : {
+				"iotlab" : ['sudo', 'scons', 'board=iot-lab_A8-M3', 'toolchain=armgcc', 'apps=cbenchmark', 'oos_openwsn'],
+				"wilab"  : ['sudo', 'scons', 'board=remote', 'toolchain=armgcc', 'apps=cbenchmark', 'oos_openwsn'],
+				"opensim": ['sudo', 'scons', 'board=python', 'toolchain=gcc', 'oos_openwsn']
+			}
 		}
 
 		cwds = {
-			"clone"   : os.path.dirname(os.path.abspath(__file__)),
+			"clone"   : self.openwsn_dir,
 			"compile" : self.local_repo
 		}
 
-		pipe = subprocess.Popen(cmds[cmd], cwd=cwds[cmd], stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+		chosenCmd = cmds[cmd][self.testbed] if cmd == 'compile' else cmds[cmd]
+		chosenCwd = cwds[cmd]
+
+		pipe = subprocess.Popen(chosenCmd, cwd=chosenCwd, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
 		
 		for line in iter(pipe.stdout.readline, b''):
 			output = line.rstrip()
@@ -103,13 +129,25 @@ class FWCompiler:
 		self.mqtt_client.push_debug_log("[FW_COMPILATION]", message)
 		print("[FW_COMPILATION] {0}".format(message))
 
+	def _change_ownership(self):
+		cmd = 'sudo chown -R "$(whoami)":"$(whoami)" build'
+		pipe = subprocess.Popen(cmd, cwd=self.local_repo, shell=True, stdin=subprocess.PIPE, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+
+		for line in iter(pipe.stdout.readline, b''):
+			output = line.rstrip()
+			self._print_log(output)
+			
+		for line in iter(pipe.stderr.readline, b''):
+			output = line.rstrip()
+			self._print_log(output)
+
 
 def main():
 	FWCompiler(
-		repo_url = 'https://github.com/malishav/openwsn-fw.git',
-		branch   = 'develop_FW-808',
 		testbed  = 'iotlab',
-		user_id  = 1
+		user_id  = 1,
+		repo_url = 'https://github.com/malishav/openwsn-fw.git',
+		branch   = 'develop_FW-808'
 	).compile()
 
 if __name__ == '__main__':
