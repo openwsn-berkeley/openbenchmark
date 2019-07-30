@@ -28,7 +28,7 @@ class OTBoxFlash:
 						'description': ''
 					}
 
-					print("Sending {0} firmware to motes".format(self.firmware_path))
+					print("[FW_FLASHING] Sending {0} firmware to motes".format(self.firmware_path))
 					self.mqtt_client.push_debug_log('FW_FLASHING', "Sending {0} firmware to motes".format(self.firmware_path))
 					self.mqtt_client.flash(payload)
 
@@ -37,6 +37,7 @@ class OTBoxFlash:
 					time.sleep(self.time_padding)
 
 					self.mqtt_client.push_notification("flashed", True)
+					print("[FW_FLASHING] Flashed successfully")
 
 			except Exception, e:
 				print("An exception occured: {0}".format(str(e)))
@@ -45,3 +46,4 @@ class OTBoxFlash:
 
 		else:
 			self.mqtt_client.push_notification("flashed", True)
+			print("[FW_FLASHING] Skips FW flashing for OpenSim...")
