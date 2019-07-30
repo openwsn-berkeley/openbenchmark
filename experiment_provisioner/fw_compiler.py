@@ -48,6 +48,9 @@ class FWCompiler:
 
 
 	def _clone_branch(self):
+		# Added another `-change_ownership` call to prevent a script failure in case the previous run had been interrupted
+		# and the ownership hadn't changed
+		self._change_ownership() 
 		self._delete_repo()
 		self._print_log('Cloning the branch...')
 		self._run_cmd('clone')
