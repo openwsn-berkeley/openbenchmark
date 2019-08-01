@@ -71,6 +71,7 @@
 <style scoped>
     .top-container {
         position: fixed;
+        z-index: 1 !important;
     }
 
     * {
