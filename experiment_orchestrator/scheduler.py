@@ -36,13 +36,15 @@ class Scheduler:
 				destination      = sending_point["destination"]
 				confirmable      = sending_point["confirmable"]
 				packets_in_burst = sending_point["packets_in_burst"] if "packets_in_burst" in sending_point else 1
+				payload_size     = sending_point["payload_size"]
 
 				self.schedule.append({
 					"time_sec"          : time_sec,
 					"node"              : node,
 					"destination_eui64" : Utils.id_to_eui64[ self.scenario.config_node_data[destination]['node_id'] ],
 					"confirmable"       : confirmable,
-					"packets_in_burst"  : packets_in_burst
+					"packets_in_burst"  : packets_in_burst,
+					"payload_size"      : payload_size
 				})
 
 	def _generate_schedule(self):
@@ -110,7 +112,7 @@ class Scheduler:
 			currently_on["node"].command_exec(payload={
 					'source'          : currently_on["node"].eui64,
 					'destination'     : currently_on["destination_eui64"],
-					'packetPayloadLen': self.scenario.main_config['payload_size'],
+					'packetPayloadLen': currently_on['payload_size'],
 					'confirmable'     : currently_on["confirmable"],
 					'packetsInBurst'  : currently_on["packets_in_burst"] 
 				})

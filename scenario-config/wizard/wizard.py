@@ -31,14 +31,6 @@ class Wizard:
 			Identifiers.im
 		]
 
-		self.default_payload_size = {   # in bytes
-
-			Identifiers.dm: 10,
-			Identifiers.ba: 80,
-			Identifiers.ha: 10,
-			Identifiers.im: 10
-		}
-
 		self.nf_time_padding_min = {
 			Identifiers.dm: 10,
 			Identifiers.ba: 10,
@@ -50,7 +42,8 @@ class Wizard:
 		self.nodes      = OrderedDict()
 		self.specifics  = {
 			"iotlab": {},
-			"wilab":  {}
+			"wilab":  {},
+			"opensim":{}
 		}
 
 		self.locations = {
@@ -72,7 +65,6 @@ class Wizard:
 		
 		self.info['duration_min'] = input("Duration in minutes (e.g. 30): ")
 		self.info['number_of_nodes'] = input("Number of nodes (e.g. 10): ")
-		self.info['payload_size'] = self.default_payload_size[self.info['identifier']]
 		self.info['nf_time_padding_min'] = self.nf_time_padding_min[self.info['identifier']]
 
 		self.generator = Generator(self.info['duration_min'] * 60)
@@ -108,7 +100,7 @@ class Wizard:
 		identifier = self.info['identifier']
 		roles      = definitions[identifier]
 
-		role = Roles.zc if identifier == Identifiers.ba else Roles.cu if identifier in (Identifiers.ha, Identifiers.dm) else Roles.g
+		role = Roles.zc if identifier == Identifiers.ba else Roles.cu if identifier == Identifiers.ha else Roles.g
 		self.nodes["openbenchmark00"] = OrderedDict()
 		self.nodes["openbenchmark00"]['role'] = role
 		self.nodes["openbenchmark00"]['area'] = None
@@ -197,7 +189,6 @@ class Wizard:
 			content['identifier']          = self.info['identifier']
 			content['duration_min']        = self.info['duration_min']
 			content['number_of_nodes']     = self.info['number_of_nodes'] 
-			content['payload_size']        = self.info['payload_size']
 			content['nf_time_padding_min'] = self.info['nf_time_padding_min']
 			content['nodes']               = self.nodes
 			f.write(json.dumps(content, indent=4))
