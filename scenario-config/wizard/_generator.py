@@ -24,6 +24,7 @@ class Generator:
 		bottom_interval  = params['traffic_properties']['interval'][0]
 		top_interval     = params['traffic_properties']['interval'][1]
 		packets_in_burst = params['packets_in_burst']
+		payload_size     = params['payload_size']
 		current_instant  = 0
 		sending_points   = []
 
@@ -41,13 +42,15 @@ class Generator:
 						'time_sec':         round(current_instant, 3),
 						'destination':      node['id'],
 						'confirmable':      node['confirmable'],
-						'packets_in_burst': packets_in_burst
+						'packets_in_burst': packets_in_burst,
+						'payload_size':     payload_size
 					})
 			else:
 				sending_points.append({
-						'time_sec':    round(current_instant, 3),
-						'destination': node['id'],
-						'confirmable': node['confirmable'],
+						'time_sec':     round(current_instant, 3),
+						'destination':  node['id'],
+						'confirmable':  node['confirmable'],
+						'payload_size': payload_size
 					})
 
 		return sending_points
@@ -57,6 +60,7 @@ class Generator:
 		mean               = params['traffic_properties']['mean'] * (self.exp_duration/60)  # per hour
 		num_of_packets     = np.random.poisson(mean)
 		packets_in_burst   = params['packets_in_burst']
+		payload_size       = params['payload_size']
 		period             = 3600   # 1h in seconds
 		top_interval       = 0
 		sending_points     = []
@@ -71,13 +75,15 @@ class Generator:
 						'time_sec':         round(instant, 3),
 						'destination':      node['id'],
 						'confirmable':      node['confirmable'],
-						'packets_in_burst': packets_in_burst
+						'packets_in_burst': packets_in_burst,
+						'payload_size':     payload_size
 					})
 			else:
 				sending_points.append({
-						'time_sec':    round(instant, 3),
-						'destination': node['id'],
-						'confirmable': node['confirmable']
+						'time_sec':     round(instant, 3),
+						'destination':  node['id'],
+						'confirmable':  node['confirmable'],
+						'payload_size': payload_size
 					})
 
 		return sending_points
